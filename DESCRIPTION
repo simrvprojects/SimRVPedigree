@@ -9,7 +9,11 @@ Description: Routines to simulate pedigrees ascertained for a rare disease.
     ascertained according to a particular study design on the basis of
     containing multiple family members affected by a rare disease, and
     (2) manipulate simulated pedigrees for the purpose of analyses.
-Depends: R (>= 3.2.5)
-Imports: kinship2 (>= 1.6.4), dplyr (>= 0.4.3)
+Depends:
+    R (>= 3.2.5)
+Imports:
+    kinship2 (>= 1.6.4),
+    dplyr (>= 0.4.3)
 License: What license is it under?
 LazyData: TRUE
+RoxygenNote: 5.0.1
