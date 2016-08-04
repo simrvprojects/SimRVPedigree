@@ -9,7 +9,7 @@ check_hazpart(hazard, part)
 \arguments{
 \item{hazard}{A numeric vector.  A vector of age-specific hazards.}
 
-\item{part}{A numeric vector. The partition over which to apply hazard, note part should have 1 element more than hazard.}
+\item{part}{A numeric vector. The partition over which to apply hazard, note length(part) == length(hazard) + 1 should return TRUE.}
 }
 \description{
 \code{check_hazpart} Check to see if hazard and partition vectors are specified correctly

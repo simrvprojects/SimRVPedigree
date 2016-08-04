@@ -3,7 +3,7 @@
 #'\code{check_hazpart} Check to see if hazard and partition vectors are specified correctly
 #'
 #'@param hazard A numeric vector.  A vector of age-specific hazards.
-#'@param part A numeric vector. The partition over which to apply hazard, note part should have 1 element more than hazard.
+#'@param part A numeric vector. The partition over which to apply hazard, note length(part) == length(hazard) + 1 should return TRUE.
 #'
 #'@examples
 #'check_hazpart(hazard = c(0.1, 0.4, 0.7, 0.8, 0.9), part = c(0, 20, 40, 60, 80, 100))
@@ -15,7 +15,7 @@ check_hazpart = function(hazard, part){
   check3 <- (length(part) != (length(hazard) + 1))
   if ( check1 | check2 | check3 ) {
     stop ('please provide numeric hazard and part vectors,
-          with length(part) = length(hazard) + 1')
+          such that length(part) == length(hazard) + 1 returns TRUE')
   }
 }
 
