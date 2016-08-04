@@ -1,49 +1,39 @@
-##-----------------##
-##  check_hazpart  ##
-##-----------------##
-## define a function that checks to make sure all the appropriate arguments 
-##  have been provided in NHPP functions
-
-## Arguments--------------------------------------------------------------------
-## hazard    - numeric vector of length n
-## part - numeric vector of length n + 1
-
-## Function Requirements--------------------------------------------------------
-## NONE
-
-## Package Requirements---------------------------------------------------------
-## NONE
+#' Check to see if hazard and partition vectors are specified correctly
+#'
+#'\code{check_hazpart} Check to see if hazard and partition vectors are specified correctly
+#'
+#'@param hazard A numeric vector.  A vector of age-specific hazards.
+#'@param part A numeric vector. The partition over which to apply hazard, note part should have 1 element more than hazard.
+#'
+#'@examples
+#'check_hazpart(hazard = c(0.1, 0.4, 0.7, 0.8, 0.9), part = c(0, 20, 40, 60, 80, 100))
+#'check_hazpart(hazard = c(0.1, 0.4, 0.7, 0.8, 0.9), part = c(0, 20, 40, 60, 80))
 
 check_hazpart = function(hazard, part){
   check1 <- (class(hazard) != "numeric")
   check2 <- (length(hazard) < 1)
   check3 <- (length(part) != (length(hazard) + 1))
   if ( check1 | check2 | check3 ) {
-    stop ('please provide numeric hazard and part vectors, with length(part) = length(hazard) + 1')
+    stop ('please provide numeric hazard and part vectors,
+          with length(part) = length(hazard) + 1')
   }
 }
 
 
-##--------------##
-##  check_part  ##
-##--------------##
-## define a function that issues a warning if the partition does not apply to 
-## a wide enough span of ages
 
-## Arguments--------------------------------------------------------------------
-## part - numeric vector of length n + 1
-
-## Function Requirements--------------------------------------------------------
-## NONE
-
-## Package Requirements---------------------------------------------------------
-## NONE
+#' define a function that issues a warning if age-specific hazards are notsupplied for an appropriate span of ages
+#'
+#'\code{check_part} Check to see if the partition vector meets some basic properties
+#'
+#'@param part A numeric vector. Partiton over which to apply hazards
+#'@examples
+#'check_part(part = c("a"))
+#'check_part(part = c(-1, 0, 10))
 
 check_part = function(part){
   check1 <- min(part)
   check2 <- max(part)
-  check3 <- length(part)
-  if ( check1 > 20 | check2 < 60 | check3 < 5 ) {
-    stop ('please provide numeric hazard and part vectors, with length(part) = length(hazard) + 1')
+  if ( check1 > 20 | check2 < 60 ) {
+    warning ('For optimal results please specify age-specific hazards which span from age 0 to >= age 60')
   }
 }
