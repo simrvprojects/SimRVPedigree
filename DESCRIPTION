@@ -4,6 +4,7 @@ Title: Simulate Pedigrees Ascertained for a Rare Disease
 Version: 0.1.0
 Author: Christina Nieuwoudt, Jinko Graham
 Maintainer: Christina Nieuwoudt <cnieuwou@sfu.ca>
-Description: Simulate a sample of pedigrees ascertained for a rare disease according to a particular study design
+Description: Simulate a sample of pedigrees ascertained for a rare disease
+    according to a particular study design
 License: What license is it under?
 LazyData: TRUE
