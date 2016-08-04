@@ -34,6 +34,6 @@ check_part = function(part){
   check1 <- min(part)
   check2 <- max(part)
   if ( check1 > 20 | check2 < 60 ) {
-    warning ('For optimal results please specify age-specific hazards which span from age 0 to >= age 60')
+    warning ('For optimal results please specify age-specific hazards which begin near birth and end near the life expectancy of the population to which the age specific hazards should be applied.')
   }
 }
