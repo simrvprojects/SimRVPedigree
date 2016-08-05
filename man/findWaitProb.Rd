@@ -26,11 +26,15 @@ computes the probability that the waiting time, is at least some value given the
 \examples{
 haz_vec <- seq(1, 2.5, by = 0.1)
 part_vec <- seq(0, 80, by = 5)
+
+findWaitProb(last_event = 2, wait_time = 18,
+             hazard = haz_vec, part = part_vec)
+
 findWaitProb(last_event = 10, wait_time = 18,
              hazard = haz_vec, part = part_vec)
 
-findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec)
-findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec, scale = TRUE)
-
+findWaitProb(last_event = 10, wait_time = 18,
+             hazard = haz_vec, part = part_vec,
+             scale = TRUE)
 }
 

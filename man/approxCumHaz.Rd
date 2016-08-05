@@ -22,6 +22,7 @@ cum_hazard numeric. The approximate cumulative hazard at time t.
 \examples{
 haz_vec <- seq(1, 2.5, by = 0.1)
 part_vec <- seq(0, 80, by = 5)
+
 approxCumHaz(t = 0, hazard = haz_vec, part = part_vec)
 approxCumHaz(t = 5, hazard = haz_vec, part = part_vec)
 approxCumHaz(t = 17, hazard = haz_vec, part = part_vec)

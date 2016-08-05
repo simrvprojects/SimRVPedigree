@@ -11,6 +11,7 @@
 #' @examples
 #' haz_vec <- seq(1, 2.5, by = 0.1)
 #' part_vec <- seq(0, 80, by = 5)
+#'
 #' approxCumHaz(t = 0, hazard = haz_vec, part = part_vec)
 #' approxCumHaz(t = 5, hazard = haz_vec, part = part_vec)
 #' approxCumHaz(t = 17, hazard = haz_vec, part = part_vec)
@@ -39,12 +40,17 @@ approxCumHaz = function(t, hazard, part) {
 #' @examples
 #' haz_vec <- seq(1, 2.5, by = 0.1)
 #' part_vec <- seq(0, 80, by = 5)
+#'
+#' findWaitProb(last_event = 2, wait_time = 18,
+#'              hazard = haz_vec, part = part_vec)
+#'
 #' findWaitProb(last_event = 10, wait_time = 18,
 #'              hazard = haz_vec, part = part_vec)
 #'
-#' findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec)
-#' findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec, scale = TRUE)
-#'
+#' findWaitProb(last_event = 10, wait_time = 18,
+#'              hazard = haz_vec, part = part_vec,
+#'              scale = TRUE)
+
 findWaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
 
@@ -61,26 +67,33 @@ findWaitProb = function(last_event, wait_time,
   return(wait_prob)
 }
 
-##----------------##
-##  findWaitTime  ##
-##----------------##
-## deine a function that finds the waiting time for a given probability
-## i.e. create a function that obtains solutions to the inverse CDF numerically
-
-## Arguments--------------------------------------------------------------------
-## u          - constant
-## last_event - constant
-## hazard     - numeric vector of length n
-## part  - numeric vector of length n + 1
-## scale      - logical (T/F)
-
-## Function Requirements--------------------------------------------------------
-## approxCumHaz
-
-## Package Requirements---------------------------------------------------------
-## NONE
-
-#Define a function that will obtain the solution to the inverse CDF numerically
+#' Randomly generate the waiting time to next event, given the last event time
+#'
+#' @param u A numeric constant. argument of inverse CDF
+#' @param last_event A numeric constant.  The age at last event.
+#'@param hazard A numeric vector.  A vector of age-specific hazards.
+#'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
+#' @param scale Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that event will occur, i.e. a waiting time will always be generated.
+#'
+#' @return A numeric constant.  The waiting time to next event.
+#'
+#' @examples
+#' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
+#' part_vec <- seq(0, 80, by = 5)
+#'
+#' set.seed(17)
+#' u_val = runif(1)
+#' findWaitTime(u = u_val, last_event = 2,
+#'              hazard = haz_vec, part = part_vec)
+#'
+#' findWaitTime(u = u_val, last_event = 2,
+#'              hazard = haz_vec, part = part_vec,
+#'              scale = TRUE)
+#'
+#' findWaitTime(u = u_val, last_event = 10,
+#'              hazard = haz_vec, part = part_vec,
+#'              scale = TRUE)
+#'
 findWaitTime = function(u, last_event,
                         hazard, part, scale = FALSE){
 
