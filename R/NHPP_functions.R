@@ -4,6 +4,7 @@
 #'
 #'@param hazard A numeric vector.  A vector of age-specific hazards.
 #'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
+#'
 #'@examples
 #' hfunct = approxHazFun(hazard = seq(1,2.5, by = 0.1),
 #'                       part = seq(0, 80, by = 5))
