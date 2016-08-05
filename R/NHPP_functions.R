@@ -25,7 +25,7 @@ approxCumHaz = function(t, hazard, part) {
   return(cum_hazard)
 }
 
-#' computes the probability that a waiting time, W, is less than or equal to some value s, given that the last event occured at s_0
+#' computes the probability that the waiting time, is at least some value given the time of the last event
 #'
 #' @param last_event A numeric constant.  The age at last event.
 #' @param wait_time A numeric constant. The wiating time, in years, to next event.
