@@ -1,99 +1,50 @@
-#'create a cumulative hazard function that linearly interpolates the cumulative risk within a time interval
+#' Determine cumulative risk at a given time
 #'
-#'\code{approxHazFun} approximate a continuous cumulative hazard by linearly interpolating the cumulative risk within a time interval
+#'\code{approxCumHaz} returns the cumulative risk at time t, given a vector of age-specific hazards and a partition of ages over which to apply the age-specific hazards.
 #'
+#'@param t A numeric constant. The age at which to approximate the cumulative hazard
 #'@param hazard A numeric vector.  A vector of age-specific hazards.
 #'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
 #'
-#'@examples
-#' hfunct = approxHazFun(hazard = seq(1,2.5, by = 0.1), part = seq(0, 80, by = 5))
-#' hfunct(0)
-#' hfunct(55)
-#' hfunct(100)
-
-approxHazFun = function(hazard, part){
-  check_hazpart(hazard, part)
-  return (approxfun(x = part, y = c(0, hazard)))
-}
-
-
-##-----------------##
-## approxCumHazFun ##
-##-----------------##
-## define a functon that creates a cumulative hazard function
-## that linearly interpolates the cumulative risk within a time interval
-
-## Arguments--------------------------------------------------------------------
-## hazard    - numeric vector of length n
-## part - numeric vector of length n + 1
-
-## Function Requirements--------------------------------------------------------
-## check_hazpart
-
-## Package Requirements---------------------------------------------------------
-## NONE
-approxCumHazFun = function(hazard, part){
-  check_hazpart(hazard, part)
-  return (approxfun(x = part, y = c(0, cumsum(hazard))))
-}
-
-
-##----------------##
-##  approxCumHaz  ##
-##----------------##
-## define a function returns the cumulative risk at time t, given
-## a vector of hazards and a partition over which to apply hazards.
-## NOTE: the difference between approxCumHaz and approxCumHazFun is that
-##       approxCumHaz returns a constant while approxCumHazFun returns a function
-
-## Arguments--------------------------------------------------------------------
-## t         - constant
-## hazard    - numeric vector of length n
-## part - numeric vector of length n + 1
-
-## Function Requirements--------------------------------------------------------
-## approxCumHazFun
-
-## Package Requirements---------------------------------------------------------
-## NONE
+#' @return cum_hazard numeric. The approximate cumulative hazard at time t.
+#'
+#' @examples
+#' approxCumHaz(t = 5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+#' approxCumHaz(t = 5.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+#' approxCumHaz(t = 85.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+#'
 approxCumHaz = function(t, hazard, part) {
 
-  CHazFun = approxCumHazFun(hazard, part)
+  check_hazpart(hazard, part)
 
-  my.CHaz = ifelse((t >= min(part) & t <= max(part)), CHazFun(t),
+  CHazFun = approxfun(x = part, y = c(0, cumsum(hazard)))
+
+  cum_hazard = ifelse((t >= min(part) & t <= max(part)), CHazFun(t),
                    ifelse(t > max(part), CHazFun(max(part)), 0))
 
-  return(my.CHaz)
+  return(cum_hazard)
 }
 
-
-##----------------##
-##  findWaitProb  ##
-##----------------##
-## deine a function that to computes the probability that a waiting time, W,
-## is less than or equal to some value s, given that the last event occured at
-## s_0
-## NOTE: Choosing scale = TRUE ensures that W is a proper random variable,
-## i.e. that this function is a proper CDF with upper limit 1.
-
-## Arguments--------------------------------------------------------------------
-## last_event - constant
-## next_event - constant
-## hazard     - numeric vector of length n
-## part  - numeric vector of length n + 1
-## scale      - logical (T/F)
-
-## Function Requirements--------------------------------------------------------
-## approxCumHaz
-
-## Package Requirements---------------------------------------------------------
-## NONE
-
-findWaitProb = function(last_event, next_event,
+#' computes the probability that a waiting time, W, is less than or equal to some value s, given that the last event occured at s_0
+#'
+#' @param last_event A numeric constant.  The age at last event.
+#' @param wait_time A numeric constant. The wiating time, in years, to next event.
+#'@param hazard A numeric vector.  A vector of age-specific hazards.
+#'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
+#' @param scale Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
+#'
+#' @return wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
+#'
+#' @examples
+#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5), scale = TRUE)
+#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5))
+#'
+findWaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
 
   prob <- 1 - exp(approxCumHaz(t = last_event, hazard, part)
-                  - approxCumHaz(t = last_event + next_event, hazard, part))
+                  - approxCumHaz(t = last_event + wait_time, hazard, part))
 
   #uplimit <- 1 - exp(-approxCumHaz(t = part[length(part)], hazard, part))
 
@@ -131,7 +82,7 @@ findWaitTime = function(u, last_event,
   #Find the maximum value of findWaitProb so that we
   # can quickly return NA when u is greater than this value
 
-  MaxProb <- findWaitProb(last_event, next_event = max(part), hazard, part, scale)
+  MaxProb <- findWaitProb(last_event, wait_time = max(part), hazard, part, scale)
 
   if (u <= MaxProb) {
     a    <- min(part)
@@ -141,9 +92,9 @@ findWaitTime = function(u, last_event,
     while (diff > 0.001) {
       w <- (a + b)/2
 
-      if (findWaitProb(next_event = w, last_event, hazard, part, scale) <= u){
+      if (findWaitProb(wait_time = w, last_event, hazard, part, scale) <= u){
         a <- w
-      } else if (findWaitProb(next_event = w, last_event, hazard, part, scale) > u){
+      } else if (findWaitProb(wait_time = w, last_event, hazard, part, scale) > u){
         b <- w
       }
 
