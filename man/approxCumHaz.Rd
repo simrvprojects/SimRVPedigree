@@ -20,9 +20,13 @@ cum_hazard numeric. The approximate cumulative hazard at time t.
 \code{approxCumHaz} returns the cumulative risk at time t, given a vector of age-specific hazards and a partition of ages over which to apply the age-specific hazards.
 }
 \examples{
-approxCumHaz(t = 5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-approxCumHaz(t = 5.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-approxCumHaz(t = 85.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+haz_vec <- seq(1, 2.5, by = 0.1)
+part_vec <- seq(0, 80, by = 5)
+approxCumHaz(t = 0, hazard = haz_vec, part = part_vec)
+approxCumHaz(t = 5, hazard = haz_vec, part = part_vec)
+approxCumHaz(t = 17, hazard = haz_vec, part = part_vec)
+approxCumHaz(t = 80, hazard = haz_vec, part = part_vec)
+approxCumHaz(t = 100, hazard = haz_vec, part = part_vec)
 
 }
 

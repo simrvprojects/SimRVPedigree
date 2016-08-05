@@ -24,9 +24,13 @@ wait_prob numeric. The probability that the waiting time is at most wait_time gi
 computes the probability that the waiting time, is at least some value given the time of the last event
 }
 \examples{
-findWaitProb(last_event = 2, wait_time = 18, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5), scale = TRUE)
-findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5))
+haz_vec <- seq(1, 2.5, by = 0.1)
+part_vec <- seq(0, 80, by = 5)
+findWaitProb(last_event = 10, wait_time = 18,
+             hazard = haz_vec, part = part_vec)
+
+findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec)
+findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec, scale = TRUE)
 
 }
 

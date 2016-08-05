@@ -9,20 +9,20 @@
 #' @return cum_hazard numeric. The approximate cumulative hazard at time t.
 #'
 #' @examples
-#' approxCumHaz(t = 5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-#' approxCumHaz(t = 5.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-#' approxCumHaz(t = 85.5, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
+#' haz_vec <- seq(1, 2.5, by = 0.1)
+#' part_vec <- seq(0, 80, by = 5)
+#' approxCumHaz(t = 0, hazard = haz_vec, part = part_vec)
+#' approxCumHaz(t = 5, hazard = haz_vec, part = part_vec)
+#' approxCumHaz(t = 17, hazard = haz_vec, part = part_vec)
+#' approxCumHaz(t = 80, hazard = haz_vec, part = part_vec)
+#' approxCumHaz(t = 100, hazard = haz_vec, part = part_vec)
 #'
 approxCumHaz = function(t, hazard, part) {
-
   check_hazpart(hazard, part)
 
-  CHazFun = approxfun(x = part, y = c(0, cumsum(hazard)))
+  CHazFun = approxfun(x = part, y = c(0, cumsum(hazard)), rule = 2)
 
-  cum_hazard = ifelse((t >= min(part) & t <= max(part)), CHazFun(t),
-                   ifelse(t > max(part), CHazFun(max(part)), 0))
-
-  return(cum_hazard)
+  return(cum_hazard = CHazFun(t))
 }
 
 
@@ -37,9 +37,13 @@ approxCumHaz = function(t, hazard, part) {
 #' @return wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
 #'
 #' @examples
-#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
-#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5), scale = TRUE)
-#' findWaitProb(last_event = 2, wait_time = 18, hazard = seq(0, 1.5, by = 0.1), part = seq(0, 80, by = 5))
+#' haz_vec <- seq(1, 2.5, by = 0.1)
+#' part_vec <- seq(0, 80, by = 5)
+#' findWaitProb(last_event = 10, wait_time = 18,
+#'              hazard = haz_vec, part = part_vec)
+#'
+#' findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec)
+#' findWaitProb(last_event = 2, wait_time = 18, hazard = haz_vec, part = part_vec, scale = TRUE)
 #'
 findWaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
