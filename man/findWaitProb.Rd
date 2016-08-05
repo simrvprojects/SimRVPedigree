@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{findWaitProb}
 \alias{findWaitProb}
-\title{computes the probability that a waiting time, W, is less than or equal to some value s, given that the last event occured at s_0}
+\title{computes the probability that the waiting time, is at least some value given the time of the last event}
 \usage{
 findWaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
@@ -21,7 +21,7 @@ findWaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
 }
 \description{
-computes the probability that a waiting time, W, is less than or equal to some value s, given that the last event occured at s_0
+computes the probability that the waiting time, is at least some value given the time of the last event
 }
 \examples{
 findWaitProb(last_event = 2, wait_time = 18, hazard = seq(1, 2.5, by = 0.1), part = seq(0, 80, by = 5))
