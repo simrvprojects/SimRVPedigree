@@ -14,34 +14,10 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
                       scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
-##---------------##
-##  event_step   ##
-##---------------##
-## create a function that determines the next life event: onset, death, or birth
-## by treating these 3 events as competing life events
-##
-## Arguments--------------------------------------------------------------------
-## current_age    - constant
-## disease_status - constant; 1 if individuals has ever been affected, 0 otherwise
-## RV_status      - constant; 1 if individual has RV, 0 otherwise
-## lambda_birth   - constant; the individuals simulated birth rate
-## onset_hazard   - vector; age specific incidence rates for the disease of interest
-## death_hazard   - data.frame; age specific mortality rates
-##                              column 1 = unaffected mortality rates
-##                              column 2 = affected mortality rates
-## part           - vector; partition over which to apply onset and death rates
-## birth_range    - vector; max and min birth ages
-## RR           - constant: the RR for developing disease
-## Function Requirements--------------------------------------------------------
-## findWaitTime
-
-## Package Requirements---------------------------------------------------------
-## NONE
-
 #' Simulate the next life event for an individual
 #'
 #' \code{event_step} Randomly simulates the next life event for an individual by
-#' generating the waiting times to reproduction, onset, and death given the
+#' generating the waiting times, via \link{findWaitTime}, to reproduction, onset, and death given the
 #' individuals current age and then choosing the event with the shortest waiting
 #' time as the winner.
 #'
@@ -67,14 +43,25 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
+#' Brate <- rbirth_rate(NB_size = 2, NB_prob = 4/7,
+#'                      min_birth_age = 17, max_birth_age = 45)
 #' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16), shape = 9.5, scale = 1)
 #' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 #'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
 #' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
 #' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
-#' event_step(current age = 23, disease_status = 0, RV_status = 0,
-#'            lambda_birth = 0.025, onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-#'            part = part_vec, birth_range = c(17,45), RR = 15)
+#' set.seed(17)
+#' event_step(current_age = 23, disease_status = 0, RV_status = 0,
+#'            lambda_birth = Brate, onset_hazard = Ohaz_vec,
+#'            death_hazard = Dhaz_df, part = part_vec,
+#'            birth_range = c(17,45), RR = 15)
+#'
+#' set.seed(17)
+#' event_step(current_age = 23, disease_status = 1, RV_status = 1,
+#'            lambda_birth = Brate, onset_hazard = Ohaz_vec,
+#'            death_hazard = Dhaz_df, part = part_vec,
+#'            birth_range = c(17,45), RR = 15)
+#'
 event_step = function(current_age, disease_status, RV_status,
                       lambda_birth, onset_hazard, death_hazard, part,
                       birth_range, RR){
