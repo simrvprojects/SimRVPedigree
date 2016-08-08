@@ -33,6 +33,7 @@ allowable birth ages in simulation.}
 \item{RR}{A numeric constant. The rare variant relative risk of developing
 disease.}
 }
+<<<<<<< HEAD
 \value{
 A named matrix (?), The number of years until the next life event,
 named by event type.
@@ -65,4 +66,12 @@ event_step(current_age = 23, disease_status = 1, RV_status = 1,
            birth_range = c(17,45), RR = 15)
 
 }
+=======
+\description{
+\code{event_step} Randomly simulates the next life event for an individual by
+generating the waiting times to reproduction, onset, and death given the
+individuals current age and then choosing the event with the shortest waiting
+time as the winner.
+}
+>>>>>>> ba95b5e3ce6bf5feed7ab92ea928f15413f1ad24
 
