@@ -1,20 +1,14 @@
-##---------------##
-##  rbirth_rate  ##
-##---------------##
-## create function to simulate a random birth rate for individual who will
-## reproduce from min_birth_age to max_birth_age
-##
-## Arguments--------------------------------------------------------------------
-## NB_size        - constant; size parameter of NB distrbution
-## NB_prob        - constant; probability parameter of NB distrbution
-## min_birth_age  - constant
-## max_birth_age  - constant
-
-## Function Requirements--------------------------------------------------------
-## NONE
-
-## Package Requirements---------------------------------------------------------
-## NONE
+#' Simulate a random birth rate
+#'
+#' @param NB_size,NB_prob size and probability parameters of negative binomial distribution.
+#' @param min_birth_age,max_birth_age minimum and maximum allowable birth ages
+#'
+#' @return birth_rate numeric, the randomly generated birth rate
+#'
+#' @examples
+#' set.seed(17)
+#' rbirth_rate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
+#'
 rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
   birth_rate = rgamma(1, shape = NB_size,
          scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
@@ -56,12 +50,16 @@ event_step = function(current_age, disease_status, RV_status,
 
   #Assuming that the person is not yet affected, simulate the waiting time until onset given current age
   t.onset <- ifelse(disease_status == 0,
-                    findWaitTime(u = runif(1), last_event = current_age, hazard = onset.lambda, part),
-                    NA)
+                    findWaitTime(u = runif(1), last_event = current_age,
+                                 hazard = onset.lambda, part), NA)
 
   #simulate the waiting time until death given current age.
   # NOTE: choosing rate = FASLE implies that we are assuming person will die
-  t.death <- findWaitTime(u = runif(1), last_event = current_age, hazard = death.lambda, part, scale = TRUE)
+  t.death <- findWaitTime(u = runif(1),
+                          last_event = current_age,
+                          hazard = death.lambda,
+                          part,
+                          scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
