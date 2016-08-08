@@ -30,8 +30,8 @@ age-specific hazards}
 \item{birth_range}{A numeric vector of length 2.  The minimum and maximum
 allowable birth ages in simulation.}
 
-\item{RR}{A numeric constant. The rare variant relative risk of developing
-disease.}
+\item{RR}{A numeric constant. The relative risk of developing
+disease for individuals who have inherited the rare variant.}
 }
 \value{
 Named matrix. The number of years until the next life event,

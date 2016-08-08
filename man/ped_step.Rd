@@ -17,8 +17,8 @@ the age specific morality rates in the affected population.}
 \item{part}{A numeric vector.  Partition of ages over which to apply the
 age-specific hazards}
 
-\item{RR}{A numeric constant. The rare variant relative risk of developing
-disease.}
+\item{RR}{A numeric constant. The relative risk of developing
+disease for individuals who have inherited the rare variant.}
 
 \item{founder_byears}{A numeric vector of length 2, the minimum and maximum founder birth years.  See details.}
 

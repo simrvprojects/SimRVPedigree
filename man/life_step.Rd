@@ -27,8 +27,8 @@ allowable birth ages in simulation.}
 parameters of the negative binomial distribution that describes the number of
 children per household in the population.}
 
-\item{RR}{A numeric constant. The rare variant relative risk of developing
-disease.}
+\item{RR}{A numeric constant. The relative risk of developing
+disease for individuals who have inherited the rare variant.}
 }
 \value{
 Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.

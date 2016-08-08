@@ -41,8 +41,8 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #' age-specific hazards
 #' @param birth_range A numeric vector of length 2.  The minimum and maximum
 #' allowable birth ages in simulation.
-#' @param RR A numeric constant. The rare variant relative risk of developing
-#' disease.
+#' @param RR A numeric constant. The relative risk of developing
+#' disease for individuals who have inherited the rare variant.
 #'
 #' @return Named matrix. The number of years until the next life event,
 #' named by event type.

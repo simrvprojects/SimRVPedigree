@@ -177,28 +177,6 @@ nfam_step = function(found_info, stop_year, last_id,
   return(sim.fam.return)
 }
 
-
-##-------------##
-##  ped_step  ##
-##-------------##
-## create a function that simulates an entire pedigree up to the stop year
-##
-## Arguments____________________________________________________________________
-## onset_hazard   - vector; age specific incidence rates for the disease of interest
-## death_hazard   - data.frame; age specific mortality rates
-## part           - vector; partition over which to apply onset and death rates
-## birth_range    - vector; max and min birth ages
-## NB_params      - vector; size and probability parameters for NB distribution
-## RR           - constant; the RR for developing disease
-## founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
-## stop_year      - constant:
-##
-## Function Requirements________________________________________________________
-## nfam_step
-##
-## Package Requirements_________________________________________________________
-## NONE
-##
 #' Simulate a full pedigree
 #'
 #' \code{ped_step} randomly generates a full pedigree.
