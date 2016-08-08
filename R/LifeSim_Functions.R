@@ -24,7 +24,7 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #' @param current_age The individuals current age.
 #' @param disease_status The disease status, disease_status = 1 if individual
 #' has experienced onset, and 0 otherwise.
-#' @param RV_status The individuals rare variant status, RV_status  = 1 if
+#' @param RV_status Rare variant status, RV_status  = 1 if
 #' individual has inherited the rare variant, and 0 otherwise.
 #' @param lambda_birth Numeric constant. The individuals birth rate.
 #' @param onset_hazard Numeric vector. The population age-specific onset hazard.
@@ -38,14 +38,15 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #' @param RR A numeric constant. The rare variant relative risk of developing
 #' disease.
 #'
-#' @return A named matrix (?), The number of years until the next life event,
+#' @return Named matrix. The number of years until the next life event,
 #' named by event type.
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
 #' Brate <- rbirth_rate(NB_size = 2, NB_prob = 4/7,
 #'                      min_birth_age = 17, max_birth_age = 45)
-#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16), shape = 9.5, scale = 1)
+#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
+#'                                     shape = 9.5, scale = 1)
 #' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 #'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
 #' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
@@ -114,28 +115,43 @@ event_step = function(current_age, disease_status, RV_status,
   return(nyears)
 }
 
-##---------------##
-##  life_step   ##
-##---------------##
-## create a function that determines all life events
-##
-## Arguments--------------------------------------------------------------------
-## RV_status      - constant; 1 if individual has RV, 0 otherwise
-## lambda_birth   - constant; the individuals simulated birth rate
-## onset_hazard   - vector; age specific incidence rates for the disease of interest
-## death_hazard   - data.frame; age specific mortality rates
-##                              column 1 = unaffected mortality rates
-##                              column 2 = affected mortality rates
-## part           - vector; partition over which to apply onset and death rates
-## birth_range    - vector; max and min birth ages
-## NB_params      - vector; size and probability parameters for NB distribution
-## RR           - constant: the RR for developing disease
-## Function Requirements--------------------------------------------------------
-## rbirth_rate
-## event_step
+#' Simulate all life events, starting at birth and ending with death.
+#'
+#' @param RV_status Rare variant status, RV_status  = 1 if
+#' individual has inherited the rare variant, and 0 otherwise.
+#' @param onset_hazard Numeric vector. The population age-specific onset hazard.
+#' @param death_hazard data.frame. Column 1 should specify the age specific
+#' mortality rates in the unaffected population, while column 2 should provide
+#' the age specific morality rates in the affected population.
+#' @param part A numeric vector.  Partition of ages over which to apply the
+#' age-specific hazards
+#' @param birth_range A numeric vector of length 2.  The minimum and maximum
+#' allowable birth ages in simulation.
+#' @param NB_params A numeric vector of length 2. The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.
+#' @param RR A numeric constant. The rare variant relative risk of developing
+#' disease.
+#'
+#' @return Named matrix. All life events randomly simulated for an individual.
+#'
+#' @examples
+#' part_vec <- seq(0, 100, by = 1)
+#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
+#'                                     shape = 9.5, scale = 1)
+#' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
+#'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
+#' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
+#' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
+#' set.seed(17)
+#' life_step(RV_status = 0, onset_hazard = Ohaz_vec,
+#'            death_hazard = Dhaz_df, part = part_vec,
+#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+#'
+#' set.seed(17)
+#' life_step(RV_status = 1, onset_hazard = Ohaz_vec,
+#'            death_hazard = Dhaz_df, part = part_vec,
+#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+#'
 
-## Package Requirements---------------------------------------------------------
-## NONE
 life_step = function(RV_status, onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
 
