@@ -14,12 +14,18 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
                       scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
-#' Simulate the next life event for an individual
+#' Simulate next life event
 #'
-#' \code{event_step} Randomly simulates the next life event for an individual by
-#' generating the waiting times, via \link{findWaitTime}, to reproduction, onset, and death given the
-#' individuals current age and then choosing the event with the shortest waiting
-#' time as the winner.
+#' \code{event_step} randomly simulates the next life event for an individual
+#'  given their current age, disease status, and rare variant status.
+#'
+#' \code{event_step} randomly simulates the next life event for an individual by
+#' generating the waiting times, via \link{findWaitTime}, to reproduction, onset,
+#' and death given the individuals current age.  The event with the shortest
+#' waiting time is chosen as the next life event.  If event_step returns a value
+#' named "Birth", then the next life event is reproduction, if event_step
+#' returns a value named "Onset" then the next life event is onset of disease,
+#' if event_step returns a value named "Death" then the next life event is death.
 #'
 #' @param current_age The individuals current age.
 #' @param disease_status The disease status, disease_status = 1 if individual
@@ -115,7 +121,7 @@ event_step = function(current_age, disease_status, RV_status,
   return(nyears)
 }
 
-#' Simulate all life events, starting at age 0 and ending with death.
+#' Simulate all life events.
 #'
 #' \code{life_step} simulates all life events for an individual starting at age
 #' 0 and ending with death by applying the \link{event_step} function until death

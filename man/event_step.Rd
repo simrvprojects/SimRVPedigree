@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{event_step}
 \alias{event_step}
-\title{Simulate the next life event for an individual}
+\title{Simulate next life event}
 \usage{
 event_step(current_age, disease_status, RV_status, lambda_birth, onset_hazard,
   death_hazard, part, birth_range, RR)
@@ -38,10 +38,17 @@ Named matrix. The number of years until the next life event,
 named by event type.
 }
 \description{
-\code{event_step} Randomly simulates the next life event for an individual by
-generating the waiting times, via \link{findWaitTime}, to reproduction, onset, and death given the
-individuals current age and then choosing the event with the shortest waiting
-time as the winner.
+\code{event_step} randomly simulates the next life event for an individual
+ given their current age, disease status, and rare variant status.
+}
+\details{
+\code{event_step} randomly simulates the next life event for an individual by
+generating the waiting times, via \link{findWaitTime}, to reproduction, onset,
+and death given the individuals current age.  The event with the shortest
+waiting time is chosen as the next life event.  If event_step returns a value
+named "Birth", then the next life event is reproduction, if event_step
+returns a value named "Onset" then the next life event is onset of disease,
+if event_step returns a value named "Death" then the next life event is death.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)
