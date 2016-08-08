@@ -139,8 +139,8 @@ event_step = function(current_age, disease_status, RV_status,
 #'                                     shape = 9.5, scale = 1)
 #' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 #'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-#' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
-#' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
+#' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+#' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 #' set.seed(17)
 #' life_step(RV_status = 0, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
