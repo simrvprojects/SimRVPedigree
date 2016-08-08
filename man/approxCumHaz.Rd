@@ -7,17 +7,21 @@
 approxCumHaz(t, hazard, part)
 }
 \arguments{
-\item{t}{A numeric constant. The age at which to approximate the cumulative hazard}
+\item{t}{A numeric constant. The age at which to approximate the cumulative
+hazard}
 
 \item{hazard}{A numeric vector.  A vector of age-specific hazards.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the age-specific hazards.}
+\item{part}{A numeric vector.  Partition of ages over which to apply the
+age-specific hazards.}
 }
 \value{
 cum_hazard numeric. The approximate cumulative hazard at time t.
 }
 \description{
-\code{approxCumHaz} returns the cumulative risk at time t, given a vector of age-specific hazards and a partition of ages over which to apply the age-specific hazards.
+\code{approxCumHaz} returns the cumulative risk at time t, given a vector of
+age-specific hazards and a partition of ages over which to apply the
+age-specific hazards.
 }
 \examples{
 haz_vec <- seq(1, 2.5, by = 0.1)

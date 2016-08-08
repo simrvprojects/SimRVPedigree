@@ -1,10 +1,14 @@
 #' Determine cumulative risk at a given time
 #'
-#'\code{approxCumHaz} returns the cumulative risk at time t, given a vector of age-specific hazards and a partition of ages over which to apply the age-specific hazards.
+#' \code{approxCumHaz} returns the cumulative risk at time t, given a vector of
+#' age-specific hazards and a partition of ages over which to apply the
+#' age-specific hazards.
 #'
-#'@param t A numeric constant. The age at which to approximate the cumulative hazard
-#'@param hazard A numeric vector.  A vector of age-specific hazards.
-#'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
+#' @param t A numeric constant. The age at which to approximate the cumulative
+#' hazard
+#' @param hazard A numeric vector.  A vector of age-specific hazards.
+#' @param part A numeric vector.  Partition of ages over which to apply the
+#' age-specific hazards.
 #'
 #' @return cum_hazard numeric. The approximate cumulative hazard at time t.
 #'
@@ -31,9 +35,8 @@ approxCumHaz = function(t, hazard, part) {
 #'
 #' @param last_event A numeric constant.  The age at last event.
 #' @param wait_time A numeric constant. The wiating time, in years, to next event.
-#'@param hazard A numeric vector.  A vector of age-specific hazards.
-#'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
 #' @param scale Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
+#' @inheritParams approxCumHaz
 #'
 #' @return wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
 #'
@@ -70,10 +73,7 @@ findWaitProb = function(last_event, wait_time,
 #' Randomly generate the waiting time to next event, given the last event time
 #'
 #' @param u A numeric constant. argument of inverse CDF
-#' @param last_event A numeric constant.  The age at last event.
-#'@param hazard A numeric vector.  A vector of age-specific hazards.
-#'@param part A numeric vector.  Partition of ages over which to apply the age-specific hazards.
-#' @param scale Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that event will occur, i.e. a waiting time will always be generated.
+#' @inheritParams findWaitProb
 #'
 #' @return A numeric constant.  The waiting time to next event.
 #'

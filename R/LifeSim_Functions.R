@@ -115,23 +115,18 @@ event_step = function(current_age, disease_status, RV_status,
   return(nyears)
 }
 
-#' Simulate all life events, starting at birth and ending with death.
+#' Simulate all life events, starting at age 0 and ending with death.
 #'
-#' @param RV_status Rare variant status, RV_status  = 1 if
-#' individual has inherited the rare variant, and 0 otherwise.
-#' @param onset_hazard Numeric vector. The population age-specific onset hazard.
-#' @param death_hazard data.frame. Column 1 should specify the age specific
-#' mortality rates in the unaffected population, while column 2 should provide
-#' the age specific morality rates in the affected population.
-#' @param part A numeric vector.  Partition of ages over which to apply the
-#' age-specific hazards
-#' @param birth_range A numeric vector of length 2.  The minimum and maximum
-#' allowable birth ages in simulation.
-#' @param NB_params A numeric vector of length 2. The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.
-#' @param RR A numeric constant. The rare variant relative risk of developing
-#' disease.
+#' \code{life_step} simulates all life events for an individual starting at age
+#' 0 and ending with death by applying the \link{event_step} function until death
+#' occurs.
 #'
-#' @return Named matrix. All life events randomly simulated for an individual.
+#' @param NB_params A numeric vector of length 2. The size and probabiliy
+#' parameters of the negative binomial distribution that describes the number of
+#' children per household in the population.
+#' @inheritParams event_step
+#'
+#' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)

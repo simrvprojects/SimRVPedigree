@@ -13,9 +13,10 @@ findWaitTime(u, last_event, hazard, part, scale = FALSE)
 
 \item{hazard}{A numeric vector.  A vector of age-specific hazards.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the age-specific hazards.}
+\item{part}{A numeric vector.  Partition of ages over which to apply the
+age-specific hazards.}
 
-\item{scale}{Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that event will occur, i.e. a waiting time will always be generated.}
+\item{scale}{Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
 }
 \value{
 A numeric constant.  The waiting time to next event.

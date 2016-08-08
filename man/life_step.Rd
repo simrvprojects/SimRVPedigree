@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{life_step}
 \alias{life_step}
-\title{Simulate all life events, starting at birth and ending with death.}
+\title{Simulate all life events, starting at age 0 and ending with death.}
 \usage{
 life_step(RV_status, onset_hazard, death_hazard, part, birth_range, NB_params,
   RR)
@@ -23,16 +23,20 @@ age-specific hazards}
 \item{birth_range}{A numeric vector of length 2.  The minimum and maximum
 allowable birth ages in simulation.}
 
-\item{NB_params}{A numeric vector of length 2. The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
+\item{NB_params}{A numeric vector of length 2. The size and probabiliy
+parameters of the negative binomial distribution that describes the number of
+children per household in the population.}
 
 \item{RR}{A numeric constant. The rare variant relative risk of developing
 disease.}
 }
 \value{
-Named matrix. All life events randomly simulated for an individual.
+Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
 }
 \description{
-Simulate all life events, starting at birth and ending with death.
+\code{life_step} simulates all life events for an individual starting at age
+0 and ending with death by applying the \link{event_step} function until death
+occurs.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)
@@ -40,8 +44,8 @@ unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
-Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
+Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(17)
 life_step(RV_status = 0, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
