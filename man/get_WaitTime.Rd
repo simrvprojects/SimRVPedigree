@@ -16,7 +16,7 @@ get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 \item{part}{A numeric vector.  Partition of ages over which to apply the
 age-specific hazards.}
 
-\item{scale}{Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
+\item{scale}{Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
 }
 \value{
 The waiting time to next event, units same as those in \code{part}.

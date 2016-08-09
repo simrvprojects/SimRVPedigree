@@ -35,7 +35,7 @@ approxCumHaz = function(t, hazard, part) {
 #'
 #' @param last_event A numeric constant.  The age at last event.
 #' @param wait_time A numeric constant. The wiating time, in years, to next event.
-#' @param scale Logical. By default scale = FALSE.  NOTE: Choosing scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
+#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
 #' @inheritParams approxCumHaz
 #'
 #' @return wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
@@ -134,7 +134,12 @@ findWaitTime = function(u, last_event,
 #' \code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.  Makes use of \link{approxfun} and \link{splinefun}
 #'
 #' @param p A numeric constant. Argument of non-homogeneous poisson process quantile function
-#' @inheritParams findWaitProb
+#' @param last_event A numeric constant.  The age at last event.
+
+#' @param hazard A numeric vector.  A vector of age-specific hazards.
+#' @param part A numeric vector.  Partition of ages over which to apply the
+#' age-specific hazards.
+#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
 #'
