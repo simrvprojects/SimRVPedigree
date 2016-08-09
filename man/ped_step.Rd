@@ -42,11 +42,12 @@ The birth year for the founder with the rare variant is simulated uniformly betw
 \examples{
 part_vec <- seq(0, 100, by = 1)
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-                                    shape = 9.5, scale = 1)
+                                    shape = 9.5, scale = 1)/350
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
+                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+set.seed(22)
 ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
 }

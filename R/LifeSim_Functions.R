@@ -81,12 +81,12 @@ event_step = function(current_age, disease_status, RV_status,
 
   #Assuming that the person is not yet affected, simulate the waiting time until onset given current age
   t.onset <- ifelse(disease_status == 0,
-                    findWaitTime(u = runif(1), last_event = current_age,
+                    get_WaitTime(p = runif(1), last_event = current_age,
                                  hazard = onset.lambda, part), NA)
 
   #simulate the waiting time until death given current age.
   # NOTE: choosing rate = FASLE implies that we are assuming person will die
-  t.death <- findWaitTime(u = runif(1),
+  t.death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
                           hazard = death.lambda,
                           part,
