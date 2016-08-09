@@ -179,6 +179,10 @@ get_WaitTime = function(p, last_event, hazard, part, scale = FALSE){
                       (part[length(part)]-last_event),
                       approxInvCDF(p))
 
+  #check to see if u is greater than the maximum value of CumProb, if so
+  #return NA
+  wait_time = ifelse(p <= max(CumProb), wait_time, NA)
+
   return(wait_time)
 }
 
