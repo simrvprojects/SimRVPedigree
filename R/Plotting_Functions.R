@@ -21,7 +21,8 @@
 #' set.seed(22)
 #' ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
 #'                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
-#' plot.RVpedigree(ex_ped)
+#' ex_ped$FamID = 1
+#' plot_RVpedigree(ex_ped)
 plot_RVpedigree = function(ped_file){
   RV_ped = pedigree(ped_file$ID, ped_file$dad_id,
                     ped_file$mom_id, (ped_file$gender + 1),
