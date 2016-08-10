@@ -271,7 +271,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 ## part           - vector; partition over which to apply onset and death rates
 ## RR           - constant; the RR for developing disease
 ## founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
-## onset_yspan    - vector, length = 2, the acertainment period of the study
+## ascertain_span    - vector, length = 2, the acertainment period of the study
 ##                          i.e., years in which proband became affected
 ## num_affected   - constant; number of affected in simulated family
 ## family_num     - constant; a family identificaton number
@@ -288,7 +288,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 ## NONE
 ##
 # sim_family = function(onset_hazard, death_hazard, part, RR,
-#                       founder_byears, onset_yspan,
+#                       founder_byears, ascertain_span,
 #                       num_affected, family_num,
 #                       recall_probs,
 #                       birth_range = c(18, 45),
@@ -307,7 +307,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 #
 #       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
 #           length(fam_ped$ID[which(fam_ped$onset_year %in%
-#                                   onset_yspan[1]:onset_yspan[2])]) < num_affected ){
+#                                   ascertain_span[1]:ascertain_span[2])]) < num_affected ){
 #         d = 0
 #       } else { d = 1 }
 #     }
@@ -315,9 +315,9 @@ ped_step = function(onset_hazard, death_hazard, part,
 #     #trim the pedigree and check to see that the trimmed pedigree has
 #     # the appropriate number of affecteds
 #     if (missing(recall_probs)) {
-#       trim_ped = trim_step(ped_file = fam_ped, onset_yspan)
+#       trim_ped = trim_step(ped_file = fam_ped, ascertain_span)
 #     } else {
-#       trim_ped = trim_step(ped_file = fam_ped, onset_yspan, recall_probs)
+#       trim_ped = trim_step(ped_file = fam_ped, ascertain_span, recall_probs)
 #     }
 #     #determine the number of available affected individuals
 #     avail.affect = trim_ped$ID[which(trim_ped$available == 1 & trim_ped$affected == 1)]
@@ -343,7 +343,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 # ## part           - vector; partition over which to apply onset and death rates
 # ## RR           - constant; the RR for developing disease
 # ## founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
-# ## onset_yspan    - vector, length = 2, the acertainment period of the study
+# ## ascertain_span    - vector, length = 2, the acertainment period of the study
 # ##                          i.e., years in which proband became affected
 # ## num_affected   - constant; number of affected in simulated family
 # ## recall_probs   - vector, length n, probability proband recalls relatives of degree n
@@ -359,7 +359,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 # ##
 # Sim_Peds = function(npeds, RR,
 #                     onset_hazard, death_hazard, part,
-#                     founder_byears, onset_yspan,
+#                     founder_byears, ascertain_span,
 #                     num_affected, recall_probs,
 #                     birth_range = c(18, 45), NB_params = c(2, 4/7),
 #                     stop_year = 2015){
@@ -371,7 +371,7 @@ ped_step = function(onset_hazard, death_hazard, part,
 #   pb <- txtProgressBar(min = 0, max = length(ped.RRs), style = 3)
 #   for(m in 1:length(ped.RRs)){
 #     loop.fam = sim_family(onset_hazard, death_hazard, part, RR = ped.RRs[m],
-#                           founder_byears, onset_yspan,
+#                           founder_byears, ascertain_span,
 #                           num_affected, family_num = my.count,
 #                           recall_probs,
 #                           birth_range, NB_params, stop_year)[[2]]
