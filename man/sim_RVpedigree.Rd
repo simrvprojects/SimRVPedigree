@@ -64,8 +64,8 @@ ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
                            ascertain_span = c(1900, 2015),
                            num_affected = 2, family_num = 1)
 
-plot.RVpedigree(ex_RVped[[1]])
-plot.RVpedigree(ex_RVped[[2]])
+plot_RVpedigree(ex_RVped[[1]])
+plot_RVpedigree(ex_RVped[[2]])
 
 }
 

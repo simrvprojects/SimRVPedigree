@@ -262,6 +262,8 @@ ped_step = function(onset_hazard, death_hazard, part,
 #' individuals who have become affected during the acertainment period of the
 #' study, and finally trims the pedigree based on recall_probs
 #'
+#' This section will be details for the function... still need to add these.
+#'
 #' @param num_affected numeric. The desired number of affected.
 #' @param family_num numeric. The family number to assign the simulated RV pedigree.
 #' @inheritParams ped_step
@@ -286,8 +288,8 @@ ped_step = function(onset_hazard, death_hazard, part,
 #'                            ascertain_span = c(1900, 2015),
 #'                            num_affected = 2, family_num = 1)
 #'
-#' plot.RVpedigree(ex_RVped[[1]])
-#' plot.RVpedigree(ex_RVped[[2]])
+#' plot_RVpedigree(ex_RVped[[1]])
+#' plot_RVpedigree(ex_RVped[[2]])
 #'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                       founder_byears, ascertain_span,
