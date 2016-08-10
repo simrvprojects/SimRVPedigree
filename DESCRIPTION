@@ -15,6 +15,6 @@ Imports:
     kinship2 (>= 1.6.4),
     dplyr (>= 0.4.3),
     stats (>= 3.3.0)
-License: What license is it under?
+License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 5.0.1
