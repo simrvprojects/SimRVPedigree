@@ -12,12 +12,28 @@ trim_step(ped_file, ascertain_span, recall_probs)
 \item{ascertain_span}{numeric vector of length 2. The ascertainment period,
 i.e. first and last year of study.}
 
-\item{recall_probs}{numeric.  The proband recall probabilities.  See details.}
+\item{recall_probs}{numeric.  Proband recall probabilities.  See details.}
 }
 \value{
 The trimmed ped file
 }
 \description{
-\code{trim_step} chooses a proband from the pedigree and trims relatives based on proband recall probabilities.
+\code{trim_step} chooses a proband from the pedigree and trims relatives
+based on proband recall probabilities.
+}
+\examples{
+part_vec <- seq(0, 100, by = 1)
+unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
+                                    shape = 9.5, scale = 1)/350
+affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
+                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))/100
+set.seed(22)
+ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
+                   part = part_vec, RR = 5, founder_byears = c(1900, 1910))
+ex_ped
+trim_step(ex_ped, ascertain_span = c(1990, 2015))
+trim_step(ex_ped, ascertain_span = c(1990, 2015), recall_probs = c(1, 0.9, 0))
 }
 

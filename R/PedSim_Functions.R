@@ -254,82 +254,83 @@ ped_step = function(onset_hazard, death_hazard, part,
 }
 
 
-##--------------##
-##  sim_family  ##
-##--------------##
-## Create a function that will:
-##  a.) simulate a pedigree
-##  b.) choose a proband from the available candidates
-##  c.) trim the family based on recall_probs
-##  d.) check to see if the familiy has the requested number of affecteds
-##       if the family does not have the requested number of affecteds
-##       after steps a or c, we throw away the family and simulate a new one
-##
-## Arguments____________________________________________________________________
-## onset_hazard   - vector; age specific incidence rates for the disease of interest
-## death_hazard   - data.frame; age specific mortality rates
-## part           - vector; partition over which to apply onset and death rates
-## RR           - constant; the RR for developing disease
-## founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
-## ascertain_span    - vector, length = 2, the acertainment period of the study
-##                          i.e., years in which proband became affected
-## num_affected   - constant; number of affected in simulated family
-## family_num     - constant; a family identificaton number
-## recall_probs   - vector, length n, probability proband recalls relatives of degree n
-## birth_range    - vector; max and min birth ages
-## NB_params      - vector; size and probability parameters for NB distribution
-## stop_year      - constant:
-##
-## Function Requirements________________________________________________________
-## ped_step
-## trim_step
-##
-## Package Requirements_________________________________________________________
-## NONE
-##
-# sim_family = function(onset_hazard, death_hazard, part, RR,
-#                       founder_byears, ascertain_span,
-#                       num_affected, family_num,
-#                       recall_probs,
-#                       birth_range = c(18, 45),
-#                       NB_params = c(2, 4/7),
-#                       stop_year = 2015){
+#--------------##
+#  sim_family  ##
+#--------------##
+# Create a function that will:
+#  a.) simulate a pedigree
+#  b.) choose a proband from the available candidates
+#  c.) trim the family based on recall_probs
+#  d.) check to see if the familiy has the requested number of affecteds
+#       if the family does not have the requested number of affecteds
+#       after steps a or c, we throw away the family and simulate a new one
 #
-#   #generate the family pedigree, sheck to see that the untrimmed pedigree has
-#   # the appropriate number of affected individuals
-#   D = 0
-#   while(D <= 0){
-#     d = 0
-#     while( d <= 0 ){
-#       fam_ped = ped_step(onset_hazard, death_hazard, part, RR,
-#                          founder_byears, birth_range, NB_params, stop_year)
-#       fam_ped$FamID = family_num
+# Arguments____________________________________________________________________
+# onset_hazard   - vector; age specific incidence rates for the disease of interest
+# death_hazard   - data.frame; age specific mortality rates
+# part           - vector; partition over which to apply onset and death rates
+# RR           - constant; the RR for developing disease
+# founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
+# ascertain_span    - vector, length = 2, the acertainment period of the study
+#                          i.e., years in which proband became affected
+# num_affected   - constant; number of affected in simulated family
+# family_num     - constant; a family identificaton number
+# recall_probs   - vector, length n, probability proband recalls relatives of degree n
+# birth_range    - vector; max and min birth ages
+# NB_params      - vector; size and probability parameters for NB distribution
+# stop_year      - constant:
 #
-#       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
-#           length(fam_ped$ID[which(fam_ped$onset_year %in%
-#                                   ascertain_span[1]:ascertain_span[2])]) < num_affected ){
-#         d = 0
-#       } else { d = 1 }
-#     }
+# Function Requirements________________________________________________________
+# ped_step
+# trim_step
 #
-#     #trim the pedigree and check to see that the trimmed pedigree has
-#     # the appropriate number of affecteds
-#     if (missing(recall_probs)) {
-#       trim_ped = trim_step(ped_file = fam_ped, ascertain_span)
-#     } else {
-#       trim_ped = trim_step(ped_file = fam_ped, ascertain_span, recall_probs)
-#     }
-#     #determine the number of available affected individuals
-#     avail.affect = trim_ped$ID[which(trim_ped$available == 1 & trim_ped$affected == 1)]
-#     D = ifelse(length(avail.affect) < num_affected, 0, 1)
-#   }
+# Package Requirements_________________________________________________________
+# NONE
 #
-#   #return original and trimmed pedigrees
-#   my.return = list(fam_ped, trim_ped)
-#   names(my.return) = c("full.ped", "trim_ped")
-#   return(my.return)
-# }
-#
+sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
+                      founder_byears, ascertain_span,
+                      num_affected, family_num,
+                      recall_probs,
+                      birth_range = c(18, 45),
+                      NB_params = c(2, 4/7),
+                      stop_year = 2015){
+
+  #generate the family pedigree, sheck to see that the untrimmed pedigree has
+  # the appropriate number of affected individuals
+  D = 0
+  while(D <= 0){
+    d = 0
+    while( d <= 0 ){
+      fam_ped = ped_step(onset_hazard, death_hazard, part, RR,
+                         founder_byears, birth_range, NB_params, stop_year)
+      fam_ped$FamID = family_num
+
+      if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
+          length(fam_ped$ID[which(fam_ped$onset_year %in%
+                                  ascertain_span[1]:ascertain_span[2])]) < num_affected ){
+        d = 0
+      } else { d = 1 }
+    }
+
+    #trim the pedigree and check to see that the trimmed pedigree has
+    # the appropriate number of affecteds
+    if (missing(recall_probs)) {
+      trim_ped = trim_step(ped_file = fam_ped, ascertain_span)
+    } else {
+      trim_ped = trim_step(ped_file = fam_ped, ascertain_span, recall_probs)
+    }
+    #determine the number of available affected individuals
+    avail.affect = trim_ped$ID[which(trim_ped$available == 1 & trim_ped$affected == 1)]
+    D = ifelse(length(avail.affect) < num_affected, 0, 1)
+  }
+
+  #return original and trimmed pedigrees
+  my.return = list(fam_ped, trim_ped)
+  names(my.return) = c("full.ped", "trim_ped")
+  return(my.return)
+}
+
+
 # ##------------##
 # ##  Sim_Peds  ##
 # ##------------##
