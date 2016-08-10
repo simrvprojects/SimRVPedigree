@@ -1,6 +1,6 @@
 #' Plot simulated pedigree
 #'
-#' Plot simulated pedigrees using the pedigree plotting tools provided by \link{kinship2}
+#' Plot ped files generated using \code{SimRVPedigree} using the pedigree plotting tools provided by the \link{kinship2} package.
 #'
 #' @param ped_file A single pedigree simulated with either \code{sim_RVpedigree} or \code{ped_step}
 #'

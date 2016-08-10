@@ -13,7 +13,7 @@ plot_RVpedigree(ped_file)
 Values returned from \link{plot.pedigree}
 }
 \description{
-Plot simulated pedigrees using the pedigree plotting tools provided by \link{kinship2}
+Plot ped files generated using \code{SimRVPedigree} using the pedigree plotting tools provided by the \link{kinship2} package.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)
@@ -26,6 +26,7 @@ Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(22)
 ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
-plot.RVpedigree(ex_ped)
+ex_ped$FamID = 1
+plot_RVpedigree(ex_ped)
 }
 
