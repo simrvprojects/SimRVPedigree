@@ -4,6 +4,7 @@
 #' @param min_birth_age,max_birth_age minimum and maximum allowable birth ages
 #'
 #' @return birth_rate numeric, the randomly generated birth rate
+#' @export
 #'
 #' @examples
 #' set.seed(17)
@@ -46,6 +47,7 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #'
 #' @return Named matrix. The number of years until the next life event,
 #' named by event type.
+#' @export
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
@@ -133,6 +135,7 @@ event_step = function(current_age, disease_status, RV_status,
 #' @inheritParams event_step
 #'
 #' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
+#' @export
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)

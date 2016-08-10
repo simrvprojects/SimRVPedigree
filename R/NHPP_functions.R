@@ -11,6 +11,7 @@
 #' age-specific hazards.
 #'
 #' @return cum_hazard numeric. The approximate cumulative hazard at time t.
+#' @export
 #'
 #' @examples
 #' haz_vec <- seq(1, 2.5, by = 0.1)
@@ -39,6 +40,7 @@ approxCumHaz = function(t, hazard, part) {
 #' @inheritParams approxCumHaz
 #'
 #' @return wait_prob numeric. The probability that the waiting time is at most wait_time given that the last event occured at last_event
+#' @export
 #'
 #' @examples
 #' haz_vec <- seq(1, 2.5, by = 0.1)
@@ -76,6 +78,7 @@ findWaitProb = function(last_event, wait_time,
 #' @inheritParams findWaitProb
 #'
 #' @return A numeric constant.  The waiting time to next event.
+#' @export
 #'
 #' @examples
 #' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
@@ -142,6 +145,7 @@ findWaitTime = function(u, last_event,
 #' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
+#' @export
 #'
 #' @examples
 #' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))

@@ -6,9 +6,9 @@ Author: Christina Nieuwoudt, Jinko Graham
 Maintainer: Christina Nieuwoudt <cnieuwou@sfu.ca>
 Description: Routines to simulate pedigrees ascertained for a rare disease.
     Provides functions to: (1) simulate a sample of pedigrees which have been
-    ascertained according to a particular study design on the basis of
-    containing multiple family members affected by a rare disease, and
-    (2) manipulate simulated pedigrees for the purpose of analyses.
+    ascertained on the basis of containing multiple family members affected by
+    a rare disease according to a particular study design, and (2) manipulate
+    simulated pedigrees for the purpose of analyses.
 Depends:
     R (>= 3.2.5)
 Imports:
