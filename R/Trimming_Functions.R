@@ -1,28 +1,3 @@
-##-------------##
-##  trim_step  ##
-##-------------##
-## Create a function that will:
-##  a.) choose a proband
-##  b.) determine which of the proband's relatives will remain in pedigree
-##     based on recall.prob.  Here the entries of recall.prob are the probabilies
-##     of the proband recalling relatives of various degrees.
-## More specifically, let k(p, r_i) be the kinship coefficient between the proband
-## and relative i.  Now, let p_k denote the probability that the proband can recall a
-## relative whose kinship coefficent is k(p, r_i).
-##
-## Arguments____________________________________________________________________
-## ped_file       - data.frame; ped_file generated using ped_step
-## ascertain_span    - vector, length = 2, the acertainment period of the study
-##                          i.e., years in which proband became affected
-## recall_probs   - vector, length n, probability proband recalls relatives of degree n
-##
-## Function Requirements________________________________________________________
-## nfam_step
-##
-## Package Requirements_________________________________________________________
-## kinship2
-##
-
 #' Choose proband and trim pedigree
 #'
 #' \code{trim_step} chooses a proband from the pedigree and trims relatives
