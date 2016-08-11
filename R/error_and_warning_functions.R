@@ -37,3 +37,7 @@ check_part = function(part){
     warning ('For optimal results please specify age-specific hazards which begin near birth and end near the life expectancy of the population to which the age specific hazards should be applied.')
   }
 }
+
+
+#check_recall_probs
+#check_spans

@@ -49,6 +49,9 @@ affected, then chooses a proband from the available candidates, or the
 individuals who have become affected during the acertainment period of the
 study, and finally trims the pedigree based on recall_probs
 }
+\details{
+This section will be details for the function... still need to add these.
+}
 \examples{
 part_vec <- seq(0, 100, by = 1)
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
