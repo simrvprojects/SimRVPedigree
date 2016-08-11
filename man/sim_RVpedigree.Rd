@@ -26,11 +26,11 @@ disease for individuals who have inherited the rare variant.}
 \item{ascertain_span}{numeric vector of length 2. The ascertainment period,
 i.e. first and last year of study.}
 
-\item{num_affected}{numeric. The desired number of affected.}
+\item{num_affected}{Numeric.  The desired number of affected.}
 
 \item{family_num}{numeric. The family number to assign the simulated RV pedigree.}
 
-\item{recall_probs}{numeric.  Proband recall probabilities.  See details.}
+\item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
 
 \item{birth_range}{A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.}
 
@@ -45,11 +45,21 @@ trim_ped The trimmed ped file, trimmed according to proband recall probability.
 }
 \description{
 \code{sim_RVpedigree} simulates a pedigree with the desired number of
-affected, then chooses a proband from the available candidates, or the
-individuals who have become affected during the acertainment period of the
-study, and finally trims the pedigree based on recall_probs
+affected, chooses a proband,and trims the pedigree based on the proband's
+recall probability of his or her relatives
 }
 \details{
+By default \code{recall_probs} is 4 times the kinship coefficent between the
+proband and the probands relative, which results in a recall probability of
+\eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may
+specify a list of recall probabilites of length \eqn{l > 0}, in which case
+the first \emph{l-1} items in \code{recall_probs} are the respective proband
+recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the
+\emph{l}th item in \code{recall_probs} is the proband's recall probability for
+all relatives of degree \strong{\emph{l} or greater}.  For example if
+\code{recall_probs = c(1)} all relatives will be recalled by the proband with
+probability 1.
+
 This section will be details for the function... still need to add these.
 }
 \examples{

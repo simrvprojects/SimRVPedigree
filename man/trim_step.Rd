@@ -12,14 +12,16 @@ trim_step(ped_file, ascertain_span, recall_probs, num_affected)
 \item{ascertain_span}{numeric vector of length 2. The ascertainment period,
 i.e. first and last year of study.}
 
-\item{recall_probs}{numeric.  Proband recall probabilities.  See details.}
+\item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
+
+\item{num_affected}{Numeric.  The desired number of affected.}
 }
 \value{
 The trimmed ped file
 }
 \description{
 \code{trim_step} chooses a proband from the pedigree and trims relatives
-based on proband recall probabilities.
+based on the proband's recall probability of that relative.
 }
 \details{
 By default \code{recall_probs} is 4 times the kinship coefficent between the

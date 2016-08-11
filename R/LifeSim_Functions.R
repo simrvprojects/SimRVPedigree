@@ -21,7 +21,7 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #'  given their current age, disease status, and rare variant status.
 #'
 #' \code{event_step} randomly simulates the next life event for an individual by
-#' generating the waiting times, via \link{findWaitTime}, to reproduction, onset,
+#' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
 #' and death given the individuals current age.  The event with the shortest
 #' waiting time is chosen as the next life event.  If event_step returns a value
 #' named "Birth", then the next life event is reproduction, if event_step
