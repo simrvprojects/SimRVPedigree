@@ -272,8 +272,6 @@ ped_step = function(onset_hazard, death_hazard, part,
 #' \code{recall_probs = c(1)} all relatives will be recalled by the proband with
 #' probability 1.
 #'
-#' This section will be details for the function... still need to add these.
-#'
 #'
 #' @param family_num numeric. The family number to assign the simulated RV pedigree.
 #' @inheritParams ped_step
