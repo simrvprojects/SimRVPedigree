@@ -37,7 +37,7 @@ create_pedFile = function(){
 add_mate = function(partner_info, last_id){
   new_mate_info <- data.frame(FamID = partner_info$FamID,
                              ID = last_id+1,
-                             gender = abs(partner_info$gender-1),
+                             gender = abs(partner_info$gender - 1),
                              dad_id = NA,
                              mom_id = NA,
                              affected = 0,
@@ -338,8 +338,8 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
     }
 
     #determine the number of available affected individuals
-    avail.affect <- trim_ped$ID[which(trim_ped$available == 1 & trim_ped$affected == 1)]
-    D <- ifelse(length(avail.affect) < num_affected, 0, 1)
+    D <- ifelse(length(trim_ped$ID[which(trim_ped$available == 1 &
+                                           trim_ped$affected == 1)]) < num_affected, 0, 1)
   }
 
   #return original and trimmed pedigrees
@@ -352,8 +352,7 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
 # ##------------##
 # ##  Sim_Peds  ##
 # ##------------##
-# ## Create a function that will simulate n pedigrees, gives user a progress bar,
-# ## but no parallization here
+# ## Create a function that will simulate n pedigrees, and uses parallization
 # ##
 # ## Arguments____________________________________________________________________
 # ## npeds          - constant; number of pedigrees to simulate
