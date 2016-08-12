@@ -334,9 +334,10 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
     # pedigree and check to see that the trimmed pedigree STILL meets our
     # conditions, if it does not we throw it out and start all over again.
     if (missing(recall_probs)) {
-      trim_ped <- trim_step(ped_file = fam_ped, ascertain_span)
+      trim_ped <- trim_step(ped_file = fam_ped, ascertain_span, num_affected)
     } else {
-      trim_ped <- trim_step(ped_file = fam_ped, ascertain_span, recall_probs)
+      trim_ped <- trim_step(ped_file = fam_ped,
+                            ascertain_span, num_affected, recall_probs)
     }
 
     #determine the number of available affected individuals

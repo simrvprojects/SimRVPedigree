@@ -75,6 +75,8 @@ event_step = function(current_age, disease_status, RV_status,
                       lambda_birth, onset_hazard, death_hazard, part,
                       birth_range, RR){
 
+  check_spans(birth_range)
+
   #first pull appropriate columns from death_hazard and onset_hazard for given
   # RV status and disease status
   risk.lambda  <- ifelse(RV_status == 1, RR, 1)
@@ -158,6 +160,8 @@ event_step = function(current_age, disease_status, RV_status,
 
 life_step = function(RV_status, onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
+
+  check_spans(birth_range)
 
   #initialize data frame to hold life events
   R.life  <- data.frame(Start = 0)

@@ -59,8 +59,6 @@ recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the
 all relatives of degree \strong{\emph{l} or greater}.  For example if
 \code{recall_probs = c(1)} all relatives will be recalled by the proband with
 probability 1.
-
-This section will be details for the function... still need to add these.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)

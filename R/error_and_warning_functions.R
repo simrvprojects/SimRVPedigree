@@ -1,14 +1,3 @@
-#' Check to see if hazard and partition vectors are specified correctly
-#'
-#'\code{check_hazpart} Check to see if hazard and partition vectors are specified correctly
-#'
-#'@param hazard A numeric vector.  A vector of age-specific hazards.
-#'@param part A numeric vector. The partition over which to apply hazard, note length(part) == length(hazard) + 1 should return TRUE.
-#'
-#'@examples
-#'check_hazpart(hazard = c(0.1, 0.4, 0.7, 0.8, 0.9), part = c(0, 20, 40, 60, 80, 100))
-#'check_hazpart(hazard = c(0.1, 0.4, 0.7, 0.8, 0.9), part = c(0, 20, 40, 60, 80))
-
 check_hazpart = function(hazard, part){
   check1 <- (class(hazard) != "numeric")
   check2 <- (length(hazard) < 1)
@@ -19,17 +8,6 @@ check_hazpart = function(hazard, part){
   }
 }
 
-
-
-#' define a function that issues a warning if age-specific hazards are notsupplied for an appropriate span of ages
-#'
-#'\code{check_part} Check to see if the partition vector meets some basic properties
-#'
-#'@param part A numeric vector. Partiton over which to apply hazards
-#'@examples
-#'check_part(part = c("a"))
-#'check_part(part = c(-1, 0, 10))
-
 check_part = function(part){
   check1 <- min(part)
   check2 <- max(part)
@@ -39,5 +17,14 @@ check_part = function(part){
 }
 
 
-#check_recall_probs
-#check_spans
+check_rprobs = function(recall_probs){
+  if (sum(recall_probs > 1) > 0 ){
+    stop ('recall probabilities must be less than or equal to 1')
+  }
+}
+
+check_spans = function(span){
+  if (length(span) != 2 | span[1] >= span[2]){
+    stop ('please provide an appropriate time span')
+  }
+}
