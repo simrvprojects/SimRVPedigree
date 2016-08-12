@@ -116,66 +116,66 @@ nfam_step = function(found_info, stop_year, last_id,
                      onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
 
-  nfam_ped = found_info
+  nfam_ped <- found_info
 
   #Simulate life steps for our founder
-  sim.life = life_step(RV_status = sum(c(found_info$DA1, found_info$DA2)),
-                       onset_hazard, death_hazard, part,
-                       birth_range, NB_params, RR)
+  sim_life <- life_step(RV_status = sum(c(found_info$DA1, found_info$DA2)),
+                        onset_hazard, death_hazard, part,
+                        birth_range, NB_params, RR)
 
   #convert these to years
-  sim.years = date_step(Rlife_events = sim.life, byear = found_info$birth_year)
+  sim_years <- date_step(Rlife_events = sim_life, byear = found_info$birth_year)
 
-  #set the disease status based on whether or not they experience disease onset prior to stop_year
-  onset.true = is.element("Onset", names(sim.years))
-  if (onset.true == TRUE) {
-    o.year = as.numeric(sim.years[which(names(sim.years) == "Onset")])
-    if (o.year <= stop_year) {
-      nfam_ped$affected = 1
-      nfam_ped$onset_year = o.year
+  # set the disease status based on whether or not they experience disease
+  # onset prior to stop_year
+  if (is.element("Onset", names(sim_years)) == TRUE) {
+    o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
+    if (o_year <= stop_year) {
+      nfam_ped$affected <- 1
+      nfam_ped$onset_year <- o_year
     } else {
-      nfam_ped$affected = 0
-      nfam_ped$onset_year = NA
+      nfam_ped$affected <- 0
+      nfam_ped$onset_year <- NA
     }
   } else {
-    nfam_ped$affected = 0
-    nfam_ped$onset_year = NA
+    nfam_ped$affected <- 0
+    nfam_ped$onset_year <- NA
   }
 
   #set the year of death if it occurs before stop_year
-  d.year = as.numeric(sim.years[which(names(sim.years) == "Death")])
-  if (d.year <= stop_year) {
-    nfam_ped$death_year = d.year
+  d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
+  if (d_year <= stop_year) {
+    nfam_ped$death_year <- d_year
   }
 
   #store the birth years of each child
-  birth.events = as.numeric(sim.years[which(names(sim.years) == "Birth" &
-                                              sim.years <= stop_year)])
+  birth_events <- as.numeric(sim_years[which(names(sim_years) == "Birth" &
+                                              sim_years <= stop_year)])
 
-  if (length(birth.events) > 0) {
+  if (length(birth_events) > 0) {
     #add a mate
-    new.mate = add_mate(partner_info = nfam_ped[1,], last_id)
-    nfam_ped = rbind(nfam_ped, new.mate[[1]])
-    last_id = new.mate[[2]]
+    new_mate <- add_mate(partner_info = nfam_ped[1,], last_id)
+    nfam_ped <- rbind(nfam_ped, new_mate[[1]])
+    last_id <- new_mate[[2]]
 
     #store info for mom and dad
-    dad = nfam_ped[which(nfam_ped$gender == 0), ]
-    mom = nfam_ped[which(nfam_ped$gender == 1), ]
+    dad <- nfam_ped[which(nfam_ped$gender == 0), ]
+    mom <- nfam_ped[which(nfam_ped$gender == 1), ]
 
-    for (k in 1:length(birth.events)) {
+    for (k in 1:length(birth_events)) {
       #add child
-      new.child = add_offspring(dad_info = dad, mom_info = mom,
-                            byear = birth.events[k], last_id)
-      nfam_ped = rbind(nfam_ped, new.child[[1]])
-      last_id = new.child[[2]]
+      new_child <- add_offspring(dad_info = dad, mom_info = mom,
+                                 byear = birth_events[k], last_id)
+      nfam_ped <- rbind(nfam_ped, new_child[[1]])
+      last_id <- new_child[[2]]
     }
   }
 
   #swich the do_sim value to 0 for the individual whose life events we have simulated
   nfam_ped$do_sim[1] = 0
 
-  sim.fam.return = list(nfam_ped, last_id)
-  return(sim.fam.return)
+  sim_fam_return = list(nfam_ped, last_id)
+  return(sim_fam_return)
 }
 
 #' Simulate a full pedigree
@@ -213,42 +213,43 @@ ped_step = function(onset_hazard, death_hazard, part,
                     stop_year = 2015){
 
   #initialize a data frame to store all the necessary info for the ped file
-  fam_ped = create_pedFile()
+  fam_ped <- create_pedFile()
 
   #randomly generate birth year and gender for the founder carrying the RV,
   #and fill in all other fields with the appropriate info
-  fam_ped[1,] = c(NA,               #family ID
+  fam_ped[1,] <- c(NA,               #family ID
                   1,                #RV status
                   round(runif(1)),  #gender
                   NA, NA,           #dad_id and #mom_id
                   NA,               #affected status
                   1, 0,             #alleles 1 and 2,
                   1,                #generation no
-                  round(runif(1, min = founder_byears[1], max = founder_byears[2])), #birth year
+                  round(runif(1, min = founder_byears[1],
+                              max = founder_byears[2])), #birth year
                   NA, NA,           #onset and death years
                   RR,               #RR of developing disease
                   1, 1)             # do_sim and availablilty
 
-  last_id = 1
-  last.gen = 1
+  last_id <- 1
+  last.gen <- 1
 
   #store the ID of individuals for whom we need to simulate life events
-  re.sim = fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
+  re.sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
   while (length(re.sim) > 0) {
     for (k in 1:length(re.sim)) {
-      new.kin = nfam_step(found_info = fam_ped[which(fam_ped$ID == re.sim[k]),],
-                          stop_year, last_id,
-                          onset_hazard, death_hazard, part,
-                          birth_range, NB_params, RR)
+      new.kin <- nfam_step(found_info = fam_ped[which(fam_ped$ID == re.sim[k]),],
+                           stop_year, last_id,
+                           onset_hazard, death_hazard, part,
+                           birth_range, NB_params, RR)
 
       #replace individual by their simulated self and add family members when necessary
-      fam_ped = rbind(fam_ped[-which(fam_ped$ID==re.sim[k]), ],
-                      new.kin[[1]])
+      fam_ped <- rbind(fam_ped[-which(fam_ped$ID==re.sim[k]), ],
+                       new.kin[[1]])
 
-      last_id = new.kin[[2]]
+      last_id <- new.kin[[2]]
     }
-    last.gen = max(fam_ped$Gen)
-    re.sim = fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
+    last.gen <- max(fam_ped$Gen)
+    re.sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
   }
 
   return(fam_ped[, c(1:8,10:13,15,9)])
@@ -261,16 +262,12 @@ ped_step = function(onset_hazard, death_hazard, part,
 #' affected, chooses a proband,and trims the pedigree based on the proband's
 #' recall probability of his or her relatives
 #'
-#' By default \code{recall_probs} is 4 times the kinship coefficent between the
-#' proband and the probands relative, which results in a recall probability of
-#' \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may
-#' specify a list of recall probabilites of length \eqn{l > 0}, in which case
-#' the first \emph{l-1} items in \code{recall_probs} are the respective proband
-#' recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the
-#' \emph{l}th item in \code{recall_probs} is the proband's recall probability for
-#' all relatives of degree \strong{\emph{l} or greater}.  For example if
-#' \code{recall_probs = c(1)} all relatives will be recalled by the proband with
-#' probability 1.
+#'
+#' We assume that the variant is rare enough that it has only been introduced to the pedigree by one of the two oldest founders.  The variant is then transmitted to offspring according to Mendel's  laws.  Life events for individuals who have inherited the rare variant (RV) are simulated such that their relative risk is \code{RR}, all others are simulated with a relative risk of 1.  All events which occur after the specified \code{stop_year} are censored.
+#'
+#' By default \code{recall_probs} is 4 times the kinship coefficent between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilites of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
+#'
+#' The birth year for the founder with the rare variant is simulated uniformly  between the years specified in \code{founder_byears}.
 #'
 #'
 #' @param family_num numeric. The family number to assign the simulated RV pedigree.

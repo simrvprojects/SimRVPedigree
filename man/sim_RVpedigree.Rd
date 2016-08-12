@@ -49,16 +49,11 @@ affected, chooses a proband,and trims the pedigree based on the proband's
 recall probability of his or her relatives
 }
 \details{
-By default \code{recall_probs} is 4 times the kinship coefficent between the
-proband and the probands relative, which results in a recall probability of
-\eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may
-specify a list of recall probabilites of length \eqn{l > 0}, in which case
-the first \emph{l-1} items in \code{recall_probs} are the respective proband
-recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the
-\emph{l}th item in \code{recall_probs} is the proband's recall probability for
-all relatives of degree \strong{\emph{l} or greater}.  For example if
-\code{recall_probs = c(1)} all relatives will be recalled by the proband with
-probability 1.
+We assume that the variant is rare enough that it has only been introduced to the pedigree by one of the two oldest founders.  The variant is then transmitted to offspring according to Mendel's  laws.  Life events for individuals who have inherited the rare variant (RV) are simulated such that their relative risk is \code{RR}, all others are simulated with a relative risk of 1.  All events which occur after the specified \code{stop_year} are censored.
+
+By default \code{recall_probs} is 4 times the kinship coefficent between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilites of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
+
+The birth year for the founder with the rare variant is simulated uniformly  between the years specified in \code{founder_byears}.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)

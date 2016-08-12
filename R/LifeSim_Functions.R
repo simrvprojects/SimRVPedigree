@@ -11,8 +11,8 @@
 #' rbirth_rate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
 #'
 rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
-  birth_rate = rgamma(1, shape = NB_size,
-                      scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
+  birth_rate <- rgamma(1, shape = NB_size,
+                       scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
 #' Simulate next life event
@@ -77,51 +77,50 @@ event_step = function(current_age, disease_status, RV_status,
 
   check_spans(birth_range)
 
-  #first pull appropriate columns from death_hazard and onset_hazard for given
-  # RV status and disease status
-  risk.lambda  <- ifelse(RV_status == 1, RR, 1)
-  onset.lambda <- onset_hazard*risk.lambda
-  death.lambda <- death_hazard[, (1 + disease_status)]
-
-  #Assuming that the person is not yet affected, simulate the waiting time until onset given current age
-  t.onset <- ifelse(disease_status == 0,
+  # Assuming that the person is not yet affected, simulate the waiting time
+  # until onset given current age
+  t_onset <- ifelse(disease_status == 0,
                     get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = onset.lambda, part), NA)
+                                 hazard = onset_hazard*ifelse(RV_status == 1, RR, 1),
+                                 part), NA)
 
   #simulate the waiting time until death given current age.
   # NOTE: choosing rate = FASLE implies that we are assuming person will die
-  t.death <- get_WaitTime(p = runif(1),
+  t_death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
-                          hazard = death.lambda,
+                          hazard = death_hazard[, (1 + disease_status)],
                           part,
                           scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
-  nyear.birth <- rexp(1, lambda_birth)
-  t.birth <- ifelse(
-    # this condition handles the case when person is less than the minimum
-    # birth age when this occurs we return current age + waiting time
-    # so long as this value is less than the maximum birth age
-    ((current_age < birth_range[1]) & (nyear.birth + birth_range[1] <= birth_range[2])),
-    nyear.birth + birth_range[1],
-    # next we deal with people who have reached the minimum birth age,
-    ifelse(((current_age >= birth_range[1]) & (nyear.birth + current_age <= birth_range[2])),
-           nyear.birth,
-           #if neither condition is met we return NA
-           NA))
+
+  # First condition handles the case when person is less than the minimum
+  # birth age when this occurs we return current age + waiting time
+  # so long as this value is less than the maximum birth age
+  # Second condition deals with people who have reached the minimum birth age,
+  # if neiter is met we return NA
+  nyear_birth <- rexp(1, lambda_birth)
+  t_birth <- ifelse((current_age < birth_range[1] &
+                       nyear_birth + birth_range[1] <= birth_range[2]),
+                    nyear_birth + birth_range[1],
+                    ifelse((current_age >= birth_range[1] &
+                              (nyear_birth + current_age) <= birth_range[2]),
+                           nyear_birth,
+                           NA))
 
   #create list of simulated times
-  times <- as.list(c(Birth = t.birth,  Onset = t.onset, Death = t.death))
+  times <- as.list(c(Birth = t_birth,  Onset = t_onset, Death = t_death))
 
   #find the smallest waiting time
-  if (sum(which.min(times)) == 0) {
-    nyears = as.matrix(0, ncol = 1)
-    colnames(nyears) = c("retry")
-  }else if (sum(which.min(times)) != 0) {
-    nyears = as.matrix(times[[which.min(times)]], ncol = 1)
-    colnames(nyears) = c(paste(names(which.min(times))))
+  if (sum(which.min(times)) != 0) {
+    nyears <- as.matrix(times[[which.min(times)]], ncol = 1)
+    colnames(nyears) <- c(paste(names(which.min(times))))
+  }else if (sum(which.min(times)) == 0) {
+    nyears <- as.matrix(0, ncol = 1)
+    colnames(nyears) <- c("retry")
   }
+
   return(nyears)
 }
 
@@ -161,7 +160,7 @@ event_step = function(current_age, disease_status, RV_status,
 life_step = function(RV_status, onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
 
-  check_spans(birth_range)
+  #check_spans(birth_range)
 
   #initialize data frame to hold life events
   R.life  <- data.frame(Start = 0)
