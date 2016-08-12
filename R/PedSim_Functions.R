@@ -15,13 +15,13 @@ create_pedFile = function(){
              affected = numeric(),
              DA1 = numeric(),
              DA2 = numeric(),
-             Gen = numeric(),
              birth_year = numeric(),
              onset_year = numeric(),
              death_year = numeric(),
              RR = numeric(),
-             do_sim = numeric(),
              available = numeric(),
+             Gen = numeric(),
+             do_sim = numeric(),
              stringsAsFactors=FALSE)
 }
 
@@ -43,13 +43,13 @@ add_mate = function(partner_info, last_id){
                              affected = 0,
                              DA1 = 0,
                              DA2 = 0,
-                             Gen = partner_info$Gen,
                              birth_year = NA,
                              onset_year = NA,
                              death_year = NA,
                              RR = NA,
-                             do_sim = 0,
                              available = 0,
+                             Gen = partner_info$Gen,
+                             do_sim = 0,
                              stringsAsFactors=FALSE)
 
   mate_return <- list(new_mate_info, last_id+1)
@@ -75,13 +75,13 @@ add_offspring = function(dad_info, mom_info, byear, last_id){
                               affected = 0,
                               DA1 = sample(x = c(dad_info$DA1, dad_info$DA2), size = 1),
                               DA2 = sample(x = c(mom_info$DA1, mom_info$DA2), size = 1),
-                              Gen = dad_info$Gen + 1,
                               birth_year = byear,
                               onset_year = NA,
                               death_year = NA,
                               RR = c(dad_info$RR, mom_info$RR)[which(!is.na(c(dad_info$RR, mom_info$RR)))],
-                              do_sim = 1,
                               available = 1,
+                              Gen = dad_info$Gen + 1,
+                              do_sim = 1,
                               stringsAsFactors=FALSE)
   child_return <- list(new_child_info, last_id+1)
   return(child_return)
@@ -158,9 +158,9 @@ nfam_step = function(found_info, stop_year, last_id,
     nfam_ped <- rbind(nfam_ped, new_mate[[1]])
     last_id <- new_mate[[2]]
 
-    #store info for mom and dad
-    dad <- nfam_ped[which(nfam_ped$gender == 0), ]
-    mom <- nfam_ped[which(nfam_ped$gender == 1), ]
+    #store info for mom and dad (previously nfam_ped$gender below)
+    dad <- nfam_ped[which(nfam_ped[,3] == 0), ]
+    mom <- nfam_ped[which(nfam_ped[,3] == 1), ]
 
     for (k in 1:length(birth_events)) {
       #add child
@@ -223,12 +223,12 @@ ped_step = function(onset_hazard, death_hazard, part,
                   NA, NA,           #dad_id and #mom_id
                   NA,               #affected status
                   1, 0,             #alleles 1 and 2,
-                  1,                #generation no
                   round(runif(1, min = founder_byears[1],
                               max = founder_byears[2])), #birth year
                   NA, NA,           #onset and death years
                   RR,               #RR of developing disease
-                  1, 1)             # do_sim and availablilty
+                  1, 1,             #availablilty and generation no
+                  1)                # do_sim
 
   last_id <- 1
   last.gen <- 1
@@ -252,7 +252,7 @@ ped_step = function(onset_hazard, death_hazard, part,
     re.sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
   }
 
-  return(fam_ped[, c(1:8,10:13,15,9)])
+  return(fam_ped[, c(1:14)])
 }
 
 
