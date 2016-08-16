@@ -81,7 +81,9 @@ library(doRNG)
 cl <- makeCluster(detectCores())  # create cluster
 registerDoParallel(cl)            # register cluster
 
-npeds = 8   #set the number of pedigrees to generate
+npeds = 8    #set the number of pedigrees to generate
+rnseed = 22  #choose a seed
+
 RV_peds = foreach(i = seq(npeds), .combine = rbind,
                   .packages = c("kinship2", "SimRVPedigree"),
                   .options.RNG = rnseed
@@ -95,6 +97,8 @@ RV_peds = foreach(i = seq(npeds), .combine = rbind,
                                  family_num = i)[[2]]}
 
 stopCluster(cl)
+#RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
+
 
 }
 

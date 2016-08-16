@@ -324,6 +324,8 @@ ped_step = function(onset_hazard, death_hazard, part,
 #'                                  family_num = i)[[2]]}
 #'
 #' stopCluster(cl)
+#' #RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
+#'
 #'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           founder_byears, ascertain_span,
