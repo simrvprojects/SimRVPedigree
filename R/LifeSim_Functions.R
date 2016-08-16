@@ -5,6 +5,7 @@
 #'
 #' @return birth_rate numeric, the randomly generated birth rate
 #' @export
+#' @importFrom stats rgamma
 #'
 #' @examples
 #' set.seed(17)
@@ -48,6 +49,8 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #' @return Named matrix. The number of years until the next life event,
 #' named by event type.
 #' @export
+#' @importFrom stats runif
+#' @importFrom stats rexp
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)

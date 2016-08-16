@@ -15,6 +15,9 @@
 #' @return The waiting time to next event, units same as those in \code{part}.
 #' @export
 #'
+#' @importFrom stats splinefun
+#' @importFrom stats approxfun
+#'
 #' @examples
 #' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
 #' part_vec <- seq(0, 80, by = 5)

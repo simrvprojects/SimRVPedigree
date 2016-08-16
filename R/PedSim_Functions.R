@@ -66,6 +66,8 @@ add_mate = function(partner_info, last_id){
 #' @return new_child_info the ped file information for the new child
 #' @return last_id the updated value of last_id after offspring has been added
 #'
+#' @importFrom stats runif
+#'
 add_offspring = function(dad_info, mom_info, byear, last_id){
   new_child_info <- data.frame(FamID = dad_info$FamID,
                               ID = last_id+1,
@@ -194,6 +196,8 @@ nfam_step = function(found_info, stop_year, last_id,
 #'
 #' @return The ped file for the simulated pedigree.
 #' @export
+#' @importFrom stats runif
+
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
 #' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),

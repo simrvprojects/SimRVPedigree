@@ -25,6 +25,7 @@
 #' @export
 #'
 #' @importFrom kinship2 kinship
+#' @importFrom stats runif
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)

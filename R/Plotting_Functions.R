@@ -4,11 +4,12 @@
 #'
 #' @param ped_file A single pedigree simulated with either \code{sim_RVpedigree} or \code{ped_step}
 #'
-#' @return Values returned from \link{plot.pedigree}
+#' @return Values returned from \link[kinship2]{plot.pedigree}
 #' @export
 #'
 #' @importFrom kinship2 pedigree
 #' @importFrom kinship2 plot.pedigree
+#' @importFrom graphics plot
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)

@@ -10,7 +10,7 @@ plot_RVpedigree(ped_file)
 \item{ped_file}{A single pedigree simulated with either \code{sim_RVpedigree} or \code{ped_step}}
 }
 \value{
-Values returned from \link{plot.pedigree}
+Values returned from \link[kinship2]{plot.pedigree}
 }
 \description{
 Plot ped files generated using \code{SimRVPedigree} using the pedigree plotting tools provided by the \link{kinship2} package.
