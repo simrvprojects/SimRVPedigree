@@ -297,12 +297,12 @@ ped_step = function(onset_hazard, death_hazard, part,
 #' plot_RVpedigree(ex_RVped[[2]])
 #'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
-                      founder_byears, ascertain_span,
-                      num_affected, family_num,
-                      recall_probs,
-                      birth_range = c(18, 45),
-                      NB_params = c(2, 4/7),
-                      stop_year = 2015){
+                          founder_byears, ascertain_span,
+                          num_affected, family_num,
+                          recall_probs,
+                          birth_range = c(18, 45),
+                          NB_params = c(2, 4/7),
+                          stop_year = 2015){
 
   #generate the family pedigree, check to see that the untrimmed pedigree has
   # the appropriate number of affected individuals
