@@ -300,6 +300,31 @@ ped_step = function(onset_hazard, death_hazard, part,
 #' plot_RVpedigree(ex_RVped[[1]])
 #' plot_RVpedigree(ex_RVped[[2]])
 #'
+#' #how to incorporate parallel processing
+#' library(doParallel)
+#' library(doRNG)
+#'
+#'
+#' cl <- makeCluster(detectCores())  # create cluster
+#' registerDoParallel(cl)            # register cluster
+#'
+#' npeds = 8    #set the number of pedigrees to generate
+#' rnseed = 22  #choose a seed
+#'
+#' RV_peds = foreach(i = seq(npeds), .combine = rbind,
+#'                   .packages = c("kinship2", "SimRVPedigree"),
+#'                   .options.RNG = rnseed
+#'                   ) %dorng% {
+#'                   sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                                  death_hazard = Dhaz_df,
+#'                                  part = part_vec, RR = 5,
+#'                                  founder_byears = c(1900, 1910),
+#'                                  ascertain_span = c(1900, 2015),
+#'                                  num_affected = 2,
+#'                                  family_num = i)[[2]]}
+#'
+#' stopCluster(cl)
+#'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           founder_byears, ascertain_span,
                           num_affected, family_num,
