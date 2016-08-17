@@ -74,8 +74,9 @@ library(doRNG)
 
 cl <- makeCluster(detectCores())  # create cluster
 registerDoParallel(cl)            # register cluster
+on.exit(stopCluster(cl))
 
-npeds = 120    #set the number of pedigrees to generate
+npeds = 8*12    #set the number of pedigrees to generate
 rnseed = 22    #choose a seed
 
 RV_peds = foreach(i = seq(npeds), .combine = rbind,
@@ -89,6 +90,19 @@ RV_peds = foreach(i = seq(npeds), .combine = rbind,
                                  ascertain_span = c(1900, 2015),
                                  num_affected = 2)[[2]]}
 
+# Run sequentially
+system.time(foreach(i = seq(npeds), .combine = rbind,
+                  .packages = c("kinship2", "SimRVPedigree"),
+                  .options.RNG = rnseed
+                  ) \%do\% {
+                  sim_RVpedigree(onset_hazard = Ohaz_vec,
+                                 death_hazard = Dhaz_df,
+                                 part = part_vec, RR = 5, FamID = i,
+                                 founder_byears = c(1900, 1910),
+                                 ascertain_span = c(1900, 2015),
+                                 num_affected = 2)[[2]]})
+
+#for each loop
 system.time(foreach(i = seq(npeds), .combine = rbind,
                   .packages = c("kinship2", "SimRVPedigree"),
                   .options.RNG = rnseed
@@ -101,20 +115,8 @@ system.time(foreach(i = seq(npeds), .combine = rbind,
                                  num_affected = 2)[[2]]})
 
 #break into separate jobs for each processor
-n_proc = 8
+n_proc = detectCores()
 nped_proc = npeds/n_proc
-RV_peds2 = foreach(i = seq(n_proc), .combine = rbind,
-                   .packages = c("kinship2", "SimRVPedigree"),
-                   .options.RNG = rnseed
-                   ) \%dorng\% {
-                   sim_RVstudy(npeds = nped_proc, onset_hazard = Ohaz_vec,
-                               death_hazard = Dhaz_df,
-                               part = part_vec, RR = 5,
-                               first_FamID = (i*nped_proc - nped_proc + 1),
-                               founder_byears = c(1900, 1910),
-                               ascertain_span = c(1900, 2015),
-                               num_affected = 2)}
-
 system.time(foreach(i = seq(n_proc), .combine = rbind,
                    .packages = c("kinship2", "SimRVPedigree"),
                    .options.RNG = rnseed
@@ -126,6 +128,18 @@ system.time(foreach(i = seq(n_proc), .combine = rbind,
                                founder_byears = c(1900, 1910),
                                ascertain_span = c(1900, 2015),
                                num_affected = 2)})
+
+RV_peds2 = foreach(i = seq(n_proc), .combine = rbind,
+                   .packages = c("kinship2", "SimRVPedigree"),
+                   .options.RNG = rnseed
+                   ) \%dorng\% {
+                   sim_RVstudy(npeds = nped_proc, onset_hazard = Ohaz_vec,
+                               death_hazard = Dhaz_df,
+                               part = part_vec, RR = 5,
+                               first_FamID = (i*nped_proc - nped_proc + 1),
+                               founder_byears = c(1900, 1910),
+                               ascertain_span = c(1900, 2015),
+                               num_affected = 2)}
 
 registerDoSEQ()
 stopCluster(cl)
