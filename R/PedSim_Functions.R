@@ -331,10 +331,10 @@ sim_ped = function(onset_hazard, death_hazard, part,
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           founder_byears, ascertain_span,
                           num_affected, FamID,
-                          recall_probs,
-                          birth_range = c(18, 45),
-                          NB_params = c(2, 4/7),
-                          stop_year = 2015){
+                          recall_probs, birth_range = c(18, 45),
+                          NB_params = c(2, 4/7), stop_year = 2015){
+
+
 
   #generate the family pedigree, check to see that the untrimmed pedigree has
   # the appropriate number of affected individuals
@@ -380,53 +380,128 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
 }
 
 
-# ##------------##
-# ##  Sim_Peds  ##
-# ##------------##
-# ## Create a function that will simulate n pedigrees, and uses parallization
-# ##
-# ## Arguments____________________________________________________________________
-# ## npeds          - constant; number of pedigrees to simulate
-# ## onset_hazard   - vector; age specific incidence rates for the disease of interest
-# ## death_hazard   - data.frame; age specific mortality rates
-# ## part           - vector; partition over which to apply onset and death rates
-# ## RR           - constant; the RR for developing disease
-# ## founder_byears - vector; length 2, years to be chosen from uniformly for founder birth year
-# ## ascertain_span    - vector, length = 2, the acertainment period of the study
-# ##                          i.e., years in which proband became affected
-# ## num_affected   - constant; number of affected in simulated family
-# ## recall_probs   - vector, length n, probability proband recalls relatives of degree n
-# ## birth_range    - vector; max and min birth ages
-# ## NB_params      - vector; size and probability parameters for NB distribution
-# ## stop_year      - constant:
-# ##
-# ## Function Requirements________________________________________________________
-# ## sim_family
-# ##
-# ## Package Requirements_________________________________________________________
-# ## NONE
-# ##
-# Sim_Peds = function(npeds, RR,
-#                     onset_hazard, death_hazard, part,
-#                     founder_byears, ascertain_span,
-#                     num_affected, recall_probs,
-#                     birth_range = c(18, 45), NB_params = c(2, 4/7),
-#                     stop_year = 2015){
-#
-#
-#   ped_files = create_pedFile()
-#   ped.RRs = rep(RR, npeds)
-#   my.count = 1
-#   pb <- txtProgressBar(min = 0, max = length(ped.RRs), style = 3)
-#   for(m in 1:length(ped.RRs)){
-#     loop.fam = sim_family(onset_hazard, death_hazard, part, RR = ped.RRs[m],
-#                           founder_byears, ascertain_span,
-#                           num_affected, family_num = my.count,
-#                           recall_probs,
-#                           birth_range, NB_params, stop_year)[[2]]
-#     ped_files = rbind(ped_files, loop.fam)
-#     setTxtProgressBar(pb, m)
-#     my.count = my.count + 1
-#     }
-#   return(ped_files)
-# }
+#' Simulate a dataset of n pedigrees ascertained for a rare disease
+#'
+#' \code{Sim_RVstudy} simulates a dataset of \emph{n} pedigrees that have been ascertained for a rare disease according to a particular study design.
+#'
+#' For details on how individual pedigrees are simulated please refer to \link{sim_RVpedigree}.
+#'
+#' @param npeds numeric. The number of pedigrees to simulate.
+#' @inheritParams sim_RVpedigree
+#'
+#' @return RVped_files A data.frame of n pedigrees.
+#' @export
+#'
+#' @examples
+#' part_vec <- seq(0, 100, by = 1)
+#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
+#'                                     shape = 9.5, scale = 1)/350
+#' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
+#'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+#' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+#' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+#' set.seed(22)
+#' RVstudy = sim_RVstudy(npeds = 4, onset_hazard = Ohaz_vec,
+#'                       death_hazard = Dhaz_df, part = part_vec, RR = 5,
+#'                       founder_byears = c(1900, 1910),
+#'                       ascertain_span = c(1900, 2015),
+#'                       num_affected = 2 )
+#'
+#' for(i in 1:4){
+#'   plot_RVpedigree(RVstudy[which(RVstudy$FamID == i),])
+#'   mtext(paste0("FamID = ", i))
+#' }
+#'
+#' #how to incorporate parallel processing
+#' library(doParallel)
+#' library(doRNG)
+#'
+#'
+#' cl <- makeCluster(detectCores())  # create cluster
+#' registerDoParallel(cl)            # register cluster
+#'
+#' npeds = 40    #set the number of pedigrees to generate
+#' rnseed = 22    #choose a seed
+#'
+#' RV_peds = foreach(i = seq(npeds), .combine = rbind,
+#'                   .packages = c("kinship2", "SimRVPedigree"),
+#'                   .options.RNG = rnseed
+#'                   ) %dorng% {
+#'                   sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                                  death_hazard = Dhaz_df,
+#'                                  part = part_vec, RR = 5, FamID = i,
+#'                                  founder_byears = c(1900, 1910),
+#'                                  ascertain_span = c(1900, 2015),
+#'                                  num_affected = 2)[[2]]}
+#'
+#' system.time(foreach(i = seq(npeds), .combine = rbind,
+#'                   .packages = c("kinship2", "SimRVPedigree"),
+#'                   .options.RNG = rnseed
+#'                   ) %dorng% {
+#'                   sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                                  death_hazard = Dhaz_df,
+#'                                  part = part_vec, RR = 5, FamID = i,
+#'                                  founder_byears = c(1900, 1910),
+#'                                  ascertain_span = c(1900, 2015),
+#'                                  num_affected = 2)[[2]]})
+#'
+#' #break into separate jobs for each processor
+#' n_proc = 8
+#' nped_proc = npeds/n_proc
+#' RV_peds2 = foreach(i = seq(n_proc), .combine = rbind,
+#'                    .packages = c("kinship2", "SimRVPedigree"),
+#'                    .options.RNG = rnseed
+#'                    ) %dorng% {
+#'                    sim_RVstudy(npeds = nped_proc, onset_hazard = Ohaz_vec,
+#'                                death_hazard = Dhaz_df,
+#'                                part = part_vec, RR = 5,
+#'                                first_FamID = (i*nped_proc - nped_proc + 1),
+#'                                founder_byears = c(1900, 1910),
+#'                                ascertain_span = c(1900, 2015),
+#'                                num_affected = 2)}
+#'
+#' system.time(foreach(i = seq(n_proc), .combine = rbind,
+#'                    .packages = c("kinship2", "SimRVPedigree"),
+#'                    .options.RNG = rnseed
+#'                    ) %dorng% {
+#'                    sim_RVstudy(npeds = nped_proc, onset_hazard = Ohaz_vec,
+#'                                death_hazard = Dhaz_df,
+#'                                part = part_vec, RR = 5,
+#'                                first_FamID = (i*nped_proc - nped_proc + 1),
+#'                                founder_byears = c(1900, 1910),
+#'                                ascertain_span = c(1900, 2015),
+#'                                num_affected = 2)})
+#'
+#' registerDoSEQ()
+#' stopCluster(cl)
+#' #RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
+#'
+#'
+sim_RVstudy = function(npeds, onset_hazard, death_hazard, part, RR,
+                       founder_byears, ascertain_span,
+                       num_affected, recall_probs, first_FamID,
+                       birth_range = c(18, 45), NB_params = c(2, 4/7),
+                       stop_year = 2015){
+
+
+  RVped_files <- create_pedFile()
+  colnames(RVped_files)[ncol(RVped_files)] <- "is_proband"
+  ped_RRs <- rep(RR, each = npeds)
+
+  if (missing(first_FamID)) {
+    FamIDs <- seq(1, length(ped_RRs), by = 1)
+  } else {
+    FamIDs <- seq(first_FamID, (first_FamID + length(ped_RRs)), by = 1)
+  }
+
+  for(m in 1:length(ped_RRs)){
+    loop.fam <- sim_RVpedigree(onset_hazard, death_hazard, part, RR = ped_RRs[m],
+                               founder_byears, ascertain_span,
+                               num_affected, FamID = FamIDs[m],
+                               recall_probs, birth_range,
+                               NB_params, stop_year)[[2]]
+    RVped_files = rbind(RVped_files, loop.fam)
+  }
+
+  return(RVped_files)
+}
