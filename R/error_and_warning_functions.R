@@ -1,30 +1,86 @@
+#' Check to see if age-specific hazard and partition of ages are specified correctly
+#'
+#' @inheritParams get_WaitTime
+#' @export
+#'
+#' @examples
+#' #the length of part should be equal to the length of hazard + 1
+#' check_hazpart(hazard = seq(0, 1, by = 0.05), part = seq(0, 20, by = 1))
+#' check_hazpart(hazard = seq(0, 1, by = 0.05), part = seq(0, 21, by = 1))
+#'
+#' check_hazpart(hazard = c(1, NA, 2, 4), part = c(0, 10, 20, 30, 40))
 check_hazpart = function(hazard, part){
-  check1 <- (class(hazard) != "numeric")
-  check2 <- (length(hazard) < 1)
-  check3 <- (length(part) != (length(hazard) + 1))
-  if ( check1 | check2 | check3 ) {
+  if ( class(hazard) != "numeric" | class(part) != "numeric" ){
+    stop ('please provide numeric hazard and part vectors')
+  } else if (length(part) == 1 | length(part) != (length(hazard) + 1)) {
     stop ('please provide numeric hazard and part vectors,
-          such that length(part) == length(hazard) + 1 returns TRUE')
+          such that length(part) == length(hazard) + 1')
+  } else if (any(is.na(hazard)) | any(is.na(part))) {
+    stop('hazard and part cannot contain missing values')
   }
 }
 
+#' Check to see if hazards span an appropriate range of ages
+#'
+#' @inheritParams get_WaitTime
+#'
+#' @export
+#'
+#' @examples
+#' check_part(part = seq(10, 20, by = 1))
+#' check_part(part = seq(-10, 10, by = 1))
+#' check_part(part = seq(0, 85, by = 1))
 check_part = function(part){
-  check1 <- min(part)
-  check2 <- max(part)
-  if ( check1 > 20 | check2 < 60 ) {
-    warning ('For optimal results please specify age-specific hazards which begin near birth and end near the life expectancy of the population to which the age specific hazards should be applied.')
-  }
+  if (min(part) > 20 | min(part) < 0 | max(part) < 65) {
+    warning ('For optimal results please specify age-specific hazards that begin near birth and end near the life expectancy of the population to which the age-specific hazards apply.')
+    }
 }
 
 
+#' check to see if recall probabilies are correctly specified
+#'
+#' @inheritParams trim_pedigree
+#'
+#' @export
+#'
+#' @examples
+#' check_rprobs(c(2, 0.3, 0.4))
+#' check_rprobs(NA)
+#' check_rprobs("a")
+#' check_rprobs(recall_probs = c(1))
 check_rprobs = function(recall_probs){
-  if (sum(recall_probs > 1) > 0 ){
-    stop ('recall probabilities must be less than or equal to 1')
+  if (any(recall_probs > 1) | any(recall_probs < 0) ){
+    stop ('recall probabilities must be between 0 and 1')
   }
 }
 
+#' Check to see if time spans are appropriately specified
+#'
+#' @param span numeric.  A span of years or ages.
+#'
+#' @export
+#'
+#' @examples
+#' check_spans(c(1, 3, 6))
+#' check_spans(c(1982, 1975))
+#' check_spans(c(1975, 1982))
+#' check_spans(c(1975, 1975))
+#' check_spans(c(18))
 check_spans = function(span){
   if (length(span) != 2 | span[1] >= span[2]){
-    stop ('please provide an appropriate time span')
+    stop ('please provide appropriate time/age spans')
+  }
+}
+
+#' check to see if death_hazard is appropriately specified
+#'
+#' @param death_hazard data.frame. The age-specific death hazards for affected and unaffected individuals.
+#'
+#' @export
+check_dhaz = function(death_hazard){
+  if(class(death_hazard) != "data.frame" | ncol(death_hazard) != 2){
+    stop("please specify a data frame with 2 columns for death_hazard,
+         column 1 = age-specific death hazard for unaffected individuals,
+         column 2 = age-specific death hazard for affected indivdiuals")
   }
 }

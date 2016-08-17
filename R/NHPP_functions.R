@@ -31,9 +31,8 @@
 #'              scale = TRUE)
 #'
 
-get_WaitTime = function(p, last_event, hazard, part, scale = FALSE){
-  check_hazpart(hazard, part)
-  check_part(part)
+get_WaitTime = function(p, last_event, hazard, part,
+                        scale = FALSE){
 
   #create a function to approximate cumulative hazard using approxfun()
   approxCumHaz <- approxfun(x = part, y = c(0, cumsum(hazard)), rule = 2)

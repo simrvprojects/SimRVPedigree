@@ -2,7 +2,6 @@
 #'
 #' @param NB_size,NB_prob size and probability parameters of negative binomial distribution.
 #' @param min_birth_age,max_birth_age minimum and maximum allowable birth ages
-#'
 #' @return birth_rate numeric, the randomly generated birth rate
 #' @export
 #' @importFrom stats rgamma
@@ -12,7 +11,7 @@
 #' sim_birthRate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
 #'
 sim_birthRate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
-  birth_rate <- rgamma(1, shape = NB_size,
+    birth_rate <- rgamma(1, shape = NB_size,
                        scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
@@ -78,8 +77,6 @@ get_nextEvent = function(current_age, disease_status, RV_status,
                       lambda_birth, onset_hazard, death_hazard, part,
                       birth_range, RR){
 
-  check_spans(birth_range)
-
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
   t_onset <- ifelse(disease_status == 0,
@@ -92,8 +89,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
   t_death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
                           hazard = death_hazard[, (1 + disease_status)],
-                          part,
-                          scale = TRUE)
+                          part, scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
