@@ -1,6 +1,6 @@
 #' Choose proband and trim pedigree
 #'
-#' \code{trim_step} chooses a proband from the pedigree and trims relatives
+#' \code{trim_pedigree} chooses a proband from the pedigree and trims relatives
 #' based on the proband's recall probability of that relative.
 #'
 #' By default \code{recall_probs} is 4 times the kinship coefficent between the
@@ -39,11 +39,11 @@
 #' ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
 #'                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
 #' ex_ped
-#' trim_step(ped_file = ex_ped, ascertain_span = c(1990, 2015), num_affected = 3)
-#' trim_step(ped_file = ex_ped, ascertain_span = c(1990, 2015),
+#' trim_pedigree(ped_file = ex_ped, ascertain_span = c(1990, 2015), num_affected = 3)
+#' trim_pedigree(ped_file = ex_ped, ascertain_span = c(1990, 2015),
 #'           num_affected = 3, recall_probs = c(1, 0.9, 0))
 #'
-trim_step = function(ped_file, ascertain_span, num_affected, recall_probs){
+trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
   #First we must randomly choose a proband from the individuals who
   #experienced onset during ascertain_span, keeping in mind that there should
   #be num_affected - 1 individuals who have experienced onset before the proband

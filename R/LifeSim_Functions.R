@@ -9,25 +9,25 @@
 #'
 #' @examples
 #' set.seed(17)
-#' rbirth_rate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
+#' sim_birthRate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
 #'
-rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
+sim_birthRate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
   birth_rate <- rgamma(1, shape = NB_size,
                        scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
 #' Simulate next life event
 #'
-#' \code{event_step} randomly simulates the next life event for an individual
+#' \code{get_nextEvent} randomly simulates the next life event for an individual
 #'  given their current age, disease status, and rare variant status.
 #'
-#' \code{event_step} randomly simulates the next life event for an individual by
+#' \code{get_nextEvent} randomly simulates the next life event for an individual by
 #' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
 #' and death given the individuals current age.  The event with the shortest
-#' waiting time is chosen as the next life event.  If event_step returns a value
-#' named "Birth", then the next life event is reproduction, if event_step
+#' waiting time is chosen as the next life event.  If get_nextEvent returns a value
+#' named "Birth", then the next life event is reproduction, if get_nextEvent
 #' returns a value named "Onset" then the next life event is onset of disease,
-#' if event_step returns a value named "Death" then the next life event is death.
+#' if get_nextEvent returns a value named "Death" then the next life event is death.
 #'
 #' @param current_age The individuals current age.
 #' @param disease_status The disease status, disease_status = 1 if individual
@@ -54,7 +54,7 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
-#' Brate <- rbirth_rate(NB_size = 2, NB_prob = 4/7,
+#' Brate <- sim_birthRate(NB_size = 2, NB_prob = 4/7,
 #'                      min_birth_age = 17, max_birth_age = 45)
 #' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
 #'                                     shape = 9.5, scale = 1)
@@ -63,18 +63,18 @@ rbirth_rate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
 #' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
 #' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
 #' set.seed(17)
-#' event_step(current_age = 23, disease_status = 0, RV_status = 0,
+#' get_nextEvent(current_age = 23, disease_status = 0, RV_status = 0,
 #'            lambda_birth = Brate, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
 #'            birth_range = c(17,45), RR = 15)
 #'
 #' set.seed(17)
-#' event_step(current_age = 23, disease_status = 1, RV_status = 1,
+#' get_nextEvent(current_age = 23, disease_status = 1, RV_status = 1,
 #'            lambda_birth = Brate, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
 #'            birth_range = c(17,45), RR = 15)
 #'
-event_step = function(current_age, disease_status, RV_status,
+get_nextEvent = function(current_age, disease_status, RV_status,
                       lambda_birth, onset_hazard, death_hazard, part,
                       birth_range, RR){
 
@@ -129,14 +129,14 @@ event_step = function(current_age, disease_status, RV_status,
 
 #' Simulate all life events.
 #'
-#' \code{life_step} simulates all life events for an individual starting at age
-#' 0 and ending with death by applying the \link{event_step} function until death
+#' \code{get_lifeEvents} simulates all life events for an individual starting at age
+#' 0 and ending with death by applying the \link{get_nextEvent} function until death
 #' occurs.
 #'
 #' @param NB_params A numeric vector of length 2. The size and probabiliy
 #' parameters of the negative binomial distribution that describes the number of
 #' children per household in the population.
-#' @inheritParams event_step
+#' @inheritParams get_nextEvent
 #'
 #' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
 #' @export
@@ -150,17 +150,17 @@ event_step = function(current_age, disease_status, RV_status,
 #' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 #' set.seed(17)
-#' life_step(RV_status = 0, onset_hazard = Ohaz_vec,
+#' get_lifeEvents(RV_status = 0, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
 #'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
 #'
 #' set.seed(17)
-#' life_step(RV_status = 1, onset_hazard = Ohaz_vec,
+#' get_lifeEvents(RV_status = 1, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
 #'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
 #'
 
-life_step = function(RV_status, onset_hazard, death_hazard, part,
+get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
 
   #check_spans(birth_range)
@@ -173,12 +173,12 @@ life_step = function(RV_status, onset_hazard, death_hazard, part,
   DS <- 0; t <- min.age
 
   #generate and store the birth rate for this individual
-  B.lambda <- rbirth_rate( NB_params[1], NB_params[2] ,
+  B.lambda <- sim_birthRate( NB_params[1], NB_params[2] ,
                            birth_range[1], birth_range[2])
 
   while(t < max.age){
     #generate next event
-    my.step <- event_step(current_age = t, disease_status = DS, RV_status,
+    my.step <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
                           lambda_birth = B.lambda, onset_hazard, death_hazard,
                           part, birth_range, RR)
 
