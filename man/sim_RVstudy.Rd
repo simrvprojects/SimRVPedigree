@@ -67,7 +67,7 @@ for(i in 1:4){
   mtext(paste0("FamID = ", i))
 }
 
-#how to incorporate parallel processing
+#parallel processing example for Window OS
 library(doParallel)
 library(doRNG)
 
@@ -75,7 +75,7 @@ library(doRNG)
 cl <- makeCluster(detectCores())  # create cluster
 registerDoParallel(cl)            # register cluster
 
-npeds = 40    #set the number of pedigrees to generate
+npeds = 120    #set the number of pedigrees to generate
 rnseed = 22    #choose a seed
 
 RV_peds = foreach(i = seq(npeds), .combine = rbind,

@@ -83,6 +83,7 @@ library(doRNG)
 
 cl <- makeCluster(detectCores())  # create cluster
 registerDoParallel(cl)            # register cluster
+on.exit(stopCluster(cl))
 
 npeds = 8    #set the number of pedigrees to generate
 rnseed = 22  #choose a seed
