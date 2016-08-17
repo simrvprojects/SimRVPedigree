@@ -188,6 +188,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 #'  The birth year for the founder with the rare variant is simulated uniformly between the years specified in \code{founder_byears}.
 #'
+#' @param FamID numeric. Family identification number.
 #' @param founder_byears A numeric vector of length 2, the minimum and maximum founder birth years.  See details.
 #' @param stop_year The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.
 #' @param birth_range A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.
@@ -208,31 +209,31 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 #' set.seed(22)
 #' ex_ped <- sim_ped(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-#'                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
+#'                    part = part_vec, RR = 5, FamID = 1, founder_byears = c(1900, 1910))
 
 sim_ped = function(onset_hazard, death_hazard, part,
-                    RR, founder_byears,
-                    birth_range = c(18, 45),
-                    NB_params = c(2, 4/7),
-                    stop_year = 2015){
+                   RR, FamID, founder_byears,
+                   birth_range = c(18, 45),
+                   NB_params = c(2, 4/7),
+                   stop_year = 2015){
 
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
 
   #randomly generate birth year and gender for the founder carrying the RV,
   #and fill in all other fields with the appropriate info
-  fam_ped[1,] <- c(NA,               #family ID
-                  1,                #RV status
-                  round(runif(1)),  #gender
-                  NA, NA,           #dad_id and #mom_id
-                  NA,               #affected status
-                  1, 0,             #alleles 1 and 2,
-                  round(runif(1, min = founder_byears[1],
-                              max = founder_byears[2])), #birth year
-                  NA, NA,           #onset and death years
-                  RR,               #RR of developing disease
-                  1, 1,             #availablilty and generation no
-                  1)                # do_sim
+  fam_ped[1,] <- c(FamID,            #family ID
+                   1,                #RV status
+                   round(runif(1)),  #gender
+                   NA, NA,           #dad_id and #mom_id
+                   NA,               #affected status
+                   1, 0,             #alleles 1 and 2,
+                   round(runif(1, min = founder_byears[1],
+                               max = founder_byears[2])), #birth year
+                   NA, NA,           #onset and death years
+                   RR,               #RR of developing disease
+                   1, 1,             #availablilty and generation no
+                   1)                # do_sim
 
   last_id <- 1
   last.gen <- 1
@@ -291,11 +292,12 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 #' set.seed(22)
-#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-#'                            part = part_vec, RR = 5,
+#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                            death_hazard = Dhaz_df,
+#'                            part = part_vec, RR = 5, FamID = 1,
 #'                            founder_byears = c(1900, 1910),
 #'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2, family_num = 1)
+#'                            num_affected = 2)
 #'
 #' plot_RVpedigree(ex_RVped[[1]])
 #' plot_RVpedigree(ex_RVped[[2]])
@@ -317,11 +319,10 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                   ) %dorng% {
 #'                   sim_RVpedigree(onset_hazard = Ohaz_vec,
 #'                                  death_hazard = Dhaz_df,
-#'                                  part = part_vec, RR = 5,
+#'                                  part = part_vec, RR = 5, FamID = i,
 #'                                  founder_byears = c(1900, 1910),
 #'                                  ascertain_span = c(1900, 2015),
-#'                                  num_affected = 2,
-#'                                  family_num = i)[[2]]}
+#'                                  num_affected = 2)[[2]]}
 #'
 #' stopCluster(cl)
 #' #RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
@@ -329,7 +330,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           founder_byears, ascertain_span,
-                          num_affected, family_num,
+                          num_affected, FamID,
                           recall_probs,
                           birth_range = c(18, 45),
                           NB_params = c(2, 4/7),
@@ -341,9 +342,8 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
   while(D == 0){
     d <- 0
     while( d == 0 ){
-      fam_ped <- sim_ped(onset_hazard, death_hazard, part, RR,
+      fam_ped <- sim_ped(onset_hazard, death_hazard, part, RR, FamID,
                          founder_byears, birth_range, NB_params, stop_year)
-      fam_ped$FamID <- family_num
 
       # prior to sending the simulated pedigree to the trim function,
       # we check to see if it meets the required criteria for number of

@@ -5,8 +5,8 @@
 \title{Simulate a pedigree ascertained for a given number of affected.}
 \usage{
 sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
-  ascertain_span, num_affected, family_num, recall_probs, birth_range = c(18,
-  45), NB_params = c(2, 4/7), stop_year = 2015)
+  ascertain_span, num_affected, FamID, recall_probs, birth_range = c(18, 45),
+  NB_params = c(2, 4/7), stop_year = 2015)
 }
 \arguments{
 \item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
@@ -28,7 +28,7 @@ i.e. first and last year of study.}
 
 \item{num_affected}{Numeric.  The desired number of affected.}
 
-\item{family_num}{numeric. The family number to assign the simulated RV pedigree.}
+\item{FamID}{numeric. Family identification number.}
 
 \item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
 
@@ -37,6 +37,8 @@ i.e. first and last year of study.}
 \item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
 
 \item{stop_year}{The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
+
+\item{family_num}{numeric. The family number to assign the simulated RV pedigree.}
 }
 \value{
 full_ped The full ped file, prior to proband selection and trimming.
@@ -64,11 +66,12 @@ affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(22)
-ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-                           part = part_vec, RR = 5,
+ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+                           death_hazard = Dhaz_df,
+                           part = part_vec, RR = 5, FamID = 1,
                            founder_byears = c(1900, 1910),
                            ascertain_span = c(1900, 2015),
-                           num_affected = 2, family_num = 1)
+                           num_affected = 2)
 
 plot_RVpedigree(ex_RVped[[1]])
 plot_RVpedigree(ex_RVped[[2]])
@@ -90,11 +93,10 @@ RV_peds = foreach(i = seq(npeds), .combine = rbind,
                   ) \%dorng\% {
                   sim_RVpedigree(onset_hazard = Ohaz_vec,
                                  death_hazard = Dhaz_df,
-                                 part = part_vec, RR = 5,
+                                 part = part_vec, RR = 5, FamID = i,
                                  founder_byears = c(1900, 1910),
                                  ascertain_span = c(1900, 2015),
-                                 num_affected = 2,
-                                 family_num = i)[[2]]}
+                                 num_affected = 2)[[2]]}
 
 stopCluster(cl)
 #RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS

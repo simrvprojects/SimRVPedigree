@@ -4,7 +4,7 @@
 \alias{sim_ped}
 \title{Simulate a pedigree}
 \usage{
-sim_ped(onset_hazard, death_hazard, part, RR, founder_byears,
+sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears,
   birth_range = c(18, 45), NB_params = c(2, 4/7), stop_year = 2015)
 }
 \arguments{
@@ -19,6 +19,8 @@ age-specific hazards}
 
 \item{RR}{A numeric constant. The relative risk of developing
 disease for individuals who have inherited the rare variant.}
+
+\item{FamID}{numeric. Family identification number.}
 
 \item{founder_byears}{A numeric vector of length 2, the minimum and maximum founder birth years.  See details.}
 
@@ -49,6 +51,6 @@ Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(22)
 ex_ped <- sim_ped(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-                   part = part_vec, RR = 5, founder_byears = c(1900, 1910))
+                   part = part_vec, RR = 5, FamID = 1, founder_byears = c(1900, 1910))
 }
 
