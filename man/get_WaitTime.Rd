@@ -25,7 +25,7 @@ The waiting time to next event, units same as those in \code{part}.
 \code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process
 }
 \details{
-\code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.  Makes use of \link{approxfun} and \link{splinefun}
+\code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
 }
 \examples{
 haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))

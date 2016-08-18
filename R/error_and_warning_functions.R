@@ -31,7 +31,9 @@ check_hazpart = function(hazard, part){
 #' check_part(part = seq(-10, 10, by = 1))
 #' check_part(part = seq(0, 85, by = 1))
 check_part = function(part){
-  if (min(part) > 10 | min(part) < 0 | max(part) < 65) {
+  if (min(part) != 0) {
+    stop('age-specific hazards must begin at birth')
+  } else if (max(part) < 65){
     warning ('For optimal results please specify age-specific hazards that begin near birth and end near the life expectancy of the population to which the age-specific hazards apply.')
     }
 }
@@ -66,7 +68,7 @@ check_rprobs = function(recall_probs){
 #' check_spans(c(1975, 1982))
 #' check_spans(c(1975, 1975))
 #' check_spans(c(18))
-check_spans = function(span){
+check_spans = function(span, part){
   if (length(span) != 2 | span[1] >= span[2]){
     stop ('please provide appropriate time/age spans')
   }

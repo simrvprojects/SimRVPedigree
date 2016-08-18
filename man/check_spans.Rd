@@ -4,7 +4,7 @@
 \alias{check_spans}
 \title{Check to see if time spans are appropriately specified}
 \usage{
-check_spans(span)
+check_spans(span, part)
 }
 \arguments{
 \item{span}{numeric.  A span of years or ages.}
