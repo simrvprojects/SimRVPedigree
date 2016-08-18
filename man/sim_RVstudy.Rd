@@ -67,5 +67,37 @@ for(i in 1:4){
   mtext(paste0("FamID = ", i))
 }
 
+ncores <- 8
+cl <- makeCluster(ncores)         # create cluster
+registerDoParallel(cl)            # register cluster
+on.exit(stopCluster(cl))
+
+n_peds <- 120    #set the number of pedigrees to generate
+rnseed <- 22    #choose a seed
+nped_proc <- n_peds/ncores
+
+#run sequentially
+system.time(sim_RVstudy(npeds = n_peds, onset_hazard = Ohaz_vec,
+                        death_hazard = Dhaz_df, part = part_vec, RR = 5,
+                        founder_byears = c(1900, 1910),
+                        ascertain_span = c(1900, 2015),
+                        num_affected = 2))
+
+#parallel processing
+system.time(foreach(i = seq(n_peds), .combine = rbind,
+            .packages = c("kinship2", "SimRVPedigree"),
+            .options.RNG = rnseed
+            ) \%dorng\% {
+                sim_RVpedigree(onset_hazard = Ohaz_vec,
+                               death_hazard = Dhaz_df,
+                               part = part_vec, RR = 5, FamID = i,
+                               founder_byears = c(1900, 1910),
+                               ascertain_span = c(1900, 2015),
+                               num_affected = 2)[[2]]})
+
+
+
+stopCluster(cl)
+#RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
 }
 
