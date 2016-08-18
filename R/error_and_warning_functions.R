@@ -31,7 +31,7 @@ check_hazpart = function(hazard, part){
 #' check_part(part = seq(-10, 10, by = 1))
 #' check_part(part = seq(0, 85, by = 1))
 check_part = function(part){
-  if (min(part) > 20 | min(part) < 0 | max(part) < 65) {
+  if (min(part) > 10 | min(part) < 0 | max(part) < 65) {
     warning ('For optimal results please specify age-specific hazards that begin near birth and end near the life expectancy of the population to which the age-specific hazards apply.')
     }
 }
@@ -78,9 +78,13 @@ check_spans = function(span){
 #'
 #' @export
 check_dhaz = function(death_hazard){
-  if(class(death_hazard) != "data.frame" | ncol(death_hazard) != 2){
-    stop("please specify a data frame with 2 columns for death_hazard,
-         column 1 = age-specific death hazard for unaffected individuals,
-         column 2 = age-specific death hazard for affected indivdiuals")
+  if(class(death_hazard) != "data.frame"  ){
+    stop("death_hazard must be a data frame with 2 columns:,
+         column 1 = unaffected age-specific death hazard,
+         column 2 = affected age-specific death hazard")
+  }else if(ncol(death_hazard) != 2){
+    stop("death_hazard must be a data frame with 2 columns:,
+         column 1 = unaffected age-specific death hazard,
+         column 2 = affected age-specific death hazard")
   }
 }
