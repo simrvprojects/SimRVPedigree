@@ -10,6 +10,8 @@
 #' @return wait_prob The probability that the waiting time to next event is at least wait_time.
 #' @export
 #'
+#' @importFrom stats approxfun
+#'
 #' @examples
 #' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
 #' part_vec <- seq(0, 80, by = 5)
@@ -18,9 +20,6 @@
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = FALSE)
 #'
-#'      ## Tests:
-#'      ## expect that when scale = T, maxProb = 1
-#'      ## expect that wait_prob is between 0 and 1
 get_WaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
 
@@ -70,11 +69,6 @@ get_WaitProb = function(last_event, wait_time,
 #' get_WaitTime(p = 0.05, last_event = 0,
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = TRUE)
-#'
-#'      ##Tests:
-#'      ##wait time is always greater than 0 and less than or
-#'      ##    equal to max(part)-last_event.
-#'      ##When scale = TRUE the wait time is never NA
 #'
 get_WaitTime = function(p, last_event, hazard, part,
                          scale = FALSE){
