@@ -18,7 +18,7 @@
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = FALSE)
 #'
-#'      ## Tests to write:
+#'      ## Tests:
 #'      ## expect that when scale = T, maxProb = 1
 #'      ## expect that wait_prob is between 0 and 1
 get_WaitProb = function(last_event, wait_time,
@@ -71,13 +71,19 @@ get_WaitProb = function(last_event, wait_time,
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = TRUE)
 #'
+#'      ##Tests:
+#'      ##wait time is always greater than 0 and less than or
+#'      ##    equal to max(part)-last_event.
+#'      ##When scale = TRUE the wait time is never NA
+#'
 get_WaitTime = function(p, last_event, hazard, part,
                          scale = FALSE){
 
   #Find the maximum value of findWaitProb so that we
   # can quickly return NA when u is greater than this value
 
-  MaxProb <- get_WaitProb(last_event, wait_time = max(part), hazard, part, scale)
+  MaxProb <- get_WaitProb(last_event, wait_time = max(part),
+                          hazard, part, scale)
 
   if (p > MaxProb) {
     w <- NA
@@ -89,7 +95,7 @@ get_WaitTime = function(p, last_event, hazard, part,
     b <- wts[which.max((p - probs) < 0)]
     w <- (a + b)/2
   } else if (p == MaxProb) {
-    w = max(part) - last_event
+    w <- max(part) - last_event
   }
   return(w)
 }

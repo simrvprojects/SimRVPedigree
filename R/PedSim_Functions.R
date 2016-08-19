@@ -423,14 +423,13 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
 #'   mtext(paste0("FamID = ", i))
 #' }
 #'
-#' ncores <- 8
+#' ncores <- 4
 #' cl <- makeCluster(ncores)         # create cluster
 #' registerDoParallel(cl)            # register cluster
 #' on.exit(stopCluster(cl))
 #'
 #' n_peds <- 120    #set the number of pedigrees to generate
 #' rnseed <- 22    #choose a seed
-#' nped_proc <- n_peds/ncores
 #'
 #' #run sequentially
 #' system.time(sim_RVstudy(npeds = n_peds, onset_hazard = Ohaz_vec,
