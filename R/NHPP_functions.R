@@ -19,7 +19,9 @@
 #' get_WaitProb(last_event = 0, wait_time = 18,
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = FALSE)
-#'
+#' ##Tests:
+#' ##wait_prob in [0, 1]
+#' ##when scale = TRUE, maxProb = 1
 get_WaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
 
@@ -69,7 +71,9 @@ get_WaitProb = function(last_event, wait_time,
 #' get_WaitTime(p = 0.05, last_event = 0,
 #'              hazard = haz_vec, part = part_vec,
 #'              scale = TRUE)
-#'
+#' ##Tests:
+#' ##wait_time in [0, max(part) - last_event]
+#' ##when scale = TRUE, wait_time != NA
 get_WaitTime = function(p, last_event, hazard, part,
                          scale = FALSE){
 

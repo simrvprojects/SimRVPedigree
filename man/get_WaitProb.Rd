@@ -31,9 +31,8 @@ part_vec <- seq(0, 80, by = 5)
 get_WaitProb(last_event = 0, wait_time = 18,
              hazard = haz_vec, part = part_vec,
              scale = FALSE)
-
-     ## Tests to write:
-     ## expect that when scale = T, maxProb = 1
-     ## expect that wait_prob is between 0 and 1
+##Tests:
+##wait_prob in [0, 1]
+##when scale = TRUE, maxProb = 1
 }
 

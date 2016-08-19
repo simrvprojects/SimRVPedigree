@@ -9,7 +9,9 @@
 #'
 #' @importFrom kinship2 pedigree
 #' @importFrom kinship2 plot.pedigree
+#' @importFrom kinship2 pedigree.legend
 #' @importFrom graphics plot
+#' @importFrom graphics legend
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
@@ -24,13 +26,37 @@
 #'                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
 #' ex_ped$FamID = 1
 #' plot_RVpedigree(ex_ped)
-plot_RVpedigree = function(ped_file){
-  RV_ped = pedigree(ped_file$ID, ped_file$dad_id,
+plot_RVpedigree = function(ped_file, legend_location, A_colors){
+
+  RV_status <- ped_file$DA1 + ped_file$DA2
+  Affected  <- ped_file$affected
+  Proband   <- ped_file$is_proband
+  Available <- ped_file$available
+
+  if (missing(A_colors)){
+    A_colors <- c(rgb(red = 0/225, green = 112/225, blue = 150/225),  #SFUblue,
+                 rgb(red = 166/225, green = 25/225, blue = 46/225))  #SFUred)
+  }
+
+  Ped_cols <- ifelse((Available == 1), A_colors[1], A_colors[2])
+
+  RV_ped <- pedigree(ped_file$ID, ped_file$dad_id,
                     ped_file$mom_id, (ped_file$gender + 1),
-                    affected = cbind(ped_file$affected,
-                                     ped_file$is_proband,
-                                     ped_file$available),
+                    affected = cbind(Affected,
+                                     Proband,
+                                     RV_status),
                     famid = ped_file$FamID)
   rvPed = RV_ped[paste0(ped_file$FamID[1])]
-  plot(rvPed)
+  plot(rvPed, col = Ped_cols)
+
+  if (missing(legend_location)){
+    pedigree.legend(rvPed, location="topleft", radius=.35)
+  } else {
+    pedigree.legend(rvPed, location= legend_location, radius=.35)
+  }
+  legend("topright", title = "Availability Status",
+         legend = c("available", "unavailable"),
+         col = A_colors,
+         lwd = 4)
+
 }

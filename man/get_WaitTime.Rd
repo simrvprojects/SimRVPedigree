@@ -38,6 +38,8 @@ get_WaitTime(p = 0.05, last_event = 0,
 get_WaitTime(p = 0.05, last_event = 0,
              hazard = haz_vec, part = part_vec,
              scale = TRUE)
-
+##Tests:
+##wait_time in [0, max(part) - last_event]
+##when scale = TRUE, wait_time != NA
 }
 
