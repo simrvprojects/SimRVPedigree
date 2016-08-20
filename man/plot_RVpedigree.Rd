@@ -4,7 +4,7 @@
 \alias{plot_RVpedigree}
 \title{Plot simulated pedigree}
 \usage{
-plot_RVpedigree(ped_file, legend_location, A_colors)
+plot_RVpedigree(ped_file, legend_location, A_colors, Print_Gen = FALSE)
 }
 \arguments{
 \item{ped_file}{A single pedigree simulated with either \code{sim_RVpedigree} or \code{ped_step}}
@@ -28,5 +28,6 @@ ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
 ex_ped$FamID = 1
 plot_RVpedigree(ex_ped)
+
 }
 

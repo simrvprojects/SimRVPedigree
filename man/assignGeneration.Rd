@@ -38,5 +38,42 @@ ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
 
 plot_RVpedigree(ex_RVped[[1]])
 plot_RVpedigree(ex_RVped[[2]])
+
+set.seed(3)
+#example of reassigned generation number
+ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+                           death_hazard = Dhaz_df,
+                           part = part_vec, RR = 5, FamID = 1,
+                           founder_byears = c(1900, 1910),
+                           ascertain_span = c(1900, 2015),
+                           num_affected = 2)
+
+plot_RVpedigree(ex_RVped[[1]])
+plot_RVpedigree(ex_RVped[[2]])
+
+
+set.seed(4)
+#example of reassigned generation number
+ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+                           death_hazard = Dhaz_df,
+                           part = part_vec, RR = 5, FamID = 1,
+                           founder_byears = c(1900, 1910),
+                           ascertain_span = c(1900, 2015),
+                           num_affected = 2)
+
+plot_RVpedigree(ex_RVped[[1]])
+plot_RVpedigree(ex_RVped[[2]])
+
+set.seed(6)
+#example of reassigned generation number
+ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+                           death_hazard = Dhaz_df,
+                           part = part_vec, RR = 5, FamID = 1,
+                           founder_byears = c(1900, 1910),
+                           ascertain_span = c(1900, 2015),
+                           num_affected = 2)
+
+plot_RVpedigree(ex_RVped[[1]])
+plot_RVpedigree(assignGeneration(ex_RVped[[1]]))
 }
 

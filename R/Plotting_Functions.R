@@ -26,7 +26,9 @@
 #'                    part = part_vec, RR = 5, founder_byears = c(1900, 1910))
 #' ex_ped$FamID = 1
 #' plot_RVpedigree(ex_ped)
-plot_RVpedigree = function(ped_file, legend_location, A_colors){
+#'
+plot_RVpedigree = function(ped_file, legend_location,
+                           A_colors, Print_Gen = FALSE){
 
   RV_status <- ped_file$DA1 + ped_file$DA2
   Affected  <- ped_file$affected
@@ -47,13 +49,15 @@ plot_RVpedigree = function(ped_file, legend_location, A_colors){
                                      RV_status),
                     famid = ped_file$FamID)
   rvPed = RV_ped[paste0(ped_file$FamID[1])]
-  plot(rvPed, col = Ped_cols)
+
+  plot(rvPed, col = Ped_cols, id = ped_file$Gen)
 
   if (missing(legend_location)){
-    pedigree.legend(rvPed, location="topleft", radius=.35)
+    pedigree.legend(rvPed, location="topleft", radius = 0.15)
   } else {
-    pedigree.legend(rvPed, location= legend_location, radius=.35)
+    pedigree.legend(rvPed, location= legend_location, radius = 0.15)
   }
+
   legend("topright", title = "Availability Status",
          legend = c("available", "unavailable"),
          col = A_colors,
