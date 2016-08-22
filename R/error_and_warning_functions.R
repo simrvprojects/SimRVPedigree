@@ -39,7 +39,7 @@ check_part = function(part){
 }
 
 
-#' check to see if recall probabilies are correctly specified
+#' Check to see if recall probabilies are correctly specified
 #'
 #' @inheritParams trim_pedigree
 #'
@@ -74,7 +74,7 @@ check_spans = function(span, part){
   }
 }
 
-#' check to see if death_hazard is appropriately specified
+#' Check to see if death_hazard is appropriately specified
 #'
 #' @param death_hazard data.frame. The age-specific death hazards for affected and unaffected individuals.
 #'

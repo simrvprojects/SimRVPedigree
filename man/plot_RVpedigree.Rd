@@ -4,7 +4,8 @@
 \alias{plot_RVpedigree}
 \title{Plot simulated pedigree}
 \usage{
-plot_RVpedigree(ped_file, legend_location, A_colors, Print_Gen = FALSE)
+plot_RVpedigree(ped_file, A_colors, legend_location1 = "topleft",
+  legend_location2 = "topright", Print_Gen = FALSE)
 }
 \arguments{
 \item{ped_file}{A single pedigree simulated with either \code{sim_RVpedigree} or \code{ped_step}}

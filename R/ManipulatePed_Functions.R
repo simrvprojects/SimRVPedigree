@@ -1,6 +1,6 @@
 #' Assign minimum carrier generation to a simulated pedigree
 #'
-#' \code{AssignGeneration} reassigns the generation number based on affected status and trims the pedigree down to affecteds and obligate carriers.
+#' \code{assign_affectedGen} reassigns the generation number based on affected status and trims the pedigree down to affecteds and obligate carriers.
 #'
 #' Add details concerning reassignment...
 #'
@@ -22,55 +22,70 @@
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))/60
 #'
 #' set.seed(1)
-#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-#'                            death_hazard = Dhaz_df,
-#'                            part = part_vec, RR = 5, FamID = 1,
-#'                            founder_byears = c(1900, 1910),
-#'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2)
+#' ex_RVped1 <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                             death_hazard = Dhaz_df,
+#'                             part = part_vec, RR = 5, FamID = 1,
+#'                             founder_byears = c(1900, 1910),
+#'                             ascertain_span = c(1900, 2015),
+#'                             num_affected = 2)
 #'
-#' plot_RVpedigree(ex_RVped[[1]])
-#' plot_RVpedigree(assignGeneration(ex_RVped[[1]]))
+#' plot_RVpedigree(ex_RVped1[[1]], Print_Gen = TRUE)
+#' #since there are at least two affected in generation 2, one of the
+#' #founders is an obligate carrier and generation numbers for affecteds
+#' #do not need to be re-assigned
+#'
+#' #NOTE: this pedigree now only includes affected individuals and
+#' #individuals who are required to create a pedigree.
+#' plot_RVpedigree(assign_affectedGen(ex_RVped1[[1]]), Print_Gen = TRUE)
 #'
 #' set.seed(3)
 #' #example of reassigned generation number
-#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-#'                            death_hazard = Dhaz_df,
-#'                            part = part_vec, RR = 5, FamID = 1,
-#'                            founder_byears = c(1900, 1910),
-#'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2)
+#' ex_RVped2 <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                             death_hazard = Dhaz_df,
+#'                             part = part_vec, RR = 5, FamID = 1,
+#'                             founder_byears = c(1900, 1910),
+#'                             ascertain_span = c(1900, 2015),
+#'                             num_affected = 2)
 #'
-#' plot_RVpedigree(ex_RVped[[1]])
-#' plot_RVpedigree(assignGeneration(ex_RVped[[1]]))
+#' plot_RVpedigree(ex_RVped2[[1]], Print_Gen = TRUE)
+#' #assign_affectedGen will reassign the generation for individual 5 to 2 and
+#' #the generation for individual 9 to 3.
+#'
+#' plot_RVpedigree(assign_affectedGen(ex_RVped2[[1]]), Print_Gen = TRUE,
+#'                 legend_location1 = "bottomleft")
 #'
 #'
 #' set.seed(4)
 #' #example of reassigned generation number
-#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-#'                            death_hazard = Dhaz_df,
-#'                            part = part_vec, RR = 5, FamID = 1,
-#'                            founder_byears = c(1900, 1910),
-#'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2)
+#' ex_RVped3 <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                             death_hazard = Dhaz_df,
+#'                             part = part_vec, RR = 5, FamID = 1,
+#'                             founder_byears = c(1900, 1910),
+#'                             ascertain_span = c(1900, 2015),
+#'                             num_affected = 2)
 #'
-#' plot_RVpedigree(ex_RVped[[1]])
-#' plot_RVpedigree(assignGeneration(ex_RVped[[1]]))
+#' plot_RVpedigree(ex_RVped3[[1]], Print_Gen = TRUE)
+#' # reassign generation numbers for individuals 3, 5, and 10,
+#' # to 1, 2, and, 2 respectively.
+#' plot_RVpedigree(assign_affectedGen(ex_RVped3[[1]]), Print_Gen = TRUE,
+#'                 legend_location2 = "bottomright")
 #'
 #' set.seed(6)
 #' #example of reassigned generation number
-#' ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-#'                            death_hazard = Dhaz_df,
-#'                            part = part_vec, RR = 5, FamID = 1,
-#'                            founder_byears = c(1900, 1910),
-#'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2)
+#' ex_RVped4 <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+#'                             death_hazard = Dhaz_df,
+#'                             part = part_vec, RR = 5, FamID = 1,
+#'                             founder_byears = c(1900, 1910),
+#'                             ascertain_span = c(1900, 2015),
+#'                             num_affected = 2)
 #'
-#' plot_RVpedigree(ex_RVped[[1]])
-#' plot_RVpedigree(assignGeneration(ex_RVped[[1]]))
-
-
-assignGeneration = function(ped_file){
+#' plot_RVpedigree(ex_RVped4[[1]], Print_Gen = TRUE)
+#' #No reassignment of generation number required for these affecteds
+#'
+#' plot_RVpedigree(assign_affectedGen(ex_RVped4[[1]]), Print_Gen = TRUE,
+#'                 legend_location1 = "bottomleft",
+#'                 legend_location2 = "bottomright")
+assign_affectedGen = function(ped_file){
 
   #create new ped file with affecteds only
   reGen_ped <- ped_file[which(ped_file$affected == 1), ]

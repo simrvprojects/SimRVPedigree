@@ -27,8 +27,11 @@
 #' ex_ped$FamID = 1
 #' plot_RVpedigree(ex_ped)
 #'
-plot_RVpedigree = function(ped_file, legend_location,
-                           A_colors, Print_Gen = FALSE){
+plot_RVpedigree = function(ped_file,
+                           A_colors,
+                           legend_location1 = "topleft",
+                           legend_location2 = "topright",
+                           Print_Gen = FALSE){
 
   RV_status <- ped_file$DA1 + ped_file$DA2
   Affected  <- ped_file$affected
@@ -36,7 +39,7 @@ plot_RVpedigree = function(ped_file, legend_location,
   Available <- ped_file$available
 
   if (missing(A_colors)){
-    A_colors <- c(rgb(red = 0/225, green = 112/225, blue = 150/225),  #SFUblue,
+    A_colors <- c(rgb(red = 0/225, green = 112/225, blue = 150/225), #SFUblue,
                  rgb(red = 166/225, green = 25/225, blue = 46/225))  #SFUred)
   }
 
@@ -50,17 +53,20 @@ plot_RVpedigree = function(ped_file, legend_location,
                     famid = ped_file$FamID)
   rvPed = RV_ped[paste0(ped_file$FamID[1])]
 
-  plot(rvPed, col = Ped_cols, id = ped_file$Gen)
-
-  if (missing(legend_location)){
-    pedigree.legend(rvPed, location="topleft", radius = 0.15)
+  if(Print_Gen == FALSE) {
+    plot(rvPed, col = Ped_cols)
   } else {
-    pedigree.legend(rvPed, location= legend_location, radius = 0.15)
+    id_gens = paste0("ID", sep = ": ", ped_file$ID,
+                     sep = ",\n Gen: ", ped_file$Gen)
+    plot(rvPed, col = Ped_cols, id = id_gens)
   }
 
-  legend("topright", title = "Availability Status",
+
+  pedigree.legend(rvPed, location = legend_location1, radius = 0.15)
+
+  legend(legend_location2, title = "Availability Status",
          legend = c("available", "unavailable"),
          col = A_colors,
-         lwd = 4)
+         lwd = 4, cex = 0.9)
 
 }
