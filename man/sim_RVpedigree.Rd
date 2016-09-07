@@ -63,7 +63,7 @@ After proband selection, the pedigree is trimmed based on the proband's recall p
 
 \code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} discards that pedigree and simulates another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \link{sim_ped}.
 
-We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing examples.
+We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing example.
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)

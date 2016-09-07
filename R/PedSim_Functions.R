@@ -184,7 +184,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 #' \code{sim_ped} randomly generates a pedigree. Note the distinction between \code{sim_ped} and \code{sim_RVpedigree}:  pedigrees simulated using \code{sim_ped} do not account for study design, pedigrees simulated using \code{sim_RVpedigrees} do account for study design.
 #'
-#' \code{sim_ped} randomly generates a pedigree starting with the founder who introduced the rare variant.  We assume that the variant is rare enough that it has only been introduced to the pedigree by one of the two oldest founders.  The variant is transmitted to offspring according to Mendel's laws.  Life events for individuals who have inherited the rare variant (RV) are simulated such that their relative risk is \code{RR}, all others are simulated with a relative risk of 1.  All events which occur after the specified \code{stop_year} are censored.
+#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder. The function \code{sim_ped} randomly generates a pedigree starting with the founder who introduced the rare variant. The rare variant is transmitted to offspring according to Mendel's laws.  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model.  For all individuals who have not inherited the rare variant we assume a relative risk of 1.  All events which occur after \code{stop_year} are censored.
 #'
 #'  The birth year for the founder with the rare variant is simulated uniformly between the years specified in \code{founder_byears}.
 #'
@@ -279,7 +279,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 #' \code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} discards that pedigree and simulates another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \link{sim_ped}.
 #'
-#' We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing examples.
+#' We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing example.
 #'
 #'
 #'
