@@ -34,34 +34,39 @@ disease for individuals who have inherited the rare variant.}
 The ped file for the simulated pedigree.
 }
 \description{
-\code{sim_ped} randomly generates a pedigree. Note the distinction between \code{sim_ped} and \code{sim_RVpedigree}:  pedigrees simulated using \code{sim_ped} do not account for study design, pedigrees simulated using \code{sim_RVpedigrees} do account for study design.
+\code{sim_ped} randomly generates a pedigree.
 }
 \details{
-By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder. The function \code{sim_ped} randomly generates a pedigree starting with the founder who introduced the rare variant. The rare variant is transmitted to offspring according to Mendel's laws.  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model.  For all individuals who have not inherited the rare variant we assume a relative risk of 1.  All events which occur after \code{stop_year} are censored.
+Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design, i.e. no requirement for multiple affected individuals in pedigree.  To simulate a pedigree likely to be ascertained according to a particular study design please use \link{sim_RVpedigrees}.
 
-The birth year for the founder with the rare variant is simulated uniformly between the years specified in \code{founder_byears}.
+By assumption, all ascertained pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_RVpedigree} starts the pedigree simulation process by simulating the birth year,  uniformly between the years specified by \code{founder_byears}, for the founder who has introduced the rare variant into the pedigree.  Next, life events are simulated for the founder.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_RVpedigree} only allows disease onset to occur once, i.e. no remission after disease onset.  Compuationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortaility rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant, we assign a relative risk of disease onset of 1.  Any life events that occur after \code{stop_year} are censored.
+
+The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 }
 \section{See Also}{
 
 \link{sim_RVpedigree}
 }
 \examples{
-
 #Define a parition of ages over which to apply the age-specific hazards
 part_vec <- seq(0, 100, by = 1)
 
-#Specify the age-specific mortality rates for the affected and unaffected group
+#Specify age-specific mortality rates for affected and unaffected individuals
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)/350
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
 
-#Combine mortality rates in a data frame, with unaffected mortality rates in column 1, and affected mortality rates in column 2
+#Combine mortality rates in data frame, with
+# unaffected mortality rates in column 1, and
+# affected mortality rates in column 2
+
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 
 #Specify the population age-specific onset hazard
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 
+#Simulate a random pedigree
 set.seed(22)
 ex_ped <- sim_ped(onset_hazard = Ohaz_vec,
                   death_hazard = Dhaz_df,

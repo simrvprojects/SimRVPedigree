@@ -17,7 +17,8 @@ Imports:
     stats (>= 3.3.0)
 Suggests:
     doParallel (>= 1.0.10),
-    doRNG (>= 1.6)
+    doRNG (>= 1.6),
+    graphics (>= 3.3.0)
 License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 5.0.1

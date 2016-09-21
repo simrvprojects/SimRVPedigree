@@ -70,13 +70,25 @@ We note that, for rare diseases, this simulation process is computaionally expen
 \link{sim_ped}
 }
 \examples{
+#Define a parition of ages over which to apply the age-specific hazards
 part_vec <- seq(0, 100, by = 1)
+
+#Specify age-specific mortality rates for affected and unaffected individuals
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)/350
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+
+#Combine mortality rates in data frame, with
+# unaffected mortality rates in column 1, and
+# affected mortality rates in column 2
+
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+
+#Specify the population age-specific onset hazard
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+
+#Simulate pedigree ascertained for multiple affected individuals
 set.seed(22)
 ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
                            death_hazard = Dhaz_df,
@@ -85,10 +97,13 @@ ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
                            ascertain_span = c(1900, 2015),
                            num_affected = 2)
 
-Plot full and trimmed pedigrees using kinship2 package
+
+
+
+#Plot ex_RVped pedigrees using the kinship2 package
 library(kinship2)
 
-#Define pedigree object for fully ascertained pedigree
+#Define pedigree object for full pedigree
 RV_statusF <- ex_RVped[[1]]$DA1 + ex_RVped[[1]]$DA2
 AffectedF  <- ex_RVped[[1]]$affected
 
@@ -99,11 +114,13 @@ full_RVped <- pedigree(id = ex_RVped[[1]]$ID,
                         affected = cbind(AffectedF, RV_statusF),
                         famid = ex_RVped[[1]]$FamID)
 FullRVped <- full_RVped['1']
+
+#plot pedigree and legend
 plot(FullRVped)
 pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 
 
-#Define pedigree object for trimmed pedigree
+#Define pedigree object for trimmed, i.e, ascertained, pedigree
 RV_statusT <- ex_RVped[[2]]$DA1 + ex_RVped[[2]]$DA2
 AffectedT  <- ex_RVped[[2]]$affected
 ProbandT  <- ex_RVped[[2]]$is_proband
@@ -124,7 +141,6 @@ pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 library(doParallel)
 library(doRNG)
 
-
 cl <- makeCluster(detectCores())  # create cluster
 registerDoParallel(cl)            # register cluster
 on.exit(stopCluster(cl))
@@ -144,7 +160,6 @@ RV_peds = foreach(i = seq(npeds), .combine = rbind,
                                  num_affected = 2)[[2]]}
 
 stopCluster(cl)
-#RANDOM SEED NOT WORKING THE WAY IT SHOULD BE HERE COME BACK TO THIS
 
 
 }
