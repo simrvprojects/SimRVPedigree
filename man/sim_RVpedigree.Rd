@@ -65,6 +65,10 @@ After proband selection, the pedigree is trimmed based on the proband's recall p
 
 We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing example.
 }
+\section{See Also}{
+
+\link{sim_ped}
+}
 \examples{
 part_vec <- seq(0, 100, by = 1)
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),

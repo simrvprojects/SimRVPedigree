@@ -41,6 +41,10 @@ By assumption, all pedigrees are segregating a rare variant, which is rare enoug
 
 The birth year for the founder with the rare variant is simulated uniformly between the years specified in \code{founder_byears}.
 }
+\section{See Also}{
+
+\link{sim_RVpedigree}
+}
 \examples{
 part_vec <- seq(0, 100, by = 1)
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),

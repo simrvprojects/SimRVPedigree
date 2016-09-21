@@ -11,12 +11,12 @@
 #' check_hazpart(hazard = c(1, NA, 2, 4), part = c(0, 10, 20, 30, 40))
 check_hazpart = function(hazard, part){
   if ( class(hazard) != "numeric" | class(part) != "numeric" ){
-    stop ('please provide numeric hazard and part vectors')
+    stop ('please provide numeric hazard and partition vectors')
   } else if (length(part) == 1 | length(part) != (length(hazard) + 1)) {
-    stop ('please provide numeric hazard and part vectors,
+    stop ('please provide numeric hazard and partition vectors,
           such that length(part) == length(hazard) + 1')
   } else if (any(is.na(hazard)) | any(is.na(part))) {
-    stop('hazard and part cannot contain missing values')
+    stop('hazard and partition vectors cannot contain missing values')
   }
 }
 
