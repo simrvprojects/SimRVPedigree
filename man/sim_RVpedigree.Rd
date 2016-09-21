@@ -37,8 +37,6 @@ i.e. first and last year of study.}
 \item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
 
 \item{stop_year}{The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
-
-\item{family_num}{numeric. The family number to assign the simulated RV pedigree.}
 }
 \value{
 full_ped The full ped file, prior to proband selection and trimming.
@@ -61,13 +59,13 @@ Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped
 
 After proband selection, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  By default \code{recall_probs} is 4 times the kinship coefficent between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(m-1)}} for a relative of degree \eqn{m}. Alternatively, the user may specify a list of recall probabilites of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example, if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 
-\code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} discards that pedigree and simulates another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \link{sim_ped}.
+\code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} discards that pedigree and simulates another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \code{\link{sim_ped}}.
 
 We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing example.
 }
 \section{See Also}{
 
-\link{sim_ped}
+\code{\link{sim_ped}}
 }
 \examples{
 #Define a parition of ages over which to apply the age-specific hazards

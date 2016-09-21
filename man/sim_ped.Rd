@@ -37,7 +37,7 @@ The ped file for the simulated pedigree.
 \code{sim_ped} randomly generates a pedigree.
 }
 \details{
-Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design, i.e. no requirement for multiple affected individuals in pedigree.  To simulate a pedigree likely to be ascertained according to a particular study design please use \link{sim_RVpedigrees}.
+Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design, i.e. no requirement for multiple affected individuals in pedigree.  To simulate a pedigree likely to be ascertained according to a particular study design please use \code{\link{sim_RVpedigree}}.
 
 By assumption, all ascertained pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_RVpedigree} starts the pedigree simulation process by simulating the birth year,  uniformly between the years specified by \code{founder_byears}, for the founder who has introduced the rare variant into the pedigree.  Next, life events are simulated for the founder.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_RVpedigree} only allows disease onset to occur once, i.e. no remission after disease onset.  Compuationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortaility rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant, we assign a relative risk of disease onset of 1.  Any life events that occur after \code{stop_year} are censored.
 
@@ -45,7 +45,7 @@ The rare variant is transmitted to any offspring of the founder according to Men
 }
 \section{See Also}{
 
-\link{sim_RVpedigree}
+\code{\link{sim_RVpedigree}}
 }
 \examples{
 #Define a parition of ages over which to apply the age-specific hazards

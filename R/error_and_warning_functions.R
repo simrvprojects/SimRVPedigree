@@ -68,7 +68,7 @@ check_rprobs = function(recall_probs){
 #' check_spans(c(1975, 1982))
 #' check_spans(c(1975, 1975))
 #' check_spans(c(18))
-check_spans = function(span, part){
+check_spans = function(span){
   if (length(span) != 2 | span[1] >= span[2]){
     stop ('please provide appropriate time/age spans')
   }

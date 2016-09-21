@@ -8,7 +8,7 @@ get_eventYear(Rlife_events, byear)
 }
 \arguments{
 \item{Rlife_events}{Named matrix of all life events returned from
-\link{get_lifeEvents}}
+\code{\link{get_lifeEvents}}}
 
 \item{byear}{The birth year}
 }
