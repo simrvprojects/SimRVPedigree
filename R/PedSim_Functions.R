@@ -337,11 +337,14 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' #Define a parition of ages over which to apply the age-specific hazards
 #' part_vec <- seq(0, 100, by = 1)
 #'
+#'
 #' #Specify age-specific mortality rates for affected and unaffected individuals
-#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-#'                                     shape = 9.5, scale = 1)/350
-#' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-#'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+#' set.seed(1)
+#' unaffected_mort <- c(0.0001, 0.00005, rnorm(98, mean = 0.00001, sd = 0.00001)) +
+#'                      pgamma(seq(0.16, 16, by = .16), shape = 9, scale = 1)/350
+#'
+#' affected_mort <- c(0.35, 0.28, 0.22, 0.16, 0.135, 0.12, 0.115, 0.081, 0.057, 0.05,
+#'                    pgamma(seq(1.76, 16, by = .16), shape = 4, scale = 1.5))/200
 #'
 #' #Combine mortality rates in data frame, with
 #' # unaffected mortality rates in column 1, and
