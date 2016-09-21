@@ -36,20 +36,86 @@ all relatives of degree \strong{\emph{l} or greater}.  For example if
 probability 1.
 }
 \examples{
+#Define a parition of ages over which to apply the age-specific hazards
 part_vec <- seq(0, 100, by = 1)
+
+#Specify age-specific mortality rates for affected and unaffected individuals
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)/350
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+
+#Combine mortality rates in data frame, with
+# unaffected mortality rates in column 1, and
+# affected mortality rates in column 2
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
-Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))/50
-set.seed(22)
-ex_ped <- ped_step(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-                   part = part_vec, RR = 5, founder_byears = c(1900, 1910))
-ex_ped
-trim_pedigree(ped_file = ex_ped, ascertain_span = c(1990, 2015), num_affected = 3)
-trim_pedigree(ped_file = ex_ped, ascertain_span = c(1990, 2015),
-          num_affected = 3, recall_probs = c(1, 0.9, 0))
+
+#Specify the population age-specific onset hazard
+Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 2, scale = 3.5))/100
+
+## Simulate a random pedigree
+set.seed(222)
+ex_ped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
+                         death_hazard = Dhaz_df,
+                         part = part_vec, RR = 10, FamID = 1,
+                         founder_byears = c(1900, 1910),
+                         ascertain_span = c(1980, 2015),
+                         num_affected = 2)[[1]]
+
+#plot ex_ped using kinship2
+library(kinship2)
+ex_pedigree <- pedigree(id = ex_ped$ID,
+                        dadid = ex_ped$dad_id,
+                        momid = ex_ped$mom_id,
+                        sex = (ex_ped$gender + 1),
+                        affected = cbind(Affected = ex_ped$affected,
+                                   RV_status = ex_ped$DA1 + ex_ped$DA2),
+                        famid = ex_ped$FamID)['1']
+plot(ex_pedigree)
+pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
+mtext("Original Pedigree", side = 3, line = 2)
+
+
+## Trim pedigree examples
+#define lists of various trimming parameters to
+#illustrate the effects of various settings
+Recall_Probabilities <- list(r1 = c(1),  #will result in same ped as ex_ped
+                             r2 = c(1, 0.5, 0.125),
+                             r3 = c(1, 0.5, 0.125))
+
+Number_Affected <- c(2, 2, 2)
+Ascertainment_Span <- list(span1 = c(2010, 2015),
+                           span2 = c(2010, 2015),
+                           span3 = c(2000, 2015))
+
+for (k in 1:length(Number_Affected)) {
+   set.seed(2)
+   #trim pedigree
+   TrimPed <- trim_pedigree(ped_file = ex_ped,
+                            ascertain_span = Ascertainment_Span[[k]],
+                            num_affected = Number_Affected[[k]],
+                            recall_probs = Recall_Probabilities[[k]])
+
+   #plot trimmed pedigree
+   Tped <- pedigree(id = TrimPed$ID,
+                    dadid = TrimPed$dad_id,
+                    momid = TrimPed$mom_id,
+                    sex = (TrimPed$gender + 1),
+                    affected = cbind(Affected = TrimPed$affected,
+                                     Proband = TrimPed$is_proband,
+                                     RV_status = TrimPed$DA1 + TrimPed$DA2),
+                    famid = TrimPed$FamID)['1']
+
+   plot(Tped)
+   pedigree.legend(Tped, location = "topleft",  radius = 0.25)
+   mtext(paste0("recall_probs = (", sep = "",
+                paste(Recall_Probabilities[[k]], collapse = ", "),
+                ")\\n ascertain_span = (",
+                paste(Ascertainment_Span[[k]], collapse = ", "),
+                ")\\n num_affected = ", Number_Affected[[k]]),
+                side = 3 )
+}
+
 
 }
 
