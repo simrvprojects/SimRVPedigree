@@ -46,15 +46,44 @@ The birth year for the founder with the rare variant is simulated uniformly betw
 \link{sim_RVpedigree}
 }
 \examples{
+
+#Define a parition of ages over which to apply the age-specific hazards
 part_vec <- seq(0, 100, by = 1)
+
+#Specify the age-specific mortality rates for the affected and unaffected group
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)/350
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+
+#Combine mortality rates in a data frame, with unaffected mortality rates in column 1, and affected mortality rates in column 2
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+
+#Specify the population age-specific onset hazard
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+
 set.seed(22)
-ex_ped <- sim_ped(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-                   part = part_vec, RR = 5, FamID = 1, founder_byears = c(1900, 1910))
+ex_ped <- sim_ped(onset_hazard = Ohaz_vec,
+                  death_hazard = Dhaz_df,
+                  part = part_vec,
+                  RR = 5, FamID = 1,
+                  founder_byears = c(1900, 1910))
+
+#Plot pedigree usign kinship2 package
+library(kinship2)
+
+#Define pedigree to use kinship2's plot function
+RV_status <- ex_ped$DA1 + ex_ped$DA2
+Affected  <- ex_ped$affected
+
+ex_pedigree <- pedigree(id = ex_ped$ID,
+                        dadid = ex_ped$dad_id,
+                        momid = ex_ped$mom_id,
+                        sex = (ex_ped$gender + 1),
+                        affected = cbind(Affected, RV_status),
+                        famid = ex_ped$FamID)
+ExamplePed <- ex_pedigree['1']
+plot(ExamplePed)
+pedigree.legend(ExamplePed, location = "topleft",  radius = 0.25)
 }
 

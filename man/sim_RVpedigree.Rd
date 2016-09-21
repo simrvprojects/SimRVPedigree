@@ -85,8 +85,40 @@ ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
                            ascertain_span = c(1900, 2015),
                            num_affected = 2)
 
-plot_RVpedigree(ex_RVped[[1]])
-plot_RVpedigree(ex_RVped[[2]])
+Plot full and trimmed pedigrees using kinship2 package
+library(kinship2)
+
+#Define pedigree object for fully ascertained pedigree
+RV_statusF <- ex_RVped[[1]]$DA1 + ex_RVped[[1]]$DA2
+AffectedF  <- ex_RVped[[1]]$affected
+
+full_RVped <- pedigree(id = ex_RVped[[1]]$ID,
+                        dadid = ex_RVped[[1]]$dad_id,
+                        momid = ex_RVped[[1]]$mom_id,
+                        sex = (ex_RVped[[1]]$gender + 1),
+                        affected = cbind(AffectedF, RV_statusF),
+                        famid = ex_RVped[[1]]$FamID)
+FullRVped <- full_RVped['1']
+plot(FullRVped)
+pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
+
+
+#Define pedigree object for trimmed pedigree
+RV_statusT <- ex_RVped[[2]]$DA1 + ex_RVped[[2]]$DA2
+AffectedT  <- ex_RVped[[2]]$affected
+ProbandT  <- ex_RVped[[2]]$is_proband
+
+trim_RVped <- pedigree(id = ex_RVped[[2]]$ID,
+                       dadid = ex_RVped[[2]]$dad_id,
+                       momid = ex_RVped[[2]]$mom_id,
+                       sex = (ex_RVped[[2]]$gender + 1),
+                       affected = cbind(AffectedT, ProbandT, RV_statusT),
+                       famid = ex_RVped[[2]]$FamID)
+TrimRVped <- trim_RVped['1']
+plot(TrimRVped)
+pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
+
+
 
 #how to incorporate parallel processing
 library(doParallel)

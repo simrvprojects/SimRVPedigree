@@ -205,16 +205,46 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' \link{sim_RVpedigree}
 #'
 #' @examples
+#'
+#' #Define a parition of ages over which to apply the age-specific hazards
 #' part_vec <- seq(0, 100, by = 1)
+#'
+#' #Specify the age-specific mortality rates for the affected and unaffected group
 #' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
 #'                                     shape = 9.5, scale = 1)/350
 #' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 #'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
+#'
+#' #Combine mortality rates in a data frame, with unaffected mortality rates in column 1, and affected mortality rates in column 2
 #' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
+#'
+#' #Specify the population age-specific onset hazard
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+#'
 #' set.seed(22)
-#' ex_ped <- sim_ped(onset_hazard = Ohaz_vec, death_hazard = Dhaz_df,
-#'                    part = part_vec, RR = 5, FamID = 1, founder_byears = c(1900, 1910))
+#' ex_ped <- sim_ped(onset_hazard = Ohaz_vec,
+#'                   death_hazard = Dhaz_df,
+#'                   part = part_vec,
+#'                   RR = 5, FamID = 1,
+#'                   founder_byears = c(1900, 1910))
+#'
+#' #Plot pedigree usign kinship2 package
+#' library(kinship2)
+#'
+#' #Define pedigree to use kinship2's plot function
+#' RV_status <- ex_ped$DA1 + ex_ped$DA2
+#' Affected  <- ex_ped$affected
+#'
+#' ex_pedigree <- pedigree(id = ex_ped$ID,
+#'                         dadid = ex_ped$dad_id,
+#'                         momid = ex_ped$mom_id,
+#'                         sex = (ex_ped$gender + 1),
+#'                         affected = cbind(Affected, RV_status),
+#'                         famid = ex_ped$FamID)
+#' ExamplePed <- ex_pedigree['1']
+#' plot(ExamplePed)
+#' pedigree.legend(ExamplePed, location = "topleft",  radius = 0.25)
+
 
 sim_ped = function(onset_hazard, death_hazard, part,
                    RR, FamID, founder_byears,
@@ -316,8 +346,40 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                            ascertain_span = c(1900, 2015),
 #'                            num_affected = 2)
 #'
-#' plot_RVpedigree(ex_RVped[[1]])
-#' plot_RVpedigree(ex_RVped[[2]])
+#' Plot full and trimmed pedigrees using kinship2 package
+#' library(kinship2)
+#'
+#' #Define pedigree object for fully ascertained pedigree
+#' RV_statusF <- ex_RVped[[1]]$DA1 + ex_RVped[[1]]$DA2
+#' AffectedF  <- ex_RVped[[1]]$affected
+#'
+#' full_RVped <- pedigree(id = ex_RVped[[1]]$ID,
+#'                         dadid = ex_RVped[[1]]$dad_id,
+#'                         momid = ex_RVped[[1]]$mom_id,
+#'                         sex = (ex_RVped[[1]]$gender + 1),
+#'                         affected = cbind(AffectedF, RV_statusF),
+#'                         famid = ex_RVped[[1]]$FamID)
+#' FullRVped <- full_RVped['1']
+#' plot(FullRVped)
+#' pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
+#'
+#'
+#' #Define pedigree object for trimmed pedigree
+#' RV_statusT <- ex_RVped[[2]]$DA1 + ex_RVped[[2]]$DA2
+#' AffectedT  <- ex_RVped[[2]]$affected
+#' ProbandT  <- ex_RVped[[2]]$is_proband
+#'
+#' trim_RVped <- pedigree(id = ex_RVped[[2]]$ID,
+#'                        dadid = ex_RVped[[2]]$dad_id,
+#'                        momid = ex_RVped[[2]]$mom_id,
+#'                        sex = (ex_RVped[[2]]$gender + 1),
+#'                        affected = cbind(AffectedT, ProbandT, RV_statusT),
+#'                        famid = ex_RVped[[2]]$FamID)
+#' TrimRVped <- trim_RVped['1']
+#' plot(TrimRVped)
+#' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
+#'
+#'
 #'
 #' #how to incorporate parallel processing
 #' library(doParallel)
