@@ -334,6 +334,23 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' \code{\link{sim_ped}}
 #'
 #' @examples
+#' #Read in age-specific hazards
+#' data(age_specific_hazards)
+#'
+#' plot(x = age_specific_hazards[,4],
+#'      y = age_specific_hazards[,1],
+#'      xlab = "age",
+#'      ylab = "population age-specific onset hazard",
+#'      col = "red3", lwd = 2, type = "s")
+#' plot(x = age_specific_hazards[,4],
+#'      y = age_specific_hazards[,2],
+#'      xlab = "age",
+#'      ylab = "age-specific death hazard",
+#'      col = "dodgerblue", lwd = 2, type = "s")
+#' lines(x = age_specific_hazards[,4],
+#'      y = age_specific_hazards[,3],
+#'      col = "goldenrod2", lwd = 2, type = "s")
+#'
 #' #Define a parition of ages over which to apply the age-specific hazards
 #' part_vec <- seq(0, 100, by = 1)
 #'
