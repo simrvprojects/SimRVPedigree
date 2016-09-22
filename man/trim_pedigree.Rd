@@ -12,7 +12,7 @@ trim_pedigree(ped_file, ascertain_span, num_affected, recall_probs)
 \item{ascertain_span}{numeric vector of length 2. The ascertainment period,
 i.e. first and last year of study.}
 
-\item{num_affected}{Numeric.  The desired number of affected.}
+\item{num_affected}{Numeric.  Number of affected individuals in ascertained pedigree. See details.}
 
 \item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
 }
@@ -34,43 +34,24 @@ recall probabilites for relatives of degree \emph{1, 2, ..., l-1}, and the
 all relatives of degree \strong{\emph{l} or greater}.  For example if
 \code{recall_probs = c(1)} all relatives will be recalled by the proband with
 probability 1.
+
+Within the \code{trim_pedigree} function, the argument \code{num_affected} serves to determine which affected members may be selected as the proband, not to ensure the number of affected members in the trimmed pedigree, as in \code{sim_RVpedigree}.
+For example, if there are only two affected members and \code{num_affected = 2}, then \code{trim_pedigree} will choose as the proband the second individual to experience onset, so that at the time of ascertainment the pedigree would have had two affected family members.  If \code{recall_probs != c(1)}, it is possible that proband will not recall the other affected.  Hence, the trimmed pedigree may have only 1 affected family member.
 }
 \examples{
-#Define a parition of ages over which to apply the age-specific hazards
-part_vec <- seq(0, 100, by = 1)
+#Read in example pedigree to trim
+data(example_ped)
 
-#Specify age-specific mortality rates for affected and unaffected individuals
-unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-                                    shape = 9.5, scale = 1)/350
-affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))/300
-
-#Combine mortality rates in data frame, with
-# unaffected mortality rates in column 1, and
-# affected mortality rates in column 2
-Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
-
-#Specify the population age-specific onset hazard
-Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 2, scale = 3.5))/100
-
-## Simulate a random pedigree
-set.seed(222)
-ex_ped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-                         death_hazard = Dhaz_df,
-                         part = part_vec, RR = 10, FamID = 1,
-                         founder_byears = c(1900, 1910),
-                         ascertain_span = c(1980, 2015),
-                         num_affected = 2)[[1]]
-
-#plot ex_ped using kinship2
+#plot example_ped using kinship2
 library(kinship2)
-ex_pedigree <- pedigree(id = ex_ped$ID,
-                        dadid = ex_ped$dad_id,
-                        momid = ex_ped$mom_id,
-                        sex = (ex_ped$gender + 1),
-                        affected = cbind(Affected = ex_ped$affected,
-                                   RV_status = ex_ped$DA1 + ex_ped$DA2),
-                        famid = ex_ped$FamID)['1']
+ex_pedigree <- pedigree(id = example_ped$ID,
+                        dadid = example_ped$dad_id,
+                        momid = example_ped$mom_id,
+                        sex = (example_ped$gender + 1),
+                        affected = cbind(Affected = example_ped$affected,
+                                         RV_status = example_ped$DA1 +
+                                                     example_ped$DA2),
+                        famid = example_ped$FamID)['1']
 plot(ex_pedigree)
 pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 mtext("Original Pedigree", side = 3, line = 2)
@@ -79,19 +60,24 @@ mtext("Original Pedigree", side = 3, line = 2)
 ## Trim pedigree examples
 #define lists of various trimming parameters to
 #illustrate the effects of various settings
-Recall_Probabilities <- list(r1 = c(1),  #will result in same ped as ex_ped
-                             r2 = c(1, 0.5, 0.125),
-                             r3 = c(1, 0.5, 0.125))
+Recall_Probabilities <- list(r1 = c(1, 0),
+                             r2 = c(1),
+                             r3 = c(1, 0.5, 0.25, 0.125),
+                             r4 = c(1, 0.5, 0.25, 0.125),
+                             r5 = c(1, 0.5, 0.25, 0.125))
 
-Number_Affected <- c(2, 2, 2)
-Ascertainment_Span <- list(span1 = c(2010, 2015),
-                           span2 = c(2010, 2015),
-                           span3 = c(2000, 2015))
+Number_Affected <- c(2, 2, 2, 3, 2)
+Ascertainment_Span <- list(span1 = c(2005, 2015),
+                           span2 = c(2005, 2015),
+                           span3 = c(2005, 2015),
+                           span4 = c(2000, 2015),
+                           span5 = c(2000, 2015))
+
 
 for (k in 1:length(Number_Affected)) {
    set.seed(2)
    #trim pedigree
-   TrimPed <- trim_pedigree(ped_file = ex_ped,
+   TrimPed <- trim_pedigree(ped_file = example_ped,
                             ascertain_span = Ascertainment_Span[[k]],
                             num_affected = Number_Affected[[k]],
                             recall_probs = Recall_Probabilities[[k]])

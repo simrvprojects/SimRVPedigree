@@ -26,7 +26,7 @@ disease for individuals who have inherited the rare variant.}
 \item{ascertain_span}{numeric vector of length 2. The ascertainment period,
 i.e. first and last year of study.}
 
-\item{num_affected}{Numeric.  The desired number of affected.}
+\item{num_affected}{Numeric.  Number of affected individuals in ascertained pedigree. See details.}
 
 \item{FamID}{numeric. Family identification number.}
 
@@ -91,6 +91,7 @@ par(mfrow = c(1, 1))
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(22)
+set.seed(17)
 ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
                            death_hazard = age_specific_hazards[,c(2,3)],
                            part = c(0, age_specific_hazards[,4]),
