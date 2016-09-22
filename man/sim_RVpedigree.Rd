@@ -91,7 +91,6 @@ par(mfrow = c(1, 1))
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(22)
-set.seed(17)
 ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
                            death_hazard = age_specific_hazards[,c(2,3)],
                            part = c(0, age_specific_hazards[,4]),

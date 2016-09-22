@@ -42,7 +42,7 @@ add_mate = function(partner_info, last_id){
                              gender = abs(partner_info$gender - 1),
                              dad_id = NA,
                              mom_id = NA,
-                             affected = NA,
+                             affected = 0,
                              DA1 = 0,
                              DA2 = 0,
                              birth_year = NA,
@@ -357,7 +357,6 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(22)
-#' set.seed(17)
 #' ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
 #'                            death_hazard = age_specific_hazards[,c(2,3)],
 #'                            part = c(0, age_specific_hazards[,4]),

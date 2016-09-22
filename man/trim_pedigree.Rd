@@ -66,7 +66,7 @@ Recall_Probabilities <- list(r1 = c(1, 0),
                              r4 = c(1, 0.5, 0.25, 0.125),
                              r5 = c(1, 0.5, 0.25, 0.125))
 
-Number_Affected <- c(2, 2, 2, 3, 2)
+Number_Affected <- c(2, 2, 2, 2, 3)
 Ascertainment_Span <- list(span1 = c(2005, 2015),
                            span2 = c(2005, 2015),
                            span3 = c(2005, 2015),
