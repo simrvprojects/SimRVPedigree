@@ -68,35 +68,37 @@ We note that, for rare diseases, this simulation process is computaionally expen
 \code{\link{sim_ped}}
 }
 \examples{
-#Define a parition of ages over which to apply the age-specific hazards
-part_vec <- seq(0, 100, by = 1)
+#Read in age-specific hazards
+data(age_specific_hazards)
 
-
-#Specify age-specific mortality rates for affected and unaffected individuals
-set.seed(1)
-unaffected_mort <- c(0.0001, 0.00005, rnorm(98, mean = 0.00001, sd = 0.00001)) +
-                     pgamma(seq(0.16, 16, by = .16), shape = 9, scale = 1)/350
-
-affected_mort <- c(0.35, 0.28, 0.22, 0.16, 0.135, 0.12, 0.115, 0.081, 0.057, 0.05,
-                   pgamma(seq(1.76, 16, by = .16), shape = 4, scale = 1.5))/200
-
-#Combine mortality rates in data frame, with
-# unaffected mortality rates in column 1, and
-# affected mortality rates in column 2
-
-Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
-
-#Specify the population age-specific onset hazard
-Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+par(mfrow = c(1, 2))
+plot(x = age_specific_hazards[,4],
+     y = age_specific_hazards[,1],
+     xlab = "age",
+     ylab = "population age-specific onset hazard",
+     col = "red3", lwd = 2, type = "s")
+plot(x = age_specific_hazards[,4],
+     y = age_specific_hazards[,2],
+     xlab = "age",
+     ylab = "age-specific death hazard",
+     col = "dodgerblue", lwd = 2, type = "s")
+lines(x = age_specific_hazards[,4],
+     y = age_specific_hazards[,3],
+     col = "goldenrod2", lwd = 2, type = "s")
+legend("topleft", legend = c("unaffected", "affected"),
+       col = c("dodgerblue", "goldenrod2"), lwd = 2)
+par(mfrow = c(1, 1))
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(22)
-ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
-                           death_hazard = Dhaz_df,
-                           part = part_vec, RR = 5, FamID = 1,
+ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
+                           death_hazard = age_specific_hazards[,c(2,3)],
+                           part = c(0, age_specific_hazards[,4]),
+                           RR = 15, FamID = 1,
                            founder_byears = c(1900, 1910),
                            ascertain_span = c(1900, 2015),
-                           num_affected = 2)
+                           num_affected = 2,
+                           recall_probs = c(1))
 
 
 
@@ -104,35 +106,32 @@ ex_RVped <- sim_RVpedigree(onset_hazard = Ohaz_vec,
 #Plot ex_RVped pedigrees using the kinship2 package
 library(kinship2)
 
-#Define pedigree object for full pedigree
-RV_statusF <- ex_RVped[[1]]$DA1 + ex_RVped[[1]]$DA2
-AffectedF  <- ex_RVped[[1]]$affected
-
-full_RVped <- pedigree(id = ex_RVped[[1]]$ID,
+#Define pedigree object for full pedigree, i.e. pedigree prior to trimming
+FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
                         dadid = ex_RVped[[1]]$dad_id,
                         momid = ex_RVped[[1]]$mom_id,
                         sex = (ex_RVped[[1]]$gender + 1),
-                        affected = cbind(AffectedF, RV_statusF),
-                        famid = ex_RVped[[1]]$FamID)
-FullRVped <- full_RVped['1']
+                        affected = cbind(Affected = ex_RVped[[1]]$affected,
+                                         RV_status = ex_RVped[[1]]$DA1 +
+                                                     ex_RVped[[1]]$DA2),
+                        famid = ex_RVped[[1]]$FamID)['1']
 
 #plot pedigree and legend
 plot(FullRVped)
 pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 
 
-#Define pedigree object for trimmed, i.e, ascertained, pedigree
-RV_statusT <- ex_RVped[[2]]$DA1 + ex_RVped[[2]]$DA2
-AffectedT  <- ex_RVped[[2]]$affected
-ProbandT  <- ex_RVped[[2]]$is_proband
-
-trim_RVped <- pedigree(id = ex_RVped[[2]]$ID,
+#Define pedigree object for trimmed pedigree, i.e, predigree with
+# proband selected and relatives trimmed
+TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
                        dadid = ex_RVped[[2]]$dad_id,
                        momid = ex_RVped[[2]]$mom_id,
                        sex = (ex_RVped[[2]]$gender + 1),
-                       affected = cbind(AffectedT, ProbandT, RV_statusT),
-                       famid = ex_RVped[[2]]$FamID)
-TrimRVped <- trim_RVped['1']
+                       affected = cbind(Affected = ex_RVped[[2]]$affected,
+                                        Proband = ex_RVped[[2]]$is_proband,
+                                        RV_status = ex_RVped[[2]]$DA1 +
+                                                    ex_RVped[[2]]$DA2),
+                       famid = ex_RVped[[2]]$FamID)['1']
 plot(TrimRVped)
 pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 

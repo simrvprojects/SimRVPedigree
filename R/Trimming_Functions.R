@@ -133,8 +133,8 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
     probandID <- sample(size = 1,
                         x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
   } else {
-    #no affecteds before ascertainment period, must choose from among the nth
-    #or greater to experience onset
+    #no affecteds before ascertainment period, must choose from among
+    #the nth or greater to experience onset
     AffIDs$poss_proband[1:(num_affected - 1)] <- 0
     probandID <-  sample(size = 1,
                          x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
