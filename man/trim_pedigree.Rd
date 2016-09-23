@@ -40,18 +40,18 @@ For example, if there are only two affected members and \code{num_affected = 2},
 }
 \examples{
 #Read in example pedigree to trim
-data(example_ped)
+data(exp_peds)
 
 #plot example_ped using kinship2
 library(kinship2)
-ex_pedigree <- pedigree(id = example_ped$ID,
-                        dadid = example_ped$dad_id,
-                        momid = example_ped$mom_id,
-                        sex = (example_ped$gender + 1),
-                        affected = cbind(Affected = example_ped$affected,
-                                         RV_status = example_ped$DA1 +
-                                                     example_ped$DA2),
-                        famid = example_ped$FamID)['1']
+ex_pedigree <- pedigree(id = exp_peds$ID,
+                        dadid = exp_peds$dad_id,
+                        momid = exp_peds$mom_id,
+                        sex = (exp_peds$gender + 1),
+                        affected = cbind(Affected = exp_peds$affected,
+                                         RV_status = exp_peds$DA1 +
+                                                     exp_peds$DA2),
+                        famid = exp_peds$FamID)['1']
 plot(ex_pedigree)
 pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 mtext("Original Pedigree", side = 3, line = 2)
@@ -77,7 +77,7 @@ Ascertainment_Span <- list(span1 = c(2005, 2015),
 for (k in 1:length(Number_Affected)) {
    set.seed(2)
    #trim pedigree
-   TrimPed <- trim_pedigree(ped_file = example_ped,
+   TrimPed <- trim_pedigree(ped_file = exp_peds[which(exp_peds$FamID == 1), ],
                             ascertain_span = Ascertainment_Span[[k]],
                             num_affected = Number_Affected[[k]],
                             recall_probs = Recall_Probabilities[[k]])

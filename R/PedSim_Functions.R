@@ -380,10 +380,10 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                         affected = cbind(Affected = ex_RVped[[1]]$affected,
 #'                                          RV_status = ex_RVped[[1]]$DA1 +
 #'                                                      ex_RVped[[1]]$DA2),
-#'                         famid = ex_RVped[[1]]$FamID)['1']
+#'                         famid = ex_RVped[[1]]$FamID)
 #'
 #' #plot pedigree and legend
-#' plot(FullRVped)
+#' plot(FullRVped['1'])
 #' pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 #'
 #'
