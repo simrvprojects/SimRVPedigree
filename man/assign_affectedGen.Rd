@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{assign_affectedGen}
 \alias{assign_affectedGen}
-\title{Assign minimum carrier generation to a simulated pedigree}
+\title{Assign affected generation number.}
 \usage{
 assign_affectedGen(ped_file)
 }
@@ -13,7 +13,7 @@ assign_affectedGen(ped_file)
 reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.
 }
 \description{
-\code{assign_affectedGen} reassigns the generation number based on affected status and trims the pedigree down to affecteds and obligate carriers.
+\code{assign_affectedGen} reassigns the generation number based on affected status and reduces pedigree to affecteds and obligate carriers.
 }
 \details{
 Add details concerning reassignment...

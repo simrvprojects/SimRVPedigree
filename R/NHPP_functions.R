@@ -1,4 +1,4 @@
-#' Determine the cumulative probability of the waiting time, given the age at last event
+#' Determine the cumulative probability of the waiting time, given the age at last event.
 #'
 #' @param last_event A numeric constant.  The age at last event.
 #' @param wait_time A numeric constant.  The waiting time to next_event.
@@ -43,7 +43,7 @@ get_WaitProb = function(last_event, wait_time,
 }
 
 
-#' Simulate the waiting time to next event for a non-homogeneous Poisson process
+#' Simulate the waiting time to next event in a non-homogeneous Poisson process.
 #'
 #' \code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process
 #'

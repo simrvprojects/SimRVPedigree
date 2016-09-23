@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitTime}
 \alias{get_WaitTime}
-\title{Simulate the waiting time to next event for a non-homogeneous Poisson process}
+\title{Simulate the waiting time to next event in a non-homogeneous Poisson process.}
 \usage{
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }

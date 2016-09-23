@@ -19,8 +19,8 @@ Suggests:
     doParallel (>= 1.0.10),
     doRNG (>= 1.6),
     graphics (>= 3.3.0),
-    knitr,
-    rmarkdown
+    knitr (>= 1.13),
+    rmarkdown (>= 0.9.6)
 License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 5.0.1

@@ -1,4 +1,4 @@
-#' Check to see if age-specific hazard and partition of ages are specified correctly
+#' Check that age-specific hazard and partition of ages are correctly specified.
 #'
 #' @inheritParams get_WaitTime
 #' @export
@@ -21,7 +21,7 @@ check_hazpart = function(hazard, part){
   }
 }
 
-#' Check to see if hazards span an appropriate range of ages
+#' Check that age-specific hazards span an appropriate range of ages.
 #'
 #' @inheritParams get_WaitTime
 #'
@@ -40,7 +40,7 @@ check_part = function(part){
 }
 
 
-#' Check to see if recall probabilies are correctly specified
+#' Check that recall probabilies are correctly specified.
 #'
 #' @inheritParams trim_pedigree
 #'
@@ -57,7 +57,7 @@ check_rprobs = function(recall_probs){
   }
 }
 
-#' Check to see if time spans are appropriately specified
+#' Check that time spans are appropriately specified.
 #'
 #' @param span numeric.  A span of years or ages.
 #'
@@ -77,13 +77,13 @@ check_spans = function(span){
   }
 }
 
-#' Check to see if death_hazard is appropriately specified
+#' Check that death_hazard data frame is appropriately specified.
 #'
 #' @param death_hazard data.frame. The age-specific death hazards for affected and unaffected individuals.
 #'
 #' @export
 check_dhaz = function(death_hazard){
-  if(class(death_hazard) != "data.frame"  ){
+  if(class(death_hazard) != "data.frame"){
     stop("death_hazard must be a data frame with 2 columns:,
          column 1 = unaffected age-specific death hazard,
          column 2 = affected age-specific death hazard")
@@ -91,5 +91,9 @@ check_dhaz = function(death_hazard){
     stop("death_hazard must be a data frame with 2 columns:,
          column 1 = unaffected age-specific death hazard,
          column 2 = affected age-specific death hazard")
+  }else if(sum(death_hazard[,1] > death_hazard[,2]) > nrow(death_hazard)/2){
+    warning("death_hazard must be a data frame with 2 columns:,
+            column 1 = unaffected age-specific death hazard,
+            column 2 = affected age-specific death hazard")
   }
 }

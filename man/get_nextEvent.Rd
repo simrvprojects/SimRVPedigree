@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{get_nextEvent}
 \alias{get_nextEvent}
-\title{Simulate next life event}
+\title{Simulate next life event.}
 \usage{
 get_nextEvent(current_age, disease_status, RV_status, lambda_birth,
   onset_hazard, death_hazard, part, birth_range, RR)

@@ -1,4 +1,4 @@
-#' Choose proband and trim pedigree
+#' Choose a proband and trim pedigree.
 #'
 #' \code{trim_pedigree} chooses a proband from the pedigree and trims relatives
 #' based on the proband's recall probability of that relative.

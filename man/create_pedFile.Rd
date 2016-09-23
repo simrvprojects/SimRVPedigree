@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{create_pedFile}
 \alias{create_pedFile}
-\title{Create empty ped file}
+\title{Create an empty ped file.}
 \usage{
 create_pedFile()
 }

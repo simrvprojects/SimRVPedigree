@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_and_warning_functions.R
 \name{check_hazpart}
 \alias{check_hazpart}
-\title{Check to see if age-specific hazard and partition of ages are specified correctly}
+\title{Check that age-specific hazard and partition of ages are correctly specified.}
 \usage{
 check_hazpart(hazard, part)
 }
@@ -13,7 +13,7 @@ check_hazpart(hazard, part)
 age-specific hazards.}
 }
 \description{
-Check to see if age-specific hazard and partition of ages are specified correctly
+Check that age-specific hazard and partition of ages are correctly specified.
 }
 \examples{
 #the length of part should be equal to the length of hazard + 1

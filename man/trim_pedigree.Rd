@@ -2,7 +2,7 @@
 % Please edit documentation in R/Trimming_Functions.R
 \name{trim_pedigree}
 \alias{trim_pedigree}
-\title{Choose proband and trim pedigree}
+\title{Choose a proband and trim pedigree.}
 \usage{
 trim_pedigree(ped_file, ascertain_span, num_affected, recall_probs)
 }

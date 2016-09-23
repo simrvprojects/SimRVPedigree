@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitProb}
 \alias{get_WaitProb}
-\title{Determine the cumulative probability of the waiting time, given the age at last event}
+\title{Determine the cumulative probability of the waiting time, given the age at last event.}
 \usage{
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
@@ -22,7 +22,7 @@ age-specific hazards.}
 wait_prob The probability that the waiting time to next event is at least wait_time.
 }
 \description{
-Determine the cumulative probability of the waiting time, given the age at last event
+Determine the cumulative probability of the waiting time, given the age at last event.
 }
 \examples{
 haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))

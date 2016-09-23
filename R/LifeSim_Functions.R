@@ -1,4 +1,4 @@
-#' Simulate a random birth rate
+#' Simulate a random birth rate.
 #'
 #' @param NB_size,NB_prob size and probability parameters of negative binomial distribution.
 #' @param min_birth_age,max_birth_age minimum and maximum allowable birth ages
@@ -15,7 +15,7 @@ sim_birthRate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
                        scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
 }
 
-#' Simulate next life event
+#' Simulate next life event.
 #'
 #' \code{get_nextEvent} randomly simulates the next life event for an individual
 #'  given their current age, disease status, and rare variant status.
@@ -158,8 +158,6 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 
 get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
                      birth_range, NB_params, RR){
-
-  #check_spans(birth_range)
 
   #initialize data frame to hold life events
   R.life  <- data.frame(Start = 0)

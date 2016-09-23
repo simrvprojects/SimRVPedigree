@@ -1,6 +1,6 @@
-#' Assign minimum carrier generation to a simulated pedigree
+#' Assign affected generation number.
 #'
-#' \code{assign_affectedGen} reassigns the generation number based on affected status and trims the pedigree down to affecteds and obligate carriers.
+#' \code{assign_affectedGen} reassigns the generation number based on affected status and reduces pedigree to affecteds and obligate carriers.
 #'
 #' Add details concerning reassignment...
 #'

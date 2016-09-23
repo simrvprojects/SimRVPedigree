@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_and_warning_functions.R
 \name{check_spans}
 \alias{check_spans}
-\title{Check to see if time spans are appropriately specified}
+\title{Check that time spans are appropriately specified.}
 \usage{
 check_spans(span)
 }
@@ -10,7 +10,7 @@ check_spans(span)
 \item{span}{numeric.  A span of years or ages.}
 }
 \description{
-Check to see if time spans are appropriately specified
+Check that time spans are appropriately specified.
 }
 \examples{
 check_spans(c(1975, 1982))

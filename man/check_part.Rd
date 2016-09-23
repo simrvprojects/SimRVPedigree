@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_and_warning_functions.R
 \name{check_part}
 \alias{check_part}
-\title{Check to see if hazards span an appropriate range of ages}
+\title{Check that age-specific hazards span an appropriate range of ages.}
 \usage{
 check_part(part)
 }
@@ -11,7 +11,7 @@ check_part(part)
 age-specific hazards.}
 }
 \description{
-Check to see if hazards span an appropriate range of ages
+Check that age-specific hazards span an appropriate range of ages.
 }
 \examples{
 \dontrun{check_part(part = seq(10, 20, by = 1))}

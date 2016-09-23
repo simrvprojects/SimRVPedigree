@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{sim_birthRate}
 \alias{sim_birthRate}
-\title{Simulate a random birth rate}
+\title{Simulate a random birth rate.}
 \usage{
 sim_birthRate(NB_size, NB_prob, min_birth_age, max_birth_age)
 }
@@ -15,7 +15,7 @@ sim_birthRate(NB_size, NB_prob, min_birth_age, max_birth_age)
 birth_rate numeric, the randomly generated birth rate
 }
 \description{
-Simulate a random birth rate
+Simulate a random birth rate.
 }
 \examples{
 set.seed(17)

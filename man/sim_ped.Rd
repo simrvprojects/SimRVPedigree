@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{sim_ped}
 \alias{sim_ped}
-\title{Simulate a pedigree}
+\title{Simulate a pedigree.}
 \usage{
 sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears,
   birth_range = c(18, 45), NB_params = c(2, 4/7), stop_year = 2015)

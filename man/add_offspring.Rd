@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{add_offspring}
 \alias{add_offspring}
-\title{Create new offspring}
+\title{Create a new offspring.}
 \usage{
 add_offspring(dad_info, mom_info, byear, last_id)
 }
@@ -21,6 +21,6 @@ new_child_info the ped file information for the new child
 last_id the updated value of last_id after offspring has been added
 }
 \description{
-Create new offspring
+Create a new offspring for pedigree.
 }
 

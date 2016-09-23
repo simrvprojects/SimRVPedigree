@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_and_warning_functions.R
 \name{check_rprobs}
 \alias{check_rprobs}
-\title{Check to see if recall probabilies are correctly specified}
+\title{Check that recall probabilies are correctly specified.}
 \usage{
 check_rprobs(recall_probs)
 }
@@ -10,7 +10,7 @@ check_rprobs(recall_probs)
 \item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
 }
 \description{
-Check to see if recall probabilies are correctly specified
+Check that recall probabilies are correctly specified.
 }
 \examples{
 \dontrun{check_rprobs(c(2, 0.3, 0.4))

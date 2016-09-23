@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{get_eventYear}
 \alias{get_eventYear}
-\title{Convert event waiting times to year of event}
+\title{Convert event waiting times to year of event.}
 \usage{
 get_eventYear(Rlife_events, byear)
 }
@@ -17,6 +17,6 @@ Named matrix. The years when simulated life events occur,
 named according to which life event has occurred.
 }
 \description{
-Convert event waiting times to year of event
+Convert event waiting times to year of event.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_and_warning_functions.R
 \name{check_dhaz}
 \alias{check_dhaz}
-\title{Check to see if death_hazard is appropriately specified}
+\title{Check that death_hazard data frame is appropriately specified.}
 \usage{
 check_dhaz(death_hazard)
 }
@@ -10,6 +10,6 @@ check_dhaz(death_hazard)
 \item{death_hazard}{data.frame. The age-specific death hazards for affected and unaffected individuals.}
 }
 \description{
-Check to see if death_hazard is appropriately specified
+Check that death_hazard data frame is appropriately specified.
 }
 

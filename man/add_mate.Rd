@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{add_mate}
 \alias{add_mate}
-\title{Create a new mate}
+\title{Create a new mate.}
 \usage{
 add_mate(partner_info, last_id)
 }
@@ -18,6 +18,6 @@ new_mate_info the ped file information for the new mate
 last_id the updated value of last_id after mate has been added
 }
 \description{
-Create a new mate in pedigree
+Create a new mate in pedigree.
 }
 
