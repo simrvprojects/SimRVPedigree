@@ -18,7 +18,10 @@ Imports:
 Suggests:
     doParallel (>= 1.0.10),
     doRNG (>= 1.6),
-    graphics (>= 3.3.0)
+    graphics (>= 3.3.0),
+    knitr,
+    rmarkdown
 License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr

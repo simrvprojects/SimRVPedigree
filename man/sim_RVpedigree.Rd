@@ -98,7 +98,7 @@ ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
                            founder_byears = c(1900, 1910),
                            ascertain_span = c(1900, 2015),
                            num_affected = 2,
-                           recall_probs = c(1))
+                           recall_probs = c(1, 0.75, 0.5))
 
 
 
