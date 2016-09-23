@@ -13,10 +13,12 @@ check_spans(span)
 Check to see if time spans are appropriately specified
 }
 \examples{
+check_spans(c(1975, 1982))
+\dontrun{
 check_spans(c(1, 3, 6))
 check_spans(c(1982, 1975))
-check_spans(c(1975, 1982))
 check_spans(c(1975, 1975))
-check_spans(c(18))
+check_spans(c(18))}
+
 }
 

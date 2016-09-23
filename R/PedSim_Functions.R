@@ -364,7 +364,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                            founder_byears = c(1900, 1910),
 #'                            ascertain_span = c(1900, 2015),
 #'                            num_affected = 2,
-#'                            recall_probs = c(1))
+#'                            recall_probs = c(1, 0.75, 0.5))
 #'
 #'
 #'

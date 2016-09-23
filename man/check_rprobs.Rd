@@ -13,9 +13,9 @@ check_rprobs(recall_probs)
 Check to see if recall probabilies are correctly specified
 }
 \examples{
-check_rprobs(c(2, 0.3, 0.4))
-check_rprobs(NA)
-check_rprobs("a")
+\dontrun{check_rprobs(c(2, 0.3, 0.4))
+         check_rprobs(NA)
+         check_rprobs("a")}
 check_rprobs(recall_probs = c(1))
 }
 

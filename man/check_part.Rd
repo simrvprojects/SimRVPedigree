@@ -14,8 +14,8 @@ age-specific hazards.}
 Check to see if hazards span an appropriate range of ages
 }
 \examples{
-check_part(part = seq(10, 20, by = 1))
-check_part(part = seq(-10, 10, by = 1))
+\dontrun{check_part(part = seq(10, 20, by = 1))}
+\dontrun{check_part(part = seq(-10, 10, by = 1))}
 check_part(part = seq(0, 85, by = 1))
 }
 

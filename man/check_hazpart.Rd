@@ -17,9 +17,11 @@ Check to see if age-specific hazard and partition of ages are specified correctl
 }
 \examples{
 #the length of part should be equal to the length of hazard + 1
-check_hazpart(hazard = seq(0, 1, by = 0.05), part = seq(0, 20, by = 1))
 check_hazpart(hazard = seq(0, 1, by = 0.05), part = seq(0, 21, by = 1))
+\dontrun{check_hazpart(hazard = seq(0, 1, by = 0.05),
+                       part = seq(0, 20, by = 1))}
+\dontrun{check_hazpart(hazard = c(1, NA, 2, 4),
+                       part = c(0, 10, 20, 30, 40))}
 
-check_hazpart(hazard = c(1, NA, 2, 4), part = c(0, 10, 20, 30, 40))
 }
 
