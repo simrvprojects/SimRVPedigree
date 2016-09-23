@@ -22,6 +22,7 @@ Add details concerning reassignment...
 #Read in example pedigree to trim
 data(exp_peds)
 
+library(kinship2)
 #assign to pedigree object to show before and after behavior of
 #the assign_affectedGen function
 ex_pedigree <- pedigree(id = exp_peds$ID,
