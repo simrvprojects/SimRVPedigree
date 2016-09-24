@@ -132,6 +132,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' @param NB_params A numeric vector of length 2. The size and probabiliy
 #' parameters of the negative binomial distribution that describes the number of
 #' children per household in the population.
+#' @param YOB numeric. The indivdiual's year of birth.
 #' @inheritParams get_nextEvent
 #'
 #' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
@@ -148,16 +149,15 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' set.seed(17)
 #' get_lifeEvents(RV_status = 0, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
 #'
 #' set.seed(17)
 #' get_lifeEvents(RV_status = 1, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
 #'
-
 get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
-                     birth_range, NB_params, RR){
+                          birth_range, NB_params, RR, YOB){
 
   #initialize data frame to hold life events
   R.life  <- data.frame(Start = 0)
@@ -193,5 +193,8 @@ get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
     }
   }
 
-  return(R.life)
+  life_events <- round(cumsum(as.numeric(R.life[1,]))) + YOB
+  names(life_events) <- names(R.life)
+  return(life_events)
+
 }

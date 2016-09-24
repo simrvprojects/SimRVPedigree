@@ -93,20 +93,6 @@ add_offspring = function(dad_info, mom_info, byear, last_id){
   return(child_return)
 }
 
-#' Convert event waiting times to year of event.
-#'
-#' @param Rlife_events Named matrix of all life events returned from
-#' \code{\link{get_lifeEvents}}
-#' @param byear The birth year
-#'
-#' @return Named matrix. The years when simulated life events occur,
-#' named according to which life event has occurred.
-#'
-get_eventYear = function(Rlife_events, byear){
-  life_years <- round(cumsum(as.numeric(Rlife_events[1,]))) + byear
-  names(life_years) <- names(Rlife_events)
-  return(life_years)
-}
 
 #' Simulate all life events for an individual and create a nuclear family when
 #' appropriate.
@@ -125,12 +111,12 @@ sim_nFam = function(found_info, stop_year, last_id,
   nfam_ped <- found_info
 
   #Simulate life steps for our founder
-  sim_life <- get_lifeEvents(RV_status = sum(c(found_info$DA1, found_info$DA2)),
+  sim_years <- get_lifeEvents(RV_status = sum(c(found_info$DA1, found_info$DA2)),
                         onset_hazard, death_hazard, part,
-                        birth_range, NB_params, RR)
+                        birth_range, NB_params, RR, YOB = found_info$birth_year)
 
-  #convert these to years
-  sim_years <- get_eventYear(Rlife_events = sim_life, byear = found_info$birth_year)
+  # #convert these to years
+  # sim_years <- get_eventYear(Rlife_events = sim_life, byear = found_info$birth_year)
 
   # set the disease status based on whether or not they experience disease
   # onset prior to stop_year

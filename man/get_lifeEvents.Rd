@@ -5,7 +5,7 @@
 \title{Simulate all life events.}
 \usage{
 get_lifeEvents(RV_status, onset_hazard, death_hazard, part, birth_range,
-  NB_params, RR)
+  NB_params, RR, YOB)
 }
 \arguments{
 \item{RV_status}{Rare variant status, RV_status  = 1 if
@@ -29,6 +29,8 @@ children per household in the population.}
 
 \item{RR}{A numeric constant. The relative risk of developing
 disease for individuals who have inherited the rare variant.}
+
+\item{YOB}{numeric. The indivdiual's year of birth.}
 }
 \value{
 Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
@@ -49,12 +51,12 @@ Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(17)
 get_lifeEvents(RV_status = 0, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
 
 set.seed(17)
 get_lifeEvents(RV_status = 1, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15)
+           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
 
 }
 
