@@ -86,7 +86,10 @@ get_WaitTime = function(p, last_event, hazard, part,
   if (p > MaxProb) {
     w <- NA
   } else if (p < MaxProb) {
-    wts   <- seq(0, (max(part) - last_event), by = 0.5)
+    wts <- seq(0, (max(part) - last_event), by = 0.5)
+    if (max(wts) < (max(part) - last_event)){
+      wts <- c(wts, (max(part) - last_event))
+    }
     probs <- get_WaitProb(wait_time = wts, last_event, hazard, part, scale)
 
     a <- wts[(which.max((p - probs) < 0)-1)]
