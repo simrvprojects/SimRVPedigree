@@ -209,10 +209,7 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
         readd$birth_year <- NA
         readd$onset_year <- NA
         readd$death_year <- NA
-        readd$affected   <- NA
         readd$available  <- 0
-        readd$DA1 <- NA
-        readd$DA2 <- NA
       }
 
       #add back to pedigree
