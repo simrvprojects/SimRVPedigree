@@ -220,13 +220,5 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
   #assign proband identifier
   ped_trim$is_proband <- ifelse(ped_trim$ID == probandID, 1, 0)
 
-  #add back in DA1 and DA2 = 0 for all marry-ins
-  kin_mat <- kinship(ped_trim,
-                     id = ped_trim$ID,
-                     dadid = ped_trim$dad_id,
-                     momid = ped_trim$mom_id)
-  ped_trim[which(kin_mat[, which(ped_trim$is_proband == 1)] == 0),
-           which(colnames(ped_trim) %in% c("affected", "DA1", "DA2"))] <- 0
-
   return(ped_trim)
 }

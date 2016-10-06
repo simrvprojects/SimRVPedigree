@@ -462,8 +462,8 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
     if (missing(recall_probs)) {
       trim_ped <- trim_pedigree(ped_file = fam_ped, ascertain_span, num_affected)
     } else {
-      trim_ped <- trim_pedigree(ped_file = fam_ped,
-                            ascertain_span, num_affected, recall_probs)
+      trim_ped <- trim_pedigree(ped_file = fam_ped, ascertain_span,
+                                num_affected, recall_probs)
     }
 
     #determine the number of available affected individuals
