@@ -7,7 +7,7 @@
 assign_affectedGen(ped_file)
 }
 \arguments{
-\item{ped_file}{data.frame. A ped file with the same format as one simulated with sim_RVpedigree}
+\item{ped_file}{data.frame. A ped file returned by the sim_RVpedigree function.}
 }
 \value{
 reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.

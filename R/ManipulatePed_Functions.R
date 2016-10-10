@@ -4,7 +4,7 @@
 #'
 #' Add details concerning reassignment...
 #'
-#' @param ped_file data.frame. A ped file with the same format as one simulated with sim_RVpedigree
+#' @param ped_file data.frame. A ped file returned by the sim_RVpedigree function.
 #'
 #' @return reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.
 #' @export
