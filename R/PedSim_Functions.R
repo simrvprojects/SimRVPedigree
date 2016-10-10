@@ -308,7 +308,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 #' \code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} discards that pedigree and simulates another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \code{\link{sim_ped}}.
 #'
-#' We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  See parallel processing example.
+#' We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  To see an example code that uses parallel processing to simulate a study sample of pedigrees, please refer to the vignette.
 #'
 #'
 #' @inheritParams sim_ped
@@ -388,32 +388,6 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                        famid = ex_RVped[[2]]$FamID)['1']
 #' plot(TrimRVped)
 #' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
-#'
-#'
-#'
-#' #how to incorporate parallel processing
-#' library(doParallel)
-#' library(doRNG)
-#'
-#' cl <- makeCluster(2)     # create cluster
-#' registerDoParallel(cl)   # register cluster
-#' on.exit(stopCluster(cl))
-#'
-#' npeds = 8    #set the number of pedigrees to generate
-#' rnseed = 22  #choose a seed
-#'
-#' RV_peds = foreach(i = seq(npeds), .combine = rbind,
-#'                   .packages = c("kinship2", "SimRVPedigree"),
-#'                   .options.RNG = rnseed
-#'                   ) %dorng% {
-#'                   sim_RVpedigree(onset_hazard = Ohaz_vec,
-#'                                  death_hazard = Dhaz_df,
-#'                                  part = part_vec, RR = 5, FamID = i,
-#'                                  founder_byears = c(1900, 1910),
-#'                                  ascertain_span = c(1900, 2015),
-#'                                  num_affected = 2)[[2]]}
-#'
-#' stopCluster(cl)
 #'
 #'
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
