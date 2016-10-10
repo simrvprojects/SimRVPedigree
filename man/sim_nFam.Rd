@@ -36,7 +36,7 @@ disease for individuals who have inherited the rare variant.}
 }
 \value{
 A ped file with all life events of founding individual updated, and
-with additional information for mate and offspring, when offspring are generated. #'
+with additional information for mate and offspring, when offspring are generated.
 }
 \description{
 Simulate all life events for an individual and create a nuclear family when

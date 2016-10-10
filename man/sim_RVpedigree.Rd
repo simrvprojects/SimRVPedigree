@@ -69,31 +69,32 @@ We note that, for rare diseases, this simulation process is computaionally expen
 }
 \examples{
 #Read in age-specific hazards
-data(age_specific_hazards)
+data(AgeSpecific_Hazards)
 
 par(mfrow = c(1, 2))
-plot(x = age_specific_hazards[,4],
-     y = age_specific_hazards[,1],
+plot(x = seq(1, 100, by = 1),
+     y = AgeSpecific_Hazards[,1],
      xlab = "age",
      ylab = "population age-specific onset hazard",
      col = "red3", lwd = 2, type = "s")
-plot(x = age_specific_hazards[,4],
-     y = age_specific_hazards[,2],
+plot(x = seq(1, 100, by = 1),
+     y = AgeSpecific_Hazards[,3],
      xlab = "age",
      ylab = "age-specific death hazard",
+     col = "goldenrod2", ylim = c(0, 0.04),
+     lwd = 2, type = "s")
+lines(x = seq(1, 100, by = 1),
+     y = AgeSpecific_Hazards[,2],
      col = "dodgerblue", lwd = 2, type = "s")
-lines(x = age_specific_hazards[,4],
-     y = age_specific_hazards[,3],
-     col = "goldenrod2", lwd = 2, type = "s")
 legend("topleft", legend = c("unaffected", "affected"),
        col = c("dodgerblue", "goldenrod2"), lwd = 2)
 par(mfrow = c(1, 1))
 
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(22)
-ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
-                           death_hazard = age_specific_hazards[,c(2,3)],
-                           part = c(0, age_specific_hazards[,4]),
+set.seed(13)
+ex_RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                           part = seq(0, 100, by = 1),
                            RR = 15, FamID = 1,
                            founder_byears = c(1900, 1910),
                            ascertain_span = c(1900, 2015),
