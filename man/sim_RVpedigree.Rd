@@ -5,8 +5,8 @@
 \title{Simulate a pedigree ascertained for multiple affected individuals.}
 \usage{
 sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
-  ascertain_span, num_affected, FamID, recall_probs, birth_range = c(18, 45),
-  NB_params = c(2, 4/7), stop_year = 2015)
+  ascertain_span, num_affected, FamID, recall_probs, stop_year,
+  birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
 \item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
@@ -28,15 +28,15 @@ i.e. first and last year of study.}
 
 \item{num_affected}{Numeric.  Number of affected individuals in ascertained pedigree. See details.}
 
-\item{FamID}{numeric. Family identification number.}
+\item{FamID}{Numeric. Family identification number.}
 
 \item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
+
+\item{stop_year}{The last year of study, any information simulated after stop.year is censored and will not be recorded in the ped file.  If missing, the stop year is set to the current year.}
 
 \item{birth_range}{A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.}
 
 \item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
-
-\item{stop_year}{The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
 }
 \value{
 full_ped The full ped file, prior to proband selection and trimming.
@@ -97,7 +97,7 @@ ex_RVped <- sim_RVpedigree(onset_hazard = age_specific_hazards[,1],
                            RR = 15, FamID = 1,
                            founder_byears = c(1900, 1910),
                            ascertain_span = c(1900, 2015),
-                           num_affected = 2,
+                           num_affected = 2, stop_year = 2015,
                            recall_probs = c(1, 0.75, 0.5))
 
 

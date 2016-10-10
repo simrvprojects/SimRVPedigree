@@ -181,9 +181,9 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 #'
 #'
-#' @param FamID numeric. Family identification number.
+#' @param FamID Numeric. Family identification number.
 #' @param founder_byears A numeric vector of length 2, the minimum and maximum founder birth years.  See details.
-#' @param stop_year The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.
+#' @param stop_year The last year of study.  Note: any information simulated after stop.year is censored and will not be recorded in the ped file.
 #' @param birth_range A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.
 #' @param NB_params A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.
 #' @inheritParams get_lifeEvents
@@ -220,7 +220,8 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                   death_hazard = Dhaz_df,
 #'                   part = part_vec,
 #'                   RR = 5, FamID = 1,
-#'                   founder_byears = c(1900, 1910))
+#'                   founder_byears = c(1900, 1910),
+#'                   stop_year = 2015)
 #'
 #' #Plot pedigree usign kinship2 package
 #' library(kinship2)
@@ -241,10 +242,9 @@ sim_nFam = function(found_info, stop_year, last_id,
 
 
 sim_ped = function(onset_hazard, death_hazard, part,
-                   RR, FamID, founder_byears,
+                   RR, FamID, founder_byears, stop_year,
                    birth_range = c(18, 45),
-                   NB_params = c(2, 4/7),
-                   stop_year = 2015){
+                   NB_params = c(2, 4/7)){
 
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
@@ -312,6 +312,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 #'
 #' @inheritParams sim_ped
+#' @param stop_year The last year of study, any information simulated after stop.year is censored and will not be recorded in the ped file.  If missing, the stop year is set to the current year.
 #' @inheritParams trim_pedigree
 #'
 #' @return full_ped The full ped file, prior to proband selection and trimming.
@@ -351,7 +352,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                            RR = 15, FamID = 1,
 #'                            founder_byears = c(1900, 1910),
 #'                            ascertain_span = c(1900, 2015),
-#'                            num_affected = 2,
+#'                            num_affected = 2, stop_year = 2015,
 #'                            recall_probs = c(1, 0.75, 0.5))
 #'
 #'
@@ -393,8 +394,9 @@ sim_ped = function(onset_hazard, death_hazard, part,
 sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           founder_byears, ascertain_span,
                           num_affected, FamID,
-                          recall_probs, birth_range = c(18, 45),
-                          NB_params = c(2, 4/7), stop_year = 2015){
+                          recall_probs, stop_year,
+                          birth_range = c(18, 45),
+                          NB_params = c(2, 4/7)){
 
   check_hazpart(onset_hazard, part)
   check_part(part)
@@ -406,7 +408,9 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
   check_spans(birth_range)
 
   if(!missing(recall_probs)) check_rprobs(recall_probs)
-
+  if(missing(stop_year)){
+    stop_year <- as.numeric(format(Sys.Date(),'%Y'))
+  }
 
   #generate the family pedigree, check to see that the untrimmed pedigree has
   # the appropriate number of affected individuals
@@ -415,7 +419,7 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
     d <- 0
     while( d == 0 ){
       fam_ped <- sim_ped(onset_hazard, death_hazard, part, RR, FamID,
-                         founder_byears, birth_range, NB_params, stop_year)
+                         founder_byears, stop_year, birth_range, NB_params)
 
       # prior to sending the simulated pedigree to the trim function,
       # we check to see if it meets the required criteria for number of

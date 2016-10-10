@@ -4,8 +4,8 @@
 \alias{sim_ped}
 \title{Simulate a pedigree.}
 \usage{
-sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears,
-  birth_range = c(18, 45), NB_params = c(2, 4/7), stop_year = 2015)
+sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
+  birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
 \item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
@@ -20,15 +20,15 @@ age-specific hazards}
 \item{RR}{A numeric constant. The relative risk of developing
 disease for individuals who have inherited the rare variant.}
 
-\item{FamID}{numeric. Family identification number.}
+\item{FamID}{Numeric. Family identification number.}
 
 \item{founder_byears}{A numeric vector of length 2, the minimum and maximum founder birth years.  See details.}
+
+\item{stop_year}{The last year of study.  Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
 
 \item{birth_range}{A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.}
 
 \item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
-
-\item{stop_year}{The last year of study.  By default, \code{stop_year} = 2015. Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
 }
 \value{
 The ped file for the simulated pedigree.
@@ -72,7 +72,8 @@ ex_ped <- sim_ped(onset_hazard = Ohaz_vec,
                   death_hazard = Dhaz_df,
                   part = part_vec,
                   RR = 5, FamID = 1,
-                  founder_byears = c(1900, 1910))
+                  founder_byears = c(1900, 1910),
+                  stop_year = 2015)
 
 #Plot pedigree usign kinship2 package
 library(kinship2)
