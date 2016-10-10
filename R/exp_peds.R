@@ -1,0 +1,27 @@
+#' Example pedigrees
+#'
+#' A dataset containing 4 example pedigrees.
+#'
+#' @docType data
+#'
+#' @usage data(exp_peds)
+#'
+#' @format A data frame with 50 rows and 14 variables:
+#' \describe{
+#' \item{FamID}{Family identification number}
+#' \item{ID}{Individual identification number}
+#' \item{gender}{gender, 0 = male, 1 = female}
+#' \item{dad_id}{ID number of father}
+#' \item{mom_id}{ID number of mother}
+#' \item{affected}{Affected status, 0 = unaffected, 1 = affected}
+#' \item{DA1}{Allele at assumed disease locus 1, 0 = major, 1 = minor}
+#' \item{DA2}{Allele at assumed disease locus 2, 0 = major, 1 = minor}
+#' \item{birth_year}{birth year}
+#' \item{onset_year}{disease onset year}
+#' \item{death_year}{death year}
+#' \item{RR}{relative risk of disease for individual who have inheritied the rare variant}
+#' \item{available}{Availability status, 0 = unavailable, 1 = available}
+#' \item{Gen}{Generation number}
+#' }
+#'
+"exp_peds"
