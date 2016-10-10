@@ -395,8 +395,8 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' library(doParallel)
 #' library(doRNG)
 #'
-#' cl <- makeCluster(detectCores())  # create cluster
-#' registerDoParallel(cl)            # register cluster
+#' cl <- makeCluster(2)     # create cluster
+#' registerDoParallel(cl)   # register cluster
 #' on.exit(stopCluster(cl))
 #'
 #' npeds = 8    #set the number of pedigrees to generate

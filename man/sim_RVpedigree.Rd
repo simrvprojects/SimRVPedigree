@@ -141,8 +141,8 @@ pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 library(doParallel)
 library(doRNG)
 
-cl <- makeCluster(detectCores())  # create cluster
-registerDoParallel(cl)            # register cluster
+cl <- makeCluster(2)     # create cluster
+registerDoParallel(cl)   # register cluster
 on.exit(stopCluster(cl))
 
 npeds = 8    #set the number of pedigrees to generate
