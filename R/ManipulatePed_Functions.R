@@ -2,7 +2,7 @@
 #'
 #' \code{assign_affectedGen} reassigns the generation number based on affected status and reduces pedigree to affecteds and obligate carriers.
 #'
-#' Add details concerning reassignment...
+#' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation number based on the affecteds in the pedigree.  Specifically, given a pedigree it reassigns generation numbers of the affected memebers so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 #'
 #' @param ped_file data.frame. A ped file returned by the sim_RVpedigree function.
 #'
