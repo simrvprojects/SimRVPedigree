@@ -20,7 +20,8 @@ Suggests:
     doRNG (>= 1.6),
     graphics (>= 3.3.0),
     knitr (>= 1.13),
-    rmarkdown (>= 0.9.6)
+    rmarkdown (>= 0.9.6),
+    testthat
 License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 5.0.1
