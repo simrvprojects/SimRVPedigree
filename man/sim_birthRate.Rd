@@ -19,7 +19,12 @@ Simulate a random birth rate.
 }
 \examples{
 set.seed(17)
-sim_birthRate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
+sim_birthRate(NB_size = 2, NB_prob = 4/7,
+              min_birth_age = 17, max_birth_age = 45)
+set.seed(17)
+sim_birthRate(NB_size = 2, NB_prob = 4/7,
+              min_birth_age = 17, max_birth_age = 45)
+
 
 }
 

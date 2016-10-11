@@ -8,11 +8,17 @@
 #'
 #' @examples
 #' set.seed(17)
-#' sim_birthRate(NB_size = 2, NB_prob = 4/7, min_birth_age = 17, max_birth_age = 45)
+#' sim_birthRate(NB_size = 2, NB_prob = 4/7,
+#'               min_birth_age = 17, max_birth_age = 45)
+#' set.seed(17)
+#' sim_birthRate(NB_size = 2, NB_prob = 4/7,
+#'               min_birth_age = 17, max_birth_age = 45)
+#'
 #'
 sim_birthRate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
     birth_rate <- rgamma(1, shape = NB_size,
-                       scale = (1-NB_prob)/NB_prob ) / (max_birth_age-min_birth_age)
+                       scale = (1-NB_prob)/NB_prob)/(max_birth_age -
+                                                       min_birth_age)
 }
 
 #' Simulate next life event.
@@ -167,8 +173,8 @@ get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
   DS <- 0; t <- min.age
 
   #generate and store the birth rate for this individual
-  B.lambda <- sim_birthRate( NB_params[1], NB_params[2] ,
-                           birth_range[1], birth_range[2])
+  B.lambda <- sim_birthRate(NB_params[1], NB_params[2],
+                            birth_range[1], birth_range[2])
 
   while(t < max.age){
     #generate next event
