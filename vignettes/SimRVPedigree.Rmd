@@ -20,22 +20,22 @@ body{ /* Normal  */
 1. [Introduction](#introduction)
 2. [Basic Usage](#BasicUsage)
     1. [Example Data](#ExampleData)
-    2. [Simulating Waiting Times to Life Events](#NHPP)
-        1. [Simulating the Waiting Time to Disease Onset](#Onset)
-        2. [Simulating the Waiting Time to Death](#Death)
-        3. [Simulating the Waiting Time to Reproduction](#Repro)
-    3. [Simulating Life Events](#LifeEvent)
-    4. [Simulating Pedigrees](#PedSim)
-    5. [Trimming Pedigrees](#PedTrim)
-    6. [Simulating Pedigrees with Multiple Affecteds](#RVPedSim)
+    2. [Simulating Pedigrees](#PedSim)
+    3. [Trimming Pedigrees](#PedTrim)
+    4. [Simulating Pedigrees with Multiple Affecteds](#RVPedSim)
         1. [Parallel Processing Example](#ParProc)
-    7. [Reassigning Affected Generation](#AffGen)
+    5. [Reassigning Generation Based on Affected Status](#AffGen)
 
 ## Introduction <a name="introduction"></a>
+The `SimRVPedigree` package provides methods and functions to randomly simulate pedigrees that have been ascertained to contain multiple relatives affected with a rare disease.  
 
-The `SimRVPedigree` package provides methods and functions to randomly simulate pedigrees likely to be asertained for multiple affected members under a particular study design.  Pedigrees include individual specific variables such as birth year, and, when applicable, onset year, and/or death year.  Additionally, the transmission of a rare variant, assumed to increase disease susceptibility, is simulated according to Mendel's laws.
+Then you could talk about the study design; e.g. ascertainment occurs over a user-specified time-period, and is through the proband. Discuss the rare disease and how we assume that (i) sporadic cases have age-dependent baseline hazard rates which are to be specified by the user, (ii) genetic cases within the same family are due to a shared rare variant but that different families may segregate different rare variants, and 
 
-In addition to randomly simulating pedigrees, `SimRVPedigree` also includes functions for: simulating waiting times associated with a non-homogeneous Poisson process, randomly simulating life events contingent on user-provided age-specific hazards, and functions to reassign the generation number of based on affected status.
+NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.  
+
+Pedigrees include individual specific variables such as birth year, and, when applicable, onset year, and/or death year.  Additionally, the transmission of a rare variant, assumed to increase disease susceptibility, is simulated according to Mendel's laws.
+
+In addition to randomly simulating pedigrees, `SimRVPedigree` also includes a function to reassign the generation number of based on affected status.
 
 ## Basic Usage <a name="BasicUsage"></a>
 After installing the `SimRVPedigree` package, load it by typing the command:
@@ -51,142 +51,6 @@ library(SimRVPedigree)
 
 We begin the vignette by illustrating how the data in `AgeSpecific_Hazards` may be used to: simulate the waiting time to an event associated with a non-homogeneous Poisson process, randomly simulate all life events for an individual, starting at birth and terminating with death, and in conjunction with the `sim_RVpedigree` function to randomly simulate a pedigree with multiple affected members.  We will use the `exp_peds` data to illustrate the effects of trimming pedigrees based on a proband's recall probability of a relative, and reassignment of affected generation number to reflect minimum carrier status.  For more information on either of these datasets please type the command `help(AgeSpecific_Hazards)` and/or `help(exp_peds)` in the `R` console. 
 
-### Simulating Waiting Times to Life Events <a name="NHPP"></a>
-At the heart of the pedigree simulator is the simulation of individual life events starting with birth and ending with death.  In simulation, we consider three competing age-specific life events: disease onset, reproduction, and death.  We will now discusss the simulation of the waiting times to each of these life events in turn.
-
-####Simulating the Waiting Time to Disease Onset <a name="Onset"></a>
-First, consider the waiting time time to disease onset.  Given an individual's current age $t$, we model the waiting time to disease onset, $w_{o|t}$, as the waiting time associated with a non-homogeneous Poisson process.  The age-specific hazard associated with this process is determined by the individual's rare variant status, $x_{RV}$.  In what follows we adopt the notation, $x_{RV} = 1$, if the individual has inherited the rare variant, and $x_{RV} = 0$, otherwise.  
-
-We model the age-specific hazard for disease onset according to the following Cox proportional hazards model:
-$$\lambda_o(t|x_{RV}) = \left\{ \begin{array}{ll}
-        \lambda_0(t), & \text{if $x_{RV}$ = 0};\\
-        \kappa*\lambda_0(t),  & \text{if $x_{RV}$ = 1},\end{array} \right.$$
-
-for $\kappa \ge 1$, where $\kappa$ represents the relative risk for individuals who have inherited the rare variant.
-
-We note that, in using this procedure to simulate the waiting time to disease onset, not all individuals will necessarily experience disease onset.  However, we impose the restriction that those who do may only do so once.  That is, if an individual has already experienced disease onset, we do not consider them for further onset events.  Assuming that disease onset has not occurred by the individual's current age we use the `SimRVPedigree` package to simulate the waiting time to onset as follows:
-
-```{r}
-#load example hazards 
-data("AgeSpecific_Hazards")
-colnames(AgeSpecific_Hazards)
-
-#the first column of the AgeSpecific_Hazards dataset provides the age-specific
-#onset hazard for the population
-my_onset_hazard = AgeSpecific_Hazards[,1]
-
-#We must specify a partition of ages over which to apply the age-specifc
-#hazards.  Note that a valid partition must contain 1 element more that the
-#age-specific hazards. Assuming that the age-specific hazards are specified 
-#in 1 year increments starting at birth we can specify the partition of ages 
-#as follows. 
-age_part = seq(0, length(my_onset_hazard), by = 1)  
-
-#Let's assume that the individual has inherited a rare variant which has an
-#associated relative risk of disease onset of 10, and that the indiviual is
-#currently 45 years old.  To simulate the waiting time to onset we would type
-#the following command:
-set.seed(1)
-Time_to_onset <- get_WaitTime(p = runif(1), last_event = 45, 
-                 hazard = my_onset_hazard*10,
-                 part = age_part)
-Time_to_onset
-
-
-#Note that in some instances, no waiting time to onset is simulated  
-Time_to_onset <- get_WaitTime(p = 0.99, last_event = 45, 
-                 hazard = my_onset_hazard*10,
-                 part = age_part)
-Time_to_onset
-```
-
-####Simulating the Waiting Time to Death <a name="Death"></a>
-Simulating the waiting time to death given the current age $t$, $w_{d|t}$, is highly analogous, with a few caveats.  
-
-The first is that instead of considering an individual's rare variant status, we instead consider their disease status.  If the individual for whom we are simulatind the waiting time to death has experienced disease onset, we use the affected age-specific mortality rate to simulate the waiting time to death, otherwise we use the unaffected age-specific mortaility rate.
-
-The second caveat, is that unlike disease onset, which may or may not occur, all individuals must eventually die.  However, since we cannot simulate death past the greatest age to which the age-specific hazards apply, we simulate the waiting time to death under the assumption that all indivdiuals will die by the maximum age specified.  For example, suppose that the maximum age specifed is 100.  Then, given an individual's current age $t$, we model the waiting time to death, $w_{d|t}$, as the waiting time associated with a non-homogeneous Poisson process conditioned on death occuring by age 100.  The process of conditioning on the occurance of an event has an effect that is analogous to sampling from a truncated exponential distribution. 
-
-In simulation this is accomplished by setting `scale = TRUE` in the `get_WaitTime` function.
-
-```{r}
-#the second and third columns of the AgeSpecific_Hazards dataset, respectively,
-#provide the age-specific death hazards for the unaffected and affected 
-#populations.  Note: if the disease of interest is sufficiently rare the 
-#population death hazard may be used as an estimate for the unaffected death 
-#hazard.
-my_death_hazard <- AgeSpecific_Hazards[, c(2,3)]
-
-#Note the effect of the different death hazards: 
-#First we simulate the waiting time to death for a 45 year old who has NOT 
-#experienced onset.
-set.seed(123)
-Time_to_death_unaffected <- get_WaitTime(p = runif(1), last_event = 45, 
-                                         hazard = my_death_hazard[,1],
-                                         part = age_part, scale = TRUE)
-Time_to_death_unaffected
-
-#Next, we simulate the waiting time to death for a 45 year old who HAS 
-#experienced disease onset.
-set.seed(123)
-Time_to_death_affected <- get_WaitTime(p = runif(1), last_event = 45, 
-                                       hazard = my_death_hazard[,2],
-                                       part = age_part, scale = TRUE)
-Time_to_death_affected
-```
-
-####Simulating the Waiting Time to Reproduction <a name="Repro"></a>
-To accommodate extra-Poisson variability observed in the number of offspring of humans, Kojima and Kelleher (1962) have proposed a negative binomial model with number of trials $n\approx 2$ and success probability $p\approx 4/7$. We adopt this negative binomial model of offspring number in `SimRVPedigree`. 
-
-We use an equivalent Poisson-Gamma mixture model (Zhou_2015) to obtain the negative-binomial offspring number and to simulate the waiting time to reproduction as follows.
-
-Given an individuals current age $t$, let $w_{r|t}$ denote the conditional waiting time to reproduction. Next, assume that individuals are only able to reproduce from age $a_1$ to age $a_2$.  
-
-For each individual: 
-
-1. Draw $\gamma \sim Gamma( \alpha = 2 , \beta = 4/3)$, their lifetime birthrate.
-2. Simulate the unconditional waiting time to reproduction by drawing  $w_r \sim Exp(\frac{\gamma}{a_2-a_1})$.
-3. Condition on their current age and generate $w_{r|t}$ as follows:  $$w_{r|t} = \left\{ \begin{array}{ll} 
-        a_1 + w_r & \text{if } t < a_1 \text{and } (a_1 + w_r) < a_2 ;\\
-        t + w_r & \text{if } t \in [a_1, a_2) \text{and } (t + w_r) < a_2;\\
-        \infty & \text{otherwise}. \end{array} \right. $$
-
-Note that individuals with large simulated values of $\gamma$ will have high birth rates and many children, whereas individuals with small simulated values of $\gamma$ will have low birth rates and few or no children. 
-
-Note that with this simulation procedure we simulate the waiting time to birth according to a homogeneous Poisson process during an individual's reproductive years.
-
-### Simulating Life Events <a name="LifeEvent"></a>
-Starting at birth, we simulate waiting times to each of the three events and choose as the winning life event the event with the shortest waiting time.  We continue this process from the age of the previous winning event, until death occurs at which point the life events simulation process terminates.  Again, we make note that the `SimRVPedigree` package only allows for disease onset to occur once.  In the event that onset has occured, we simply choose between death and reproduction. 
-
-The `get_lifeEvents` function may be used to simulate all life events starting with birth and ending with death.  The user must simply specify the individual's rare variant status, `RV_status`, the appropriate hazards for onset and death, `onset_hazard` and `death_hazard`, the year of birth, `YOB`, the age span for reproduction, `birth_range`, the parameters of the negative binomial distribution used to model the number of offspring per household, `NB_params`, and the relative risk of disease onset for individuals who have inherited the rare variant, `RR`.  Note, all individuals with `RV_status = 0` are assumed to have `RR = 1`.
-
-```{r}
-# First, we illustrate how all life events are simulated for an individual who 
-# has inherited the rare variant 
-set.seed(2)
-Life_Events <- get_lifeEvents(RV_status = 1, 
-                              onset_hazard = my_onset_hazard,
-                              death_hazard = my_death_hazard,
-                              part = age_part,
-                              birth_range = c(18, 45),
-                              NB_params = c(2, 4/7),
-                              RR = 10, YOB = 1900)
-
-Life_Events
-
-# Note the effect of keeping all factors constant except for rare variant #status.  
-set.seed(2)
-Life_Events <- get_lifeEvents(RV_status = 0, 
-                              onset_hazard = my_onset_hazard,
-                              death_hazard = my_death_hazard,
-                              part = age_part,
-                              birth_range = c(18, 45),
-                              NB_params = c(2, 4/7),
-                              RR = 10, YOB = 1900)
-
-Life_Events
-```
-
 ### Simulating Pedigrees <a name="PedSim"></a>
 Simulation of a full pedigree is accomplished as follows:
 
@@ -196,7 +60,29 @@ Simulation of a full pedigree is accomplished as follows:
 4. Simulate life events for all offspring recursively until the `stop_year` or death is reached.  The `stop_year` argument represents the end of the study.  All information that occurs after the stop year is censored. 
 
 Random simulation of a pedigree may be achieved using the `sim_ped` function as illustrated below.
+```{r}
+#load example hazards 
+data("AgeSpecific_Hazards")
+colnames(AgeSpecific_Hazards)
 
+#the first column of the AgeSpecific_Hazards dataset provides the age-specific
+#onset hazard for the population
+my_onset_hazard = AgeSpecific_Hazards[,1]
+
+#the second and third columns of the AgeSpecific_Hazards dataset, respectively,
+#provide the age-specific death hazards for the unaffected and affected 
+#populations.  Note: if the disease of interest is sufficiently rare the 
+#population death hazard may be used as an estimate for the unaffected death 
+#hazard.
+my_death_hazard <- AgeSpecific_Hazards[, c(2,3)]
+
+#We must specify a partition of ages over which to apply the age-specifc
+#hazards.  Note that a valid partition must contain 1 element more that the
+#age-specific hazards. The age-specific hazards in AgeSpecific_Hazards are specified 
+#in 1 year increments starting at birth, thus we can specify the partition of ages by 
+age_part = seq(0, length(my_onset_hazard), by = 1)  
+
+```
 ```{r}
  #Simulate a random pedigree
  set.seed(6)
