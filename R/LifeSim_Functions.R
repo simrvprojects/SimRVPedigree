@@ -1,26 +1,3 @@
-#' Simulate a random birth rate.
-#'
-#' @param NB_size,NB_prob size and probability parameters of negative binomial distribution.
-#' @param min_birth_age,max_birth_age minimum and maximum allowable birth ages
-#' @return birth_rate numeric, the randomly generated birth rate
-#' @export
-#' @importFrom stats rgamma
-#'
-#' @examples
-#' set.seed(17)
-#' sim_birthRate(NB_size = 2, NB_prob = 4/7,
-#'               min_birth_age = 17, max_birth_age = 45)
-#' set.seed(17)
-#' sim_birthRate(NB_size = 2, NB_prob = 4/7,
-#'               min_birth_age = 17, max_birth_age = 45)
-#'
-#'
-sim_birthRate = function(NB_size, NB_prob, min_birth_age, max_birth_age){
-    birth_rate <- rgamma(1, shape = NB_size,
-                       scale = (1-NB_prob)/NB_prob)/(max_birth_age -
-                                                       min_birth_age)
-}
-
 #' Simulate next life event.
 #'
 #' \code{get_nextEvent} randomly simulates the next life event for an individual
@@ -143,6 +120,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
 #' @export
+#' @importFrom stats rgamma
 #'
 #' @examples
 #' part_vec <- seq(0, 100, by = 1)
@@ -173,9 +151,9 @@ get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
   DS <- 0; t <- min.age
 
   #generate and store the birth rate for this individual
-  B.lambda <- sim_birthRate(NB_params[1], NB_params[2],
-                            birth_range[1], birth_range[2])
-
+  B.lambda <- rgamma(1, shape = NB_params[1],
+                       scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
+                                                                 birth_range[1])
   while(t < max.age){
     #generate next event
     my.step <- get_nextEvent(current_age = t, disease_status = DS, RV_status,

@@ -1,27 +1,3 @@
-library(SimRVPedigree)
-library(testthat)
-data("AgeSpecific_Hazards")
-context("sim_birthRate")
-test_that("narrowing birth span increases birth rate", {
-  expect_lte(sim_birthRate(NB_size = 2, NB_prob = 4/7,
-                           min_birth_age = 17, max_birth_age = 45),
-             sim_birthRate(NB_size = 2, NB_prob = 4/7,
-                           min_birth_age = 17, max_birth_age = 18))
-})
-
-
-context("get_nextEvent")
-test_that("If current age > max birth age and disease status = 1, next event is death", {
-  expect_equal(colnames(get_nextEvent(current_age = 46, disease_status = 1,
-                                      RV_status = 1, lambda_birth = 0.05,
-                                      onset_hazard = AgeSpecific_Hazards[,1],
-                                      death_hazard = AgeSpecific_Hazards[,c(2:3)],
-                                      part = seq(0, 100, by = 1),
-                                      birth_range = c(18, 45), RR = 1))
-               , "Death")
-})
-
-
 context("get_lifeEvents")
 test_that("get_lifeEvents should always begin at start and end at death", {
   Levents <- get_lifeEvents(RV_status = 0,
@@ -35,7 +11,6 @@ test_that("get_lifeEvents should always begin at start and end at death", {
   expect_equal(names(Levents)[length(Levents)], "Death")
 })
 
-context("get_lifeEvents")
 test_that("get_lifeEvents never returns onset more than once", {
   Levents <- get_lifeEvents(RV_status = 1,
                             onset_hazard = AgeSpecific_Hazards[,1],
@@ -47,11 +22,9 @@ test_that("get_lifeEvents never returns onset more than once", {
     expect_equal(as.numeric(table(names(Levents))[which(names(table(names(Levents))) ==
                                                           "Onset")]),
                  1)
-    }
+  }
 })
 
-
-context("get_lifeEvents")
 test_that("get_lifeEvents always returns death event after all other events", {
   Levents <- get_lifeEvents(RV_status = 0,
                             onset_hazard = AgeSpecific_Hazards[,1],
@@ -63,6 +36,4 @@ test_that("get_lifeEvents always returns death event after all other events", {
   num_events <- length(Levents)
   expect_equal(sum(Levents[num_events] >= Levents[-num_events])/(num_events - 1),
                1)
-  })
-
-
+})
