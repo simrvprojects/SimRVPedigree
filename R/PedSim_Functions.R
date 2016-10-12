@@ -446,9 +446,13 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                                 num_affected, recall_probs)
     }
 
+    Oyears <- trim_ped$onset_year[which(trim_ped$affected == 1 &
+                                          trim_ped$available == 1 &
+                                          trim_ped$is_proband == 0)]
+
     #determine the number of available affected individuals
-    D <- ifelse(length(trim_ped$ID[which(trim_ped$available == 1 &
-                                           trim_ped$affected == 1)]) < num_affected, 0, 1)
+    D <- ifelse(length(which(Oyears <= ascertain_span[[2]] &
+                               Oyears >= ascertain_span[[1]])) >= (num_affected - 1), 1, 0)
   }
 
   #return original and trimmed pedigrees
