@@ -52,8 +52,7 @@ if get_nextEvent returns a value named "Death" then the next life event is death
 }
 \examples{
 part_vec <- seq(0, 100, by = 1)
-Brate <- sim_birthRate(NB_size = 2, NB_prob = 4/7,
-                     min_birth_age = 17, max_birth_age = 45)
+Birth_rate <- 0.05
 unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
                                     shape = 9.5, scale = 1)
 affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
@@ -62,13 +61,13 @@ Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
 Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
 set.seed(17)
 get_nextEvent(current_age = 23, disease_status = 0, RV_status = 0,
-           lambda_birth = Brate, onset_hazard = Ohaz_vec,
+           lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
            birth_range = c(17,45), RR = 15)
 
 set.seed(17)
 get_nextEvent(current_age = 23, disease_status = 1, RV_status = 1,
-           lambda_birth = Brate, onset_hazard = Ohaz_vec,
+           lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
            birth_range = c(17,45), RR = 15)
 
