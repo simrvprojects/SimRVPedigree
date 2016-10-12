@@ -68,7 +68,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
   expect_gte(length(Oyears[which(Oyears <= 2015 & Oyears >= 2000)]), 1)
 })
 
-test_that("issues errors when check functions fail", {
+test_that("issues errors when invalid partition supplied", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                               death_hazard = AgeSpecific_Hazards[,c(2,3)],
                               part = seq(1, 100, by = 1),
@@ -76,31 +76,51 @@ test_that("issues errors when check functions fail", {
                               num_affected = 2,
                               founder_byears = c(1900, 1980),
                               ascertain_span = c(2000, 2015)))
+  })
 
+
+test_that("issues error when death_hazard contains only 1 column", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              death_hazard = AgeSpecific_Hazards[,c(2)],
                               part = seq(0, 100, by = 1),
                               RR = 20, FamID = 1,
                               num_affected = 2,
-                              founder_byears = c(1980, 1980),
+                              founder_byears = c(1900, 1980),
                               ascertain_span = c(2000, 2015)))
+  })
 
+test_that("issues error when hazard contains NA values", {
+  expect_error(sim_RVpedigree(onset_hazard = c(AgeSpecific_Hazards[1:80,1], NA,
+                                               AgeSpecific_Hazards[82:100,1]),
+                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              part = seq(0, 100, by = 1),
+                              RR = 20, FamID = 1,
+                              num_affected = 2,
+                              founder_byears = c(1900, 1980),
+                              ascertain_span = c(2000, 2015)))
+  })
+
+test_that("issues error when part contains NA values", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              part = c(NA, seq(1, 100, by = 1)),
+                              RR = 20, FamID = 1,
+                              num_affected = 2,
+                              founder_byears = c(1900, 1980),
+                              ascertain_span = c(2000, 2015)))
+  })
+
+test_that("issues error when ascertain_span not properly specified", {
+    expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                               death_hazard = AgeSpecific_Hazards[,c(2,3)],
                               part = seq(0, 100, by = 1),
                               RR = 20, FamID = 1,
                               num_affected = 2,
                               founder_byears = c(1900, 1980),
                               ascertain_span = c(2017, 2015)))
+  })
 
-  expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                              part = seq(0, 100, by = 1),
-                              RR = 20, FamID = 1,
-                              num_affected = 2,
-                              founder_byears = c(1900, 1980),
-                              ascertain_span = c(2017, 2015)))
-
+test_that("issues error when part doesn't start at zero", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                                 death_hazard = AgeSpecific_Hazards[,c(2,3)],
                                 part = seq(50, 100, by = 0.5),
@@ -110,10 +130,42 @@ test_that("issues errors when check functions fail", {
                                 ascertain_span = c(2000, 2015)))
   })
 
-test_that("issues warning for partitions that don't span appropriate ages", {
+test_that("issues error when birth_range not properly specified", {
+  expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              part = seq(0, 100, by = 1),
+                              RR = 20, FamID = 1,
+                              num_affected = 2,
+                              birth_range = c(10, 5),
+                              founder_byears = c(1900, 1980),
+                              ascertain_span = c(2000, 2015)))
+  })
+
+test_that("issues error when recall_probs not properly specified", {
+  expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              part = seq(0, 100, by = 1),
+                              RR = 20, FamID = 1,
+                              num_affected = 2,
+                              recall_probs = c(10, 5),
+                              founder_byears = c(1900, 1980),
+                              ascertain_span = c(2000, 2015)))
+  })
+
+test_that("issues warnings when partition doesn't span appropriate ages", {
   expect_warning(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                                 death_hazard = AgeSpecific_Hazards[,c(2,3)],
                                 part = seq(0, 50, by = 0.5),
+                                RR = 20, FamID = 1,
+                                num_affected = 2,
+                                founder_byears = c(1900, 1980),
+                                ascertain_span = c(2000, 2015)))
+})
+
+test_that("issues warnings when suspected that affected death hazard listed first", {
+  expect_warning(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                                death_hazard = AgeSpecific_Hazards[,c(3,2)],
+                                part = seq(0, 100, by = 1),
                                 RR = 20, FamID = 1,
                                 num_affected = 2,
                                 founder_byears = c(1900, 1980),

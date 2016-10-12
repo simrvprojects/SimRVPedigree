@@ -424,14 +424,11 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
          column 1 = unaffected age-specific death hazard,
          column 2 = affected age-specific death hazard")
   }else if(sum(death_hazard[,1] > death_hazard[,2]) > nrow(death_hazard)/2){
-    warning("death_hazard must be a data frame with 2 columns:,
-            column 1 = unaffected age-specific death hazard,
-            column 2 = affected age-specific death hazard")
+    warning("Please check that you have specified death_hazard such that:,
+            column 1 = UNAFFECTED age-specific death hazard,
+            column 2 = AFFECTED age-specific death hazard")
   }
 
-  if (length(founder_byears) != 2 | founder_byears[1] >= founder_byears[2]){
-    stop ('please provide appropriate founder birth year span')
-  }
 
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
     stop ('please provide appropriate ascertain_span')
@@ -446,6 +443,7 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
       stop ('recall probabilities must be between 0 and 1')
     }
   }
+
   if(missing(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
   }
