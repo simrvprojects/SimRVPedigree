@@ -1,3 +1,4 @@
+library(testthat)
 context("get_waitProb")
 test_that("wait_prob return is between 0 and 1", {
   expect_equal(get_WaitProb(last_event = 0, wait_time = 100,

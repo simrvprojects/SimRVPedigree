@@ -1,3 +1,4 @@
+library(testthat)
 context("sim_RVpedigree")
 test_that("returns a list containing two pedfiles", {
   expect_true(is.list(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
