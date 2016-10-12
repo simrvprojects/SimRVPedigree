@@ -35,7 +35,7 @@ body{ /* Normal  */
 
 The `SimRVPedigree` package provides methods and functions to randomly simulate pedigrees likely to be asertained for multiple affected members under a particular study design.  Pedigrees include individual specific variables such as birth year, and, when applicable, onset year, and/or death year.  Additionally, the transmission of a rare variant, assumed to increase disease susceptibility, is simulated according to Mendel's laws.
 
-In addition to randomly simulating pedigrees, `SimRVPedigree` also includes functions for: simulating waiting times associated with a non-homogeneous Poisson process, randomly simulating life events contingent on user-provided age-specific hazards, and functions to reassign the generation number of affected members (?? There's gotta be a better way to say this...).
+In addition to randomly simulating pedigrees, `SimRVPedigree` also includes functions for: simulating waiting times associated with a non-homogeneous Poisson process, randomly simulating life events contingent on user-provided age-specific hazards, and functions to reassign the generation number based on affected status.
 
 ## Basic Usage <a name="BasicUsage"></a>
 After installing the `SimRVPedigree` package, load it by typing the command:
