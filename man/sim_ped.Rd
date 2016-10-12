@@ -71,7 +71,7 @@ set.seed(22)
 ex_ped <- sim_ped(onset_hazard = Ohaz_vec,
                   death_hazard = Dhaz_df,
                   part = part_vec,
-                  RR = 5, FamID = 1,
+                  RR = 1, FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 
@@ -91,5 +91,6 @@ ex_pedigree <- pedigree(id = ex_ped$ID,
 ExamplePed <- ex_pedigree['1']
 plot(ExamplePed)
 pedigree.legend(ExamplePed, location = "topleft",  radius = 0.25)
+
 }
 
