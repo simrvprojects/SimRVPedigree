@@ -399,16 +399,53 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
                           birth_range = c(18, 45),
                           NB_params = c(2, 4/7)){
 
-  check_hazpart(onset_hazard, part)
-  check_part(part)
-  check_dhaz(death_hazard)
-  check_hazpart(death_hazard[,1], part)
-  check_hazpart(death_hazard[,2], part)
-  check_spans(founder_byears)
-  check_spans(ascertain_span)
-  check_spans(birth_range)
+  if (any(is.na(onset_hazard)) | any(is.na(death_hazard)) | any(is.na(part))) {
+    stop('age-specific hazards and age partition cannot contain missing values')
+  }
 
-  if(!missing(recall_probs)) check_rprobs(recall_probs)
+  if (min(part) != 0) {
+    stop('age-specific hazards must begin at birth')
+  } else if (max(part) < 65){
+    warning ('For optimal results please specify age-specific hazards that begin at birth and end near the life expectancy of the population to which the age-specific hazards apply.')
+  }
+
+  if (length(part) == 1 |
+      length(part) != (length(onset_hazard) + 1) |
+      length(part) != (nrow(death_hazard) + 1) ) {
+    stop ('please provide hazards, such that length(part) == length(hazard) + 1')
+  }
+
+  if(class(death_hazard) != "data.frame"){
+    stop("death_hazard must be a data frame with 2 columns:,
+         column 1 = unaffected age-specific death hazard,
+         column 2 = affected age-specific death hazard")
+  }else if(ncol(death_hazard) != 2){
+    stop("death_hazard must be a data frame with 2 columns:,
+         column 1 = unaffected age-specific death hazard,
+         column 2 = affected age-specific death hazard")
+  }else if(sum(death_hazard[,1] > death_hazard[,2]) > nrow(death_hazard)/2){
+    warning("death_hazard must be a data frame with 2 columns:,
+            column 1 = unaffected age-specific death hazard,
+            column 2 = affected age-specific death hazard")
+  }
+
+  if (length(founder_byears) != 2 | founder_byears[1] >= founder_byears[2]){
+    stop ('please provide appropriate founder birth year span')
+  }
+
+  if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
+    stop ('please provide appropriate ascertain_span')
+  }
+
+  if (length(birth_range) != 2 | birth_range[1] >= birth_range[2]){
+    stop ('please provide appropriate birth_range')
+  }
+
+  if(!missing(recall_probs)) {
+    if (any(recall_probs > 1) | any(recall_probs < 0) ){
+      stop ('recall probabilities must be between 0 and 1')
+    }
+  }
   if(missing(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
   }
