@@ -438,6 +438,12 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
     stop ('please provide appropriate birth_range')
   }
 
+  if (RR <= 0) {
+    stop ('RR must be greater than 0')
+  } else if (RR < 1){
+    warning('Setting RR < 1 can significantly increase computation time')
+  }
+
   if(!missing(recall_probs)) {
     if (any(recall_probs > 1) | any(recall_probs < 0) ){
       stop ('recall probabilities must be between 0 and 1')

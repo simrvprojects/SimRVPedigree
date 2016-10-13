@@ -89,6 +89,16 @@ test_that("issues error when death_hazard contains only 1 column", {
                               ascertain_span = c(2000, 2015)))
   })
 
+test_that("issues error when RR < 0", {
+  expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                              part = seq(0, 100, by = 1),
+                              RR = -1, FamID = 1,
+                              num_affected = 2,
+                              founder_byears = c(1900, 1980),
+                              ascertain_span = c(2000, 2015)))
+})
+
 test_that("issues error when hazard contains NA values", {
   expect_error(sim_RVpedigree(onset_hazard = c(AgeSpecific_Hazards[1:80,1], NA,
                                                AgeSpecific_Hazards[82:100,1]),
