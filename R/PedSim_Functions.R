@@ -385,7 +385,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'                        momid = ex_RVped[[2]]$mom_id,
 #'                        sex = (ex_RVped[[2]]$gender + 1),
 #'                        affected = cbind(Affected = ex_RVped[[2]]$affected,
-#'                                         Proband = ex_RVped[[2]]$is_proband,
+#'                                         Proband = ex_RVped[[2]]$proband,
 #'                                         RV_status = ex_RVped[[2]]$DA1 +
 #'                                                     ex_RVped[[2]]$DA2),
 #'                        famid = ex_RVped[[2]]$FamID)['1']
@@ -489,7 +489,7 @@ sim_RVpedigree = function(onset_hazard, death_hazard, part, RR,
 
     Oyears <- trim_ped$onset_year[which(trim_ped$affected == 1 &
                                           trim_ped$available == 1 &
-                                          trim_ped$is_proband == 0)]
+                                          trim_ped$proband == 0)]
 
     #determine the number of available affected individuals
     D <- ifelse(length(which(Oyears <= ascertain_span[[2]] &

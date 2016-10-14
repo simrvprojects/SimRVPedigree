@@ -218,7 +218,7 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
   }
 
   #assign proband identifier
-  ped_trim$is_proband <- ifelse(ped_trim$ID == probandID, 1, 0)
+  ped_trim$proband <- ifelse(ped_trim$ID == probandID, 1, 0)
 
   return(ped_trim)
 }
