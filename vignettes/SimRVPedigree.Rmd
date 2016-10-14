@@ -12,46 +12,62 @@ vignette: >
 <style type="text/css">
 
 body{ /* Normal  */
-   font-size: 16px;
+   font-size: 20px;
 }
 </style>
 
 # Table of contents
 1. [Introduction](#introduction)
-2. [Basic Usage](#BasicUsage)
-    1. [Example Data](#ExampleData)
-    2. [Simulating Pedigrees](#PedSim)
-    3. [Trimming Pedigrees](#PedTrim)
-    4. [Simulating Pedigrees with Multiple Affecteds](#RVPedSim)
-        1. [Parallel Processing Example](#ParProc)
-    5. [Reassigning Generation Based on Affected Status](#AffGen)
+2. [Individual and Pedigree Specific Assumptions](#PedLevel)
+3. [Study Design/Ascertainment Scheme Features](#StudyLevel)
+4. [Example Application](#Example)
+5. [Parallel Processing Example](#ParProcExample)
 
-## Introduction <a name="introduction"></a>
-The `SimRVPedigree` package provides methods and functions to randomly simulate pedigrees that have been ascertained to contain multiple relatives affected with a rare disease.  
 
-Then you could talk about the study design; e.g. ascertainment occurs over a user-specified time-period, and is through the proband. Discuss the rare disease and how we assume that (i) sporadic cases have age-dependent baseline hazard rates which are to be specified by the user, (ii) genetic cases within the same family are due to a shared rare variant but that different families may segregate different rare variants, and 
+# Introduction <a name="introduction"></a>
+Family-based studies designed to identify genetic susceptibility factors associated with rare diseases have received significant consideration in recent years.  Due to the rarity of the diseases under consideration, in some cases, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  Understandably, due to the nature of these studies, they are inherently difficult and sometimes infeasible to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate pedigrees similar to those ascertained  for family-based studies to contain multiple relatives affected with a rare disease.
 
-NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.  
+The distinguishing feature of the `SimRVPedigree` packages is that it simulataneously aims to accurately mimic the process of family development, while allowing users to incorporate multiple facets of a particular acsertainment scheme.  To illustrate and fully explain these features, in the next two sections, we will first discuss assumptions governing the process of pedigree simulation, followed by a full exposition of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
 
-Pedigrees include individual specific variables such as birth year, and, when applicable, onset year, and/or death year.  Additionally, the transmission of a rare variant, assumed to increase disease susceptibility, is simulated according to Mendel's laws.
+#Individual and Pedigree Specific Assumptions <a name="PedLevel"></a>
+1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
-In addition to randomly simulating pedigrees, `SimRVPedigree` also includes a function to reassign the generation number of based on affected status.
+2. We assume that the variant is rare enough that it has been introduced by at most one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 
-## Basic Usage <a name="BasicUsage"></a>
+3. We assume that the age-specific hazard for disease onset follows a Cox proportional hazards model.  Under this model, individuals who have NOT inheritied the rare variant (i.e. sporadic cases) experience disease onset according to the baseline (or population) disease onset hazard.  On the other hand, individuals who have inherited the rare variant (i.e. genetic cases),  are assumed to have an increased relative risk of diesease onset.  The user is expected to supply the baseline disease onset hazard, as well as the relative risk of disease onset for genetic cases.  
+
+4. We assume that unaffected individuals experience death according to the age-specific death hazard of the unaffected population, which is provided by the user.  If the disease of interest is rare enough, the user may substitute the 
+population age-specific death hazard in place of the unaffected age-specific death hazard.  We assume that affected individuals experience death according to the age-specific death hazard of the affected population, also provided by the user.  
+
+5. We do not model disease remission, or second onset events.  That is, we impose the restriction that individuals who experience disease onset may only do so once.  Furthermore, after onset has occured the affected death hazard is always used to simulate the death event, i.e. we do not switch back to using the unaffected death hazard after a specified number of years.
+
+<!-- NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.   -->
+
+#Study Design/Ascertainment Scheme Features <a name="PedLevel"></a>
+ In particular pedigrees simulated with `sim_RVpedigree` will reflect that ascertainment occurs over a user-specified time-period, and is through a proband.  Incomplete ascertainment of families may be modelled through proabnd recall probabilites of relatives.  
+
+#Example Application <a name="Example"></a>
+In this section we provide an example of a family-based study that could be simulated using `SimRVPedigree`.
+
+Suppose that from 2000 to 2015, a group of researchers, in collaboration with a team of clinicians, have been collecting data on families that contain at least two, related individuals who are affected by a lymphoid cancer.  
+
+
+
+
+
 After installing the `SimRVPedigree` package, load it by typing the command:
 ```{r}
 library(SimRVPedigree)
 ```
 
-### Example Data <a name="ExampleData"></a>
-`SimRVPedigree` includes 2 example datasets:
+`SimRVPedigree` includes 2 datasets:
  
- 1. `AgeSpecific_Hazards`: A dataset containing example age-specific hazards.
+ 1. `AgeSpecific_Hazards`: A dataset containing sample age-specific hazards.
  2. `exp_peds`: A dataset of five example pedigrees.
 
-We begin the vignette by illustrating how the data in `AgeSpecific_Hazards` may be used to: simulate the waiting time to an event associated with a non-homogeneous Poisson process, randomly simulate all life events for an individual, starting at birth and terminating with death, and in conjunction with the `sim_RVpedigree` function to randomly simulate a pedigree with multiple affected members.  We will use the `exp_peds` data to illustrate the effects of trimming pedigrees based on a proband's recall probability of a relative, and reassignment of affected generation number to reflect minimum carrier status.  For more information on either of these datasets please type the command `help(AgeSpecific_Hazards)` and/or `help(exp_peds)` in the `R` console. 
+All of the functions in the `SimRVPedigree` package require the user to specify age-specific hazards for diesase onset, death in the unaffected population, and death in the affected population.  The `AgeSpecific_Hazards` data set provides sample age-specific hazards, which we will use for the purpose of illustration.  The `exp_peds` dataset includes 4 pedigrees prior to proband selection.  We will use the `exp_peds` data to illustrate the effects of trimming pedigrees based on a proband's recall probability of a relative, and reassignment of affected generation number to reflect minimum carrier status.  For more information on either of these datasets please type the command `help(AgeSpecific_Hazards)` and/or `help(exp_peds)` in the `R` console. 
 
-### Simulating Pedigrees <a name="PedSim"></a>
+### Simulating Pedigrees
 Simulation of a full pedigree is accomplished as follows:
 
 1. Simulate the founder's year of birth uniformly from the span of ages specified in `founder_byears`.  We assume that this founder has introduced the rare variant into the pedigree.
@@ -113,7 +129,7 @@ age_part = seq(0, length(my_onset_hazard), by = 1)
 
 Is it critical to note that the `sim_ped` function does not simulate pedigrees with a mimimum number of affected individuals.  Furthermore, if the pedigree founder does not produce any offspring `sim_ped` will return a ped file with a single individual.  To ensure that a simulated pedigree contains a minimum number of affected individuals please use the `sim_RVpedigree` function.
 
-### Trimming Pedigrees <a name="PedTrim"></a>
+### Trimming Pedigrees
 One of the features included in the the `SimRVPedigree` package is the option to trim pedigrees based on a proband's ability to recall relatives.  This option is included to allow researchers to model the ascertainment bias that occurs when individuals either cannot provide a complete family history or they explicity request that particular family members not be contacted.
 
 To trim a pedigree the user must specify:
@@ -200,7 +216,7 @@ mtext("recall_probs = c(1, 0.5, 0.25, 0.125), \n ascertain_span = (2005, 2015), 
 
 If `recall_probs` is left unspecified, the `trim_ped` function will automatically use the 4*kinship coeffient between the proband and his or her relatives as the recall probability.  This has the effect of retaining all first degree relatives with probability 1.
 
-### Simulating Pedigrees with Multiple Affecteds <a name="RVPedSim"></a>
+### Simulating Pedigrees with Multiple Affecteds
 Simulation of pedigrees likely to be ascertained according to a particular study design is the primary purpose of the `SimRVPedigree` package and is accomplished with the `sim_RVpedigree` function.  
 
 To simulate a pedigree with `sim_RVpedigree` the user must specify:
@@ -282,7 +298,7 @@ The `sim_RVpedigree` returns two data frames, which are plotted below.  The firs
  mtext("Ascertained Pedigree", side = 3)
 ```
 
-#### Parallel Processing Example <a name="ParProc"></a>
+# Parallel Processing Example<a name="ParProcExample"></a>
 It is importatant to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affecteds is directly related to (1) the rarity of the disease, and (2) the arguments specified by the user.  In particular, we expect to see increases in the required computation time as: 
 
  1. as the relative risk, `RR`, specifed by the user approaches 1, particularly for rare diseases, 
@@ -360,7 +376,7 @@ RV_peds = foreach(i = seq(npeds),
                     }
 ```
 
-### Reassigning Affected Generation <a name="AffGen"></a>
+### Reassigning Affected Generation
 Upon simulating a pedigree, occasionally researchers have reason to reassign generation number based on affected status.
 
 This task can be achieved using the `assign_affectedGen` function.
