@@ -129,7 +129,7 @@ TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
                        momid = ex_RVped[[2]]$mom_id,
                        sex = (ex_RVped[[2]]$gender + 1),
                        affected = cbind(Affected = ex_RVped[[2]]$affected,
-                                        Proband = ex_RVped[[2]]$is_proband,
+                                        Proband = ex_RVped[[2]]$proband,
                                         RV_status = ex_RVped[[2]]$DA1 +
                                                     ex_RVped[[2]]$DA2),
                        famid = ex_RVped[[2]]$FamID)['1']
