@@ -4,17 +4,14 @@
 \alias{get_nextEvent}
 \title{Simulate next life event.}
 \usage{
-get_nextEvent(current_age, disease_status, RV_status, lambda_birth,
-  onset_hazard, death_hazard, part, birth_range, RR)
+get_nextEvent(current_age, disease_status, lambda_birth, onset_hazard,
+  death_hazard, part, birth_range, RR)
 }
 \arguments{
 \item{current_age}{The individuals current age.}
 
 \item{disease_status}{The disease status, disease_status = 1 if individual
 has experienced onset, and 0 otherwise.}
-
-\item{RV_status}{Rare variant status, RV_status  = 1 if
-individual has inherited the rare variant, and 0 otherwise.}
 
 \item{lambda_birth}{Numeric constant. The individuals birth rate.}
 
@@ -60,16 +57,16 @@ affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
 Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
 set.seed(17)
-get_nextEvent(current_age = 23, disease_status = 0, RV_status = 0,
+get_nextEvent(current_age = 23, disease_status = 0,
            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), RR = 15)
+           birth_range = c(17,45), RR = 5)
 
 set.seed(17)
-get_nextEvent(current_age = 23, disease_status = 1, RV_status = 1,
+get_nextEvent(current_age = 23, disease_status = 1,
            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
            death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), RR = 15)
+           birth_range = c(17,45), RR = 5)
 
 }
 

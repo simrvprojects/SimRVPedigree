@@ -14,8 +14,6 @@
 #' @param current_age The individuals current age.
 #' @param disease_status The disease status, disease_status = 1 if individual
 #' has experienced onset, and 0 otherwise.
-#' @param RV_status Rare variant status, RV_status  = 1 if
-#' individual has inherited the rare variant, and 0 otherwise.
 #' @param lambda_birth Numeric constant. The individuals birth rate.
 #' @param onset_hazard Numeric vector. The population age-specific onset hazard.
 #' @param death_hazard data.frame. Column 1 should specify the age specific
@@ -44,26 +42,26 @@
 #' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
 #' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
 #' set.seed(17)
-#' get_nextEvent(current_age = 23, disease_status = 0, RV_status = 0,
+#' get_nextEvent(current_age = 23, disease_status = 0,
 #'            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), RR = 15)
+#'            birth_range = c(17,45), RR = 5)
 #'
 #' set.seed(17)
-#' get_nextEvent(current_age = 23, disease_status = 1, RV_status = 1,
+#' get_nextEvent(current_age = 23, disease_status = 1,
 #'            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
 #'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), RR = 15)
+#'            birth_range = c(17,45), RR = 5)
 #'
-get_nextEvent = function(current_age, disease_status, RV_status,
-                      lambda_birth, onset_hazard, death_hazard, part,
-                      birth_range, RR){
+get_nextEvent = function(current_age, disease_status,
+                         lambda_birth, onset_hazard, death_hazard, part,
+                         birth_range, RR){
 
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
   t_onset <- ifelse(disease_status == 0,
                     get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = onset_hazard*ifelse(RV_status == 1, RR, 1),
+                                 hazard = onset_hazard*RR,
                                  part), NA)
 
   #simulate the waiting time until death given current age.
@@ -130,16 +128,22 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 #' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 #' set.seed(17)
-#' get_lifeEvents(RV_status = 0, onset_hazard = Ohaz_vec,
-#'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
+#' get_lifeEvents(onset_hazard = Ohaz_vec,
+#'                death_hazard = Dhaz_df,
+#'                part = part_vec,
+#'                birth_range = c(17,45),
+#'                NB_params = c(2, 4/7), RR = 1,
+#'                YOB = 1900)
 #'
 #' set.seed(17)
-#' get_lifeEvents(RV_status = 1, onset_hazard = Ohaz_vec,
-#'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
+#' get_lifeEvents(onset_hazard = Ohaz_vec,
+#'                death_hazard = Dhaz_df,
+#'                part = part_vec,
+#'                birth_range = c(17,45),
+#'                NB_params = c(2, 4/7), RR = 15,
+#'                YOB = 1900)
 #'
-get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
+get_lifeEvents = function(onset_hazard, death_hazard, part,
                           birth_range, NB_params, RR, YOB){
 
   #initialize data frame to hold life events
@@ -155,9 +159,9 @@ get_lifeEvents = function(RV_status, onset_hazard, death_hazard, part,
                                                                  birth_range[1])
   while(t < max.age){
     #generate next event
-    my.step <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
-                          lambda_birth = B.lambda, onset_hazard, death_hazard,
-                          part, birth_range, RR)
+    my.step <- get_nextEvent(current_age = t, disease_status = DS,
+                             lambda_birth = B.lambda, onset_hazard, death_hazard,
+                             part, birth_range, RR)
 
     #add to previous life events
     R.life <- cbind(R.life, my.step)

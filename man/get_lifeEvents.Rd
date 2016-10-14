@@ -4,13 +4,10 @@
 \alias{get_lifeEvents}
 \title{Simulate all life events.}
 \usage{
-get_lifeEvents(RV_status, onset_hazard, death_hazard, part, birth_range,
-  NB_params, RR, YOB)
+get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
+  YOB)
 }
 \arguments{
-\item{RV_status}{Rare variant status, RV_status  = 1 if
-individual has inherited the rare variant, and 0 otherwise.}
-
 \item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
 
 \item{death_hazard}{data.frame. Column 1 should specify the age specific
@@ -49,14 +46,20 @@ affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
 Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
 Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
 set.seed(17)
-get_lifeEvents(RV_status = 0, onset_hazard = Ohaz_vec,
-           death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
+get_lifeEvents(onset_hazard = Ohaz_vec,
+               death_hazard = Dhaz_df,
+               part = part_vec,
+               birth_range = c(17,45),
+               NB_params = c(2, 4/7), RR = 1,
+               YOB = 1900)
 
 set.seed(17)
-get_lifeEvents(RV_status = 1, onset_hazard = Ohaz_vec,
-           death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), NB_params = c(2, 4/7), RR = 15, YOB = 1900)
+get_lifeEvents(onset_hazard = Ohaz_vec,
+               death_hazard = Dhaz_df,
+               part = part_vec,
+               birth_range = c(17,45),
+               NB_params = c(2, 4/7), RR = 15,
+               YOB = 1900)
 
 }
 
