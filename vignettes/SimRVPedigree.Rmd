@@ -21,7 +21,7 @@ body{ /* Normal  */
 2. [Individual and Pedigree Specific Assumptions](#PedLevel)
 3. [Study Design/Ascertainment Scheme Features](#StudyLevel)
 4. [The `sim_RVpedigree` Function](#simRVped)
-5. [Example Application](#Example)
+5. [Example Application to Family-Based Study](#Example)
 6. [Parallel Processing Example](#ParProcExample)
 
 
@@ -42,7 +42,7 @@ population age-specific death hazard in place of the unaffected age-specific dea
 
 5. We do not model disease remission, nor do we model second onset events.  That is, we impose the restriction that individuals who experience disease onset may only do so once.  Furthermore, after onset has occured the affected death hazard is always used to simulate the death event, i.e. we do not switch back to using the unaffected death hazard after a specified number of years.
 
-[REMOVE AFTER DISCUSSING WITH JINKO]  NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.  However, I worked this assumption into the example so that users might take the hint.
+[REMOVE AFTER DISCUSSING WITH JINKO]  NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.  However, I worked this assumption into the example so that users might take the hint ;)
 
 #Study Design/Ascertainment Scheme Features <a name="StudyLevel"></a>
 The `sim_RVpedigree` function is used to randomly simulate families likely to be ascertained under a particular study design or ascertainment scheme.  The study design features available to the user are as follows:
@@ -57,6 +57,7 @@ The `sim_RVpedigree` function is used to randomly simulate families likely to be
 This option is included to allow researchers to model the ascertainment bias that occurs when individuals either cannot provide a complete family history or they explicity request that particular family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of 4*kinship coeffient between the proband and his or her relatives is assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
 
 3. `stop_year`: the stop year represents either: the year that the study ends or the last full year that data has been collected.  All events that occur after the stop year are censored.
+
 
 #The `sim_RVpedigree` Function <a name="simRVped"></a>
 Simulation of pedigrees likely to be ascertained according to a particular study design is the primary purpose of the `SimRVPedigree` package and is accomplished with the `sim_RVpedigree` function.  
@@ -85,7 +86,7 @@ Optional arguments:
 
 We will illustrate the usage and output of this function in the next section.
 
-#Example Application <a name="Example"></a>
+#Example Application to Family-Based Study <a name="Example"></a>
 Suppose that from 2000 to 2015, a group of researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphoid cancer.  Researchers believe that affecteds within a family share a rare variant that increases disease susceptibility.  While they are not willing to adopt the assumption that the same rare variant is segregating in each family, they are willing to make the simplifying assumption that genetic cases share the same relative risk parameter across families.  They have reason to believe that for the families contained in their sample, the genetic cases are 5 times more likely to experience onset of lymphiod cancer.  
 
 Researchers have not encoutered individuals who have refused family participation, and are fairly confident that families have been fully ascertained.  Upon inspecting the founders in their ascertained families, they see that most were born between 1900 and 1980.
@@ -129,7 +130,7 @@ my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
 age_part <- seq(0, 100, by = 1)
 ```
 
-```{r, echo = FALSE, fig.width = 7, fig.height = 5}
+```{r, echo = FALSE, fig.width = 7, fig.height = 3.5}
 par(mfrow = c(1, 2))
 plot(x = seq(1, 100, by = 1),
      y = AgeSpecific_Hazards[,1],
@@ -164,23 +165,23 @@ ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
                            FamID = 1)
 ```
 
-The `sim_RVpedigree` returns two data frames, the first is the ped file of the original pedigree prior to trimming.  The second is the ascertained pedigree, with proband selected and unrecalled relatives removed.  If a relative cannot be recalled by the proband, but they are required to plot the pedigree using the `kinship2` package, they are be readded to the pedigree, but their information will be censored, and they will be re-labelled as unavailable.
+The `sim_RVpedigree` returns two data frames, the first is the ped file of the original pedigree prior to trimming.  The second is the ascertained pedigree, with proband selected and unrecalled relatives removed.  If a relative cannot be recalled by the proband, but they are required to plot the pedigree using the `kinship2` package, they are be readded to the pedigree, but their information will be censored, and they will be re-labelled as unavailable.  
 
 Since we are interested in pedigrees ascertained for the previously described family-based study we will focus on the second item returned by `sim_RVpedigree`.
 
 ```{r}
-#Example of ped file returned by sim_RVpedigree
+#Second ped file returned by sim_RVpedigree:
 head(ex_RVped[[2]])
 ```
 
 We can plot pedigrees with the help of the `kinship2` package.  The following code illustrates how this is accomplished. 
 
-```{r, results = FALSE, tidy = TRUE, echo = FALSE, message=FALSE}
+```{r, results = FALSE, tidy = TRUE, echo = TRUE, message=FALSE}
 #Pedigrees may be plotted usign the kinship2 package.  Assuming that this 
 #package has been installed it is loaded by executing the command:
  library(kinship2)
 ```
-```{r, fig.height=5, fig.width=7, echo = FALSE}
+```{r, fig.height=5, fig.width=7}
  #Define pedigree to use kinship2's plot function
  ex_RVpedigree <- pedigree(id = ex_RVped[[2]]$ID,
                            dadid = ex_RVped[[2]]$dad_id,
@@ -194,6 +195,7 @@ We can plot pedigrees with the help of the `kinship2` package.  The following co
  plot(ex_RVpedigree)
  pedigree.legend(ex_RVpedigree, location = "topleft",  radius = 0.25)
 ```
+
 
 #Parallel Processing Example<a name="ParProcExample"></a>
 It is importatant to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affecteds is directly related to (1) the rarity of the disease, and (2) the arguments specified by the user.  In particular, we expect to see increases in the required computation time as: 
