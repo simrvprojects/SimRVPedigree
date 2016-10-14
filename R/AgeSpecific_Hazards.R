@@ -8,9 +8,9 @@
 #'
 #' @format A data frame with 100 rows and 3 variables:
 #' \describe{
-#' \item{pop_onset_hazard}{The age-specific population onset hazard}
+#' \item{LC_onset_hazard}{The age-specific population onset hazard}
 #' \item{pop_death_hazard}{The age-specific population death hazard}
-#' \item{affected_death_hazard}{The age-specific population death hazard for affected individuals}
+#' \item{LC_death_hazard}{The age-specific population death hazard for affected individuals}
 #' }
 #'
 "AgeSpecific_Hazards"
