@@ -1,39 +1,27 @@
 library(testthat)
 context("sim_RVpedigree")
 test_that("returns a list containing two pedfiles", {
-  expect_true(is.list(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                           part = seq(0, 100, by = 1),
-                                           RR = 20, FamID = 1,
-                                           num_affected = 2,
-                                           founder_byears = c(1900, 1980),
-                                           ascertain_span = c(2000, 2015))))
+  EXPed <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                          death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                          part = seq(0, 100, by = 1),
+                          RR = 35, FamID = 1,
+                          num_affected = 2,
+                          founder_byears = c(1900, 1980),
+                          ascertain_span = c(2000, 2015))
 
-  expect_true(is.data.frame(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                           part = seq(0, 100, by = 1),
-                                           RR = 20, FamID = 1,
-                                           num_affected = 2,
-                                           founder_byears = c(1900, 1980),
-                                           ascertain_span = c(2000, 2015))[[1]]))
-
-  expect_true(is.data.frame(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                           part = seq(0, 100, by = 1),
-                                           RR = 20, FamID = 1,
-                                           num_affected = 2,
-                                           founder_byears = c(1900, 1980),
-                                           ascertain_span = c(2000, 2015))[[2]]))
+  expect_true(is.list(EXPed))
+  expect_true(is.data.frame(EXPed[[1]]))
+  expect_true(is.data.frame(EXPed[[2]]))
   })
 
 test_that("pedigree always conatains more than 1 person", {
   expect_gt(nrow(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                  death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                  part = seq(0, 100, by = 1),
-                                  RR = 20, FamID = 1,
-                                  num_affected = 2,
-                                  founder_byears = c(1900, 1980),
-                                  ascertain_span = c(2000, 2015))[[2]]), 1)
+                                death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                                part = seq(0, 100, by = 1),
+                                RR = 35, FamID = 1,
+                                num_affected = 2,
+                                founder_byears = c(1900, 1980),
+                                ascertain_span = c(2000, 2015))[[2]]), 1)
 })
 
 
@@ -41,7 +29,7 @@ test_that("pedigree always conatains more than 2 affecteds when num_affected = 2
   RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
                           part = seq(0, 100, by = 1),
-                          RR = 20, FamID = 1,
+                          RR = 35, FamID = 1,
                           num_affected = 2,
                           founder_byears = c(1900, 1980),
                           ascertain_span = c(2000, 2015))
@@ -56,7 +44,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
   RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
                           part = seq(0, 100, by = 1),
-                          RR = 20, FamID = 1,
+                          RR = 35, FamID = 1,
                           num_affected = 2,
                           founder_byears = c(1900, 1980),
                           ascertain_span = c(2000, 2015))[[2]]
@@ -161,23 +149,3 @@ test_that("issues error when recall_probs not properly specified", {
                               founder_byears = c(1900, 1980),
                               ascertain_span = c(2000, 2015)))
   })
-
-test_that("issues warnings when partition doesn't span appropriate ages", {
-  expect_warning(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                part = seq(0, 50, by = 0.5),
-                                RR = 20, FamID = 1,
-                                num_affected = 2,
-                                founder_byears = c(1900, 1980),
-                                ascertain_span = c(2000, 2015)))
-})
-
-test_that("issues warnings when suspected that affected death hazard listed first", {
-  expect_warning(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                death_hazard = AgeSpecific_Hazards[,c(3,2)],
-                                part = seq(0, 100, by = 1),
-                                RR = 20, FamID = 1,
-                                num_affected = 2,
-                                founder_byears = c(1900, 1980),
-                                ascertain_span = c(2000, 2015)))
-})
