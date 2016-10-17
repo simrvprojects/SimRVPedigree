@@ -23,12 +23,13 @@ body{ /* Normal  */
 4. [The `sim_RVpedigree` Function](#simRVped)
 5. [Example Application to Family-Based Study](#Example)
 6. [Parallel Processing Example](#ParProcExample)
+7. [References](#Ref)
 
 
 # Introduction <a name="introduction"></a>
-Family-based studies designed to identify genetic susceptibility factors associated with rare diseases have received significant consideration in recent years.  Due to the rarity of the diseases under consideration, in some cases, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  Understandably, due to the nature of these studies, they are inherently difficult and sometimes infeasible to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate pedigrees similar to those ascertained  for family-based studies to contain multiple relatives affected with a rare disease.
+Family-based studies designed to identify genetic susceptibility factors associated with rare diseases have received significant consideration in recent years.  Due to the rarity of the diseases under consideration, in some cases, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  Understandably, due to the nature of these studies, they are inherently difficult and sometimes infeasible to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate pedigrees similar to those ascertained  for family-based studies to contain multiple relatives affected by a rare disease.
 
-The distinguishing feature of the `SimRVPedigree` packages is that it aims to accurately mimic the process of family development, while allowing users to incorporate multiple facets of a particular acsertainment scheme.  To illustrate and fully explain these features, in the next two sections, we will first discuss assumptions governing the process of pedigree simulation, followed by a full exposition of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
+The distinguishing feature of the `SimRVPedigree` packages is that it aims to accurately mimic the process of family development, while allowing users to incorporate multiple facets of a particular acsertainment scheme.  To illustrate and fully explain these features, in the next two sections, we will first discuss several assumptions governing the process of pedigree simulation, followed by a full exposition of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
 
 #Individual and Pedigree Specific Assumptions <a name="PedLevel"></a>
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
@@ -45,9 +46,9 @@ population age-specific death hazard in place of the unaffected age-specific dea
 [REMOVE AFTER DISCUSSING WITH JINKO]  NOTE: Our assumption that genetic cases share the same relative risk parameter across families is not imposed upon the user.  Since the top level function only simulates a single pedigree (we decided to do this so that users could efficiently implement parallel processing) the user could choose to simulate a study sample containing families with different relative risks.  However, I worked this assumption into the example so that users might take the hint ;)
 
 #Study Design/Ascertainment Scheme Features <a name="StudyLevel"></a>
-The `sim_RVpedigree` function is used to randomly simulate families likely to be ascertained under a particular study design or ascertainment scheme.  The study design features available to the user are as follows:
+The `sim_RVpedigree` function is used to randomly simulate families likely to be ascertained under a particular study design or ascertainment scheme.  The study design features available to the user are specified via the following arguements:
 
-1. `num_affected`: the minimum number of relatives affected with the disease  of interest in each pedigree. 
+1. `num_affected`: the minimum number of relatives affected by the disease of interest in each pedigree. 
 
 2. `ascertain_span`: The ascertaiment span, in years, in which the family-based study ascertains families for analysis.  We require that the proband, i.e. the affected family member who enlists the familiy for analysis, experienced disease onset during the ascertainment period.  Additionally, when `num_affected` = $n$ affecteds are requested, we require that at the time of ascertainment the proband is at least the $n^{th}$ affected.  For example, suppose that we would like to mimic a family-based study that requires at least 3 affecteds per family.  Presumably, the family would be asertained for study when the proband, upon speaking to the clinician, informs the clinician that he or she is aware of at least 2 family members who are also affected by the disease of interest.  We also require that this condition is met when simulating families with incomplete ascertainment, discussed next.
 
@@ -87,16 +88,16 @@ Optional arguments:
 We will illustrate the usage and output of this function in the next section.
 
 #Example Application to Family-Based Study <a name="Example"></a>
-Suppose that from 2000 to 2015, a group of researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphoid cancer.  Researchers believe that affecteds within a family share a rare variant that increases disease susceptibility.  While they are not willing to adopt the assumption that the same rare variant is segregating in each family, they are willing to make the simplifying assumption that genetic cases share the same relative risk parameter across families.  They have reason to believe that for the families contained in their sample, the genetic cases are 5 times more likely to experience onset of lymphiod cancer.  
+Suppose that from 2000 to 2015, a group of researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphiod cancer.  Researchers believe that affecteds within a family share a rare variant that increases disease susceptibility.  While they are not willing to adopt the assumption that the same rare variant is segregating in each family, they are willing to make the simplifying assumption that genetic cases share the same relative risk parameter across families.  They have reason to believe that for the families contained in their sample, the genetic cases are 10 times more likely to experience onset of lymphiod cancer.  
 
 Researchers have not encoutered individuals who have refused family participation, and are fairly confident that families have been fully ascertained.  Upon inspecting the founders in their ascertained families, they see that most were born between 1900 and 1980.
 
-Based on the description of the family-based study described above, and referring to the input requirements in the last section, to simulate famlies accoding to this study design with the `sim_RVpedigree` function, users will set:
+Based on the description of the family-based study described above, and referring to the input requirements in the last section, to randomly simulate famlies likely to be ascertained by this study with the `sim_RVpedigree` function, users will set:
 
 1. `num_affected` = 2
 2. `ascertain_span` = c(2000, 2015)
 3. `stop_year` = 2015
-4. `RR` = 5
+4. `RR` = 10
 5. `recall_probs` = c(1)
 6. `founder_byears` = c(1900, 1980)
 
@@ -104,11 +105,14 @@ Additionally, the user will need to specify:
 
 1. `onset_hazard` = baseline age-specific onset hazard for lymphiod cancer.
 2. `death_hazard` = a dataframe with 2 columns:
-   1. `death_hazard[,1]` = age-specific death hazard for individuals who have never experienced onset of lymphoid cancer.
-   2. `death_hazard[,2]` = age-specific death hazard for individuals who have experienced onset of lymphoid cancer.
+   1. `death_hazard[,1]` = age-specific death hazard for the unaffected population, i.e. individuals who have NOT experienced onset of lymphoid cancer.
+   2. `death_hazard[,2]` = age-specific death hazard for the affected population, i.e. individuals who HAVE experienced onset of lymphoid cancer.
 3. `part` = a partition of ages over which to apply the age-specific hazards in `onset_hazard` and `death_hazard`.
 
-Fortunately, for the user studying lymphiod cancer the age-specific lymphoid cancer onset hazard, and age-specific death hazard for individuals affected by lyphoid cancer are provided in the `AgeSpecific_Hazards` dataset included in with the `SimRVPedigree` package.  What is not included in this dataset are the age-specific death hazards for individuals who have never experienced onset of lymphoid cancer.  The `AgeSpecific_Hazards` dataset does, however, include the baseline age-specific death hazard in the population, which we will use in place of the unaffected age-specific death hazard.  For more information on the `AgeSpecifc_Hazards` dataset type the command `help(AgeSpecific_Hazards)` into the `R` console.
+
+That is, users studying lymphiod cancer, will need to provide the age-specific lymphoid cancer onset hazard, and age-specific death hazard for individuals who have experienced onset of a lympiod cancer (affected population).  These may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER), however, we are not at liberty to reproduce data obtained through SEER.  Additionally, the uset must provide the age-specific death hazard for individuals who have not experienced onset of a lympiod cancer (unaffected population).  Since death by lymphiod cancer only accounts for a very small percentage of all deaths, the user may choose to approximate death hazard for the unaffected population by the population age-specific death hazard.  
+
+For the sake of illustration, we will pretend that the required age-specific hazards are represented in the `AgeSpecific_Hazards` dataset included in with the `SimRVPedigree` package.  We note that the age-specific hazards in the `AgeSpecific_Hazards` dataset were created solely for the purpose of illustrating package function usage, and do not apply to any disease in particular.  For more information on the `AgeSpecifc_Hazards` dataset type the command `help(AgeSpecific_Hazards)` into the `R` console.
 
 After installing the `SimRVPedigree` package, load it by typing the command:
 ```{r}
@@ -135,34 +139,36 @@ par(mfrow = c(1, 2))
 plot(x = seq(1, 100, by = 1),
      y = AgeSpecific_Hazards[,1],
      xlab = "age",
-     ylab = "LC onset hazard", ylim = c(0, 0.002),
+     ylab = "baseline onset hazard", ylim = c(0, 0.002),
      col = "red3", lwd = 2, type = "s")
 plot(x = seq(1, 100, by = 1),
      y = AgeSpecific_Hazards[,3],
      xlab = "age",
      ylab = "death hazard",
-     col = "goldenrod2", ylim = c(0, 0.8),
+     col = "goldenrod2", ylim = c(0, 1),
      lwd = 2, type = "s")
 lines(x = seq(1, 100, by = 1),
      y = AgeSpecific_Hazards[,2],
      col = "dodgerblue", lwd = 2, type = "s")
-legend("topleft", title = "Death Hazard", legend = c("Population", "LC Affected"),
+legend("topleft", title = "Death Hazard", 
+       legend = c("Unaffected", "Affected"),
        col = c("dodgerblue", "goldenrod2"), lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
 ```{r}
 #Simulate a random pedigree 
-set.seed(1)
+set.seed(3)
 ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
                            death_hazard = my_death_hazard,
                            part = age_part,
                            num_affected = 2,
                            ascertain_span = c(1900, 2015),
-                           RR = 5, stop_year = 2015,
+                           RR = 10, stop_year = 2015,
                            recall_probs = c(1),
                            founder_byears = c(1900, 1910),
                            FamID = 1)
+
 ```
 
 The `sim_RVpedigree` returns two data frames, the first is the ped file of the original pedigree prior to trimming.  The second is the ascertained pedigree, with proband selected and unrecalled relatives removed.  If a relative cannot be recalled by the proband, but they are required to plot the pedigree using the `kinship2` package, they are be readded to the pedigree, but their information will be censored, and they will be re-labelled as unavailable.  
@@ -174,7 +180,7 @@ Since we are interested in pedigrees ascertained for the previously described fa
 head(ex_RVped[[2]])
 ```
 
-We can plot pedigrees with the help of the `kinship2` package.  The following code illustrates how this is accomplished. 
+We can plot pedigrees with the help of the `kinship2` package [1].  The following code illustrates how this is accomplished. 
 
 ```{r, results = FALSE, tidy = TRUE, echo = TRUE, message=FALSE}
 #Pedigrees may be plotted usign the kinship2 package.  Assuming that this 
@@ -206,12 +212,11 @@ It is importatant to note that the processing time required to simulate a sample
  
 Given the vast number of study designs that can be specified, it is likely that there are particular combinations of simulation settings that may also lead to an increase in processsing time.  For this reason, we HIGHLY recommend the use of parallel processing when simulating a large set of pedigrees ascertained for multiple affected members.  
 
-The following parallel processing example uses the `doParallel` and `doRNG` packages to simulate the entire study sample of 150 pedigrees described in the application of the last section.
+The following parallel processing example uses the `doParallel` [2] and `doRNG` [3] packages to simulate the entire study sample of 150 pedigrees described in the application of the last section.
 
 The following example was intended for Windows and slight modifications may be necessary for Unix-like systems.
 
 ```{r, eval = FALSE}
-#SITATION FOR DOPARALLEL VIGNETTE?
 #Note that: while parallel processsing may acheived using only the doParallel 
 #package, to ensure that simulations are reproducible we must also incorporate 
 #the doRNG package.
@@ -266,3 +271,20 @@ RV_peds = foreach(i = seq(npeds),
                                    FamID = i)[[2]]
                     }
 ```
+
+
+#References <a name="Ref"></a>
+[1] Terry M Therneau and Jason Sinnwell (2015).
+  **kinship2: Pedigree Functions.** 
+  *R package version 1.6.4.* 
+  https://CRAN.R-project.org/package=kinship2
+  
+[2] Revolution Analytics and Steve Weston (2015).
+  **doParallel: Foreach Parallel Adaptor for the 'parallel' Package.** 
+  *R package version 1.0.10.*
+  https://CRAN.R-project.org/package=doParallel
+
+[3] Renaud Gaujoux (2014). 
+  **doRNG: Generic Reproducible Parallel Backend for foreach Loops.** 
+  *R package version 1.6.*
+  https://CRAN.R-project.org/package=doRNG
