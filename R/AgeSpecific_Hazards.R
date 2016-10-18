@@ -1,8 +1,8 @@
 #' Example age-specific hazards
 #'
-#' A dataset containing 3 columns of age-specific hazards: the population onset hazard, and the death hazards for the unaffected and affected populations.  Each age-specific hazard column lists the age-specific hazards in yearly increments, beginning at age 0 ending with age 100.  That is, values in the first row are the age-specific hazards for individuals whose ages fall in the interval [0, 1), the values in the first row are the age-specific hazards for individuals whose ages fall in the interval [1, 2), etc.
+#' A dataset containing age-specific hazards: the population disease onset hazard, and the death hazards for the unaffected and affected populations.  Each age-specific hazard column lists the age-specific hazards in yearly increments, beginning at age 0 ending with age 100.  That is, values in the first row are the age-specific hazards for individuals whose ages fall in the interval [0, 1), the values in the first row are the age-specific hazards for individuals whose ages fall in the interval [1, 2), etc.
 #'
-#' The hazards in this dataset were simulated randomly and do not represent age-specific hazards for a real disease.  These simulated hazards have been included in the `SimRVPedigree` package to simplify examples in object documentation, and serve as the example hazards in the vignette.
+#' The hazards in this dataset were simulated randomly and do not represent age-specific hazards for a real disease.  These simulated hazards have been included in the `SimRVPedigree` package to simplify examples in object documentation, and in the vignette.  Users must obtain age-specific hazards specific to the rare disease they wish to study.
 #'
 #' @docType data
 #'
