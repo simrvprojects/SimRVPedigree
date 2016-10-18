@@ -1,8 +1,10 @@
 #' Randomly Simulate Pedigrees Ascertained for Disease Status.
 #'
-#' The \code{SimRVPedigree} package allows random simulation of pedigrees likely to be asertained for multiple affected members under a particular study design.  Pedigrees include individual specific variables such as birth year, and, when applicable, onset year, and/or death year.  Additionally, we simualte the transmission of a rare variant, assumed to increase disease susceptibility, according to Mendel's laws.
+#' The \code{SimRVPedigree} package provides methods to randomly simulate pedigrees ascertained for multiple affected family members.
 #'
-#' In addition to randomly simulating pedigrees, \code{SimRVPedigree} also includes functions for: simulating waiting times associated with a non-homogeneous Poisson process, randomly simulating life events contingent on user-provided age-specific hazards.
+#'Family-based studies designed to identify genetic susceptibility factors associated with rare diseases have received significant consideration in recent years.  Due to the rarity of the diseases under consideration, in some cases, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  Understandably, due to the nature of these studies, they are inherently difficult and sometimes infeasible to replicate.  The \code{SimRVPedigree} package aims to address this problem by providing a platform to randomly simulate pedigrees similar to those ascertained  for family-based studies to contain multiple relatives affected by a rare disease.
+#'
+#'The distinguishing feature of the \code{SimRVPedigree} package is that it aims to accurately mimic the process of family development, while allowing users to incorporate multiple facets of a particular acsertainment scheme.
 #'
 #' @docType package
 #' @name SimRVPedigree
