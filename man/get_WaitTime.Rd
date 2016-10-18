@@ -2,19 +2,18 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitTime}
 \alias{get_WaitTime}
-\title{Simulate the waiting time to next event in a non-homogeneous Poisson process.}
+\title{Obtain the waiting time to next event associated with a nonhomogeneous Poisson process.}
 \usage{
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }
 \arguments{
 \item{p}{A numeric constant. Argument of non-homogeneous poisson process quantile function}
 
-\item{last_event}{A numeric constant.  The age at last event.}
+\item{last_event}{A numeric constant.  The time at last event.}
 
-\item{hazard}{A numeric vector.  A vector of age-specific hazards.}
+\item{hazard}{A numeric vector.  A vector of time-specific hazards.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the
-age-specific hazards.}
+\item{part}{A numeric vector.  Partition of ages over which to apply the time-specific hazards.}
 
 \item{scale}{Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
 }
@@ -22,10 +21,10 @@ age-specific hazards.}
 The waiting time to next event, units same as those in \code{part}.
 }
 \description{
-\code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process
+\code{get_WaitTime} approximates solutions of the inverse cumulative distribution function of wait times to next event associated with a non-homogeneous Poisson process.
 }
 \details{
-\code{get_WaitTime} simulates the waiting time to next event for a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
+\code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
 }
 \examples{
 haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))

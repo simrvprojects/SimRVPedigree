@@ -2,19 +2,18 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitProb}
 \alias{get_WaitProb}
-\title{Determine the cumulative probability of the waiting time, given the age at last event.}
+\title{Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.}
 \usage{
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
 \arguments{
-\item{last_event}{A numeric constant.  The age at last event.}
+\item{last_event}{A numeric constant.  The time at last event.}
 
 \item{wait_time}{A numeric constant.  The waiting time to next_event.}
 
-\item{hazard}{A numeric vector.  A vector of age-specific hazards.}
+\item{hazard}{A numeric vector.  A vector of time-specific hazards.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the
-age-specific hazards.}
+\item{part}{A numeric vector.  Time partition over which to apply the time-specific hazards.}
 
 \item{scale}{Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
 }
@@ -22,7 +21,7 @@ age-specific hazards.}
 wait_prob The probability that the waiting time to next event is at least wait_time.
 }
 \description{
-Determine the cumulative probability of the waiting time, given the age at last event.
+Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.
 }
 \examples{
 haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
