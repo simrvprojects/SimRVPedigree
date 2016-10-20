@@ -17,6 +17,12 @@ sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
 
 \item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 
+\item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.}
+
+\item{ascertain_span}{Numeric list of length 2.  The period, in years, during which the pedigree would be ascertained for study.}
+
+\item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
+
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
 \item{recall_probs}{Numeric.  The proband's recall probabilities for relatives.  If missing four times kinship coefficient between the proband and the relative will be used.}
@@ -26,12 +32,6 @@ sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
 \item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
 
 \item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
-
-\item{founder_byears.}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.}
-
-\item{ascertain_span.}{Numeric list of length 2.  The period, in years, during which the pedigree would be ascertained for study.}
-
-\item{num_affected.}{Numeric.  The minimum number of affected individuals in the pedigree.}
 }
 \value{
 full_ped The full ped file, prior to proband selection and trimming.
@@ -42,7 +42,7 @@ trim_ped The trimmed ped file, trimmed according to proband recall probability.
 \code{sim_RVpedigree} simulates a pedigree with at least \code{num_affected} affecteds, according to a specified study design, selects a proband, and trims the pedigree based on the proband's recall probability of their relatives.
 }
 \details{
-By assumption, all ascertained pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_RVpedigree} starts the pedigree simulation process by simulating the birth year,  uniformly between the years specified by \code{founder_byears}, for the founder who has introduced the rare variant into the pedigree.  Next, life events are simulated for the founder.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_RVpedigree} only allows disease onset to occur once, i.e. no remission after disease onset.  Compuationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortaility rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant, we assign a relative risk of disease onset of 1.  Any life events that occur after \code{stop_year} are censored.
+By assumption, all ascertained pedigrees are segregating a rare variant, which has been introduced by one founder.  \code{sim_RVpedigree()} begins randomly simulating a pedigree starting with the founder who has introduced the rare variant into the pedigree by generating this founder's year of birth, uniformly between the years specified in \code{founder_byears}.  Next, life events are simulated for the founder.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_RVpedigree} only allows disease onset to occur once, i.e. no remission after disease onset.  Compuationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortaility rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant, we assign a relative risk of disease onset of 1.  Any life events that occur after \code{stop_year} are censored.
 
 The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 

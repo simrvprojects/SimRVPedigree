@@ -8,27 +8,23 @@ sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
 
-\item{death_hazard}{data.frame. Column 1 should specify the age specific
-mortality rates in the unaffected population, while column 2 should provide
-the age specific morality rates in the affected population.}
+\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the
-age-specific hazards}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{A numeric constant. The relative risk of developing
-disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 
-\item{FamID}{Numeric. Family identification number.}
+\item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
-\item{founder_byears}{A numeric vector of length 2, the minimum and maximum founder birth years.  See details.}
+\item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.}
 
-\item{stop_year}{The last year of study.  Note: any information simulated after stop.year is censored and will not be recorded in the ped file.}
+\item{stop_year}{Numeric. The last year of study.  If missing the current year is used.}
 
-\item{birth_range}{A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.}
+\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
 
-\item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
+\item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
 }
 \value{
 The ped file for the simulated pedigree.

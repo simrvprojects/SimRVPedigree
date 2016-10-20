@@ -8,26 +8,19 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
   YOB)
 }
 \arguments{
-\item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
 
-\item{death_hazard}{data.frame. Column 1 should specify the age specific
-mortality rates in the unaffected population, while column 2 should provide
-the age specific morality rates in the affected population.}
+\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the
-age-specific hazards}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{birth_range}{A numeric vector of length 2.  The minimum and maximum
-allowable birth ages in simulation.}
+\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
 
-\item{NB_params}{A numeric vector of length 2. The size and probabiliy
-parameters of the negative binomial distribution that describes the number of
-children per household in the population.}
+\item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
 
-\item{RR}{A numeric constant. The relative risk of developing
-disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 
-\item{YOB}{numeric. The indivdiual's year of birth.}
+\item{YOB}{Numeric. The indivdiual's year of birth.}
 }
 \value{
 Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.

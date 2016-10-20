@@ -15,8 +15,7 @@ create_offspring(dad_info, mom_info, byear, last_id, RR)
 
 \item{last_id}{numeric.  The last id used in the pedigree.}
 
-\item{RR}{A numeric constant. The relative risk of developing
-disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 }
 \value{
 new_child_info the ped file information for the new child

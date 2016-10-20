@@ -5,26 +5,17 @@
 #'
 #' \code{get_nextEvent} randomly simulates the next life event for an individual by
 #' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
-#' and death given the individuals current age.  The event with the shortest
+#' and death given the individual's current age.  The event with the shortest
 #' waiting time is chosen as the next life event.  If get_nextEvent returns a value
 #' named "Birth", then the next life event is reproduction, if get_nextEvent
 #' returns a value named "Onset" then the next life event is onset of disease,
 #' if get_nextEvent returns a value named "Death" then the next life event is death.
 #'
-#' @param current_age The individuals current age.
-#' @param disease_status The disease status, disease_status = 1 if individual
+#' @param current_age Numeric. The individuals current age.
+#' @param disease_status Numeric. The disease status, disease_status = 1 if individual
 #' has experienced onset, and 0 otherwise.
-#' @param lambda_birth Numeric constant. The individuals birth rate.
-#' @param onset_hazard Numeric vector. The population age-specific onset hazard.
-#' @param death_hazard data.frame. Column 1 should specify the age specific
-#' mortality rates in the unaffected population, while column 2 should provide
-#' the age specific morality rates in the affected population.
-#' @param part A numeric vector.  Partition of ages over which to apply the
-#' age-specific hazards
-#' @param birth_range A numeric vector of length 2.  The minimum and maximum
-#' allowable birth ages in simulation.
-#' @param RR A numeric constant. The relative risk of developing
-#' disease for individuals who have inherited the rare variant.
+#' @param lambda_birth Numeric. The individuals birth rate.
+#' @inheritParams sim_RVpedigree
 #'
 #' @return Named matrix. The number of years until the next life event,
 #' named by event type.
@@ -109,11 +100,8 @@ get_nextEvent = function(current_age, disease_status,
 #' 0 and ending with death by applying the \link{get_nextEvent} function until death
 #' occurs.
 #'
-#' @param NB_params A numeric vector of length 2. The size and probabiliy
-#' parameters of the negative binomial distribution that describes the number of
-#' children per household in the population.
-#' @param YOB numeric. The indivdiual's year of birth.
-#' @inheritParams get_nextEvent
+#' @param YOB Numeric. The indivdiual's year of birth.
+#' @inheritParams sim_RVpedigree
 #'
 #' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
 #' @export
