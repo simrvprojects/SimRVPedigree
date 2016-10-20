@@ -6,8 +6,9 @@ test_that("returns a list containing two pedfiles", {
                           part = seq(0, 100, by = 1),
                           RR = 35, FamID = 1,
                           num_affected = 2,
+                          recall_probs = c(1),
                           founder_byears = c(1900, 1980),
-                          ascertain_span = c(2000, 2015))
+                          ascertain_span = c(1980, 2015))
 
   expect_true(is.list(EXPed))
   expect_true(is.data.frame(EXPed[[1]]))
@@ -20,8 +21,9 @@ test_that("pedigree always conatains more than 1 person", {
                                 part = seq(0, 100, by = 1),
                                 RR = 35, FamID = 1,
                                 num_affected = 2,
+                                recall_probs = c(1),
                                 founder_byears = c(1900, 1980),
-                                ascertain_span = c(2000, 2015))[[2]]), 1)
+                                ascertain_span = c(1980, 2015))[[2]]), 1)
 })
 
 
@@ -31,6 +33,7 @@ test_that("pedigree always conatains more than 2 affecteds when num_affected = 2
                           part = seq(0, 100, by = 1),
                           RR = 35, FamID = 1,
                           num_affected = 2,
+                          recall_probs = c(1, 1, 1, 0.5, 0.25),
                           founder_byears = c(1900, 1980),
                           ascertain_span = c(2000, 2015))
   RVped1 <- RVped[[1]]
@@ -46,6 +49,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
                           part = seq(0, 100, by = 1),
                           RR = 35, FamID = 1,
                           num_affected = 2,
+                          recall_probs = c(1, 1, 1, 0.5, 0.25),
                           founder_byears = c(1900, 1980),
                           ascertain_span = c(2000, 2015))[[2]]
 
@@ -60,7 +64,7 @@ test_that("issues errors when invalid partition supplied", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                               death_hazard = AgeSpecific_Hazards[,c(2,3)],
                               part = seq(1, 100, by = 1),
-                              RR = 20, FamID = 1,
+                              RR = 30, FamID = 1,
                               num_affected = 2,
                               founder_byears = c(1900, 1980),
                               ascertain_span = c(2000, 2015)))
@@ -71,7 +75,7 @@ test_that("issues error when death_hazard contains only 1 column", {
   expect_error(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
                               death_hazard = AgeSpecific_Hazards[,c(2)],
                               part = seq(0, 100, by = 1),
-                              RR = 20, FamID = 1,
+                              RR = 30, FamID = 1,
                               num_affected = 2,
                               founder_byears = c(1900, 1980),
                               ascertain_span = c(2000, 2015)))
