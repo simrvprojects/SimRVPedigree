@@ -6,43 +6,46 @@
 #' \code{get_nextEvent} randomly simulates the next life event for an individual by
 #' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
 #' and death given the individual's current age.  The event with the shortest
-#' waiting time is chosen as the next life event.  If get_nextEvent returns a value
-#' named "Birth", then the next life event is reproduction, if get_nextEvent
-#' returns a value named "Onset" then the next life event is onset of disease,
-#' if get_nextEvent returns a value named "Death" then the next life event is death.
+#' waiting time is chosen as the next life event.
 #'
-#' @param current_age Numeric. The individuals current age.
-#' @param disease_status Numeric. The disease status, disease_status = 1 if individual
-#' has experienced onset, and 0 otherwise.
-#' @param lambda_birth Numeric. The individuals birth rate.
+#' If get_nextEvent returns a value named:
+#'  - "Birth" the next life event is reproduction,
+#'  - "Onset" the next life event is disease onset,
+#'  - "Death" the next life event is death
+#'
+#' @param current_age numeric. The individual's current age.
+#' @param disease_status numeric. The individual's disease status, set disease_status = 1 if individual has experienced disease onset, otherwise set disease_status = 0.
+#' @param lambda_birth numeric. The individual's birth rate.
 #' @inheritParams sim_RVpedigree
 #'
-#' @return Named matrix. The number of years until the next life event,
-#' named by event type.
+#' @return A named matrix. The number of years until the next life event,
+#' named by event type.  See Details.
 #' @export
 #' @importFrom stats runif
 #' @importFrom stats rexp
 #'
 #' @examples
-#' part_vec <- seq(0, 100, by = 1)
-#' Birth_rate <- 0.05
-#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-#'                                     shape = 9.5, scale = 1)
-#' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-#'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-#' Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
-#' Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
+#' data(AgeSpecific_Hazards)
+#'
+#' my_part <- seq(0, 100, by = 1)
+#' my_onset_haz <- AgeSpecific_Hazards[,1]
+#' my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
+#'
 #' set.seed(17)
 #' get_nextEvent(current_age = 23, disease_status = 0,
-#'            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
-#'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), RR = 5)
+#'               lambda_birth = 0.05,
+#'               onset_hazard = my_onset_haz,
+#'               death_hazard = my_death_haz,
+#'               part = my_part,
+#'               birth_range = c(17,45), RR = 5)
 #'
 #' set.seed(17)
 #' get_nextEvent(current_age = 23, disease_status = 1,
-#'            lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
-#'            death_hazard = Dhaz_df, part = part_vec,
-#'            birth_range = c(17,45), RR = 5)
+#'               lambda_birth = 0.05,
+#'               onset_hazard = my_onset_haz,
+#'               death_hazard = my_death_haz,
+#'               part = my_part,
+#'               birth_range = c(17,45), RR = 5)
 #'
 get_nextEvent = function(current_age, disease_status,
                          lambda_birth, onset_hazard, death_hazard, part,
@@ -97,36 +100,34 @@ get_nextEvent = function(current_age, disease_status,
 #' Simulate all life events.
 #'
 #' \code{get_lifeEvents} simulates all life events for an individual starting at age
-#' 0 and ending with death by applying the \link{get_nextEvent} function until death
-#' occurs.
+#' 0 and ending with death through recursive application of \link{get_nextEvent}.
 #'
-#' @param YOB Numeric. The indivdiual's year of birth.
+#' @param YOB A positive number. The indivdiual's year of birth.
 #' @inheritParams sim_RVpedigree
 #'
-#' @return Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
+#' @return A named matrix. A matrix containing the years of all life events simulated for an individual, named by event type.
 #' @export
 #' @importFrom stats rgamma
 #'
 #' @examples
-#' part_vec <- seq(0, 100, by = 1)
-#' unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-#'                                     shape = 9.5, scale = 1)
-#' affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-#'                    pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-#' Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
-#' Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+#' data(AgeSpecific_Hazards)
+#'
+#' my_part <- seq(0, 100, by = 1)
+#' my_onset_haz <- AgeSpecific_Hazards[,1]
+#' my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
+#'
 #' set.seed(17)
-#' get_lifeEvents(onset_hazard = Ohaz_vec,
-#'                death_hazard = Dhaz_df,
-#'                part = part_vec,
+#' get_lifeEvents(onset_hazard = my_onset_haz,
+#'                death_hazard = my_death_haz,
+#'                part = my_part,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 1,
 #'                YOB = 1900)
 #'
 #' set.seed(17)
-#' get_lifeEvents(onset_hazard = Ohaz_vec,
-#'                death_hazard = Dhaz_df,
-#'                part = part_vec,
+#' get_lifeEvents(onset_hazard = my_onset_haz,
+#'                death_hazard = my_death_haz,
+#'                part = my_part,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 15,
 #'                YOB = 1900)

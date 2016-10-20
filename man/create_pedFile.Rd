@@ -7,10 +7,11 @@
 create_pedFile()
 }
 \value{
-A empty data frame with all the necessary fields needed to generate
-a ped file using SimRVPedigree
+An empty data frame with all the required fields for generating
+a ped file.
 }
 \description{
-\code{create_pedFile} initializes an empty data frame with all of the appropriate fields to simulate a pedigree using SimRVPedigree.
+\code{create_pedFile} initializes an empty data frame with all of the
+appropriate fields to simulate a pedigree.
 }
 

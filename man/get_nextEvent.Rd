@@ -8,12 +8,11 @@ get_nextEvent(current_age, disease_status, lambda_birth, onset_hazard,
   death_hazard, part, birth_range, RR)
 }
 \arguments{
-\item{current_age}{Numeric. The individuals current age.}
+\item{current_age}{numeric. The individual's current age.}
 
-\item{disease_status}{Numeric. The disease status, disease_status = 1 if individual
-has experienced onset, and 0 otherwise.}
+\item{disease_status}{numeric. The individual's disease status, set disease_status = 1 if individual has experienced disease onset, otherwise set disease_status = 0.}
 
-\item{lambda_birth}{Numeric. The individuals birth rate.}
+\item{lambda_birth}{numeric. The individual's birth rate.}
 
 \item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
 
@@ -26,42 +25,46 @@ has experienced onset, and 0 otherwise.}
 \item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 }
 \value{
-Named matrix. The number of years until the next life event,
-named by event type.
+A named matrix. The number of years until the next life event,
+named by event type.  See Details.
 }
 \description{
 \code{get_nextEvent} randomly simulates the next life event for an individual
- given their current age, disease status, and rare variant status.
+ given their current age, disease status, and relative risk of disease onset.
 }
 \details{
 \code{get_nextEvent} randomly simulates the next life event for an individual by
 generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
 and death given the individual's current age.  The event with the shortest
-waiting time is chosen as the next life event.  If get_nextEvent returns a value
-named "Birth", then the next life event is reproduction, if get_nextEvent
-returns a value named "Onset" then the next life event is onset of disease,
-if get_nextEvent returns a value named "Death" then the next life event is death.
+waiting time is chosen as the next life event.
+
+If get_nextEvent returns a value named:
+ - "Birth" the next life event is reproduction,
+ - "Onset" the next life event is disease onset,
+ - "Death" the next life event is death
 }
 \examples{
-part_vec <- seq(0, 100, by = 1)
-Birth_rate <- 0.05
-unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-                                    shape = 9.5, scale = 1)
-affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-Dhaz_df  <- as.data.frame(cbind(unaffected_mort, affected_mort))
-Ohaz_vec <- dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75)
+data(AgeSpecific_Hazards)
+
+my_part <- seq(0, 100, by = 1)
+my_onset_haz <- AgeSpecific_Hazards[,1]
+my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
+
 set.seed(17)
 get_nextEvent(current_age = 23, disease_status = 0,
-           lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
-           death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), RR = 5)
+              lambda_birth = 0.05,
+              onset_hazard = my_onset_haz,
+              death_hazard = my_death_haz,
+              part = my_part,
+              birth_range = c(17,45), RR = 5)
 
 set.seed(17)
 get_nextEvent(current_age = 23, disease_status = 1,
-           lambda_birth = Birth_rate, onset_hazard = Ohaz_vec,
-           death_hazard = Dhaz_df, part = part_vec,
-           birth_range = c(17,45), RR = 5)
+              lambda_birth = 0.05,
+              onset_hazard = my_onset_haz,
+              death_hazard = my_death_haz,
+              part = my_part,
+              birth_range = c(17,45), RR = 5)
 
 }
 

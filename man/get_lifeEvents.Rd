@@ -20,36 +20,34 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
 
 \item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 
-\item{YOB}{Numeric. The indivdiual's year of birth.}
+\item{YOB}{A positive number. The indivdiual's year of birth.}
 }
 \value{
-Named matrix. The waiting times between all life events simulated for an individual, named according to which life event has occurred.
+A named matrix. A matrix containing the years of all life events simulated for an individual, named by event type.
 }
 \description{
 \code{get_lifeEvents} simulates all life events for an individual starting at age
-0 and ending with death by applying the \link{get_nextEvent} function until death
-occurs.
+0 and ending with death through recursive application of \link{get_nextEvent}.
 }
 \examples{
-part_vec <- seq(0, 100, by = 1)
-unaffected_mort <- 0.00001 + pgamma(seq(0.16, 16, by = .16),
-                                    shape = 9.5, scale = 1)
-affected_mort <- c(0.55, 0.48, 0.37, 0.23, 0.15,
-                   pgamma(seq(0.96, 16, by = .16), shape = 4, scale = 1.5))
-Dhaz_df  <- (as.data.frame(cbind(unaffected_mort, affected_mort)))
-Ohaz_vec <- (dgamma(seq(0.1, 10, by = .1), shape = 8, scale = 0.75))
+data(AgeSpecific_Hazards)
+
+my_part <- seq(0, 100, by = 1)
+my_onset_haz <- AgeSpecific_Hazards[,1]
+my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
+
 set.seed(17)
-get_lifeEvents(onset_hazard = Ohaz_vec,
-               death_hazard = Dhaz_df,
-               part = part_vec,
+get_lifeEvents(onset_hazard = my_onset_haz,
+               death_hazard = my_death_haz,
+               part = my_part,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 1,
                YOB = 1900)
 
 set.seed(17)
-get_lifeEvents(onset_hazard = Ohaz_vec,
-               death_hazard = Dhaz_df,
-               part = part_vec,
+get_lifeEvents(onset_hazard = my_onset_haz,
+               death_hazard = my_death_haz,
+               part = my_part,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 15,
                YOB = 1900)
