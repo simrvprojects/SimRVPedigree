@@ -1,7 +1,7 @@
 #' Simulate next life event.
 #'
 #' \code{get_nextEvent} randomly simulates the next life event for an individual
-#'  given their current age, disease status, and rare variant status.
+#'  given their current age, disease status, and relative risk of disease onset.
 #'
 #' \code{get_nextEvent} randomly simulates the next life event for an individual by
 #' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
