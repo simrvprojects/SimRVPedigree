@@ -9,34 +9,29 @@ sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric vector. The population age-specific onset hazard.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
 
-\item{death_hazard}{data.frame. Column 1 should specify the age specific
-mortality rates in the unaffected population, while column 2 should provide
-the age specific morality rates in the affected population.}
+\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the
-age-specific hazards}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{A numeric constant. The relative risk of developing
-disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
 
-\item{founder_byears}{A numeric vector of length 2, the minimum and maximum founder birth years.  See details.}
+\item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
-\item{ascertain_span}{numeric vector of length 2. The ascertainment period,
-i.e. first and last year of study.}
+\item{recall_probs}{Numeric.  The proband's recall probabilities for relatives.  If missing four times kinship coefficient between the proband and the relative will be used.}
 
-\item{num_affected}{Numeric.  Number of affected individuals in ascertained pedigree. See details.}
+\item{stop_year}{Numeric. The last year of study.  If missing the current year is used.}
 
-\item{FamID}{Numeric. Family identification number.}
+\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
 
-\item{recall_probs}{Numeric.  Proband recall probabilities.  See details.}
+\item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
 
-\item{stop_year}{The last year of study, any information simulated after stop.year is censored and will not be recorded in the ped file.  If missing, the stop year is set to the current year.}
+\item{founder_byears.}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.}
 
-\item{birth_range}{A numeric vector of length 2.  By default, \code{birth_range} = c(18, 45).  The minimum and maximum allowable birth ages in simulation.}
+\item{ascertain_span.}{Numeric list of length 2.  The period, in years, during which the pedigree would be ascertained for study.}
 
-\item{NB_params}{A numeric vector of length 2. By default \code{NB_params} = c(2, 4/7). The size and probabiliy parameters of the negative binomial distribution that describes the number of children per household in the population.}
+\item{num_affected.}{Numeric.  The minimum number of affected individuals in the pedigree.}
 }
 \value{
 full_ped The full ped file, prior to proband selection and trimming.

@@ -21,7 +21,7 @@ get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 The waiting time to next event, units same as those in \code{part}.
 }
 \description{
-\code{get_WaitTime} approximates solutions of the inverse cumulative distribution function of wait times to next event associated with a non-homogeneous Poisson process.
+\code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 }
 \details{
 \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.

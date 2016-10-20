@@ -312,9 +312,18 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' We note that, for rare diseases, this simulation process is computaionally expensive.  \strong{We highly recommend the use of parallel processing or cluster computing} when simulating a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  To see an example code that uses parallel processing to simulate a study sample of pedigrees, please refer to the vignette.
 #'
 #'
-#' @inheritParams sim_ped
-#' @param stop_year The last year of study, any information simulated after stop.year is censored and will not be recorded in the ped file.  If missing, the stop year is set to the current year.
-#' @inheritParams trim_pedigree
+#' @param onset_hazard Numeric. The population age-specific hazard rate for disease onset.
+#' @param death_hazard Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.
+#' @param part Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.
+#' @param RR Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.
+#' @param FamID Numeric. The family ID to assign to the simulated pedigree.
+#' @param founder_byears. Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.
+#' @param ascertain_span. Numeric list of length 2.  The period, in years, during which the pedigree would be ascertained for study.
+#' @param num_affected. Numeric.  The minimum number of affected individuals in the pedigree.
+#' @param recall_probs Numeric.  The proband's recall probabilities for relatives.  If missing four times kinship coefficient between the proband and the relative will be used.
+#' @param birth_range Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.
+#' @param NB_params Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.
+#' @param stop_year Numeric. The last year of study.  If missing the current year is used.
 #'
 #' @return full_ped The full ped file, prior to proband selection and trimming.
 #' @return trim_ped The trimmed ped file, trimmed according to proband recall probability.
