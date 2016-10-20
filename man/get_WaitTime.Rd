@@ -7,15 +7,15 @@
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }
 \arguments{
-\item{p}{A numeric constant. Argument of non-homogeneous poisson process quantile function}
+\item{p}{a probability.  Argument of the quantile function of the waiting time associated with a non-homogeneous poisson process with rate \code{hazard}.}
 
-\item{last_event}{A numeric constant.  The time at last event.}
+\item{last_event}{a positive number.  The time at last event.}
 
-\item{hazard}{A numeric vector.  A vector of time-specific hazards.}
+\item{hazard}{A vector of positive numbers.  The time-specific hazard rate.}
 
-\item{part}{A numeric vector.  Partition of ages over which to apply the time-specific hazards.}
+\item{part}{A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.}
 
-\item{scale}{Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
+\item{scale}{logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the quantile function for a proper random variable.}
 }
 \value{
 The waiting time to next event, units same as those in \code{part}.

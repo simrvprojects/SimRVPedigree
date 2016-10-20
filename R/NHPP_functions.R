@@ -1,10 +1,10 @@
 #' Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.
 #'
-#' @param last_event A numeric constant.  The time at last event.
-#' @param wait_time A numeric constant.  The waiting time to next_event.
-#' @param hazard A numeric vector.  A vector of time-specific hazards.
-#' @param part A numeric vector.  Time partition over which to apply the time-specific hazards.
-#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
+#' @param last_event a positive number.  The time at last event.
+#' @param wait_time a positive number.  The waiting time to next_event.
+#' @param hazard A vector of positive numbers.  The time-specific hazard rate.
+#' @param part A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.
+#' @param scale logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the CDF for a proper random variable.
 #'
 #' @return wait_prob The probability that the waiting time to next event is at least wait_time.
 #' @export
@@ -44,12 +44,9 @@ get_WaitProb = function(last_event, wait_time,
 #' \code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 #'
 #' \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
-#'
-#' @param p A numeric constant. Argument of non-homogeneous poisson process quantile function
-#' @param last_event A numeric constant.  The time at last event.
-#' @param hazard A numeric vector.  A vector of time-specific hazards.
-#' @param part A numeric vector.  Partition of ages over which to apply the time-specific hazards.
-#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.
+#' @inheritParams get_WaitProb
+#' @param p a probability.  Argument of the quantile function of the waiting time associated with a non-homogeneous poisson process with rate \code{hazard}.
+#' @param scale logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the quantile function for a proper random variable.
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
 #' @export

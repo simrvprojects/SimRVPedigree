@@ -7,15 +7,15 @@
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
 \arguments{
-\item{last_event}{A numeric constant.  The time at last event.}
+\item{last_event}{a positive number.  The time at last event.}
 
-\item{wait_time}{A numeric constant.  The waiting time to next_event.}
+\item{wait_time}{a positive number.  The waiting time to next_event.}
 
-\item{hazard}{A numeric vector.  A vector of time-specific hazards.}
+\item{hazard}{A vector of positive numbers.  The time-specific hazard rate.}
 
-\item{part}{A numeric vector.  Time partition over which to apply the time-specific hazards.}
+\item{part}{A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.}
 
-\item{scale}{Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that W is a proper random variable, i.e. that this function is a proper CDF with upper limit 1.}
+\item{scale}{logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the CDF for a proper random variable.}
 }
 \value{
 wait_prob The probability that the waiting time to next event is at least wait_time.
