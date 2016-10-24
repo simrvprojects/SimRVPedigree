@@ -3,7 +3,7 @@
 \docType{data}
 \name{AgeSpecific_Hazards}
 \alias{AgeSpecific_Hazards}
-\title{Example age-specific hazards}
+\title{Age-specific hazard rate dataset}
 \format{A data frame with 100 rows and 3 variables:
 \describe{
 \item{pop_onset_hazard}{The age-specific population onset hazard}
@@ -14,10 +14,17 @@
 data(AgeSpecific_Hazards)
 }
 \description{
-A dataset containing age-specific hazards: the population disease onset hazard, and the death hazards for the unaffected and affected populations.  Each age-specific hazard column lists the age-specific hazards in yearly increments, beginning at age 0 ending with age 100.  That is, values in the first row are the age-specific hazards for individuals whose ages fall in the interval [0, 1), the values in the first row are the age-specific hazards for individuals whose ages fall in the interval [1, 2), etc.
+A dataset that contains age-specific hazard rates to roughly mimic: (1) age-specific hazard rates for lymphoid cancer onset in the United States, (2) the age-specific hazard rates for death in the United States, and (3) the age-specific hazard rates for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.
 }
 \details{
-The hazards in this dataset were simulated randomly and do not represent age-specific hazards for a real disease.  These simulated hazards have been included in the `SimRVPedigree` package to simplify examples in object documentation, and in the vignette.  Users must obtain age-specific hazards specific to the rare disease they wish to study.
+The \code{AgeSpecific_Hazards} dataset contains age-specific hazard rates which roughly mimic: (1) age-specific hazard rate for lymphoid cancer onset in the United States, (2) the age-specific hazard rate for death in the United States, and (3) the age-specific hazard rate for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.  The age-specific hazard rates of lymphoid cancer onset and death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER), and the age-specific hazard rates of death in the United States may be estimated from actuarial life tables provided by the Social Security Administration.
+
+Each of the three columns in the \code{AgeSpecific_Hazards} dataset provide age-specific hazard rates, in yearly increments, beginning at age 0 and ending with age 100.  That is, the values in the first row describe the hazard rates for an individual whose age is contained in the interval [0, 1), while the values in the second row describe the hazard rates for an individual whose age is contained in the interval [1, 2), and so on.
+}
+\references{
+The Surveillance, Epidemiology, and End Results (SEER) Program. \url{http://seer.cancer.gov/}
+
+Social Security Administration. Life Tables for the United States Social Security Area 1900-2100. \url{https://www.ssa.gov/oact/NOTES/as120/TOC.html}
 }
 \keyword{datasets}
 
