@@ -1,43 +1,30 @@
 library(testthat)
 context("sim_RVpedigree")
-test_that("returns a list containing two pedfiles", {
-  EXPed <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                          death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                          part = seq(0, 100, by = 1),
-                          RR = 35, FamID = 1,
-                          num_affected = 2,
-                          recall_probs = c(1),
-                          founder_byears = c(1900, 1980),
-                          ascertain_span = c(1980, 2015))
 
+EXPed <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                        death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                        part = seq(0, 100, by = 1),
+                        RR = 35, FamID = 1,
+                        num_affected = 2,
+                        recall_probs = c(1),
+                        founder_byears = c(1900, 1910),
+                        ascertain_span = c(1970, 2015))
+
+
+test_that("returns a list containing two pedfiles", {
   expect_true(is.list(EXPed))
   expect_true(is.data.frame(EXPed[[1]]))
   expect_true(is.data.frame(EXPed[[2]]))
   })
 
 test_that("pedigree always conatains more than 1 person", {
-  expect_gt(nrow(sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                                death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                                part = seq(0, 100, by = 1),
-                                RR = 35, FamID = 1,
-                                num_affected = 2,
-                                recall_probs = c(1),
-                                founder_byears = c(1900, 1980),
-                                ascertain_span = c(1980, 2015))[[2]]), 1)
+  expect_gt(nrow(EXPed[[2]]), 1)
 })
 
 
-test_that("pedigree always conatains more than 2 affecteds when num_affected = 2", {
-  RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                          death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                          part = seq(0, 100, by = 1),
-                          RR = 35, FamID = 1,
-                          num_affected = 2,
-                          recall_probs = c(1, 1, 1, 0.5, 0.25),
-                          founder_byears = c(1900, 1980),
-                          ascertain_span = c(2000, 2015))
-  RVped1 <- RVped[[1]]
-  RVped2 <- RVped[[2]]
+test_that("both pedigrees contains at least 2 affecteds when num_affected = 2", {
+  RVped1 <- EXPed[[1]]
+  RVped2 <- EXPed[[2]]
   expect_gte(sum(RVped1$affected[which(RVped1$available == 1)]), 2)
   expect_gte(sum(RVped2$affected[which(RVped2$available == 1)]), 2)
 })
@@ -49,15 +36,15 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
                           part = seq(0, 100, by = 1),
                           RR = 35, FamID = 1,
                           num_affected = 2,
-                          recall_probs = c(1, 1, 1, 0.5, 0.25),
-                          founder_byears = c(1900, 1980),
-                          ascertain_span = c(2000, 2015))[[2]]
+                          recall_probs = c(1),
+                          founder_byears = c(1900, 1910),
+                          ascertain_span = c(1970, 2015))[[2]]
 
   Oyears <- RVped$onset_year[which(RVped$affected == 1 &
                                      RVped$available == 1 &
                                      RVped$proband == 0)]
 
-  expect_gte(length(Oyears[which(Oyears <= 2015 & Oyears >= 2000)]), 1)
+  expect_gte(length(Oyears[which(Oyears <= 2015 & Oyears >= 1970)]), 1)
 })
 
 test_that("issues errors when invalid partition supplied", {
