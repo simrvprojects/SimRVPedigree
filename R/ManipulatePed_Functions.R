@@ -247,6 +247,7 @@ assign_affectedGen = function(ped_file){
 #' age_part <- seq(0, 100, by = 1)
 #'
 #'
+#' #Simulate pedigree
 #' set.seed(3)
 #' ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
 #'                            death_hazard = my_death_hazard,
@@ -258,6 +259,8 @@ assign_affectedGen = function(ped_file){
 #'                            founder_byears = c(1900, 1980),
 #'                            FamID = 1)
 #'
+#' #define pedigree using kinship2 package
+#' library(kinship2)
 #' Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
 #'                                              dadid = dad_id,
 #'                                              momid = mom_id,
