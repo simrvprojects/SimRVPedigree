@@ -8,23 +8,23 @@ sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
+\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
+\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
-\item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the founder's birth year.}
+\item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{stop_year}{Numeric. The last year of study.  If missing the current year is used.}
+\item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
+\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
 }
 \value{
 The ped file for the simulated pedigree.

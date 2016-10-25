@@ -8,17 +8,17 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
   YOB)
 }
 \arguments{
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
+\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
+\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. By default, \code{NB_params = c(2, 4/7)}. The size and probability parameters of the negative binomial distribution used to model the number of children per household.}
+\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
 
-\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
 }
@@ -26,8 +26,15 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
 A named matrix. A matrix containing the years of all life events simulated for an individual, named by event type.
 }
 \description{
+The \code{get_lifeEvents} function simulates all life events for an individual starting at birth, age 0, and ending with death.
+}
+\details{
 \code{get_lifeEvents} simulates all life events for an individual starting at age
-0 and ending with death through recursive application of \link{get_nextEvent}.
+0 and ending with death through the recursive application of \code{\link{get_nextEvent}} function.
+}
+\section{See Also}{
+
+\code{\link{get_nextEvent}}
 }
 \examples{
 data(AgeSpecific_Hazards)

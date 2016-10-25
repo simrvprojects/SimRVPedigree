@@ -3,18 +3,23 @@
 #' \code{get_nextEvent} randomly simulates the next life event for an individual
 #'  given their current age, disease status, and relative risk of disease onset.
 #'
-#' \code{get_nextEvent} randomly simulates the next life event for an individual by
-#' generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
-#' and death given the individual's current age.  The event with the shortest
-#' waiting time is chosen as the next life event.
+#' Given the individual's current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death .  The event with the shortest waiting time is chosen as the next life event.
 #'
-#' If get_nextEvent returns a value named:
-#'  - "Birth" the next life event is reproduction,
-#'  - "Onset" the next life event is disease onset,
-#'  - "Death" the next life event is death
+#'  We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
+#'
+#' We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
+#'
+#' ADD SECTION WHICH DEALS WITH ASSUMPTION FOR WAIT TIME TO REPRODUCTION
+#'
+#' If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
+#' \itemize{
+#'  \item "Birth" a reproductive event, i.e. creation of offspring
+#'  \item "Onset" disease onset event,
+#'  \item "Death" death event
+#' }
 #'
 #' @param current_age numeric. The individual's current age.
-#' @param disease_status numeric. The individual's disease status, set disease_status = 1 if individual has experienced disease onset, otherwise set disease_status = 0.
+#' @param disease_status numeric. The individual's disease status, \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth numeric. The individual's birth rate.
 #' @inheritParams sim_RVpedigree
 #'
@@ -99,8 +104,13 @@ get_nextEvent = function(current_age, disease_status,
 
 #' Simulate all life events.
 #'
+#' The \code{get_lifeEvents} function simulates all life events for an individual starting at birth, age 0, and ending with death.
+#'
 #' \code{get_lifeEvents} simulates all life events for an individual starting at age
-#' 0 and ending with death through recursive application of \link{get_nextEvent}.
+#' 0 and ending with death through the recursive application of \code{\link{get_nextEvent}} function.
+#'
+#' @section See Also:
+#' \code{\link{get_nextEvent}}
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
 #' @inheritParams sim_RVpedigree

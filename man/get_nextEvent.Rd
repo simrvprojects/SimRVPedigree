@@ -10,19 +10,19 @@ get_nextEvent(current_age, disease_status, lambda_birth, onset_hazard,
 \arguments{
 \item{current_age}{numeric. The individual's current age.}
 
-\item{disease_status}{numeric. The individual's disease status, set disease_status = 1 if individual has experienced disease onset, otherwise set disease_status = 0.}
+\item{disease_status}{numeric. The individual's disease status, \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.}
 
 \item{lambda_birth}{numeric. The individual's birth rate.}
 
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease onset.}
+\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the unaffected age-specific hazard rate for death, and column 2 should specify the affected age-specific hazard rate for death.}
+\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{birth_range}{Numeric list of length 2. By default, \code{birth_range = c(18, 45)}. The minimum and maximum allowable ages that individuals will be able to reproduce.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
 
-\item{RR}{Numeric. The relative risk of disease onset for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
 }
 \value{
 A named matrix. The number of years until the next life event,
@@ -33,15 +33,20 @@ named by event type.  See Details.
  given their current age, disease status, and relative risk of disease onset.
 }
 \details{
-\code{get_nextEvent} randomly simulates the next life event for an individual by
-generating the waiting times, via \link{get_WaitTime}, to reproduction, onset,
-and death given the individual's current age.  The event with the shortest
-waiting time is chosen as the next life event.
+Given the individual's current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death .  The event with the shortest waiting time is chosen as the next life event.
 
-If get_nextEvent returns a value named:
- - "Birth" the next life event is reproduction,
- - "Onset" the next life event is disease onset,
- - "Death" the next life event is death
+We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
+
+We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
+
+ADD SECTION WHICH DEALS WITH ASSUMPTION FOR WAIT TIME TO REPRODUCTION
+
+If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
+\itemize{
+ \item "Birth" a reproductive event, i.e. creation of offspring
+ \item "Onset" disease onset event,
+ \item "Death" death event
+}
 }
 \examples{
 data(AgeSpecific_Hazards)
