@@ -4,7 +4,22 @@
 #'
 #' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation number based on the affecteds in the pedigree.  Specifically, given a pedigree it reassigns generation numbers of the affected memebers so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 #'
-#' @param ped_file data.frame. A ped file returned by the sim_RVpedigree function.
+#' #' For user who are reassign generation number based on affection status in pedigrees that have not been simulated by \code{sim_RVpedigree} or \code{sim_ped}, the \code{ped_file} supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
+#'
+#' \enumerate{
+#' \item \code{ID}: an identification number.
+#' \item \code{dad_id}: identification number of father.
+#' \item \code{mom_id}: identification number of mother.
+#' \item \code{gender}: gender identification; if male \code{gender = 0}, if female \code{gender = 1}.
+#' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
+#' \item \code{birth_year}: the individual's birth year.
+#' \item \code{onset_year}: the individual's disease onset year, when applicable.
+#' \item \code{death_year}: the individual's death year, when applicable.
+#' \item \code{Gen}: the individual's current generation number.
+#' }
+#'
+#'
+#' @param ped_file data.frame. A pedigree to reassign generation number based on affection status, see details.
 #'
 #' @return reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.
 #' @export
@@ -113,20 +128,13 @@ assign_affectedGen = function(ped_file){
         # from the original ped_file
         readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
 
-        #remove all of their simulated data, and mark unavailable
-        readd$birth_year <- NA
-        readd$onset_year <- NA
-        readd$death_year <- NA
-        readd$available  <- 0
-
         #combine with affected ped file
         reGen_ped <- rbind(reGen_ped, readd)
       }
     }
 
     #Change Generation number so that only affecteds have a gen number
-    reGen_ped$Gen <- ifelse((reGen_ped$affected == 1 &
-                               reGen_ped$available == 1),
+    reGen_ped$Gen <- ifelse((reGen_ped$affected == 1),
                             reGen_ped$Gen, NA)
 
     #table affected generation number
@@ -199,10 +207,29 @@ assign_affectedGen = function(ped_file){
 #'
 #' The \code{censor_ped} function censors a pedigree relative to a specified year.
 #'
-#' censors a pedigree relative to a specified year.  Upon supplying a pedigree and a censor year the The \code{censor_ped} function will remove all individuals born after the censor year, and censor all disease onset events and death events that occured after the censor year
+#' Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after the censor year and censor all disease onset and death events after the censor year.
 #'
-#' @param ped_file data.frame. A ped file returned by the sim_RVpedigree function.
-#' @param censor_year Numeric. The censor year.
+#' For user who are censoring pedigrees that have not been simulated by \code{sim_RVpedigree} or \code{sim_ped}, the \code{ped_file} supplied to \code{censor_ped} must contain the following variables for each pedigree member:
+#'
+#' \enumerate{
+#' \item \code{ID}: an identification number.
+#' \item \code{dad_id}: identification number of father.
+#' \item \code{mom_id}: identification number of mother.
+#' \item \code{gender}: gender identification; if male \code{gender = 0}, if female \code{gender = 1}.
+#' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
+#' \item \code{birth_year}: the individual's birth year.
+#' \item \code{onset_year}: the individual's disease onset year, when applicable.
+#' \item \code{death_year}: the individual's death year, when applicable.
+#' }
+#'
+#' If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
+#'
+#' If \code{censor_year} is missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. However, if \code{ped_file} does not contain a proband identification variable the user must supply a value for \code{censor_year}.
+#'
+#'
+#'
+#' @param ped_file data.frame. The pedigree to censor, see details.
+#' @param censor_year Numeric. The censor year. If missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. See details.
 #'
 #' @return censored_ped The censored pedigree.
 #' @export
@@ -231,6 +258,28 @@ assign_affectedGen = function(ped_file){
 #'                            founder_byears = c(1900, 1980),
 #'                            FamID = 1)
 #'
+#' Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
+#'                                              dadid = dad_id,
+#'                                              momid = mom_id,
+#'                                              sex = gender + 1,
+#'                                              affected = affected))
+#' plot(Original_ped)
+#'
+#' Censor_ped1 <- with(censor_ped(ex_RVped[[2]]),
+#'                     pedigree(id = ID,
+#'                              dadid = dad_id,
+#'                              momid = mom_id,
+#'                              sex = gender + 1,
+#'                              affected = affected))
+#' plot(Censor_ped1)
+#'
+#' Censor_ped2 <- with(censor_ped(ex_RVped[[2]], 2000),
+#'                     pedigree(id = ID,
+#'                              dadid = dad_id,
+#'                              momid = mom_id,
+#'                              sex = gender + 1,
+#'                              affected = affected))
+#' plot(Censor_ped2)
 #'
 censor_ped = function(ped_file, censor_year){
 

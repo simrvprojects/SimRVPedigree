@@ -7,9 +7,9 @@
 censor_ped(ped_file, censor_year)
 }
 \arguments{
-\item{ped_file}{data.frame. A ped file returned by the sim_RVpedigree function.}
+\item{ped_file}{data.frame. The pedigree to censor, see details.}
 
-\item{censor_year}{Numeric. The censor year.}
+\item{censor_year}{Numeric. The censor year. If missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. See details.}
 }
 \value{
 censored_ped The censored pedigree.
@@ -18,7 +18,24 @@ censored_ped The censored pedigree.
 The \code{censor_ped} function censors a pedigree relative to a specified year.
 }
 \details{
-censors a pedigree relative to a specified year.  Upon supplying a pedigree and a censor year the The \code{censor_ped} function will remove all individuals born after the censor year, and censor all disease onset events and death events that occured after the censor year
+Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after the censor year and censor all disease onset and death events after the censor year.
+
+For user who are censoring pedigrees that have not been simulated by \code{sim_RVpedigree} or \code{sim_ped}, the \code{ped_file} supplied to \code{censor_ped} must contain the following variables for each pedigree member:
+
+\enumerate{
+\item \code{ID}: an identification number.
+\item \code{dad_id}: identification number of father.
+\item \code{mom_id}: identification number of mother.
+\item \code{gender}: gender identification; if male \code{gender = 0}, if female \code{gender = 1}.
+\item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
+\item \code{birth_year}: the individual's birth year.
+\item \code{onset_year}: the individual's disease onset year, when applicable.
+\item \code{death_year}: the individual's death year, when applicable.
+}
+
+If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
+
+If \code{censor_year} is missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. However, if \code{ped_file} does not contain a proband identification variable the user must supply a value for \code{censor_year}.
 }
 \examples{
 #Read in example pedigree to trim
@@ -44,6 +61,28 @@ ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
                            founder_byears = c(1900, 1980),
                            FamID = 1)
 
+Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
+                                             dadid = dad_id,
+                                             momid = mom_id,
+                                             sex = gender + 1,
+                                             affected = affected))
+plot(Original_ped)
+
+Censor_ped1 <- with(censor_ped(ex_RVped[[2]]),
+                    pedigree(id = ID,
+                             dadid = dad_id,
+                             momid = mom_id,
+                             sex = gender + 1,
+                             affected = affected))
+plot(Censor_ped1)
+
+Censor_ped2 <- with(censor_ped(ex_RVped[[2]], 2000),
+                    pedigree(id = ID,
+                             dadid = dad_id,
+                             momid = mom_id,
+                             sex = gender + 1,
+                             affected = affected))
+plot(Censor_ped2)
 
 }
 
