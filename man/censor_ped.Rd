@@ -50,6 +50,7 @@ my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
 age_part <- seq(0, 100, by = 1)
 
 
+#Simulate pedigree
 set.seed(3)
 ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
                            death_hazard = my_death_hazard,
@@ -61,6 +62,7 @@ ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
                            founder_byears = c(1900, 1980),
                            FamID = 1)
 
+library(kinship2)
 Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
                                              dadid = dad_id,
                                              momid = mom_id,
