@@ -9,7 +9,8 @@
 #'
 #' We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 #'
-#' ADD SECTION WHICH DEALS WITH ASSUMPTION FOR WAIT TIME TO REPRODUCTION
+#' We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for reproduction event outside of the range specified reproduction ages.
+#'
 #'
 #' If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
 #' \itemize{
