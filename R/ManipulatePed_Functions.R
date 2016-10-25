@@ -195,4 +195,96 @@ assign_affectedGen = function(ped_file){
 }
 
 
+#' Censor pedigree information after a specified year.
+#'
+#' The \code{censor_ped} function censors a pedigree relative to a specified year.
+#'
+#' censors a pedigree relative to a specified year.  Upon supplying a pedigree and a censor year the The \code{censor_ped} function will remove all individuals born after the censor year, and censor all disease onset events and death events that occured after the censor year
+#'
+#' @param ped_file data.frame. A ped file returned by the sim_RVpedigree function.
+#' @param censor_year Numeric. The censor year.
+#'
+#' @return censored_ped The censored pedigree.
+#' @export
+#'
+#' @examples
+#' #Read in example pedigree to trim
+#' data(AgeSpecific_Hazards)
+#'
+#'
+#' #Specify onset hazard and death hazard
+#' my_onset_hazard <- AgeSpecific_Hazards[,1]
+#' my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
+#'
+#' #Specify age partition.
+#' age_part <- seq(0, 100, by = 1)
+#'
+#'
+#' set.seed(3)
+#' ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
+#'                            death_hazard = my_death_hazard,
+#'                            part = age_part,
+#'                            num_affected = 2,
+#'                            ascertain_span = c(1900, 2015),
+#'                            RR = 10, stop_year = 2015,
+#'                            recall_probs = c(1),
+#'                            founder_byears = c(1900, 1980),
+#'                            FamID = 1)
+#'
+#'
+censor_ped = function(ped_file, censor_year){
 
+  if (missing(censor_year)) {
+    if ("proband" %in% colnames(ped_file)) {
+      censor_year <- ped_file$onset_year[which(ped_file$proband == 1)]
+    } else {
+      stop("Ped file must contain a proband or user must supply censor_year")
+    }
+  }
+
+  #create new ped file containing only individuals born before the censor year
+  censored_ped <- ped_file[which(ped_file$birth_year <= censor_year), ]
+
+  if (nrow(censored_ped) == 0) {
+    warning("Please check censor_year, no pedigree information prior to censor_year")
+    return(censored_ped)
+  } else {
+    #censor onset and death events prior to censor year
+    censored_ped$affected <- ifelse(is.na(censored_ped$onset_year), 0,
+                                    ifelse(censored_ped$onset_year <= censor_year,
+                                           censored_ped$affected, 0))
+    censored_ped$onset_year <- ifelse(censored_ped$onset_year <= censor_year,
+                                      censored_ped$onset_year, NA)
+    censored_ped$death_year <- ifelse(censored_ped$death_year <= censor_year,
+                                      censored_ped$death_year, NA)
+
+    d <- 0
+    while (d == 0) {
+      #find the dad IDs that are required but have been removed
+      miss_dad  <- !is.element(censored_ped$dad_id,
+                               censored_ped$ID[which(censored_ped$gender == 0)])
+      readd_dad <- censored_ped$dad_id[miss_dad]
+      readd_dad <- unique(readd_dad[!is.na(readd_dad)])
+
+      #find the mom IDs that are required but have been removed
+      miss_mom  <- !is.element(censored_ped$mom_id,
+                               censored_ped$ID[which(censored_ped$gender == 1)])
+      readd_mom <- censored_ped$mom_id[miss_mom]
+      readd_mom <- unique(readd_mom[!is.na(readd_mom)])
+
+      #check to see if we need to readd anyone
+      if (length(c(readd_dad, readd_mom)) == 0) {
+        d <- 1
+      } else {
+        #Now pull the rows containing the required parents
+        # from the original ped_file
+        readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
+
+        #combine with censored ped file
+        censored_ped <- rbind(censored_ped, readd)
+      }
+    }
+  }
+
+  return(censored_ped)
+}
