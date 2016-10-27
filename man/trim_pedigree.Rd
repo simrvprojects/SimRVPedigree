@@ -16,7 +16,7 @@ trim_pedigree(ped_file, ascertain_span, num_affected, recall_probs)
 \item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.}
 }
 \value{
-The trimmed ped file
+ped_trim The trimmed pedigree.
 }
 \description{
 \code{trim_pedigree} chooses a proband from the pedigree and trims relatives
@@ -36,6 +36,15 @@ probability 1.
 
 Within the \code{trim_pedigree} function, the argument \code{num_affected} serves to determine which affected members may be selected as the proband, not to ensure the number of affected members in the trimmed pedigree, as in \code{sim_RVpedigree}.
 For example, if there are only two affected members and \code{num_affected = 2}, then \code{trim_pedigree} will choose as the proband the second individual to experience onset, so that at the time of ascertainment the pedigree would have had two affected family members.  If \code{recall_probs != c(1)}, it is possible that proband will not recall the other affected.  Hence, the trimmed pedigree may have only 1 affected family member.
+
+Trimmed family members always have the following qualites:
+\enumerate{
+  \item 1. availability status = 0
+  \item 2. affected status = 0
+  \item 3. birth year = NA
+  \item 4. onset year = NA
+  \item 5. death year = NA
+}
 }
 \examples{
 #Read in example pedigree to trim
