@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -132,7 +132,7 @@ my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
 age_part <- seq(0, 100, by = 1)
 ```
 
-Let's quickly plot the age-specific hazard rates against the ages that they apply to.  
+Let's quickly plot the age-specific hazard rates against the ages they apply to.  
 ```{r, fig.width = 7, fig.height = 4}
 #plot age-specific hazard rates in the AgeSpecific_Hazards dataset
 par(mfrow = c(1, 2), mar = c(5.1, 5.1, 4.1, 2.1))
@@ -165,7 +165,7 @@ legend("topleft", title = "Population",
 par(mfrow = c(1, 1))
 ```
 
-Finally, we illustrate the use `sim_RVpedigree()` to simulate a single family ascertained for study in the example described at the beginning of this section.
+Finally, we show how `sim_RVpedigree()` may be used to simulate a single family ascertained for study in the example described at the beginning of this section.
 ```{r}
 #Simulate a random pedigree 
 set.seed(3)
@@ -197,14 +197,14 @@ The columns in the data frame above may be described as follows:
  4. `dad_id`: identification number of father
  5. `mom_id`: identification number of mother
  6. `affected`: affection status: `affected = 1` if individual has developed lymphoid cancer, and 0 otherwise.
- 7. `DA1`: first allele at disease locus: `DA1 = 1` if rare variant, and 0 otherwise.
- 8. `DA2`: second allele at disease locus: `DA2 = 1` if rare variant, and 0 otherwise.
+ 7. `DA1`: first allele at the assumed disease locus: `DA1 = 1` if rare variant is present, and 0 otherwise.
+ 8. `DA2`: second allele at the assumed disease locus: `DA2 = 1` if rare variant is present, and 0 otherwise.
  9. `birth_year`: the individual's birth year.
  10. `onset_year`: the individual's year of disease onset, when applicable.
  11. `death_year`: the individual's year of death, when applicable.
  12. `RR`: the individual's relative risk of disease.
  13. `available`: availability status: `available = 1` if individual is recalled by proband, otherwise `available = 0`.  We note that, by default, all marry-ins are unavailable since we do not simulate life events for marry-ins.
- 14. `Gen`: the generation in the pedigree to which the individual belongs. 
+ 14. `Gen`: the individual's generation number. 
  15. `proband`: a proband identifier: `proband = 1` if the individual is the proband, and 0 otherwise.
 
 Next, we will illustrate how to plot simulated pedigrees using the `kinship2` package.
@@ -236,7 +236,7 @@ Next, we will illustrate how to plot simulated pedigrees using the `kinship2` pa
  pedigree.legend(ex_RVpedigree, location = "topleft",  radius = 0.25)
 ```
 
-Often, there is additional individual information we would like to display along with the pedigree.  For example: an individual's age of onset, and their current age or, if they have already died, their age at death.  The following code illustrates how we could annotate the pedigree above to include this information.
+Often, there is additional individual information we would like to display along with the pedigree.  For example: an individual's age of onset, and their current age or, if the individual has died, their age at death.  The following code illustrates how we could annotate the pedigree above to include this information.
 ```{r, fig.height = 7, fig.width = 7}
 #create a current age label for individuals for whom we have a year of birth
 CurrentAge <- ifelse(is.na(ex_RVped[[2]]$birth_year), 
@@ -317,7 +317,7 @@ pedigree.legend(Ascertained_Ped, location = "topleft", radius = 0.25)
 mtext("Calendar Year 2005", side = 3, line = 1)
 ```
 
-Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring back to the previous pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member with ID 5) also experienced onset of lymphiod cancer.
+Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring back to the previous pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member whose ID is 5) also experienced onset of lymphiod cancer.
 
 \newpage
 #6. Parallel Processing Example<a name="ParProcExample"></a>
