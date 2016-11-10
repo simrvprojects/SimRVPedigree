@@ -1,10 +1,12 @@
-#' Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.
+#' Obtain the cumulative probability of the waiting time to the next event.
 #'
-#' @param last_event a positive number.  The time at last event.
-#' @param wait_time a positive number.  The waiting time to next_event.
+#' Determine the cumulative probability of the waiting time associated with a nonhomogenous Poisson process, given the time of the last event.
+#'
+#' @param last_event A positive number.  The time at last event.
+#' @param wait_time A positive number.  The waiting time to next_event.
 #' @param hazard A vector of positive numbers.  The time-specific hazard rate.
 #' @param part A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.
-#' @param scale logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the CDF for a proper random variable.
+#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the CDF of a proper random variable.
 #'
 #' @return wait_prob The probability that the waiting time to next event is at least wait_time.
 #' @export
@@ -39,14 +41,15 @@ get_WaitProb = function(last_event, wait_time,
 }
 
 
-#' Obtain the waiting time to next event associated with a nonhomogeneous Poisson process.
+#' Obtain the waiting time to the next event.
 #'
-#' \code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
+#' \code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to the next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 #'
 #' \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
+#'
 #' @inheritParams get_WaitProb
-#' @param p a probability.  Argument of the quantile function of the waiting time associated with a non-homogeneous poisson process with rate \code{hazard}.
-#' @param scale logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the quantile function for a proper random variable.
+#' @param p Numeric.  A probability; i.e. the argument of the quantile function of the waiting time associated with a non-homogeneous poisson process with rate \code{hazard}.
+#' @param scale Logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the quantile function for a proper random variable.
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
 #' @export
