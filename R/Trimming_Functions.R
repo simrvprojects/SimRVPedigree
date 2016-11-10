@@ -19,11 +19,11 @@
 #'
 #' Trimmed family members always have the following qualites:
 #' \enumerate{
-#'   \item 1. availability status = 0
-#'   \item 2. affected status = 0
-#'   \item 3. birth year = NA
-#'   \item 4. onset year = NA
-#'   \item 5. death year = NA
+#'   \item availability status = 0
+#'   \item affected status = 0
+#'   \item birth year = NA
+#'   \item onset year = NA
+#'   \item death year = NA
 #' }
 #'
 #'
