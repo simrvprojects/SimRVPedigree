@@ -14,7 +14,7 @@ sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease for individuals who inherit the rare variant.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -27,15 +27,15 @@ sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
 \item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
 }
 \value{
-The ped file for the simulated pedigree.
+The simulated pedigree.
 }
 \description{
-\code{sim_ped} randomly generates a pedigree.
+\code{sim_ped} simulates a pedigree.
 }
 \details{
-Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained for a family-based study please use \code{\link{sim_RVpedigree}}.
+Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVpedigree}}.
 
-By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_ped} only allows disease onset to occur once, i.e. no remission after disease onset.  Compuationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortaility rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{get_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_ped} only allows disease onset to occur once, i.e. no remission after disease onset.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 
 The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 }

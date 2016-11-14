@@ -18,19 +18,21 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
 
 \item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
 
-\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The individual's relative risk of disease.}
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
 }
 \value{
-A named matrix. A matrix containing the years of all life events simulated for an individual, named by event type.
+A named matrix containing the years of all life events simulated for an individual, named by event type.
 }
 \description{
-The \code{get_lifeEvents} function simulates all life events for an individual starting at birth, age 0, and ending with death.
+The \code{get_lifeEvents} function simulates all life events for an
+individual starting at birth, age 0, and ending with death.
 }
 \details{
-\code{get_lifeEvents} simulates all life events for an individual starting at age
-0 and ending with death through the recursive application of \code{\link{get_nextEvent}} function.
+\code{get_lifeEvents} simulates all life events for an individual starting at
+age 0 and ending with death through recursive application of
+\code{\link{get_nextEvent}} function.
 }
 \section{See Also}{
 

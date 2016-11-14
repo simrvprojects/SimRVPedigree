@@ -8,24 +8,24 @@
 \describe{
 \item{FamID}{Family identification number}
 \item{ID}{Individual identification number}
-\item{gender}{gender, 0 = male, 1 = female}
-\item{dad_id}{ID number of father}
-\item{mom_id}{ID number of mother}
-\item{affected}{Affected status, 0 = unaffected, 1 = affected}
-\item{DA1}{Allele at assumed disease locus 1, 0 = major, 1 = minor}
-\item{DA2}{Allele at assumed disease locus 2, 0 = major, 1 = minor}
-\item{birth_year}{birth year}
-\item{onset_year}{disease onset year}
-\item{death_year}{death year}
-\item{RR}{relative risk of disease for individual who have inheritied the rare variant}
-\item{available}{Availability status, 0 = unavailable, 1 = available}
-\item{Gen}{Generation number}
+\item{gender}{Gender identification variable: \code{gender = 0} for males, and \code{gender = 1} females. }
+\item{dad_id}{Identification number of father}
+\item{mom_id}{Identification number of mother}
+\item{affected}{Affection status: \code{affected = 1} if individual has developed lymphoid cancer, and 0 otherwise.}
+\item{DA1}{Paternally inherited allele at the assumed disease locus: \code{DA1 = 1} if rare variant is present, and 0 otherwise.}
+\item{DA2}{Maternally inherited allele at the assumed disease locus: \code{DA2 = 1} if rare variant is present, and 0 otherwise.}
+\item{birth_year}{Subject's year of birth}
+\item{onset_year}{Subject's year of disease onset, when applicable.}
+\item{death_year}{Subject's year of death, when applicable.}
+\item{RR}{Subject's relative risk of disease}
+\item{available}{Availability status, \code{available  = 0} if the individual is unavailable, and 1 otherwise}
+\item{Gen}{The subject's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have \code{Gen = 1}, his or her offspring will have \code{Gen = 2}, etc.}
 }}
 \usage{
 data(exp_peds)
 }
 \description{
-A dataset containing 4 example pedigrees.
+A dataset containing four example pedigrees.
 }
 \keyword{datasets}
 

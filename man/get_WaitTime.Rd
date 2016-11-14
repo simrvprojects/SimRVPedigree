@@ -2,26 +2,26 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitTime}
 \alias{get_WaitTime}
-\title{Obtain the waiting time to next event associated with a nonhomogeneous Poisson process.}
+\title{Obtain the waiting time to the next event.}
 \usage{
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }
 \arguments{
-\item{p}{a probability.  Argument of the quantile function of the waiting time associated with a non-homogeneous poisson process with rate \code{hazard}.}
+\item{p}{Numeric.  A probability; i.e. the argument of the quantile function of the waiting time associated with a non-homogeneous Poisson process with rate \code{hazard}.}
 
-\item{last_event}{a positive number.  The time at last event.}
+\item{last_event}{A positive number.  The time at last event.}
 
 \item{hazard}{A vector of positive numbers.  The time-specific hazard rate.}
 
 \item{part}{A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.}
 
-\item{scale}{logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the quantile function for a proper random variable.}
+\item{scale}{Logical. By default \code{scale = FALSE}.  Specifying \code{scale = TRUE} ensures that this function is the quantile function for a proper random variable.}
 }
 \value{
 The waiting time to next event, units same as those in \code{part}.
 }
 \description{
-\code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
+\code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to the next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 }
 \details{
 \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.

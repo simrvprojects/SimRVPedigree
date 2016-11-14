@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{sim_RVpedigree}
 \alias{sim_RVpedigree}
-\title{Simulate a pedigree ascertained for multiple affected members.}
+\title{Simulate a pedigree ascertained to contain multiple family members affected by a disease.}
 \usage{
 sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
   ascertain_span, num_affected, FamID, recall_probs, stop_year,
@@ -15,7 +15,7 @@ sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{Numeric. The relative risk of disease for individuals who have inherited the rare variant.}
+\item{RR}{Numeric. The relative risk of disease for individuals who inherit the rare variant.}
 
 \item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
@@ -39,12 +39,12 @@ full_ped The full pedigree, prior to proband selection and trimming.
 ascertained_ped The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
 }
 \description{
-\code{sim_RVpedigree} simulate a pedigrees ascertained by a family-study to contain multiple affected members, selects a proband, and trims the pedigree to contain only individuals that are recalled by the proband.
+\code{sim_RVpedigree} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 }
 \details{
 By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 
-\code{sim_RVpedigree} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the \code{\link{get_lifeEvents}} function, and censor any events that occur after the stop year.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offpring, censoring events which occur after the stop year, until the simulation process terminates.
+\code{sim_RVpedigree} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the \code{\link{get_lifeEvents}} function, and censor any events that occur after \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the stop year, until the simulation process terminates.
 
 \code{sim_RVpedigree} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVpedigree} will discard that pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVpedigree} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \code{\link{sim_ped}}.
 
@@ -57,12 +57,10 @@ Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped
 After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the ascertainment bias that occurs when a proband either cannot provide a complete family history or they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify \code{recall_probs = c(1)} so that the proband's recall probability of all relatives is 1.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
 
 We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
-
-Again, we note that, for rare diseases, this simulation process may be computaionally expensive.  \strong{When possible, recommend the use of parallel processing or cluster computing} to simulate a sample of \eqn{n} pedigrees ascertained for multiple affected individuals.  For example of parallel processing example to simulate a study sample of pedigrees, please refer to the vignette.
 }
 \section{See Also}{
 
-\code{\link{sim_ped}}, \code{\link{get_lifeEvents}}
+\code{\link{sim_ped}}, \code{\link{trim_pedigree}}, \code{\link{get_lifeEvents}}
 }
 \examples{
 #Read in age-specific hazards

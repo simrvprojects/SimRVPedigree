@@ -1,11 +1,8 @@
 #' Assign affected generation number.
 #'
-#' \code{assign_affectedGen} assigns generation numbers among affected family
-#' members so that generation 1 represents the most recent generation that a
-#' putative disease variant shared by affected members could have been
-#' introduced into the pedigree.
+#' \code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared by affected members could have been introduced into the pedigree.
 #'
-#' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected memebers so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
+#' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 #'
 #' Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
 #'
@@ -18,13 +15,13 @@
 #' \item \code{birth_year}: the individual's year of birth.
 #' \item \code{onset_year}: the individual's disease onset year, when applicable.
 #' \item \code{death_year}: the individual's death year, when applicable.
-#' \item \code{Gen}: the individual's generation number relative to the eldest founder.  For the eldest founder `Gen = 1`, for his or her offspring `Gen = 2`, etc.
+#' \item \code{Gen}: the individual's generation number relative to the eldest founder.  For the eldest founder \code{Gen = 1}, for his or her offspring \code{Gen = 2}, etc.
 #' }
 #'
 #'
 #' @param ped_file data.frame. A pedigree to reassign generation number based on affection status, see details.
 #'
-#' @return reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.
+#' @return reGen_ped A pedigree containing only affecteds, obligate carriers, and founders with generation number assigned based on affected status.
 #' @export
 #'
 #' @importFrom kinship2 kinship
@@ -44,7 +41,7 @@
 #'                         famid = exp_peds$FamID)
 #'
 #'
-#' #create df to store peds with reassigned generation number
+#' #create df to store pedigrees with reassigned generation number
 #' RAG_peds <- exp_peds[1,]
 #' RAG_peds <- RAG_peds[-1,]
 #'
@@ -210,9 +207,9 @@ assign_affectedGen = function(ped_file){
 #'
 #' \code{censor_ped} censors a pedigree of any information that occurs after a specified year.
 #'
-#' Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after the censor year and censor all disease onset and death events after the censor year.
+#' Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after \code{censor_year} and censor all disease onset and death events after the \code{censor_year}.
 #'
-#' Users who wish to censor pedigrees that have not been simulated using the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{censor_ped} must contain the following variables for each pedigree member:
+#' Users who wish to censor pedigrees that have not been simulated using the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{censor_ped} contains the following variables for each pedigree member:
 #'
 #' \enumerate{
 #' \item \code{ID}: an identification number.
@@ -223,11 +220,12 @@ assign_affectedGen = function(ped_file){
 #' \item \code{birth_year}: the individual's birth year.
 #' \item \code{onset_year}: the individual's disease onset year, when applicable.
 #' \item \code{death_year}: the individual's death year, when applicable.
+#' \item \code{proband}: (Optional) Proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.
 #' }
 #'
 #' If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
 #'
-#' If \code{censor_year} is missing, when pedigree contains a proband, \code{censor_year} is set, internally, to the year teh proband experienced disease onset. However, if \code{ped_file} does not contain a proband identification variable the user must supply a value for \code{censor_year}.
+#' If \code{censor_year} is missing, when the pedigree contains a proband, \code{censor_year} is set, internally, to the year that the proband experienced disease onset. However, if \code{ped_file} does not contain the proband identification variable the user must supply a value for \code{censor_year}.
 #'
 #'
 #'

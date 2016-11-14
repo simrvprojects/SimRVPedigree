@@ -1,9 +1,8 @@
 #' Simulate next life event.
 #'
-#' \code{get_nextEvent} randomly simulates an individual's next life event
-#'  given their current age, disease status, and relative risk of disease.
+#' \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
 #'
-#' Given their current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death .  The event with the shortest waiting time is chosen as the next life event.
+#' Given their current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death.  The event with the shortest waiting time is chosen as the next life event.
 #'
 #'  We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
 #'

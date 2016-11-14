@@ -1,6 +1,6 @@
 #' Age-specific hazard rate dataset
 #'
-#' A dataset that contains age-specific hazard rates to roughly mimic: (1) the age-specific hazard rates for lymphoid cancer onset in the United States, (2) the age-specific hazard rates for death in the United States, and (3) the age-specific hazard rates for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.
+#' A dataset that contains age-specific hazard rates to roughly mimic: (1) the age-specific hazard rates for lymphoid cancer in the United States, (2) the age-specific hazard rates for death in the United States, and (3) the age-specific hazard rates for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.
 #'
 #'  The \code{AgeSpecific_Hazards} dataset contains age-specific hazard rates which roughly mimic: (1) the age-specific hazard rates for lymphoid cancer onset in the United States, (2) the age-specific hazard rates for death in the United States, and (3) the age-specific hazard rates for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.  The age-specific hazard rates of lymphoid cancer onset and death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER), and the age-specific hazard rates of death in the United States may be estimated from actuarial life tables provided by the Social Security Administration.
 #'

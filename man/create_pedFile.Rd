@@ -2,16 +2,14 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{create_pedFile}
 \alias{create_pedFile}
-\title{Create an empty ped file.}
+\title{Create an empty pedigree.}
 \usage{
 create_pedFile()
 }
 \value{
-An empty data frame with all the required fields for generating
-a ped file.
+An empty data frame with all fields required by \code{sim_ped} to generate a pedigree.
 }
 \description{
-\code{create_pedFile} initializes an empty data frame with all of the
-appropriate fields to simulate a pedigree.
+\code{create_pedFile} initializes an empty data frame with all of the fields required by \code{sim_ped} to simulate a pedigree.
 }
 

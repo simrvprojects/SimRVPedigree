@@ -10,15 +10,15 @@ assign_affectedGen(ped_file)
 \item{ped_file}{data.frame. A pedigree to reassign generation number based on affection status, see details.}
 }
 \value{
-reGen_ped A ped file with only affecteds and obligate carriers, with generation number assigned based on affected status.
+reGen_ped A pedigree containing only affecteds, obligate carriers, and founders with generation number assigned based on affected status.
 }
 \description{
-\code{assign_affectedGen} reassigns the generation number based on affected status and reduces pedigree to affecteds and obligate carriers.
+\code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared by affected members could have been introduced into the pedigree.
 }
 \details{
-The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation number based on the affecteds in the pedigree.  Specifically, given a pedigree it reassigns generation numbers of the affected memebers so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
+The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 
-#' For user who are reassign generation number based on affection status in pedigrees that have not been simulated by \code{sim_RVpedigree} or \code{sim_ped}, the \code{ped_file} supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
+Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
 
 \enumerate{
 \item \code{ID}: an identification number.
@@ -26,10 +26,10 @@ The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim
 \item \code{mom_id}: identification number of mother.
 \item \code{gender}: gender identification; if male \code{gender = 0}, if female \code{gender = 1}.
 \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
-\item \code{birth_year}: the individual's birth year.
+\item \code{birth_year}: the individual's year of birth.
 \item \code{onset_year}: the individual's disease onset year, when applicable.
 \item \code{death_year}: the individual's death year, when applicable.
-\item \code{Gen}: the individual's current generation number.
+\item \code{Gen}: the individual's generation number relative to the eldest founder.  For the eldest founder \code{Gen = 1}, for his or her offspring \code{Gen = 2}, etc.
 }
 }
 \examples{
@@ -47,7 +47,7 @@ ex_pedigree <- pedigree(id = exp_peds$ID,
                         famid = exp_peds$FamID)
 
 
-#create df to store peds with reassigned generation number
+#create df to store pedigrees with reassigned generation number
 RAG_peds <- exp_peds[1,]
 RAG_peds <- RAG_peds[-1,]
 

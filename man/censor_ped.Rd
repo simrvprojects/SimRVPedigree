@@ -15,12 +15,12 @@ censor_ped(ped_file, censor_year)
 censored_ped The censored pedigree.
 }
 \description{
-The \code{censor_ped} function censors a pedigree relative to a specified year.
+\code{censor_ped} censors a pedigree of any information that occurs after a specified year.
 }
 \details{
-Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after the censor year and censor all disease onset and death events after the censor year.
+Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after \code{censor_year} and censor all disease onset and death events after the \code{censor_year}.
 
-For user who are censoring pedigrees that have not been simulated by \code{sim_RVpedigree} or \code{sim_ped}, the \code{ped_file} supplied to \code{censor_ped} must contain the following variables for each pedigree member:
+Users who wish to censor pedigrees that have not been simulated using the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{censor_ped} contains the following variables for each pedigree member:
 
 \enumerate{
 \item \code{ID}: an identification number.
@@ -31,11 +31,12 @@ For user who are censoring pedigrees that have not been simulated by \code{sim_R
 \item \code{birth_year}: the individual's birth year.
 \item \code{onset_year}: the individual's disease onset year, when applicable.
 \item \code{death_year}: the individual's death year, when applicable.
+\item \code{proband}: (Optional) Proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.
 }
 
 If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
 
-If \code{censor_year} is missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. However, if \code{ped_file} does not contain a proband identification variable the user must supply a value for \code{censor_year}.
+If \code{censor_year} is missing, when the pedigree contains a proband, \code{censor_year} is set, internally, to the year that the proband experienced disease onset. However, if \code{ped_file} does not contain the proband identification variable the user must supply a value for \code{censor_year}.
 }
 \examples{
 #Read in example pedigree to trim

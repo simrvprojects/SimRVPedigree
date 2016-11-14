@@ -2,26 +2,26 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitProb}
 \alias{get_WaitProb}
-\title{Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.}
+\title{Obtain the cumulative probability of the waiting time to the next event.}
 \usage{
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
 \arguments{
-\item{last_event}{a positive number.  The time at last event.}
+\item{last_event}{A positive number.  The time at last event.}
 
-\item{wait_time}{a positive number.  The waiting time to next_event.}
+\item{wait_time}{A positive number.  The waiting time to the next event.}
 
 \item{hazard}{A vector of positive numbers.  The time-specific hazard rate.}
 
 \item{part}{A vector of positive numbers.  Time partition over which to apply the time-specific hazard rate.}
 
-\item{scale}{logical. By default scale = FALSE.  Specifying scale = TRUE ensures that this function is the CDF for a proper random variable.}
+\item{scale}{Logical. By default \code{scale = FALSE}.  Specifying \code{scale = TRUE} ensures that this function is the CDF of a proper random variable.}
 }
 \value{
-wait_prob The probability that the waiting time to next event is at least wait_time.
+\code{wait_prob} The probability that the waiting time to next event is at least \code{wait_time}.
 }
 \description{
-Determine that cumulative probability of waiting time associated with a nonhomogenous Poisson process, given the time of the last event.
+Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 }
 \examples{
 haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
