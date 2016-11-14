@@ -1,4 +1,4 @@
-#' Example pedigrees
+#' Example Pedigrees
 #'
 #' A dataset containing four example pedigrees.
 #'

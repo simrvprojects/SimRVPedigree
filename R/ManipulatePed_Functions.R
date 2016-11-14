@@ -1,4 +1,4 @@
-#' Assign affected generation number.
+#' Assign Generation Number Based on Affected Status
 #'
 #' \code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared by affected members could have been introduced into the pedigree.
 #'
@@ -27,7 +27,7 @@
 #' @importFrom kinship2 kinship
 #'
 #' @examples
-#' #Read in example pedigree to trim
+#' #Read in example pedigrees
 #' data(exp_peds)
 #'
 #' library(kinship2)
@@ -57,45 +57,26 @@
 #'                            affected = RAG_peds$affected,
 #'                            famid = RAG_peds$FamID)
 #'
-#' #Affecteds in Pedigrees 1 and 4 will keep their original generation
-#' # assignment, while affecteds in pedigrees 2 and 3 will be  given new
-#' # generation numbers so that generation 1 represents the generation of
-#' # first affected or first obligate carrier
+#' # Compare pedigrees before and after reassigning
+#' # generation number based on affcted status
 #' par(mfrow = c(1, 2))
 #' for (k in 1:4) {
 #'   ID1 = paste0("ID", sep = ":",
 #'                exp_peds[which(exp_peds$FamID == k), 2],
 #'                sep = "\n Gen:", exp_peds[which(exp_peds$FamID == k), 14])
+#'
 #'   ID2 = paste0("ID", sep = ":",
 #'                RAG_peds[which(RAG_peds$FamID == k), 2],
 #'                sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == k), 14])
+#'
 #'   plot(ex_pedigree[paste0(k)], id = ID1)
 #'   mtext(paste0("Ped", k, ": before generation reassignment", sep = ""),
 #'         side = 3)
+#'
 #'   plot(RAG_pedigrees[paste0(k)], id = ID2)
 #'   mtext(paste0("Ped", k, ": after generation reassignment", sep = ""),
 #'         side = 3)
 #' }
-#'
-#' #FamID2
-#' #since there are at least two affected in generation 2, one of the
-#' #founders is an obligate carrier and generation numbers for affecteds
-#' #do not need to be re-assigned
-#'
-#' #NOTE: this pedigree now only includes affected individuals and
-#' #individuals who are required to create a pedigree.
-#'
-#' #FamID3
-#' #assign_affectedGen will reassign the generation for individual 5 to 2 and
-#' #the generation for individual 9 to 3.
-#'
-#'
-#' #FamID4
-#' # reassign generation numbers for individuals 3, 5, and 10,
-#' # to 1, 2, and, 2 respectively.
-#'
-#' #FamID5
-#' #No reassignment of generation number required for these affecteds
 #'
 assign_affectedGen = function(ped_file){
 
@@ -203,7 +184,7 @@ assign_affectedGen = function(ped_file){
 }
 
 
-#' Censor pedigree information after a specified year.
+#' Censor Pedigree After a Specified Year
 #'
 #' \code{censor_ped} censors a pedigree of any information that occurs after a specified year.
 #'
@@ -239,20 +220,11 @@ assign_affectedGen = function(ped_file){
 #' #Read in example pedigree to trim
 #' data(AgeSpecific_Hazards)
 #'
-#'
-#' #Specify onset hazard and death hazard
-#' my_onset_hazard <- AgeSpecific_Hazards[,1]
-#' my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
-#'
-#' #Specify age partition.
-#' age_part <- seq(0, 100, by = 1)
-#'
-#'
 #' #Simulate pedigree
 #' set.seed(3)
-#' ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
-#'                            death_hazard = my_death_hazard,
-#'                            part = age_part,
+#' ex_RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+#'                            death_hazard = AgeSpecific_Hazards[,c(2,3)],
+#'                            part = seq(0, 100, by = 1),
 #'                            num_affected = 2,
 #'                            ascertain_span = c(1900, 2015),
 #'                            RR = 10, stop_year = 2015,

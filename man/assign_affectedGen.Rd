@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{assign_affectedGen}
 \alias{assign_affectedGen}
-\title{Assign affected generation number.}
+\title{Assign Generation Number Based on Affected Status}
 \usage{
 assign_affectedGen(ped_file)
 }
@@ -33,7 +33,7 @@ Users who wish to assign generation number based on affection status in pedigree
 }
 }
 \examples{
-#Read in example pedigree to trim
+#Read in example pedigrees
 data(exp_peds)
 
 library(kinship2)
@@ -63,45 +63,26 @@ RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
                            affected = RAG_peds$affected,
                            famid = RAG_peds$FamID)
 
-#Affecteds in Pedigrees 1 and 4 will keep their original generation
-# assignment, while affecteds in pedigrees 2 and 3 will be  given new
-# generation numbers so that generation 1 represents the generation of
-# first affected or first obligate carrier
+# Compare pedigrees before and after reassigning
+# generation number based on affcted status
 par(mfrow = c(1, 2))
 for (k in 1:4) {
   ID1 = paste0("ID", sep = ":",
                exp_peds[which(exp_peds$FamID == k), 2],
                sep = "\\n Gen:", exp_peds[which(exp_peds$FamID == k), 14])
+
   ID2 = paste0("ID", sep = ":",
                RAG_peds[which(RAG_peds$FamID == k), 2],
                sep = "\\n Gen:", RAG_peds[which(RAG_peds$FamID == k), 14])
+
   plot(ex_pedigree[paste0(k)], id = ID1)
   mtext(paste0("Ped", k, ": before generation reassignment", sep = ""),
         side = 3)
+
   plot(RAG_pedigrees[paste0(k)], id = ID2)
   mtext(paste0("Ped", k, ": after generation reassignment", sep = ""),
         side = 3)
 }
-
-#FamID2
-#since there are at least two affected in generation 2, one of the
-#founders is an obligate carrier and generation numbers for affecteds
-#do not need to be re-assigned
-
-#NOTE: this pedigree now only includes affected individuals and
-#individuals who are required to create a pedigree.
-
-#FamID3
-#assign_affectedGen will reassign the generation for individual 5 to 2 and
-#the generation for individual 9 to 3.
-
-
-#FamID4
-# reassign generation numbers for individuals 3, 5, and 10,
-# to 1, 2, and, 2 respectively.
-
-#FamID5
-#No reassignment of generation number required for these affecteds
 
 }
 

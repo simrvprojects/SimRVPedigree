@@ -1,4 +1,4 @@
-#' Age-specific hazard rate dataset
+#' Age-specific Hazard Rate Dataset
 #'
 #' A dataset that contains age-specific hazard rates to roughly mimic: (1) the age-specific hazard rates for lymphoid cancer in the United States, (2) the age-specific hazard rates for death in the United States, and (3) the age-specific hazard rates for death for individuals, living in the United States, who have been diagnosed with a lymphoid cancer.
 #'

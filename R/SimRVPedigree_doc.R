@@ -1,4 +1,4 @@
-#' Randomly Simulate Pedigrees Ascertained for Disease Status.
+#' Simulate Pedigrees Ascertained for Disease Status
 #'
 #' The \code{SimRVPedigree} package provides methods to randomly simulate and manipulate pedigrees ascertained to contain multiple family members affected by a rare disease.
 #'

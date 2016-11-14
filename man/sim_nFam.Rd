@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{sim_nFam}
 \alias{sim_nFam}
-\title{Simulate a nuclear family from a single founder.}
+\title{Simulate a Nuclear Family from a Single Founder}
 \usage{
 sim_nFam(found_info, stop_year, last_id, onset_hazard, death_hazard, part,
   birth_range, NB_params, RR)

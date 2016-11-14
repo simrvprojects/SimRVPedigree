@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitTime}
 \alias{get_WaitTime}
-\title{Obtain the waiting time to the next event.}
+\title{Obtain the Waiting Time to the Next Event}
 \usage{
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }
@@ -27,8 +27,9 @@ The waiting time to next event, units same as those in \code{part}.
 \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
 }
 \examples{
-haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
-part_vec <- seq(0, 80, by = 5)
+data(AgeSpecific_Hazards)
+haz_vec <- AgeSpecific_Hazards[,1]
+part_vec <- seq(0, 100, by = 1)
 
 get_WaitTime(p = 0.05, last_event = 0,
              hazard = haz_vec, part = part_vec,

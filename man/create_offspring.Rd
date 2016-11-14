@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{create_offspring}
 \alias{create_offspring}
-\title{Create a new offspring.}
+\title{Create a New Offspring}
 \usage{
 create_offspring(dad_info, mom_info, byear, last_id, RR)
 }

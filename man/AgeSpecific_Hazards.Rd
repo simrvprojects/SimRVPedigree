@@ -3,7 +3,7 @@
 \docType{data}
 \name{AgeSpecific_Hazards}
 \alias{AgeSpecific_Hazards}
-\title{Age-specific hazard rate dataset}
+\title{Age-specific Hazard Rate Dataset}
 \format{A data frame with 100 rows and 3 variables:
 \describe{
 \item{pop_onset_hazard}{The age-specific population hazard rate for lymphoid cancer}

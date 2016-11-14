@@ -1,4 +1,4 @@
-#' Simulate next life event.
+#' Simulate Next Life Event
 #'
 #' \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
 #'
@@ -103,7 +103,7 @@ get_nextEvent = function(current_age, disease_status,
   return(nyears)
 }
 
-#' Simulate all life events.
+#' Simulate All Life Events
 #'
 #' The \code{get_lifeEvents} function simulates all life events for an
 #' individual starting at birth, age 0, and ending with death.

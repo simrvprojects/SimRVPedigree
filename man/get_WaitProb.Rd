@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitProb}
 \alias{get_WaitProb}
-\title{Obtain the cumulative probability of the waiting time to the next event.}
+\title{Obtain the Cumulative Probability of the Waiting Time to the Next Event}
 \usage{
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }
@@ -24,8 +24,9 @@ get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 }
 \examples{
-haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
-part_vec <- seq(0, 80, by = 5)
+data(AgeSpecific_Hazards)
+haz_vec <- AgeSpecific_Hazards[,2]
+part_vec <- seq(0, 100, by = 1)
 
 get_WaitProb(last_event = 0, wait_time = 18,
              hazard = haz_vec, part = part_vec,

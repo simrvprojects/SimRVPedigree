@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{censor_ped}
 \alias{censor_ped}
-\title{Censor pedigree information after a specified year.}
+\title{Censor Pedigree After a Specified Year}
 \usage{
 censor_ped(ped_file, censor_year)
 }
@@ -42,20 +42,11 @@ If \code{censor_year} is missing, when the pedigree contains a proband, \code{ce
 #Read in example pedigree to trim
 data(AgeSpecific_Hazards)
 
-
-#Specify onset hazard and death hazard
-my_onset_hazard <- AgeSpecific_Hazards[,1]
-my_death_hazard <- AgeSpecific_Hazards[,c(2,3)]
-
-#Specify age partition.
-age_part <- seq(0, 100, by = 1)
-
-
 #Simulate pedigree
 set.seed(3)
-ex_RVped <- sim_RVpedigree(onset_hazard = my_onset_hazard,
-                           death_hazard = my_death_hazard,
-                           part = age_part,
+ex_RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
+                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                           part = seq(0, 100, by = 1),
                            num_affected = 2,
                            ascertain_span = c(1900, 2015),
                            RR = 10, stop_year = 2015,

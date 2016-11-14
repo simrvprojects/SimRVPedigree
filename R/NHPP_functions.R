@@ -1,4 +1,4 @@
-#' Obtain the cumulative probability of the waiting time to the next event.
+#' Obtain the Cumulative Probability of the Waiting Time to the Next Event
 #'
 #' Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 #'
@@ -14,8 +14,9 @@
 #' @importFrom stats approxfun
 #'
 #' @examples
-#' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
-#' part_vec <- seq(0, 80, by = 5)
+#' data(AgeSpecific_Hazards)
+#' haz_vec <- AgeSpecific_Hazards[,2]
+#' part_vec <- seq(0, 100, by = 1)
 #'
 #' get_WaitProb(last_event = 0, wait_time = 18,
 #'              hazard = haz_vec, part = part_vec,
@@ -41,7 +42,7 @@ get_WaitProb = function(last_event, wait_time,
 }
 
 
-#' Obtain the waiting time to the next event.
+#' Obtain the Waiting Time to the Next Event
 #'
 #' \code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to the next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 #'
@@ -55,8 +56,9 @@ get_WaitProb = function(last_event, wait_time,
 #' @export
 #'
 #' @examples
-#' haz_vec <- c(seq(0, 0.5, by = 0.05), rev(seq(0.46, 0.5, by = 0.01)))
-#' part_vec <- seq(0, 80, by = 5)
+#' data(AgeSpecific_Hazards)
+#' haz_vec <- AgeSpecific_Hazards[,1]
+#' part_vec <- seq(0, 100, by = 1)
 #'
 #' get_WaitTime(p = 0.05, last_event = 0,
 #'              hazard = haz_vec, part = part_vec,

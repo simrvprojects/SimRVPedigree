@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{create_pedFile}
 \alias{create_pedFile}
-\title{Create an empty pedigree.}
+\title{Create an Empty Pedigree}
 \usage{
 create_pedFile()
 }

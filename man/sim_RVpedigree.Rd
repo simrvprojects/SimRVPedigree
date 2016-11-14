@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{sim_RVpedigree}
 \alias{sim_RVpedigree}
-\title{Simulate a pedigree ascertained to contain multiple family members affected by a disease.}
+\title{Simulate a Pedigree Ascertained to Contain Multiple Family Members Affected by a Disease}
 \usage{
 sim_RVpedigree(onset_hazard, death_hazard, part, RR, founder_byears,
   ascertain_span, num_affected, FamID, recall_probs, stop_year,

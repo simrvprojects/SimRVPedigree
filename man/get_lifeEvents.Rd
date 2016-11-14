@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{get_lifeEvents}
 \alias{get_lifeEvents}
-\title{Simulate all life events.}
+\title{Simulate All Life Events}
 \usage{
 get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
   YOB)

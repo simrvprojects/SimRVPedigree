@@ -3,7 +3,7 @@
 \docType{data}
 \name{exp_peds}
 \alias{exp_peds}
-\title{Example pedigrees}
+\title{Example Pedigrees}
 \format{A data frame with 50 rows and 14 variables:
 \describe{
 \item{FamID}{Family identification number}

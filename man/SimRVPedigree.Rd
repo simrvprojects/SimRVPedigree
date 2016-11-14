@@ -4,7 +4,7 @@
 \name{SimRVPedigree}
 \alias{SimRVPedigree}
 \alias{SimRVPedigree-package}
-\title{Randomly Simulate Pedigrees Ascertained for Disease Status.}
+\title{Simulate Pedigrees Ascertained for Disease Status}
 \description{
 The \code{SimRVPedigree} package provides methods to randomly simulate and manipulate pedigrees ascertained to contain multiple family members affected by a rare disease.
 }
