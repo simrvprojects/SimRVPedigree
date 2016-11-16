@@ -28,26 +28,26 @@
 #'
 #' @examples
 #' #Read in example pedigrees
-#' data(exp_peds)
+#' data(ExamplePedigrees)
 #'
 #' library(kinship2)
 #' #assign to pedigree object to show before and after behavior of
 #' #the assign_affectedGen function
-#' ex_pedigree <- pedigree(id = exp_peds$ID,
-#'                         dadid = exp_peds$dad_id,
-#'                         momid = exp_peds$mom_id,
-#'                         sex = (exp_peds$gender + 1),
-#'                         affected = exp_peds$affected,
-#'                         famid = exp_peds$FamID)
+#' ex_pedigree <- pedigree(id = ExamplePedigrees$ID,
+#'                         dadid = ExamplePedigrees$dad_id,
+#'                         momid = ExamplePedigrees$mom_id,
+#'                         sex = (ExamplePedigrees$gender + 1),
+#'                         affected = ExamplePedigrees$affected,
+#'                         famid = ExamplePedigrees$FamID)
 #'
 #'
 #' #create df to store pedigrees with reassigned generation number
-#' RAG_peds <- exp_peds[1,]
+#' RAG_peds <- ExamplePedigrees[1,]
 #' RAG_peds <- RAG_peds[-1,]
 #'
 #' for(i in 1:4){
 #'   RAG_peds <- rbind(RAG_peds,
-#'                     assign_affectedGen(exp_peds[which(exp_peds$FamID == i), ]))
+#'                     assign_affectedGen(ExamplePedigrees[which(ExamplePedigrees$FamID == i), ]))
 #' }
 #'
 #' RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
@@ -62,8 +62,8 @@
 #' par(mfrow = c(1, 2))
 #' for (k in 1:4) {
 #'   ID1 = paste0("ID", sep = ":",
-#'                exp_peds[which(exp_peds$FamID == k), 2],
-#'                sep = "\n Gen:", exp_peds[which(exp_peds$FamID == k), 14])
+#'                ExamplePedigrees[which(ExamplePedigrees$FamID == k), 2],
+#'                sep = "\n Gen:", ExamplePedigrees[which(ExamplePedigrees$FamID == k), 14])
 #'
 #'   ID2 = paste0("ID", sep = ":",
 #'                RAG_peds[which(RAG_peds$FamID == k), 2],

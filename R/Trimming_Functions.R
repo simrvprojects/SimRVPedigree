@@ -1,10 +1,10 @@
 #' Choose a Proband from a Pedigree and Trim Pedigree.
 #'
-#' From a supplied pedigree, \code{trim_pedigree} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
+#' From a supplied pedigree, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
 #'
 #' By default \code{recall_probs} is 4 times the kinship coefficient between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 #'
-#' Within the \code{trim_pedigree} function, the argument \code{num_affected} serves to determine which affected members may be selected as the proband, not to ensure the number of affected members in the trimmed pedigree, as in \code{sim_RVped}.  For example, if there are only two affected members and \code{num_affected = 2}, then \code{trim_pedigree} will choose as the proband the second individual to experience onset, so that at the time of ascertainment the pedigree would have had two affected family members.  If \code{recall_probs != c(1)}, it is possible that proband will not recall the other affected.  Hence, the trimmed pedigree may have only 1 affected family member.
+#' Within the \code{trim_ped} function, the argument \code{num_affected} serves to determine which affected members may be selected as the proband, not to ensure the number of affected members in the trimmed pedigree, as in \code{sim_RVped}.  For example, if there are only two affected members and \code{num_affected = 2}, then \code{trim_ped} will choose as the proband the second individual to experience onset, so that at the time of ascertainment the pedigree would have had two affected family members.  If \code{recall_probs != c(1)}, it is possible that proband will not recall the other affected.  Hence, the trimmed pedigree may have only 1 affected family member.
 #'
 #' Trimmed family members always have the following qualities:
 #' \enumerate{
@@ -27,47 +27,35 @@
 #'
 #' @examples
 #' #Read in example pedigree to trim
-#' data(exp_peds)
+#' data(ExamplePedigrees)
 #'
 #' #plot example_ped using kinship2
 #' library(kinship2)
-#' ex_pedigree <- pedigree(id = exp_peds$ID,
-#'                         dadid = exp_peds$dad_id,
-#'                         momid = exp_peds$mom_id,
-#'                         sex = (exp_peds$gender + 1),
-#'                         affected = cbind(Affected = exp_peds$affected,
-#'                                          RV_status = exp_peds$DA1 +
-#'                                                      exp_peds$DA2),
-#'                         famid = exp_peds$FamID)['1']
+#' ex_pedigree <- pedigree(id = ExamplePedigrees$ID,
+#'                         dadid = ExamplePedigrees$dad_id,
+#'                         momid = ExamplePedigrees$mom_id,
+#'                         sex = (ExamplePedigrees$gender + 1),
+#'                         affected = cbind(Affected = ExamplePedigrees$affected,
+#'                                          RV_status = ExamplePedigrees$DA1 +
+#'                                                      ExamplePedigrees$DA2),
+#'                         famid = ExamplePedigrees$FamID)['1']
 #' plot(ex_pedigree)
 #' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 #' mtext("Original Pedigree", side = 3, line = 2)
 #'
 #'
 #' ## Trim pedigree examples
-#' #define lists of various trimming parameters to
-#' #illustrate the effects of various settings
+#' #illustrate the effects of various recall_probs settings
 #' Recall_Probabilities <- list(r1 = c(1, 0),
 #'                              r2 = c(1),
-#'                              r3 = c(1, 0.5, 0.25, 0.125),
-#'                              r4 = c(1, 0.5, 0.25, 0.125),
-#'                              r5 = c(1, 0.5, 0.25, 0.125))
-#'
-#' Number_Affected <- c(2, 2, 2, 2, 3)
-#' Ascertainment_Span <- list(span1 = c(2005, 2015),
-#'                            span2 = c(2005, 2015),
-#'                            span3 = c(2005, 2015),
-#'                            span4 = c(2000, 2015),
-#'                            span5 = c(2000, 2015))
+#'                              r3 = c(1, 0.5, 0.25, 0.125))
 #'
 #'
-#' for (k in 1:length(Number_Affected)) {
+#' for (k in 1:length(Recall_Probabilities)) {
 #'    set.seed(2)
 #'    #trim pedigree
-#'    TrimPed <- trim_pedigree(ped_file = exp_peds[which(exp_peds$FamID == 1), ],
-#'                             ascertain_span = Ascertainment_Span[[k]],
-#'                             num_affected = Number_Affected[[k]],
-#'                             recall_probs = Recall_Probabilities[[k]])
+#'    TrimPed <- trim_ped(ped_file = ExamplePedigrees[which(ExamplePedigrees$FamID == 1), ],
+#'                        recall_probs = Recall_Probabilities[[k]])
 #'
 #'    #plot trimmed pedigree
 #'    Tped <- pedigree(id = TrimPed$ID,
@@ -82,50 +70,21 @@
 #'    plot(Tped)
 #'    pedigree.legend(Tped, location = "topleft",  radius = 0.25)
 #'    mtext(paste0("recall_probs = (", sep = "",
-#'                 paste(Recall_Probabilities[[k]], collapse = ", "),
-#'                 ")\n ascertain_span = (",
-#'                 paste(Ascertainment_Span[[k]], collapse = ", "),
-#'                 ")\n num_affected = ", Number_Affected[[k]]),
+#'                 paste(Recall_Probabilities[[k]], collapse = ", "), ')' ),
 #'                 side = 3 )
 #' }
 #'
 #'
-trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
-  #First we must randomly choose a proband from the individuals who
-  #experienced onset during ascertain_span, keeping in mind that there should
-  #be num_affected - 1 individuals who have experienced onset before the proband
-  #Gather info on probands in AffIDs
-  AffIDs <- ped_file[which(ped_file$affected == 1),
-                    which(colnames(ped_file) %in% c("onset_year", "ID"))]
-  AffIDs <- AffIDs[order(AffIDs$onset_year), ]
-  AffIDs$poss_proband <- ifelse(AffIDs$onset_year %in%
-                                  ascertain_span[1]:ascertain_span[2], 1, 0)
+trim_ped = function(ped_file, recall_probs){
 
-  #issue error message if num_affected violated.
-  if (nrow(AffIDs) < num_affected) stop ('num_affected condition not met')
-
-  if (sum(AffIDs$poss_proband) == 1) {
-    #only 1 available proband
-    probandID <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
-  } else if (sum(abs(AffIDs$poss_proband - 1)) > (num_affected - 1)) {
-    #multiple available probands and the n-1 affected condition has already
-    #been met by start of ascertainment period, so simply choose randomly
-    #amongst available probands
-    probandID <- sample(size = 1,
-                        x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
-  } else {
-    #no affecteds before ascertainment period, must choose from among
-    #the nth or greater to experience onset
-    AffIDs$poss_proband[1:(num_affected - 1)] <- 0
-    #must write additional if statement here because of R's interesting
-    #take on how sample should work when there is only one 1 to sample from....
-    if (sum(AffIDs$poss_proband) == 1) {
-      probandID <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
-    } else {
-      probandID <-  sample(size = 1,
-                           x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
-    }
+  #issue error message if proband variable not supplied with single proband selected.
+  if (!("proband" %in% colnames(ped_file))) {
+    stop ('please supply a proband identification variable')
+  } else if (sum(ped_file$proband) != 1){
+    stop ('pedigree may only contain 1 proband')
   }
+
+  probandID <- ped_file$ID[which(ped_file$proband == 1)]
 
   # generate a vector of Unif(0,1) RVs, to determine who is trimmed
   u <- runif(length(ped_file$ID))
@@ -204,7 +163,7 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
         readd$birth_year <- NA
         readd$onset_year <- NA
         readd$death_year <- NA
-        readd$affected  <- 0
+        readd$affected  <- NA
         readd$available <- 0
       }
 
@@ -212,9 +171,6 @@ trim_pedigree = function(ped_file, ascertain_span, num_affected, recall_probs){
       ped_trim = rbind(ped_trim, readd)
     }
   }
-
-  #assign proband identifier
-  ped_trim$proband <- ifelse(ped_trim$ID == probandID, 1, 0)
 
   return(ped_trim)
 }

@@ -60,7 +60,7 @@ We do not model disease remission. Rather, we impose the restriction that indivi
 }
 \section{See Also}{
 
-\code{\link{sim_ped}}, \code{\link{trim_pedigree}}, \code{\link{get_lifeEvents}}
+\code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{get_lifeEvents}}
 }
 \examples{
 #Read in age-specific hazards

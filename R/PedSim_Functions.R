@@ -311,7 +311,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' @export
 #'
 #' @section See Also:
-#' \code{\link{sim_ped}}, \code{\link{trim_pedigree}}, \code{\link{get_lifeEvents}}
+#' \code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{get_lifeEvents}}
 #'
 #' @examples
 #' #Read in age-specific hazards
@@ -427,7 +427,8 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
   }
 
   #generate the family pedigree, check to see that the untrimmed pedigree has
-  # the appropriate number of affected individuals
+  # the appropriate number of affected individuals, if so choose a proband
+  # and send to trim_ped
   D <- 0
   while(D == 0){
     d <- 0
@@ -437,26 +438,63 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
 
       # prior to sending the simulated pedigree to the trim function,
       # we check to see if it meets the required criteria for number of
-      # affected.  We also check to see that at least 1 of the affected
-      # experienced onset during the ascertainment period.  If these conditions
-      # are not met we discard the pedigree and simulate another until
-      # these conditions are met.
+      # affected.  If it does, we choose a proband from the available
+      # candidates prior to sending it to the trim_ped function.
       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
           length(fam_ped$ID[which(fam_ped$onset_year %in%
                                   ascertain_span[1]:ascertain_span[2])]) < num_affected ){
         d <- 0
-      } else { d <- 1 }
+      } else {
+        #assign proband variable to fam_ped
+        fam_ped$proband <- 0
+
+        #First we must randomly choose a proband from the individuals who
+        #experienced onset during ascertain_span, keeping in mind that there should
+        #be num_affected - 1 individuals who have experienced onset before the proband
+        #Gather info on probands in AffIDs
+        AffIDs <- fam_ped[which(fam_ped$affected == 1),
+                           which(colnames(fam_ped) %in% c("onset_year", "ID"))]
+        AffIDs <- AffIDs[order(AffIDs$onset_year), ]
+        AffIDs$poss_proband <- ifelse(AffIDs$onset_year %in%
+                                        ascertain_span[1]:ascertain_span[2], 1, 0)
+        prob_IDs <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
+
+        if (sum(AffIDs$poss_proband) == 1) {
+          #only 1 available proband
+          fam_ped$proband[which(fam_ped$ID == prob_IDs)] <- 1
+        } else if (sum(abs(AffIDs$poss_proband - 1)) > (num_affected - 1)) {
+          #multiple available probands and the n-1 affected condition has already
+          #been met by start of ascertainment period, so simply choose randomly
+          #amongst available probands
+          probandID <- sample(size = 1,
+                              x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
+          fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
+        } else {
+          #no affecteds before ascertainment period, must choose from among
+          #the nth or greater to experience onset
+          AffIDs$poss_proband[1:(num_affected - 1)] <- 0
+          #must write additional if statement here because of R's interesting
+          #take on how sample should work when there is only one 1 to sample from....
+          if (sum(AffIDs$poss_proband) == 1) {
+            probandID <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
+            fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
+          } else {
+            probandID <- sample(size = 1,
+                                x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
+            fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
+          }
+        }
+
+        d <- 1 }
     }
 
     # Now that we have a full pedigree that meets our conditions, we trim the
     # pedigree and check to see that the trimmed pedigree STILL meets our
     # conditions, if it does not we throw it out and start all over again.
     if (missing(recall_probs)) {
-      ascertained_ped <- trim_pedigree(ped_file = fam_ped,
-                                       ascertain_span, num_affected)
+      ascertained_ped <- trim_ped(ped_file = fam_ped)
     } else {
-      ascertained_ped <- trim_pedigree(ped_file = fam_ped, ascertain_span,
-                                num_affected, recall_probs)
+      ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
     }
 
     Oyears <- ascertained_ped$onset_year[which(ascertained_ped$affected == 1 &

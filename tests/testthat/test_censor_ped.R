@@ -1,6 +1,6 @@
 library(testthat)
 context("censor_ped")
-test_that("censor_ped returns an error when no proabnd or censor year provided", {
+test_that("censor_ped returns an error when no proband or censor year provided", {
   RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
                      death_hazard = AgeSpecific_Hazards[,c(2,3)],
                      part = seq(0, 100, by = 1),
@@ -8,7 +8,7 @@ test_that("censor_ped returns an error when no proabnd or censor year provided",
                      num_affected = 2,
                      recall_probs = c(1, 1, 1, 0.5, 0.25),
                      founder_byears = c(1900, 1980),
-                     ascertain_span = c(1980, 2015))[[1]]
+                     ascertain_span = c(1980, 2015))[[1]][, c(1, 14)]
 
   expect_error(censor_ped(RVped))
 })

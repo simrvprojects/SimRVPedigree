@@ -4,7 +4,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(exp_peds)
+#' @usage data(ExamplePedigrees)
 #'
 #' @format A data frame with 50 rows and 14 variables:
 #' \describe{
@@ -22,6 +22,7 @@
 #' \item{RR}{Subject's relative risk of disease}
 #' \item{available}{Availability status, \code{available  = 0} if the individual is unavailable, and 1 otherwise}
 #' \item{Gen}{The subject's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have \code{Gen = 1}, his or her offspring will have \code{Gen = 2}, etc.}
+#' \item{proband}{Proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.}
 #' }
 #'
-"exp_peds"
+"ExamplePedigrees"
