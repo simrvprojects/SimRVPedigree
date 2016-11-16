@@ -2,7 +2,7 @@
 #'
 #' \code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared by affected members could have been introduced into the pedigree.
 #'
-#' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
+#' The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVped} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 #'
 #' Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
 #'
@@ -222,15 +222,15 @@ assign_affectedGen = function(ped_file){
 #'
 #' #Simulate pedigree
 #' set.seed(3)
-#' ex_RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-#'                            death_hazard = AgeSpecific_Hazards[,c(2,3)],
-#'                            part = seq(0, 100, by = 1),
-#'                            num_affected = 2,
-#'                            ascertain_span = c(1900, 2015),
-#'                            RR = 10, stop_year = 2015,
-#'                            recall_probs = c(1),
-#'                            founder_byears = c(1900, 1980),
-#'                            FamID = 1)
+#' ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
+#'                       death_hazard = AgeSpecific_Hazards[,c(2,3)],
+#'                       part = seq(0, 100, by = 1),
+#'                       num_affected = 2,
+#'                       ascertain_span = c(1900, 2015),
+#'                       RR = 10, stop_year = 2015,
+#'                       recall_probs = c(1),
+#'                       founder_byears = c(1900, 1980),
+#'                       FamID = 1)
 #'
 #' library(kinship2)
 #' Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,

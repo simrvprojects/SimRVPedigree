@@ -33,7 +33,7 @@ The simulated pedigree.
 \code{sim_ped} simulates a pedigree.
 }
 \details{
-Please note distinction between \code{sim_ped} and \code{sim_RVpedigree}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVpedigree}}.
+Please note distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 
 By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{get_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_ped} only allows disease onset to occur once, i.e. no remission after disease onset.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 
@@ -41,7 +41,7 @@ The rare variant is transmitted to any offspring of the founder according to Men
 }
 \section{See Also}{
 
-\code{\link{sim_RVpedigree}}
+\code{\link{sim_RVped}}
 }
 \examples{
 data(AgeSpecific_Hazards)

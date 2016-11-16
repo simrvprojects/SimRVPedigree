@@ -22,7 +22,7 @@
 #' @param disease_status Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth Numeric. The individual's birth rate.
 #' @param RR Numeric. The individual's relative risk of disease.
-#' @inheritParams sim_RVpedigree
+#' @inheritParams sim_RVped
 #'
 #' @return A named matrix. The number of years until the next life event,
 #' named by event type.  See Details.
@@ -117,7 +117,7 @@ get_nextEvent = function(current_age, disease_status,
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
 #' @param RR Numeric. The individual's relative risk of disease.
-#' @inheritParams sim_RVpedigree
+#' @inheritParams sim_RVped
 #'
 #' @return A named matrix containing the years of all life events simulated for an individual, named by event type.
 #' @export

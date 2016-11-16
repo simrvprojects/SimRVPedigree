@@ -16,7 +16,7 @@ reGen_ped A pedigree containing only affecteds, obligate carriers, and founders 
 \code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared by affected members could have been introduced into the pedigree.
 }
 \details{
-The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVpedigree} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
+The \code{assign_affectedGen} function accepts a ped file simulated by \code{sim_RVped} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 represents the first generation containing an affected member or a suspected carrier of a genetic factor assumed to increase disease susceptibility.
 
 Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{assign_affectedGen} must contain the following variables for each pedigree member:
 

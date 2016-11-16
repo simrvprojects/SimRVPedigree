@@ -44,15 +44,15 @@ data(AgeSpecific_Hazards)
 
 #Simulate pedigree
 set.seed(3)
-ex_RVped <- sim_RVpedigree(onset_hazard = AgeSpecific_Hazards[,1],
-                           death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                           part = seq(0, 100, by = 1),
-                           num_affected = 2,
-                           ascertain_span = c(1900, 2015),
-                           RR = 10, stop_year = 2015,
-                           recall_probs = c(1),
-                           founder_byears = c(1900, 1980),
-                           FamID = 1)
+ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
+                      death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                      part = seq(0, 100, by = 1),
+                      num_affected = 2,
+                      ascertain_span = c(1900, 2015),
+                      RR = 10, stop_year = 2015,
+                      recall_probs = c(1),
+                      founder_byears = c(1900, 1980),
+                      FamID = 1)
 
 library(kinship2)
 Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
