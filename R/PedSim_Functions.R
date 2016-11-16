@@ -293,22 +293,25 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 #'
 #'
-#' @param onset_hazard Numeric. the population age-specific hazard rate for disease.
+#' @param onset_hazard Numeric. The population age-specific hazard rate for disease.
 #' @param death_hazard Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.
 #' @param part Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.
 #' @param RR Numeric. The relative risk of disease for individuals who inherit the rare variant.
 #' @param founder_byears Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
-#' @param ascertain_span Numeric list of length 2.  The ascertainment period in years.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
+#' @param ascertain_span Numeric list of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
 #' @param FamID Numeric. The family ID to assign to the simulated pedigree.
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
-#' @param birth_range Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.
-#' @param NB_params Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}
+#' @param birth_range Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
+#' @param NB_params Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.
 #'
 #' @return full_ped The full pedigree, prior to proband selection and trimming.
 #' @return ascertained_ped The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
 #' @export
+#'
+#' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
+#'
 #'
 #' @section See Also:
 #' \code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{get_lifeEvents}}

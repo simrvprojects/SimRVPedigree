@@ -8,15 +8,15 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
   YOB)
 }
 \arguments{
-\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
 
 \item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
+\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.}
 
 \item{RR}{Numeric. The individual's relative risk of disease.}
 

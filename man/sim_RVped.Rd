@@ -9,7 +9,7 @@ sim_RVped(onset_hazard, death_hazard, part, RR, founder_byears, ascertain_span,
   NB_params = c(2, 4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
 
 \item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
@@ -19,7 +19,7 @@ sim_RVped(onset_hazard, death_hazard, part, RR, founder_byears, ascertain_span,
 
 \item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{ascertain_span}{Numeric list of length 2.  The ascertainment period in years.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
+\item{ascertain_span}{Numeric list of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
@@ -29,9 +29,9 @@ sim_RVped(onset_hazard, death_hazard, part, RR, founder_byears, ascertain_span,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  If missing, it is assumed that \code{NB_params = c(2, 4/7)}}
+\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.}
 }
 \value{
 full_ped The full pedigree, prior to proband selection and trimming.
@@ -113,5 +113,8 @@ plot(TrimRVped)
 pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 
 
+}
+\references{
+Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 }
 

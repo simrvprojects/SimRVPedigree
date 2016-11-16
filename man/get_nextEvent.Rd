@@ -14,13 +14,13 @@ get_nextEvent(current_age, disease_status, lambda_birth, onset_hazard,
 
 \item{lambda_birth}{Numeric. The individual's birth rate.}
 
-\item{onset_hazard}{Numeric. the population age-specific hazard rate for disease.}
+\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
 
 \item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages between which individuals may reproduce.  If missing, it is assumed that \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
 \item{RR}{Numeric. The individual's relative risk of disease.}
 }
