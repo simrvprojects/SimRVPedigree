@@ -4,6 +4,7 @@
 #'
 #' @return An empty data frame with all fields required by \code{sim_ped} to generate a pedigree.
 #' @export
+#' @keywords internal
 #'
 create_pedFile = function(){
   data.frame(FamID = numeric(),
@@ -33,6 +34,7 @@ create_pedFile = function(){
 #'
 #' @return new_mate_info the pedigree information for the new mate.
 #' @return last_id the updated value of last_id after adding the new mate.
+#' @keywords internal
 #'
 create_mate = function(partner_info, last_id){
   new_mate_info <- data.frame(FamID = partner_info$FamID,
@@ -69,6 +71,8 @@ create_mate = function(partner_info, last_id){
 #' @return new_child_info the pedigree information for the new child
 #' @return last_id the updated value of last_id after adding new offspring
 #'
+#' @keywords internal
+#'
 #' @importFrom stats runif
 #'
 create_offspring = function(dad_info, mom_info, byear, last_id, RR){
@@ -102,6 +106,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
 #' @inheritParams create_mate
 #' @inheritParams sim_RVped
 #'
+#' @keywords internal
 #' @return A pedigree with updated life events for the founder, and
 #' additional information for mate and offspring, when offspring are generated.
 #'

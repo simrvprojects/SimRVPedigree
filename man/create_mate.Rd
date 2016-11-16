@@ -19,4 +19,5 @@ last_id the updated value of last_id after adding the new mate.
 \description{
 Create new mating partner in pedigree.
 }
+\keyword{internal}
 

@@ -11,6 +11,8 @@
 #' @return \code{wait_prob} The probability that the waiting time to next event is at least \code{wait_time}.
 #' @export
 #'
+#' @keywords internal
+#'
 #' @importFrom stats approxfun
 #'
 #' @examples
@@ -54,6 +56,8 @@ get_WaitProb = function(last_event, wait_time,
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
 #' @export
+#'
+#' @keywords internal
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)

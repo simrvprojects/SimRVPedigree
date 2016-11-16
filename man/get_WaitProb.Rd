@@ -32,4 +32,5 @@ get_WaitProb(last_event = 0, wait_time = 18,
              hazard = haz_vec, part = part_vec,
              scale = FALSE)
 }
+\keyword{internal}
 

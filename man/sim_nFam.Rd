@@ -33,4 +33,5 @@ additional information for mate and offspring, when offspring are generated.
 \description{
 Simulate all life events for an individual and create a nuclear family, when appropriate.
 }
+\keyword{internal}
 

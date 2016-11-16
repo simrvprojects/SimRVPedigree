@@ -39,4 +39,5 @@ get_WaitTime(p = 0.05, last_event = 0,
              hazard = haz_vec, part = part_vec,
              scale = TRUE)
 }
+\keyword{internal}
 
