@@ -34,9 +34,11 @@ sim_RVped(onset_hazard, death_hazard, part, RR, founder_byears, ascertain_span,
 \item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.}
 }
 \value{
-full_ped The full pedigree, prior to proband selection and trimming.
+A list containing the following data frames:
 
-ascertained_ped The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
+\code{full_ped} The full pedigree, prior to proband selection and trimming.
+
+\code{ascertained_ped} The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
 }
 \description{
 \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
@@ -56,7 +58,7 @@ Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped
   \item if less than \code{num_affected} - 1 individuals experienced disease onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} - 1 affected individuals when the pedigree was ascertained for the proband.
 }
 
-After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length $l$, such that the first $l-1$ items represent the respective recall probabilities for relatives of degree $1, 2, ... , l-1$ and the $l^{th}$ item represents the recall probability of a relative of degree $l$ or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with proability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
+After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc [add kinship citation].  Alternatively, the user may specify a list of length $l$, such that the first $l-1$ items represent the respective recall probabilities for relatives of degree $1, 2, ... , l-1$ and the $l^{th}$ item represents the recall probability of a relative of degree $l$ or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
 }
 \section{See Also}{
 
@@ -98,7 +100,7 @@ plot(FullRVped['1'])
 pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 
 
-#Define pedigree object for trimmed pedigree, i.e, predigree with
+#Define pedigree object for trimmed pedigree, i.e, pedigree with
 # proband selected and relatives trimmed
 TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
                        dadid = ex_RVped[[2]]$dad_id,

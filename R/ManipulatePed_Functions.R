@@ -23,7 +23,7 @@
 #'
 #' @param ped_file data.frame. A pedigree to reassign generation number based on affection status, see details.
 #'
-#' @return reGen_ped A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.
+#' @return \code{reGen_ped} A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.
 #' @export
 #'
 #' @importFrom kinship2 kinship

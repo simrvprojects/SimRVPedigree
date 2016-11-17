@@ -10,7 +10,7 @@ assign_affectedGen(ped_file)
 \item{ped_file}{data.frame. A pedigree to reassign generation number based on affection status, see details.}
 }
 \value{
-reGen_ped A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.
+\code{reGen_ped} A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.
 }
 \description{
 \code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD) [add citation] by affected members could have been introduced into the pedigree.

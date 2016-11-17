@@ -15,12 +15,12 @@ trim_ped(ped_file, recall_probs)
 \code{ped_trim} The trimmed pedigree.
 }
 \description{
-From a supplied pedigree, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
+Primarily intended as an internal function, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
 }
 \details{
 By default \code{recall_probs} is four times the kinship coefficient between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 
-Trimmed family members always have the following qualities:
+Occasionally, a trimmed family member must be retained to ensure pedigree can be plotted.  When this occurs, these family members are censored of all pertinent information, and will always have the following qualities:
 \enumerate{
   \item availability status = 0
   \item affected status = NA
