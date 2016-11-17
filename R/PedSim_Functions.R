@@ -177,11 +177,10 @@ sim_nFam = function(found_info, stop_year, last_id,
 
 #' Simulate a Pedigree
 #'
-#' \code{sim_ped} simulates a pedigree.
+#' Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
-#' Please note distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
-#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{get_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  Currently, \code{sim_ped} only allows disease onset to occur once, i.e. no remission after disease onset.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a Cox proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{get_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission after disease onset.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 #'
 #' The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 #'
@@ -214,7 +213,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' #Plot pedigree with the kinship2 package
 #' library(kinship2)
 #'
-#' #Define pedigree to use kinship2's plot function
+#' #Define pedigree and pass to plot function
 #' RV_status <- ex_ped$DA1 + ex_ped$DA2
 #' Affected  <- ex_ped$affected
 #'
@@ -222,11 +221,9 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                         dadid = ex_ped$dad_id,
 #'                         momid = ex_ped$mom_id,
 #'                         sex = (ex_ped$gender + 1),
-#'                         affected = cbind(Affected, RV_status),
-#'                         famid = ex_ped$FamID)
-#' ExamplePed <- ex_pedigree['1']
-#' plot(ExamplePed)
-#' pedigree.legend(ExamplePed, location = "topleft",  radius = 0.25)
+#'                         affected = cbind(Affected, RV_status))
+#' plot(ex_pedigree)
+#' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 #'
 sim_ped = function(onset_hazard, death_hazard, part,
                    RR, FamID, founder_byears, stop_year,
