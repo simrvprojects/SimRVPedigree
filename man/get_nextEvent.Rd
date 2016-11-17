@@ -29,7 +29,7 @@ A named matrix. The number of years until the next life event,
 named by event type.  See Details.
 }
 \description{
-\code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
+Primarily intended as an internal function, \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
 }
 \details{
 Given their current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death.  The event with the shortest waiting time is chosen as the next life event.
@@ -38,7 +38,7 @@ We assume that, given an individual's current age, their time to disease onset i
 
 We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
-We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for offspring to be produced for an individual whose age falls, or will fall, outside the range specified in \code{birth_range}.
+We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for offspring to be produced outside of an individual's \code{birth_range}.
 
 If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
 \itemize{
@@ -70,5 +70,8 @@ get_nextEvent(current_age = 23, disease_status = 1,
               part = my_part,
               birth_range = c(17,45), RR = 5)
 
+}
+\references{
+OUR MANUSCRIPT
 }
 

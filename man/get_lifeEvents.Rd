@@ -26,13 +26,10 @@ get_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
 A named matrix containing the years of all life events simulated for an individual, named by event type.
 }
 \description{
-The \code{get_lifeEvents} function simulates all life events for an
-individual starting at birth, age 0, and ending with death.
+Primarily intended as an internal function, \code{get_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death.
 }
 \details{
-\code{get_lifeEvents} simulates all life events for an individual starting at
-age 0 and ending with death through recursive application of
-\code{\link{get_nextEvent}} function.
+\code{get_lifeEvents} simulates all life events for an individual starting at age 0 and ending with death through recursive application of the \code{\link{get_nextEvent}} function.
 }
 \section{See Also}{
 

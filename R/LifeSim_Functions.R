@@ -1,6 +1,6 @@
 #' Simulate Next Life Event
 #'
-#' \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
+#' Primarily intended as an internal function, \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
 #'
 #' Given their current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death.  The event with the shortest waiting time is chosen as the next life event.
 #'
@@ -8,7 +8,7 @@
 #'
 #' We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 #'
-#' We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for offspring to be produced for an individual whose age falls, or will fall, outside the range specified in \code{birth_range}.
+#' We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for offspring to be produced outside of an individual's \code{birth_range}.
 #'
 #'
 #' If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
@@ -29,6 +29,8 @@
 #' @export
 #' @importFrom stats runif
 #' @importFrom stats rexp
+#'
+#' @references OUR MANUSCRIPT
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)
@@ -105,12 +107,9 @@ get_nextEvent = function(current_age, disease_status,
 
 #' Simulate All Life Events
 #'
-#' The \code{get_lifeEvents} function simulates all life events for an
-#' individual starting at birth, age 0, and ending with death.
+#' Primarily intended as an internal function, \code{get_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death.
 #'
-#' \code{get_lifeEvents} simulates all life events for an individual starting at
-#' age 0 and ending with death through recursive application of
-#' \code{\link{get_nextEvent}} function.
+#' \code{get_lifeEvents} simulates all life events for an individual starting at age 0 and ending with death through recursive application of the \code{\link{get_nextEvent}} function.
 #'
 #' @section See Also:
 #' \code{\link{get_nextEvent}}
