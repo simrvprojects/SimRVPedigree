@@ -7,7 +7,7 @@
 censor_ped(ped_file, censor_year)
 }
 \arguments{
-\item{ped_file}{data.frame. The pedigree to censor, see details.}
+\item{ped_file}{Data.frame. The pedigree to censor, see details.}
 
 \item{censor_year}{Numeric. The censor year. If missing, when pedigree contains a proband, \code{censor_year} will assume the value of the proband's onset year. See details.}
 }
@@ -20,7 +20,7 @@ censored_ped The censored pedigree.
 \details{
 Upon supplying a pedigree and a censor year the \code{censor_ped} function will remove all individuals born after \code{censor_year} and censor all disease onset and death events after the \code{censor_year}.
 
-Users who wish to censor pedigrees that have not been simulated using the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{censor_ped} contains the following variables for each pedigree member:
+Users who wish to censor pedigrees which have not been simulated by \code{\link{sim_RVped}} or \code{\link{sim_ped}} must ensure that the pedigree, \code{ped_file}, supplied to \code{censor_ped} contains the following variables for each pedigree member:
 
 \enumerate{
 \item \code{ID}: an identification number.
@@ -37,12 +37,14 @@ Users who wish to censor pedigrees that have not been simulated using the \code{
 If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
 
 If \code{censor_year} is missing, when the pedigree contains a proband, \code{censor_year} is set, internally, to the year that the proband experienced disease onset. However, if \code{ped_file} does not contain the proband identification variable the user must supply a value for \code{censor_year}.
+
+For a detailed example please refer to vignette.
 }
 \examples{
 #Read in example pedigree to trim
 data(AgeSpecific_Hazards)
 
-#Simulate pedigree
+#Simulate a pedigree ascertained for multiple affecteds
 set.seed(3)
 ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
                       death_hazard = AgeSpecific_Hazards[,c(2,3)],
@@ -52,31 +54,30 @@ ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
                       RR = 10, stop_year = 2015,
                       recall_probs = c(1),
                       founder_byears = c(1900, 1980),
-                      FamID = 1)
+                      FamID = 1)[[2]]
 
+#To plot pedigrees, use the kinship2 package
 library(kinship2)
-Original_ped <- with(ex_RVped[[2]], pedigree(id = ID,
-                                             dadid = dad_id,
-                                             momid = mom_id,
-                                             sex = gender + 1,
-                                             affected = affected))
+
+#assign simulated pedigree to pedigree object, then pass to plot function
+Original_ped <- pedigree(id = ex_RVped$ID,
+                         dadid = ex_RVped$dad_id,
+                         momid = ex_RVped$mom_id,
+                         sex = ex_RVped$gender + 1,
+                         affected = ex_RVped$affected)
 plot(Original_ped)
 
-Censor_ped1 <- with(censor_ped(ex_RVped[[2]]),
-                    pedigree(id = ID,
-                             dadid = dad_id,
-                             momid = mom_id,
-                             sex = gender + 1,
-                             affected = affected))
-plot(Censor_ped1)
+#Now censor ex_RVped after 1999
+Cped <- censor_ped(ped_file = ex_RVped, censor_year = 1999)
 
-Censor_ped2 <- with(censor_ped(ex_RVped[[2]], 2000),
-                    pedigree(id = ID,
-                             dadid = dad_id,
-                             momid = mom_id,
-                             sex = gender + 1,
-                             affected = affected))
-plot(Censor_ped2)
+#Assign the the censored pedigree to a pedigree object and plot.
+Censor_ped <- pedigree(id = Cped$ID,
+                       dadid = Cped$dad_id,
+                       momid = Cped$mom_id,
+                       sex = Cped$gender + 1,
+                       affected = Cped$affected)
+plot(Censor_ped)
+
 
 }
 
