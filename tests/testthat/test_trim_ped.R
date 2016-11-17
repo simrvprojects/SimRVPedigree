@@ -12,4 +12,3 @@ test_that("The proband is an affected and experienced onset during the ascertain
   expect_true(Tped$onset_year[which(Tped$proband == 1)] >= 2000 &
                 Tped$onset_year[which(Tped$proband == 1)] <= 2015)
 })
-

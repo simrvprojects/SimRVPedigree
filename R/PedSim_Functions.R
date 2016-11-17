@@ -276,6 +276,56 @@ sim_ped = function(onset_hazard, death_hazard, part,
   return(fam_ped[, c(1:14)])
 }
 
+#' Choose proband from simulated pedigree
+#'
+#' @param ped Pedigree simulated by \code{sim_ped}
+#' @inheritParams sim_RVped
+#'
+#' @return Pedigree with proband selected.
+#' @keywords internal
+#'
+choose_proband = function(ped, num_affected, ascertain_span){
+  #initialize proband ID variable
+  ped$proband <- 0
+
+  #Gather info on affecteds
+  A_ID <- ped[which(ped$affected == 1),
+              which(colnames(ped) %in% c("onset_year", "ID", "proband"))]
+  A_ID <- A_ID[order(A_ID$onset_year), ]
+  A_ID$proband <- ifelse(A_ID$onset_year %in% ascertain_span[1]:ascertain_span[2], 1, 0)
+
+  if (sum(A_ID$proband) == 1) {
+
+    #only 1 candidate proband
+    ped$proband[which(ped$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+
+  } else if (sum(abs(A_ID$proband - 1)) > (num_affected - 1)) {
+
+    #multiple available probands and the n-1 affected condition has already
+    #been met by start of ascertainment period, so simply choose randomly
+    #amongst available probands
+    probandID <- sample(size = 1,
+                        x = A_ID$ID[which(A_ID$proband == 1)])
+    ped$proband[which(ped$ID == probandID)] <- 1
+
+  } else {
+
+    #no affecteds before ascertainment period, must choose from among
+    #the nth or greater to experience onset
+    A_ID$proband[1:(num_affected - 1)] <- 0
+    #must write additional if statement here because of R's interesting
+    #take on how sample should work when there is only one 1 to sample from....
+    if (sum(A_ID$proband) == 1) {
+      ped$proband[which(ped$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+    } else {
+      probandID <- sample(size = 1,
+                          x = A_ID$ID[which(A_ID$proband == 1)])
+      ped$proband[which(ped$ID == probandID)] <- 1
+    }
+  }
+
+  return(ped)
+}
 
 #' Simulate a Pedigree Ascertained to Contain Multiple Family Members Affected by a Disease
 #'
@@ -283,20 +333,19 @@ sim_ped = function(onset_hazard, death_hazard, part,
 #'
 #' By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 #'
-#' \code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the \code{\link{get_lifeEvents}} function, and censor any events that occur after \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the stop year, until the simulation process terminates.
-#'
-#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals, that is if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVped} can be computationally expensive.  To randomly simulate a pedigree without a desired number of affecteds use instead \code{\link{sim_ped}}.
-#'
-#' Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
-#' \enumerate{
-#'   \item experienced disease onset between the years specified by \code{ascertain_span}
-#'   \item If less than \code{num_affected} - 1 individuals have experienced onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} - 1 affected individuals when the pedigree was ascertained for the proband.
-#' }
-#'
-#' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the ascertainment bias that occurs when a proband either cannot provide a complete family history or they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify \code{recall_probs = c(1)} so that the proband's recall probability of all relatives is 1.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
+#' \code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{get_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 #'
+#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
+#'
+#' Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
+#' \enumerate{
+#'   \item experienced disease onset between the years specified by \code{ascertain_span},
+#'   \item if less than \code{num_affected} - 1 individuals experienced disease onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} - 1 affected individuals when the pedigree was ascertained for the proband.
+#' }
+#'
+#' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length $l$, such that the first $l-1$ items represent the respective recall probabilities for relatives of degree $1, 2, ... , l-1$ and the $l^{th}$ item represents the recall probability of a relative of degree $l$ or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with proability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
 #'
 #' @param onset_hazard Numeric. The population age-specific hazard rate for disease.
 #' @param death_hazard Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.
@@ -450,50 +499,12 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
       # candidates prior to sending it to the trim_ped function.
       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
           length(fam_ped$ID[which(fam_ped$onset_year %in%
-                                  ascertain_span[1]:ascertain_span[2])]) < num_affected ){
+                                  ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
       } else {
-        #assign proband variable to fam_ped
-        fam_ped$proband <- 0
-
-        #First we must randomly choose a proband from the individuals who
-        #experienced onset during ascertain_span, keeping in mind that there should
-        #be num_affected - 1 individuals who have experienced onset before the proband
-        #Gather info on probands in AffIDs
-        AffIDs <- fam_ped[which(fam_ped$affected == 1),
-                           which(colnames(fam_ped) %in% c("onset_year", "ID"))]
-        AffIDs <- AffIDs[order(AffIDs$onset_year), ]
-        AffIDs$poss_proband <- ifelse(AffIDs$onset_year %in%
-                                        ascertain_span[1]:ascertain_span[2], 1, 0)
-        prob_IDs <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
-
-        if (sum(AffIDs$poss_proband) == 1) {
-          #only 1 available proband
-          fam_ped$proband[which(fam_ped$ID == prob_IDs)] <- 1
-        } else if (sum(abs(AffIDs$poss_proband - 1)) > (num_affected - 1)) {
-          #multiple available probands and the n-1 affected condition has already
-          #been met by start of ascertainment period, so simply choose randomly
-          #amongst available probands
-          probandID <- sample(size = 1,
-                              x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
-          fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
-        } else {
-          #no affecteds before ascertainment period, must choose from among
-          #the nth or greater to experience onset
-          AffIDs$poss_proband[1:(num_affected - 1)] <- 0
-          #must write additional if statement here because of R's interesting
-          #take on how sample should work when there is only one 1 to sample from....
-          if (sum(AffIDs$poss_proband) == 1) {
-            probandID <- AffIDs$ID[which(AffIDs$poss_proband == 1)]
-            fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
-          } else {
-            probandID <- sample(size = 1,
-                                x = AffIDs$ID[which(AffIDs$poss_proband == 1)])
-            fam_ped$proband[which(fam_ped$ID == probandID)] <- 1
-          }
-        }
-
-        d <- 1 }
+        fam_ped <- choose_proband(ped = fam_ped, num_affected, ascertain_span)
+        d <- 1
+      }
     }
 
     # Now that we have a full pedigree that meets our conditions, we trim the

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Trimming_Functions.R
 \name{trim_ped}
 \alias{trim_ped}
-\title{Choose a Proband from a Pedigree and Trim Pedigree.}
+\title{Trim Pedigree Based on Proband Recall.}
 \usage{
 trim_ped(ped_file, recall_probs)
 }
@@ -18,14 +18,12 @@ trim_ped(ped_file, recall_probs)
 From a supplied pedigree, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
 }
 \details{
-By default \code{recall_probs} is 4 times the kinship coefficient between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
-
-Within the \code{trim_ped} function, the argument \code{num_affected} serves to determine which affected members may be selected as the proband, not to ensure the number of affected members in the trimmed pedigree, as in \code{sim_RVped}.  For example, if there are only two affected members and \code{num_affected = 2}, then \code{trim_ped} will choose as the proband the second individual to experience onset, so that at the time of ascertainment the pedigree would have had two affected family members.  If \code{recall_probs != c(1)}, it is possible that proband will not recall the other affected.  Hence, the trimmed pedigree may have only 1 affected family member.
+By default \code{recall_probs} is four times the kinship coefficient between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 
 Trimmed family members always have the following qualities:
 \enumerate{
   \item availability status = 0
-  \item affected status = 0
+  \item affected status = NA
   \item birth year = NA
   \item onset year = NA
   \item death year = NA
