@@ -317,6 +317,79 @@ mtext("Calendar Year 2005", side = 3, line = 1)
 
 Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring to the 2015 pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member whose ID is 5) also experienced onset of lymphoid cancer.
 
+Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behaivor of this function by applying it to the four pedigrees included in the `EgPeds` dataset. 
+
+```{r, fig.height = 5.5, fig.width = 7}
+#we load the EgPeds dataset with the command
+data(EgPeds)
+
+#Next, let's assign these pedigrees to a pedigree object.
+eg_peds <- with(EgPeds, pedigree(famid = FamID,
+                                 id = ID,
+                                 dadid = dad_id,
+                                 momid = mom_id,
+                                 sex = gender + 1,
+                                 affected = affected))
+eg_peds
+
+#Let's re-assign the generation numbers among the affected members for the 
+#two of the pedigrees in this dataset, and store them as RAG_peds
+RAG_peds <- rbind(assign_affectedGen(EgPeds[which(EgPeds$FamID == 1), ]),
+                  assign_affectedGen(EgPeds[which(EgPeds$FamID == 5), ]))
+
+#create pedigree object for pedigrees with reassigned generation numbers
+Rpeds <-  with(RAG_peds, pedigree(famid = FamID,
+                                  id = ID,
+                                  dadid = dad_id,
+                                  momid = mom_id,
+                                  sex = gender + 1,
+                                  affected = affected))
+
+#Next, we create some new id lables that merge teh indivdiual ids with 
+#their generation numbers.
+ID1 = paste0("ID", sep = ":",
+             EgPeds[which(EgPeds$FamID == 1), 2],
+             sep = "\n Gen:", EgPeds[which(EgPeds$FamID == 1), 14])
+
+ID2 = paste0("ID", sep = ":",
+             RAG_peds[which(RAG_peds$FamID == 1), 2],
+             sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 1), 14])
+
+# Compare plots of pedigrees before and after reassigning
+# generation number based on affcted status
+par(mfrow = c(1,2))
+plot(eg_peds['1'], id = ID1)
+mtext("Pedigree 1: Before", side = 3, line = 1, cex = 1.15)
+
+plot(Rpeds['1'], id = ID2)
+mtext("Pedigree 1: After", side = 3, line = 1, cex = 1.15)
+```
+
+Looking at the before and after for this pedigree, the most striking observation is the reduction of the pedigree to include only affected members, their parents, and common ancestors.  Additionally, we see that the generation numbers of the affected members have not changed.  This is because the most recent commmon ancestors of the affected individuals (IDs 3, 6, and 15) are the two eldest founders (IDs 1 and 2).  Since the focus of this assignment scheme is on the affected members, all other family members are now missing generation numbers.
+
+```{r, fig.height = 5.5, fig.width = 7}
+#Next, we create some new id lables that merge teh indivdiual ids with 
+#their generation numbers.
+ID1 = paste0("ID", sep = ":",
+             EgPeds[which(EgPeds$FamID == 5), 2],
+             sep = "\n Gen:", EgPeds[which(EgPeds$FamID == 5), 14])
+
+ID2 = paste0("ID", sep = ":",
+             RAG_peds[which(RAG_peds$FamID == 5), 2],
+             sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 5), 14])
+
+# Compare plots of pedigrees before and after reassigning
+# generation number based on affcted status
+par(mfrow = c(1,2))
+plot(eg_peds['5'], id = ID1)
+mtext("Pedigree 5: Before", side = 3, line = 1, cex = 1.15)
+
+plot(Rpeds['5'], id = ID2)
+mtext("Pedigree 5: After", side = 3, line = 1, cex = 1.15)
+```
+
+In this example, in the leftmost pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therfore, in the rightmost pedigree, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9).
+
 \newpage
 #6. Parallel Processing Example<a name="ParProcExample"></a>
 It is important to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affected members is directly related to (1) the rarity of the disease, and (2) arguments specified by the user.  In particular, we expect to see an increase in the required computation time as: 
