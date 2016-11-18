@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -77,7 +77,7 @@ Optional arguments:
 
 9. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
 10. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  If missing, it is assumed that `birth_range = c(18, 45)`.
-11. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. If missing, it is assumed that \code{NB_params = c(2, 4/7)}, this setting is due to the findings of Kojima and Kelleher [2].
+11. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. If missing, it is assumed that `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [2].
 12. `stop_year`: the last year of study.  If missing, the current year is used.
 
 We will illustrate the usage and output of this function in the next section.
@@ -126,14 +126,14 @@ colnames(AgeSpecific_Hazards)
 
 Looking at the output above, we can see that when we call `sim_RVped()`, we will set the `onset_hazard` argument to the first column in the `AgeSpecific_Hazards` dataset, and the `death_hazard` argument will be set to the second and third columns (in that order) of the `AgeSpecific_Hazards` dataset.  Since the `AgeSpecific_Hazards` dataset supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partion to feed to the `part` argument of `sim_RVped` as follows:
 
-```{r, fig.width = 7, fig.height = 3.5}
+```{r}
 # Specify age partition.
 age_part <- seq(0, 100, by = 1)
 ```
 
 Let's quickly plot the age-specific hazard rates against the ages they apply to.
 
-```{r, fig.width = 7, fig.height = 4}
+```{r, fig.width = 7, fig.height = 4, eval = F}
 # plot age-specific hazard rates in the AgeSpecific_Hazards dataset
 par(mfrow = c(1, 2), mar = c(5.1, 5.1, 4.1, 2.1))
 # plot age-specific hazard rate of disease by age
@@ -277,18 +277,18 @@ Ped2005 <- censor_ped(ped_file = studyPed, censor_year = 2005)
 # This time we first create age labels for individuals for whom we know
 # the year of birth and who hadn't died by 2005.
 Age2005 <- ifelse(is.na(Ped2005$birth_year) | !is.na(Ped2005$death_year),
-                     " ", paste0("\n age: ", 2005 - Ped2005$birth_year))
+                  " ", paste0("\n age: ", 2005 - Ped2005$birth_year))
 
 # Next, we create a death age label for individuals who had died by 2005
 DeathAge2005 <- ifelse(is.na(Ped2005$death_year), 
-                   " ", paste0("\n death age: ", 
-                               Ped2005$death_year -  Ped2005$birth_year))
+                       " ", paste0("\n death age: ", 
+                                   Ped2005$death_year -  Ped2005$birth_year))
 
 # Finally, we create an onset age label for individuals who had 
 # experienced disease onset by the year 2005.
 OnsetAge2005 <- ifelse(is.na(Ped2005$onset_year), 
-                   " ", paste0("\n onset age: ",
-                               Ped2005$onset_year - Ped2005$birth_year))
+                       " ", paste0("\n onset age: ",
+                                   Ped2005$onset_year - Ped2005$birth_year))
 
 # To plot the pedigree as it appeared in 2005, we must define a new pedigree 
 # object for the 2005 pedigree.  Since there are different ways to define a 
@@ -317,6 +317,7 @@ mtext("Calendar Year 2005", side = 3, line = 1)
 
 Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring to the 2015 pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member whose ID is 5) also experienced onset of lymphoid cancer.
 
+
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behaivor of this function by applying it to the four pedigrees included in the `EgPeds` dataset. 
 
 ```{r, fig.height = 5.5, fig.width = 7}
@@ -338,12 +339,12 @@ RAG_peds <- rbind(assign_affectedGen(EgPeds[which(EgPeds$FamID == 1), ]),
                   assign_affectedGen(EgPeds[which(EgPeds$FamID == 5), ]))
 
 #create pedigree object for pedigrees with reassigned generation numbers
-Rpeds <-  with(RAG_peds, pedigree(famid = FamID,
-                                  id = ID,
-                                  dadid = dad_id,
-                                  momid = mom_id,
-                                  sex = gender + 1,
-                                  affected = affected))
+Rpeds <- with(RAG_peds, pedigree(famid = FamID,
+                                 id = ID,
+                                 dadid = dad_id,
+                                 momid = mom_id,
+                                 sex = gender + 1,
+                                 affected = affected))
 
 #Next, we create some new id lables that merge teh indivdiual ids with 
 #their generation numbers.
@@ -358,10 +359,10 @@ ID2 = paste0("ID", sep = ":",
 # Compare plots of pedigrees before and after reassigning
 # generation number based on affcted status
 par(mfrow = c(1,2))
-plot(eg_peds['1'], id = ID1)
+plot(eg_peds['1'], id = ID1, mar = c(2, 1, 4, 2))
 mtext("Pedigree 1: Before", side = 3, line = 1, cex = 1.15)
 
-plot(Rpeds['1'], id = ID2)
+plot(Rpeds['1'], id = ID2, mar = c(2, 2, 4, 1))
 mtext("Pedigree 1: After", side = 3, line = 1, cex = 1.15)
 ```
 
@@ -381,16 +382,15 @@ ID2 = paste0("ID", sep = ":",
 # Compare plots of pedigrees before and after reassigning
 # generation number based on affcted status
 par(mfrow = c(1,2))
-plot(eg_peds['5'], id = ID1)
+plot(eg_peds['5'], id = ID1, mar = c(2, 1, 4, 2))
 mtext("Pedigree 5: Before", side = 3, line = 1, cex = 1.15)
 
-plot(Rpeds['5'], id = ID2)
+plot(Rpeds['5'], id = ID2, mar = c(2, 2, 4, 1))
 mtext("Pedigree 5: After", side = 3, line = 1, cex = 1.15)
 ```
 
 In this example, in the leftmost pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therfore, in the rightmost pedigree, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9).
 
-\newpage
 #6. Parallel Processing Example<a name="ParProcExample"></a>
 It is important to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affected members is directly related to (1) the rarity of the disease, and (2) arguments specified by the user.  In particular, we expect to see an increase in the required computation time as: 
 
