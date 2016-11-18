@@ -36,26 +36,26 @@ Users who wish to assign generation number based on affection status in pedigree
 }
 \examples{
 #Read in example pedigrees
-data(ExamplePedigrees)
+data(EgPeds)
 
 library(kinship2)
 #assign to pedigree object to show before and after behavior of
 #the assign_affectedGen function
-ex_pedigree <- pedigree(id = ExamplePedigrees$ID,
-                        dadid = ExamplePedigrees$dad_id,
-                        momid = ExamplePedigrees$mom_id,
-                        sex = (ExamplePedigrees$gender + 1),
-                        affected = ExamplePedigrees$affected,
-                        famid = ExamplePedigrees$FamID)
+ex_pedigree <- pedigree(id = EgPeds$ID,
+                        dadid = EgPeds$dad_id,
+                        momid = EgPeds$mom_id,
+                        sex = (EgPeds$gender + 1),
+                        affected = EgPeds$affected,
+                        famid = EgPeds$FamID)
 
 
 #create df to store pedigrees with reassigned generation number
-RAG_peds <- ExamplePedigrees[1,]
+RAG_peds <- EgPeds[1,]
 RAG_peds <- RAG_peds[-1,]
 
 for(i in 1:4){
   RAG_peds <- rbind(RAG_peds,
-                    assign_affectedGen(ExamplePedigrees[which(ExamplePedigrees$FamID == i), ]))
+                    assign_affectedGen(EgPeds[which(EgPeds$FamID == i), ]))
 }
 
 RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
@@ -70,8 +70,8 @@ RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
 par(mfrow = c(1, 2))
 for (k in 1:4) {
   ID1 = paste0("ID", sep = ":",
-               ExamplePedigrees[which(ExamplePedigrees$FamID == k), 2],
-               sep = "\\n Gen:", ExamplePedigrees[which(ExamplePedigrees$FamID == k), 14])
+               EgPeds[which(EgPeds$FamID == k), 2],
+               sep = "\\n Gen:", EgPeds[which(EgPeds$FamID == k), 14])
 
   ID2 = paste0("ID", sep = ":",
                RAG_peds[which(RAG_peds$FamID == k), 2],

@@ -26,18 +26,18 @@
 #'
 #' @examples
 #' #Read in example pedigree to trim
-#' data(ExamplePedigrees)
+#' data(EgPeds)
 #'
 #' #plot example_ped using kinship2
 #' library(kinship2)
-#' ex_pedigree <- pedigree(id = ExamplePedigrees$ID,
-#'                         dadid = ExamplePedigrees$dad_id,
-#'                         momid = ExamplePedigrees$mom_id,
-#'                         sex = (ExamplePedigrees$gender + 1),
-#'                         affected = cbind(Affected = ExamplePedigrees$affected,
-#'                                          RV_status = ExamplePedigrees$DA1 +
-#'                                                      ExamplePedigrees$DA2),
-#'                         famid = ExamplePedigrees$FamID)['1']
+#' ex_pedigree <- pedigree(id = EgPeds$ID,
+#'                         dadid = EgPeds$dad_id,
+#'                         momid = EgPeds$mom_id,
+#'                         sex = (EgPeds$gender + 1),
+#'                         affected = cbind(Affected = EgPeds$affected,
+#'                                          RV_status = EgPeds$DA1 +
+#'                                                      EgPeds$DA2),
+#'                         famid = EgPeds$FamID)['1']
 #' plot(ex_pedigree)
 #' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 #' mtext("Original Pedigree", side = 3, line = 2)
@@ -53,7 +53,7 @@
 #' for (k in 1:length(Recall_Probabilities)) {
 #'    set.seed(2)
 #'    #trim pedigree
-#'    TrimPed <- trim_ped(ped_file = ExamplePedigrees[which(ExamplePedigrees$FamID == 1), ],
+#'    TrimPed <- trim_ped(ped_file = EgPeds[which(EgPeds$FamID == 1), ],
 #'                        recall_probs = Recall_Probabilities[[k]])
 #'
 #'    #plot trimmed pedigree
