@@ -77,8 +77,8 @@
 #'
 #'   plot(RAG_pedigrees[paste0(k)], id = ID2)
 #'   mtext(paste0("Ped", k, ": after generation reassignment", sep = ""),
-#'         side = 3)
-#' }
+#'         side = 3)}
+#'
 #'
 assign_affectedGen = function(ped_file){
 
