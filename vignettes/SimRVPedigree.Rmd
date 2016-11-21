@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -28,7 +28,7 @@ body{ /* Normal  */
 
 #1. Introduction <a name="introduction"></a>
 
-Family-based studies to identify genetic susceptibility factors associated with rare diseases have received much attention in recent years.  This resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies [7].  However, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  As a result, these studies are difficult to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. 
+Family-based studies to identify genetic susceptibility factors associated with rare diseases have received much attention in recent years.  This resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies [8].  However, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  As a result, these studies are difficult to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. 
 
 The distinguishing feature of the `SimRVPedigree` package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.  To illustrate and fully explain these features, in the next two sections, we will first discuss the process of pedigree simulation, followed by a full exposition of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
 
@@ -41,7 +41,9 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 
 4. We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
-5. We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
+5. We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45.  We do not allow for offspring to be produced outside of the birth range specified by the user.
+
+6. We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 
 #3. Study Design/Ascertainment Scheme Features <a name="StudyLevel"></a>
 The `sim_RVped()` function is used to randomly simulate families ascertained to have multiple affected relatives. The study design features available to the user are specified via the following arguments:
@@ -53,7 +55,7 @@ The `sim_RVped()` function is used to randomly simulate families ascertained to 
 4. `recall_probs`: the proband's recall probabilities, $\rho = (\rho_1, \rho_2, ..., \rho_n)$, for relatives where $$\rho_i = \left\{ \begin{array}{ll}
                 \text{proband recall probability for a relative of degree } i & \text{for } i = 1, 2, ..., n-1;\\
                 \text{proband recall probability for a relative of degree $n$ or greater} & \text{for } i = n.\end{array} \right.$$
-This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of four times the kinship coefficient between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
+This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of four times the kinship coefficient, as defined in [7], between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
 
 3. `stop_year`: the stop year represents either: the year that the study ends or the last full year that data have been collected.  All events that occur after the stop year are censored.
 
@@ -124,7 +126,7 @@ data("AgeSpecific_Hazards")
 colnames(AgeSpecific_Hazards)
 ```
 
-Looking at the output above, we can see that when we call `sim_RVped()`, we will set the `onset_hazard` argument to the first column in the `AgeSpecific_Hazards` dataset, and the `death_hazard` argument will be set to the second and third columns (in that order) of the `AgeSpecific_Hazards` dataset.  Since the `AgeSpecific_Hazards` dataset supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partion to feed to the `part` argument of `sim_RVped` as follows:
+Looking at the output above, we can see that when we call `sim_RVped()`, we will set the `onset_hazard` argument to the first column in the `AgeSpecific_Hazards` data set, and the `death_hazard` argument will be set to the second and third columns (in that order) of the `AgeSpecific_Hazards` data set.  Since the `AgeSpecific_Hazards` data set supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partition to feed to the `part` argument of `sim_RVped` as follows:
 
 ```{r}
 # Specify age partition.
@@ -318,13 +320,15 @@ mtext("Calendar Year 2005", side = 3, line = 1)
 Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring to the 2015 pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member whose ID is 5) also experienced onset of lymphoid cancer.
 
 
-Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behaivor of this function by applying it to the four pedigrees included in the `EgPeds` dataset. 
+Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the four pedigrees included in the `EgPeds` data set. 
+
 
 ```{r, fig.height = 5.5, fig.width = 7}
-#we load the EgPeds dataset with the command
+# We load the EgPeds dataset with the command
 data(EgPeds)
 
-#Next, let's assign these pedigrees to a pedigree object.
+# Next, we use kinship2's pedigree function to assign these 
+# pedigrees to a pedigree object.
 eg_peds <- with(EgPeds, pedigree(famid = FamID,
                                  id = ID,
                                  dadid = dad_id,
@@ -333,12 +337,13 @@ eg_peds <- with(EgPeds, pedigree(famid = FamID,
                                  affected = affected))
 eg_peds
 
-#Let's re-assign the generation numbers among the affected members for the 
-#two of the pedigrees in this dataset, and store them as RAG_peds
+# Let's re-assign the generation numbers among the affected members for the 
+# two of the pedigrees in this dataset, the pedigrees with FamID = 1 and 5, 
+# and store them as RAG_peds
 RAG_peds <- rbind(assign_affectedGen(EgPeds[which(EgPeds$FamID == 1), ]),
                   assign_affectedGen(EgPeds[which(EgPeds$FamID == 5), ]))
 
-#create pedigree object for pedigrees with reassigned generation numbers
+# Create pedigree object for pedigrees with reassigned generation numbers
 Rpeds <- with(RAG_peds, pedigree(famid = FamID,
                                  id = ID,
                                  dadid = dad_id,
@@ -346,8 +351,8 @@ Rpeds <- with(RAG_peds, pedigree(famid = FamID,
                                  sex = gender + 1,
                                  affected = affected))
 
-#Next, we create some new id lables that merge teh indivdiual ids with 
-#their generation numbers.
+# Create new id labels that merge the individual IDs with their 
+# generation numbers, so that we can compare the generation numbers
 ID1 = paste0("ID", sep = ":",
              EgPeds[which(EgPeds$FamID == 1), 2],
              sep = "\n Gen:", EgPeds[which(EgPeds$FamID == 1), 14])
@@ -356,7 +361,7 @@ ID2 = paste0("ID", sep = ":",
              RAG_peds[which(RAG_peds$FamID == 1), 2],
              sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 1), 14])
 
-# Compare plots of pedigrees before and after reassigning
+# Plot pedigrees before and after reassigning
 # generation number based on affcted status
 par(mfrow = c(1,2))
 plot(eg_peds['1'], id = ID1, mar = c(2, 1, 4, 2))
@@ -366,10 +371,11 @@ plot(Rpeds['1'], id = ID2, mar = c(2, 2, 4, 1))
 mtext("Pedigree 1: After", side = 3, line = 1, cex = 1.15)
 ```
 
-Looking at the before and after for this pedigree, the most striking observation is the reduction of the pedigree to include only affected members, their parents, and common ancestors.  Additionally, we see that the generation numbers of the affected members have not changed.  This is because the most recent commmon ancestors of the affected individuals (IDs 3, 6, and 15) are the two eldest founders (IDs 1 and 2).  Since the focus of this assignment scheme is on the affected members, all other family members are now missing generation numbers.
+Looking at the before and after for this pedigree, the most striking observation is the reduction of the pedigree to include only affected members, their parents, and common ancestors.  Additionally, we see that the generation numbers of the affected members have not changed.  This is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).  Since the focus of this assignment scheme is on the affected members, all other family members are now missing generation numbers.
 
 ```{r, fig.height = 5.5, fig.width = 7}
-#Next, we create some new id lables that merge teh indivdiual ids with 
+#Repeat same steps as before, this time for the pedigree with FamID = 5
+#First, create some new id lables that merge the individual IDs with 
 #their generation numbers.
 ID1 = paste0("ID", sep = ":",
              EgPeds[which(EgPeds$FamID == 5), 2],
@@ -379,7 +385,7 @@ ID2 = paste0("ID", sep = ":",
              RAG_peds[which(RAG_peds$FamID == 5), 2],
              sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 5), 14])
 
-# Compare plots of pedigrees before and after reassigning
+# Plot pedigrees before and after reassigning
 # generation number based on affcted status
 par(mfrow = c(1,2))
 plot(eg_peds['5'], id = ID1, mar = c(2, 1, 4, 2))
@@ -389,7 +395,8 @@ plot(Rpeds['5'], id = ID2, mar = c(2, 2, 4, 1))
 mtext("Pedigree 5: After", side = 3, line = 1, cex = 1.15)
 ```
 
-In this example, in the leftmost pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therfore, in the rightmost pedigree, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9).
+In this example, in the leftmost pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therefore, in the rightmost pedigree, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9).
+
 
 #6. Parallel Processing Example<a name="ParProcExample"></a>
 It is important to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affected members is directly related to (1) the rarity of the disease, and (2) arguments specified by the user.  In particular, we expect to see an increase in the required computation time as: 
@@ -496,6 +503,10 @@ RV_peds = foreach(i = seq(npeds),
   *R package version 1.6.4.* 
   https://CRAN.R-project.org/package=kinship2
 
-[7] Ellen M. Wijsman (2012). 
-  **The role of large pedigrees in an era of high-throughput sequencing**. 
+[7] Thompson, E. (2000). 
+  *Statistical Inference from Genetic Data on Pedigrees*. 
+  NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
+
+[8] Ellen M. Wijsman (2012). 
+  *The role of large pedigrees in an era of high-throughput sequencing*. 
   Hum Genet 131, 1555-1563 
