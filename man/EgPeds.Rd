@@ -4,7 +4,7 @@
 \name{EgPeds}
 \alias{EgPeds}
 \title{Example Pedigrees}
-\format{A data frame with 50 rows and 14 variables:
+\format{A data frame with 65 rows and 14 variables:
 \describe{
 \item{FamID}{Family identification number}
 \item{ID}{Individual identification number}
@@ -28,7 +28,7 @@ data(EgPeds)
 data(EgPeds)
 }
 \description{
-A dataset containing four example pedigrees.
+A dataset containing five example pedigrees.
 
 A dataset containing four example pedigrees.
 }
