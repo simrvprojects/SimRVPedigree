@@ -143,6 +143,7 @@ get_nextEvent = function(current_age, disease_status,
 #' sim_lifeEvents(onset_hazard = my_onset_haz,
 #'                death_hazard = my_death_haz,
 #'                part = my_part,
+#'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 25,
 #'                YOB = 1900)
 #'
