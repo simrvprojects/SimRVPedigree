@@ -42,36 +42,10 @@ We assume that, given an individual's current age, their time to reproduction is
 
 If get_nextEvent returns the waiting time to the next life event, named for event type.  The possible event types are as follows:
 \itemize{
- \item "Birth" a reproductive event, i.e. creation of offspring
+ \item "Child" a reproductive event, i.e. creation of offspring
  \item "Onset" disease onset event,
  \item "Death" death event
 }
 }
-\examples{
-data(AgeSpecific_Hazards)
-
-my_part <- seq(0, 100, by = 1)
-my_onset_haz <- AgeSpecific_Hazards[,1]
-my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
-
-set.seed(17)
-get_nextEvent(current_age = 23, disease_status = 0,
-              lambda_birth = 0.05,
-              onset_hazard = my_onset_haz,
-              death_hazard = my_death_haz,
-              part = my_part,
-              birth_range = c(17,45), RR = 5)
-
-set.seed(17)
-get_nextEvent(current_age = 23, disease_status = 1,
-              lambda_birth = 0.05,
-              onset_hazard = my_onset_haz,
-              death_hazard = my_death_haz,
-              part = my_part,
-              birth_range = c(17,45), RR = 5)
-
-}
-\references{
-OUR MANUSCRIPT
-}
+\keyword{internal}
 

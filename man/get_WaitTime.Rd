@@ -26,18 +26,5 @@ The waiting time to next event, units same as those in \code{part}.
 \details{
 \code{get_WaitTime} obtains the waiting time to next event associated with a non-homogeneous Poisson process.  The units of the simulated waiting time are the units specified in \code{part}, i.e. if \code{part} is specified in years, the simulated waiting time is in years.
 }
-\examples{
-data(AgeSpecific_Hazards)
-haz_vec <- AgeSpecific_Hazards[,1]
-part_vec <- seq(0, 100, by = 1)
-
-get_WaitTime(p = 0.05, last_event = 0,
-             hazard = haz_vec, part = part_vec,
-             scale = FALSE)
-
-get_WaitTime(p = 0.05, last_event = 0,
-             hazard = haz_vec, part = part_vec,
-             scale = TRUE)
-}
 \keyword{internal}
 

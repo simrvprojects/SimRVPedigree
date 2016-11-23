@@ -1,6 +1,6 @@
-context("get_lifeEvents")
-test_that("get_lifeEvents should always begin at start and end at death", {
-  Levents <- get_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
+context("sim_lifeEvents")
+test_that("sim_lifeEvents should always begin at start and end at death", {
+  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
                             death_hazard = AgeSpecific_Hazards[,c(2:3)],
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),
@@ -10,8 +10,8 @@ test_that("get_lifeEvents should always begin at start and end at death", {
   expect_equal(names(Levents)[length(Levents)], "Death")
 })
 
-test_that("get_lifeEvents never returns onset more than once", {
-  Levents <- get_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
+test_that("sim_lifeEvents never returns onset more than once", {
+  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
                             death_hazard = AgeSpecific_Hazards[,c(2:3)],
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),
@@ -23,8 +23,8 @@ test_that("get_lifeEvents never returns onset more than once", {
   }
 })
 
-test_that("get_lifeEvents always returns death event after all other events", {
-  Levents <- get_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
+test_that("sim_lifeEvents always returns death event after all other events", {
+  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
                             death_hazard = AgeSpecific_Hazards[,c(2:3)],
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),

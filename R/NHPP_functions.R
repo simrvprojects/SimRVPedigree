@@ -9,20 +9,10 @@
 #' @param scale Logical. By default \code{scale = FALSE}.  Specifying \code{scale = TRUE} ensures that this function is the CDF of a proper random variable.
 #'
 #' @return \code{wait_prob} The probability that the waiting time to next event is at least \code{wait_time}.
-#' @export
 #'
 #' @keywords internal
 #'
 #' @importFrom stats approxfun
-#'
-#' @examples
-#' data(AgeSpecific_Hazards)
-#' haz_vec <- AgeSpecific_Hazards[,2]
-#' part_vec <- seq(0, 100, by = 1)
-#'
-#' get_WaitProb(last_event = 0, wait_time = 18,
-#'              hazard = haz_vec, part = part_vec,
-#'              scale = FALSE)
 get_WaitProb = function(last_event, wait_time,
                         hazard, part, scale = FALSE) {
 
@@ -55,22 +45,8 @@ get_WaitProb = function(last_event, wait_time,
 #' @param scale Logical. By default \code{scale = FALSE}.  Specifying \code{scale = TRUE} ensures that this function is the quantile function for a proper random variable.
 #'
 #' @return The waiting time to next event, units same as those in \code{part}.
-#' @export
 #'
 #' @keywords internal
-#'
-#' @examples
-#' data(AgeSpecific_Hazards)
-#' haz_vec <- AgeSpecific_Hazards[,1]
-#' part_vec <- seq(0, 100, by = 1)
-#'
-#' get_WaitTime(p = 0.05, last_event = 0,
-#'              hazard = haz_vec, part = part_vec,
-#'              scale = FALSE)
-#'
-#' get_WaitTime(p = 0.05, last_event = 0,
-#'              hazard = haz_vec, part = part_vec,
-#'              scale = TRUE)
 get_WaitTime = function(p, last_event, hazard, part,
                          scale = FALSE){
 

@@ -2,12 +2,8 @@
 
 export(assign_affectedGen)
 export(censor_ped)
-export(create_pedFile)
-export(get_WaitProb)
-export(get_WaitTime)
-export(get_lifeEvents)
-export(get_nextEvent)
 export(sim_RVped)
+export(sim_lifeEvents)
 export(sim_ped)
 export(trim_ped)
 importFrom(kinship2,kinship)

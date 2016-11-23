@@ -3,7 +3,6 @@
 #' \code{create_pedFile} initializes an empty data frame with all of the fields required by \code{sim_ped} to simulate a pedigree.
 #'
 #' @return An empty data frame with all fields required by \code{sim_ped} to generate a pedigree.
-#' @export
 #' @keywords internal
 #'
 create_pedFile = function(){
@@ -117,7 +116,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   nfam_ped <- found_info
 
   #Simulate life steps for our founder
-  sim_years <- get_lifeEvents(onset_hazard, death_hazard, part,
+  sim_years <- sim_lifeEvents(onset_hazard, death_hazard, part,
                               birth_range, NB_params,
                               RR = found_info$RR,
                               YOB = found_info$birth_year)
@@ -146,7 +145,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   }
 
   #store the birth years of each child
-  birth_events <- as.numeric(sim_years[which(names(sim_years) == "Birth" &
+  birth_events <- as.numeric(sim_years[which(names(sim_years) == "Child" &
                                               sim_years <= stop_year)])
 
   if (length(birth_events) > 0) {
@@ -180,7 +179,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
 #'
-#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{get_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative risk of developing disease is \code{RR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 #'
 #' The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 #'
@@ -330,7 +329,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #'
 #' By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 #'
-#' \code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{get_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
+#' \code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 #'
@@ -368,7 +367,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #'
 #'
 #' @section See Also:
-#' \code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{get_lifeEvents}}
+#' \code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{sim_lifeEvents}}
 #'
 #' @examples
 #' #Read in age-specific hazards

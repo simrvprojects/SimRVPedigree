@@ -23,14 +23,5 @@ get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 \description{
 Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 }
-\examples{
-data(AgeSpecific_Hazards)
-haz_vec <- AgeSpecific_Hazards[,2]
-part_vec <- seq(0, 100, by = 1)
-
-get_WaitProb(last_event = 0, wait_time = 18,
-             hazard = haz_vec, part = part_vec,
-             scale = FALSE)
-}
 \keyword{internal}
 

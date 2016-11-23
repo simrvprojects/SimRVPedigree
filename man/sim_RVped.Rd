@@ -46,7 +46,7 @@ A list containing the following data frames:
 \details{
 By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 
-\code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{get_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
+\code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
 
 We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 
@@ -62,7 +62,7 @@ After the proband is selected, the pedigree is trimmed based on the proband's re
 }
 \section{See Also}{
 
-\code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{get_lifeEvents}}
+\code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{sim_lifeEvents}}
 }
 \examples{
 #Read in age-specific hazards

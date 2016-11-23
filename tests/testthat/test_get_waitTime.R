@@ -26,7 +26,6 @@ test_that("wait_time return is in [0, max(part) - last_event]", {
                           scale = TRUE),
              max(seq(0, 100, by = 1)))
 })
-
 test_that("when scale = TRUE, and p = 1, wait_time != NA", {
   expect_equal(get_WaitTime(p = 1, last_event = 0,
                             hazard = AgeSpecific_Hazards[,1],
@@ -47,4 +46,3 @@ test_that("when scale = FALSE, and p = 1, wait_time == NA", {
                             hazard = AgeSpecific_Hazards[,1],
                             part = seq(0, 100, by = 1)), NA)
 })
-
