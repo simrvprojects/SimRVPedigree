@@ -16,7 +16,7 @@ sim_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
 
 \item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.}
+\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
 \item{RR}{Numeric. The individual's relative risk of disease.}
 
@@ -55,6 +55,9 @@ my_part <- seq(0, 100, by = 1)
 my_onset_haz <- AgeSpecific_Hazards[,1]
 my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
 
+# The following commands simulate all life events for an individual, whose
+# relative risk of disease is 1, born in 1900.  From the output, this
+# individual has 1 child in 1944, and then dies in 1961.
 set.seed(1234)
 sim_lifeEvents(onset_hazard = my_onset_haz,
                death_hazard = my_death_haz,
@@ -63,13 +66,21 @@ sim_lifeEvents(onset_hazard = my_onset_haz,
                NB_params = c(2, 4/7), RR = 1,
                YOB = 1900)
 
+# Using the same random seed, notice how the life events can vary for
+# someone with an increased relative risk of disease, say 25.
+# From the output, this individual also has 1 child in 1944, then
+# experiences disease onset in 1949, and dies in 1957.
 set.seed(1234)
 sim_lifeEvents(onset_hazard = my_onset_haz,
                death_hazard = my_death_haz,
                part = my_part,
-               birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 25,
                YOB = 1900)
 
+}
+\references{
+OUR MANUSCRIPT
+
+Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 }
 

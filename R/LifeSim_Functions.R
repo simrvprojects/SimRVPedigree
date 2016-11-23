@@ -112,6 +112,8 @@ get_nextEvent = function(current_age, disease_status,
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
 #'
+#' @references OUR MANUSCRIPT
+#' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 #' @export
 #' @importFrom stats rgamma
 #'
@@ -122,6 +124,9 @@ get_nextEvent = function(current_age, disease_status,
 #' my_onset_haz <- AgeSpecific_Hazards[,1]
 #' my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
 #'
+#' # The following commands simulate all life events for an individual, whose
+#' # relative risk of disease is 1, born in 1900.  From the output, this
+#' # individual has 1 child in 1944, and then dies in 1961.
 #' set.seed(1234)
 #' sim_lifeEvents(onset_hazard = my_onset_haz,
 #'                death_hazard = my_death_haz,
@@ -130,11 +135,14 @@ get_nextEvent = function(current_age, disease_status,
 #'                NB_params = c(2, 4/7), RR = 1,
 #'                YOB = 1900)
 #'
+#' # Using the same random seed, notice how the life events can vary for
+#' # someone with an increased relative risk of disease, say 25.
+#' # From the output, this individual also has 1 child in 1944, then
+#' # experiences disease onset in 1949, and dies in 1957.
 #' set.seed(1234)
 #' sim_lifeEvents(onset_hazard = my_onset_haz,
 #'                death_hazard = my_death_haz,
 #'                part = my_part,
-#'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 25,
 #'                YOB = 1900)
 #'

@@ -190,6 +190,9 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' @export
 #' @importFrom stats runif
 #'
+#' @references OUR MANUSCRIPT
+#' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
+#'
 #' @section See Also:
 #' \code{\link{sim_RVped}}
 #'
@@ -354,15 +357,15 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
 #' @param birth_range Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
-#' @param NB_params Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher.
+#' @param NB_params Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #'
 #' @return  A list containing the following data frames:
 #' @return \code{full_ped} The full pedigree, prior to proband selection and trimming.
 #' @return \code{ascertained_ped} The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
 #' @export
 #'
+#' @references OUR MANUSCRIPT
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
-#'
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 #'
 #'
@@ -421,11 +424,9 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #'
 #'
 sim_RVped = function(onset_hazard, death_hazard, part, RR,
-                     founder_byears, ascertain_span,
-                     num_affected, FamID,
-                     recall_probs, stop_year,
-                     birth_range = c(18, 45),
-                     NB_params = c(2, 4/7)){
+                     founder_byears, ascertain_span, num_affected,
+                     FamID, recall_probs, stop_year,
+                     birth_range = c(18, 45), NB_params = c(2, 4/7)){
 
   if (any(is.na(onset_hazard)) | any(is.na(death_hazard)) | any(is.na(part))) {
     stop('age-specific hazards and age partition cannot contain missing values')

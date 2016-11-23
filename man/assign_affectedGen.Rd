@@ -10,15 +10,15 @@ assign_affectedGen(ped_file)
 \item{ped_file}{data.frame. A pedigree to reassign generation number based on affection status, see details.}
 }
 \value{
-\code{reGen_ped} A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.
+\code{reGen_ped} A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as, described in details.
 }
 \description{
-\code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD) [add citation] by affected members could have been introduced into the pedigree.
+\code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD), as defined in Thompson (2000), by affected members could have been introduced into the pedigree.
 }
 \details{
 The \code{assign_affectedGen} function accepts a pedigree simulated by \code{sim_RVped} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 is assigned to the most recent common ancestor of all affected members.  We note that the individual in generation 1 could themselves be affected, i.e. an individual can be considered their own ancestor.
 
-For example, consider a family with 2 affected members.  If the two affected members are a parent and his or her offspring, the affected parent would be assigned generation 1, and the affected child generation 2.  However, if the two affected members are a pair of siblings, each affected sibling would be assigned generation 2 since a common parent of the two affected siblings is assumed to be a carrier of a latent susceptibility variant.  Similarly, if the two affected members are a pair of cousins, each affected cousin is assigned generation 3, since a common grandparent of the two affected cousins is the most recent common ancestor from whom they could have inherited a shared variant associated with the disease. [cite our paper for this example]
+For example, consider a family with 2 affected members.  If the two affected members are a parent and his or her offspring, the affected parent would be assigned generation 1, and the affected child generation 2.  However, if the two affected members are a pair of siblings, each affected sibling would be assigned generation 2 since a common parent of the two affected siblings is assumed to be a carrier of a latent susceptibility variant.  Similarly, if the two affected members are a pair of cousins, each affected cousin is assigned generation 3, since a common grandparent of the two affected cousins is the most recent common ancestor from whom they could have inherited a shared variant associated with the disease.
 
 Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{assign_affectedGen} contains the following variables for each pedigree member:
 
@@ -86,5 +86,10 @@ for (k in 1:4) {
         side = 3)}
 
 
+}
+\references{
+OUR MANUSCRIPT
+
+Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 }
 
