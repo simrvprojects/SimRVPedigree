@@ -5,13 +5,16 @@
 #' By default \code{recall_probs} is four times the kinship coefficient, as defined by Thompson (see references), between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 #'
 #'
-#' Occasionally, a trimmed family member must be retained to ensure pedigree can be plotted.  When this occurs, these family members are censored of all pertinent information, and will always have the following qualities:
+#' Occasionally, a trimmed family member must be retained to ensure pedigree can be plotted.  When this occurs, family members who share a non-zero kinship coefficient with the proband are censored of all pertinent information, and will always have the following qualities:
 #' \enumerate{
 #'   \item availability status = 0
 #'   \item affected status = NA
 #'   \item birth year = NA
 #'   \item onset year = NA
 #'   \item death year = NA
+#'   \item RR = NA
+#'   \item DA1 = NA
+#'   \item DA2 = NA
 #' }
 #'
 #'
@@ -37,6 +40,7 @@
 #'                         momid = EgPeds$mom_id,
 #'                         sex = (EgPeds$gender + 1),
 #'                         affected = cbind(Affected = EgPeds$affected,
+#'                                          Proband = EgPeds$proband,
 #'                                          RV_status = EgPeds$DA1 +
 #'                                                      EgPeds$DA2),
 #'                         famid = EgPeds$FamID)['1']
@@ -47,9 +51,10 @@
 #'
 #' ## Trim pedigree examples
 #' #illustrate the effects of various recall_probs settings
-#' Recall_Probabilities <- list(r1 = c(1, 0),
-#'                              r2 = c(1),
-#'                              r3 = c(1, 0.5, 0.25, 0.125))
+#' Recall_Probabilities <- list(c(1),
+#'                              c(1, 0),
+#'                              c(1, 0.75, 0.5),
+#'                              c(0.5, 0.1, 0.05))
 #'
 #'
 #' for (k in 1:length(Recall_Probabilities)) {
@@ -64,7 +69,7 @@
 #'                     momid = TrimPed$mom_id,
 #'                     sex = (TrimPed$gender + 1),
 #'                     affected = cbind(Affected = TrimPed$affected,
-#'                                      Proband = TrimPed$is_proband,
+#'                                      Proband = TrimPed$proband,
 #'                                      RV_status = TrimPed$DA1 + TrimPed$DA2),
 #'                     famid = TrimPed$FamID)['1']
 #'
@@ -72,7 +77,7 @@
 #'    pedigree.legend(Tped, location = "topleft",  radius = 0.25)
 #'    mtext(paste0("recall_probs = (", sep = "",
 #'                 paste(Recall_Probabilities[[k]], collapse = ", "), ')' ),
-#'                 side = 3 )
+#'                 side = 3, line = 2 )
 #' }
 #'
 #'
@@ -86,6 +91,9 @@ trim_ped = function(ped_file, recall_probs){
   }
 
   probandID <- ped_file$ID[which(ped_file$proband == 1)]
+
+  #store info on marry-ins by ID
+  marry_ins <- ped_file$ID[which(ped_file$available == 0)]
 
   # generate a vector of Unif(0,1) RVs, to determine who is trimmed
   u <- runif(length(ped_file$ID))
@@ -105,7 +113,7 @@ trim_ped = function(ped_file, recall_probs){
     # and siblings with probability 1
 
     ped_trim <- ped_file[4*kin_proband >= u, ]
-  } else if (sum(recall_probs) == 1 & length(recall_probs) == 1) {
+  } else if (length(recall_probs) == 1 & sum(recall_probs) == 1) {
     ped_trim <- ped_file
   } else {
     # create rprobs, which associates the recall probabilities
@@ -164,8 +172,11 @@ trim_ped = function(ped_file, recall_probs){
         readd$birth_year <- NA
         readd$onset_year <- NA
         readd$death_year <- NA
-        readd$affected  <- NA
         readd$available <- 0
+        readd$affected  <- ifelse(readd$ID %in% marry_ins, 0, NA)
+        readd$DA1       <- ifelse(readd$ID %in% marry_ins, 0, NA)
+        readd$DA2       <- ifelse(readd$ID %in% marry_ins, 0, NA)
+        readd$RR        <- ifelse(readd$ID %in% marry_ins, 1, NA)
       }
 
       #add back to pedigree
