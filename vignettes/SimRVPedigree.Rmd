@@ -506,6 +506,7 @@ RV_peds = foreach(i = seq(npeds),
 [7] Thompson, E. (2000). 
   *Statistical Inference from Genetic Data on Pedigrees*. 
   NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
+  Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 
 [8] Ellen M. Wijsman (2012). 
   *The role of large pedigrees in an era of high-throughput sequencing*. 
