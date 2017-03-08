@@ -91,7 +91,8 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
                               Gen = dad_info$Gen + 1,
                               do_sim = 1,
                               stringsAsFactors=FALSE)
-  new_child_info$RR <- ifelse(sum(new_child_info$DA1, new_child_info$DA2) == 0, 1, RR)
+  new_child_info$RR <- ifelse(sum(new_child_info$DA1, new_child_info$DA2) == 0,
+                              1, RR)
   child_return <- list(new_child_info, last_id+1)
   return(child_return)
 }

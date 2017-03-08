@@ -13,8 +13,6 @@
 #'   \item onset year = NA
 #'   \item death year = NA
 #'   \item RR = NA
-#'   \item DA1 = NA
-#'   \item DA2 = NA
 #' }
 #'
 #'
@@ -175,8 +173,6 @@ trim_ped = function(ped_file, recall_probs){
         readd$death_year <- NA
         readd$available <- 0
         readd$affected  <- ifelse(readd$ID %in% marry_ins, 0, NA)
-        readd$DA1       <- ifelse(readd$ID %in% marry_ins, 0, NA)
-        readd$DA2       <- ifelse(readd$ID %in% marry_ins, 0, NA)
         readd$RR        <- ifelse(readd$ID %in% marry_ins, 1, NA)
       }
 
