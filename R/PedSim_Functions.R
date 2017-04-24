@@ -292,11 +292,14 @@ choose_proband = function(ped, num_affected, ascertain_span){
   A_ID <- ped[which(ped$affected == 1),
               which(colnames(ped) %in% c("onset_year", "ID", "proband"))]
   A_ID <- A_ID[order(A_ID$onset_year), ]
+  A_ID <- A_ID[which(A_ID$onset_year <= ascertain_span[2]), ]
   A_ID$proband <- ifelse(A_ID$onset_year %in% ascertain_span[1]:ascertain_span[2], 1, 0)
 
   if (sum(A_ID$proband) == 1) {
+    #In this scenario we have only 1 candidate proband
+    #NOTE: sim_RVped has already checked to make sure
+    #that there was another affected prior to this one
 
-    #only 1 candidate proband
     ped$proband[which(ped$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
 
   } else if (sum(abs(A_ID$proband - 1)) > (num_affected - 1)) {
@@ -501,6 +504,7 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
       # affected.  If it does, we choose a proband from the available
       # candidates prior to sending it to the trim_ped function.
       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
+          length(fam_ped$ID[which(fam_ped$onset_year <= ascertain_span[2])]) < 2 |
           length(fam_ped$ID[which(fam_ped$onset_year %in%
                                   ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
