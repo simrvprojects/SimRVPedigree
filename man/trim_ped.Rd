@@ -28,8 +28,6 @@ Occasionally, a trimmed family member must be retained to ensure that the pedigr
   \item onset year = NA
   \item death year = NA
   \item RR = NA
-  \item DA1 = NA
-  \item DA2 = NA
 }
 }
 \examples{
