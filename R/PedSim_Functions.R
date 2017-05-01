@@ -458,7 +458,8 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
     stop("death_hazard must be a data frame with 2 columns:,
          column 1 = unaffected age-specific death hazard,
          column 2 = affected age-specific death hazard")
-  }else if(sum(death_hazard[,1] > death_hazard[,2]) > nrow(death_hazard)/2){
+  }else if(sum(death_hazard[,1] > death_hazard[,2]) > nrow(death_hazard)/2 |
+           sum(which(death_hazard[,1] == death_hazard[,2])) != 0){
     warning("Please check that you have specified death_hazard such that:,
             column 1 = UNAFFECTED age-specific death hazard,
             column 2 = AFFECTED age-specific death hazard")
