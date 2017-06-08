@@ -140,7 +140,7 @@ Let's quickly plot the age-specific hazard rates against the ages they apply to.
 par(mfrow = c(1, 2), mar = c(5.1, 5.1, 4.1, 2.1))
 # plot age-specific hazard rate of disease by age
 plot(x = seq(0, 99, by = 1), y = AgeSpecific_Hazards[,1],
-     xlab = "Age (in years)", ylab = "Hazard Rate \n of Disease", 
+     xlab = "Age (in years)", ylab = "Hazard Rate of Disease", 
      main = "Hazard Rate of Disease by Age", 
      ylim = c(0, 0.002), col = "red3", lwd = 2, type = "s")
 # plot age-specific hazard rate of death by age
