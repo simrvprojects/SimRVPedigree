@@ -151,41 +151,41 @@ sim_lifeEvents = function(onset_hazard, death_hazard, part,
                           birth_range, NB_params, RR, YOB){
 
   #initialize data frame to hold life events
-  R.life  <- data.frame(Start = 0)
-  min.age <- min(part)
-  max.age <- max(part)
+  R_life  <- data.frame(Start = 0)
+  min_age <- min(part)
+  max_age <- max(part)
   #initialize disease status, start age at minumum age permissable under part
-  DS <- 0; t <- min.age
+  DS <- 0; t <- min_age
 
   #generate and store the birth rate for this individual
-  B.lambda <- rgamma(1, shape = NB_params[1],
+  B_lambda <- rgamma(1, shape = NB_params[1],
                        scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
                                                                  birth_range[1])
-  while(t < max.age){
+  while(t < max_age){
     #generate next event
-    my.step <- get_nextEvent(current_age = t, disease_status = DS,
-                             lambda_birth = B.lambda, onset_hazard, death_hazard,
+    l_event <- get_nextEvent(current_age = t, disease_status = DS,
+                             lambda_birth = B_lambda, onset_hazard, death_hazard,
                              part, birth_range, RR)
 
     #add to previous life events
-    R.life <- cbind(R.life, my.step)
+    R_life <- cbind(R_life, l_event)
 
-    if (colnames(my.step) == "Death") {
+    if (colnames(l_event) == "Death") {
       #if death occurs stop simulation by setting t = 100
-      t <- max.age
-    } else if (colnames(my.step) == "Onset") {
+      t <- max_age
+    } else if (colnames(l_event) == "Onset") {
       #if onset occurs change disease status and continue
-      t  <- t + as.numeric(my.step[1,1])
+      t  <- t + as.numeric(l_event[1,1])
       DS <- 1
     } else {
       #otherwise, increment counter, handles both birth event and case when no
       # event occurs (i.e. retry)
-      t <- t + as.numeric(my.step[1,1])
+      t <- t + as.numeric(l_event[1,1])
     }
   }
 
-  life_events <- round(cumsum(as.numeric(R.life[1,]))) + YOB
-  names(life_events) <- names(R.life)
+  life_events <- round(cumsum(as.numeric(R_life[1,]))) + YOB
+  names(life_events) <- names(R_life)
   return(life_events)
 
 }

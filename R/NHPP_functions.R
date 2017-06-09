@@ -24,10 +24,10 @@ get_WaitProb = function(last_event, wait_time,
   uplimit <- 1 - exp(approxCH(last_event)
                      -approxCH(part[length(part)]))
 
-  if(scale == FALSE){
-    wait_prob <- CumProb
-  } else {
+  if(scale){
     wait_prob <- CumProb/uplimit
+  } else {
+    wait_prob <- CumProb
   }
 
   return(wait_prob)
@@ -52,16 +52,17 @@ get_WaitTime = function(p, last_event, hazard, part,
 
   #Find the maximum value of findWaitProb so that we
   # can quickly return NA when u is greater than this value
+  max_age <- max(part)
 
-  MaxProb <- get_WaitProb(last_event, wait_time = max(part),
+  MaxProb <- get_WaitProb(last_event, wait_time = max_age,
                           hazard, part, scale)
 
   if (p > MaxProb) {
     w <- NA
   } else if (p < MaxProb) {
-    wts <- seq(0, (max(part) - last_event), by = 0.5)
-    if (max(wts) < (max(part) - last_event)){
-      wts <- c(wts, (max(part) - last_event))
+    wts <- seq(0, (max_age - last_event), by = 0.5)
+    if (max(wts) < (max_age - last_event)){
+      wts <- c(wts, (max_age - last_event))
     }
     probs <- get_WaitProb(wait_time = wts, last_event, hazard, part, scale)
 
@@ -69,7 +70,7 @@ get_WaitTime = function(p, last_event, hazard, part,
     b <- wts[which.max((p - probs) < 0)]
     w <- (a + b)/2
   } else if (p == MaxProb) {
-    w <- max(part) - last_event
+    w <- max_age - last_event
   }
   return(w)
 }

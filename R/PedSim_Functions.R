@@ -125,7 +125,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 
   # update disease status and onset year contingent on whether
   # or not they experience disease onset prior to stop_year
-  if (is.element("Onset", names(sim_years)) == TRUE) {
+  if (is.element("Onset", names(sim_years))) {
     o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
     if (o_year <= stop_year) {
       nfam_ped$affected <- 1
