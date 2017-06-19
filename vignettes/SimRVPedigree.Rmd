@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -52,10 +52,8 @@ The `sim_RVped()` function is used to randomly simulate families ascertained to 
 
 2. `ascertain_span`: The span, in years, in which the family-based study ascertains families for analysis.  We require that the proband, i.e. the affected family member who enlists the family for analysis, experienced disease onset during the ascertainment period.  Additionally, when `num_affected` = $n$ affected family members are requested, we require that at the time of ascertainment the proband is at least the $n^{th}$ affected.  For example, suppose that we would like to mimic a family-based study that requires at least 3 affected members per family.  Presumably, the family would be ascertained for study when the proband, upon speaking to the clinician, informs the clinician that he or she is aware of at least 2 family members who are also affected by the disease of interest.  We also require that this condition is met when simulating families with incomplete ascertainment, discussed next.
 
-4. `recall_probs`: the proband's recall probabilities, $\rho = (\rho_1, \rho_2, ..., \rho_n)$, for relatives where $$\rho_i = \left\{ \begin{array}{ll}
-                \text{proband recall probability for a relative of degree } i & \text{for } i = 1, 2, ..., n-1;\\
-                \text{proband recall probability for a relative of degree $n$ or greater} & \text{for } i = n.\end{array} \right.$$
-This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of four times the kinship coefficient, as defined in [7], between the proband and his or her relatives are assumed, which has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.
+4. `recall_probs`: the proband's recall probabilities for relatives, i.e. a list of length $q$ such as $p = (p_1, p_2, ..., p_q)$.  In this context, $p_i$ is used to denote the proband's recall probability for a relative of degree $i$ when $i = 1, 2, ..., q-1$, or the proband's recall probability for a relative of degree $q$ or greater when $i = q$.
+This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of four times the kinship coefficient, as defined in [7], between the proband and his or her relatives are assumed, which has the effect of retaining all first-degree relatives with probability 1, retaining all second-degree relatives with probability 0.5, retaining all third-degree relatives with probability 0.25, etc.
 
 3. `stop_year`: the stop year represents either: the year that the study ends or the last full year that data have been collected.  All events that occur after the stop year are censored.
 
@@ -87,7 +85,7 @@ We will illustrate the usage and output of this function in the next section.
 #5. Example Application to Family-Based Study <a name="Example"></a>
 Suppose that, from 2000 to 2015, researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphoid cancer.  Researchers believe that affected members within a family share a rare variant that increases disease susceptibility.  While they are not willing to assume that the same rare variant is segregating in all families, they are willing to make the simplifying assumption that all individuals carrying a genetic susceptibility variant share the same relative risk of disease.  They also believe that carriers of the susceptibility variant are 10 times more likely to develop lymphoid cancer than non-carriers.  
 
-Researchers confident that all affected family members have been fully ascertained.  Upon inspecting the founders in their ascertained families, they see that all were born between 1900 and 1980.
+Researchers are confident that all affected family members have been fully ascertained.  Upon inspecting the founders in the ascertained families, they see that all were born between 1900 and 1980.
 
 Based on the description of the family-based study described above, and referring to the input requirements in the last section, to randomly simulate families likely to be ascertained by this study with the `sim_RVped` function, users will set:
 
@@ -135,7 +133,7 @@ age_part <- seq(0, 100, by = 1)
 
 Let's quickly plot the age-specific hazard rates against the ages they apply to.
 
-```{r, fig.width = 7, fig.height = 4, eval = F}
+```{r, fig.width = 7, fig.height = 4}
 # plot age-specific hazard rates in the AgeSpecific_Hazards dataset
 par(mfrow = c(1, 2), mar = c(5.1, 5.1, 4.1, 2.1))
 # plot age-specific hazard rate of disease by age
@@ -174,7 +172,7 @@ ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
 
 ```
 
-The `sim_RVped` returns a list of two data frames.  The first data frame, named `full_ped`, represents the original pedigree prior to proband selection and trimming.  The second data frame, named `ascertain_ped`, represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [6], they are included in the ascertained pedigree, but their information is missing, and they are be labelled as unavailable.  
+The `sim_RVped` function returns a list of two data frames.  The first data frame, named `full_ped`, represents the original pedigree, prior to proband selection and trimming.  The second data frame, named `ascertain_ped`, represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [6], they are included in the ascertained pedigree, but their information is missing, and they are be labelled as unavailable.  
 
 Since we are interested in families that were ascertained for study, we will focus on the `ascertain_ped` data frame returned by the `sim_RVped()` function.  Let's look at the information that is contained in this data frame.
 
