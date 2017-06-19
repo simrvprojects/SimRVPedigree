@@ -84,4 +84,3 @@ OUR MANUSCRIPT
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 }
-

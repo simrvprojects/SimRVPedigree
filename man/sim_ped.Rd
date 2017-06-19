@@ -41,6 +41,7 @@ The rare variant is transmitted to any offspring of the founder according to Men
 
 \code{\link{sim_RVped}}
 }
+
 \examples{
 data(AgeSpecific_Hazards)
 
@@ -78,4 +79,3 @@ OUR MANUSCRIPT
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 }
-

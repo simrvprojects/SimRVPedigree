@@ -88,4 +88,3 @@ OUR MANUSCRIPT
 
 Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 }
-

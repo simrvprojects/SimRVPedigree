@@ -80,4 +80,3 @@ plot(Censor_ped)
 
 
 }
-

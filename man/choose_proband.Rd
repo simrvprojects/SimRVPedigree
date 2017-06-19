@@ -20,4 +20,3 @@ Pedigree with proband selected.
 Choose proband from simulated pedigree
 }
 \keyword{internal}
-
