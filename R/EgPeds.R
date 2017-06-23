@@ -10,7 +10,7 @@
 #' \describe{
 #' \item{FamID}{Family identification number}
 #' \item{ID}{Individual identification number}
-#' \item{gender}{Gender identification variable: \code{gender = 0} for males, and \code{gender = 1} females. }
+#' \item{sex}{sex identification variable: \code{sex = 0} for males, and \code{sex = 1} females. }
 #' \item{dad_id}{Identification number of father}
 #' \item{mom_id}{Identification number of mother}
 #' \item{affected}{Affection status: \code{affected = 1} if individual has developed lymphoid cancer, and 0 otherwise.}
