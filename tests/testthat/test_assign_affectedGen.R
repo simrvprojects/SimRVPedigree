@@ -1,8 +1,7 @@
 library(testthat)
 context("assign_affectedGen")
 test_that("assign_affectedGen returns a smaller or equally sized pedfile", {
-  RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                     death_hazard = AgeSpecific_Hazards[,c(2,3)],
+  RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                      part = seq(0, 100, by = 1),
                      GRR = 50, FamID = 1,
                      num_affected = 2,
@@ -15,8 +14,7 @@ test_that("assign_affectedGen returns a smaller or equally sized pedfile", {
 
 
 test_that("maximum re-assigned gen is at most maximum gen from original pedigree ", {
-  RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                     death_hazard = AgeSpecific_Hazards[,c(2,3)],
+  RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                      part = seq(0, 100, by = 1),
                      GRR = 50, FamID = 1,
                      num_affected = 2,
@@ -29,8 +27,7 @@ test_that("maximum re-assigned gen is at most maximum gen from original pedigree
 
 
 test_that("never have two affected individuals with reassigned gen = 1", {
-  RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                     death_hazard = AgeSpecific_Hazards[,c(2,3)],
+  RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                      part = seq(0, 100, by = 1),
                      GRR = 50, FamID = 1,
                      num_affected = 2,

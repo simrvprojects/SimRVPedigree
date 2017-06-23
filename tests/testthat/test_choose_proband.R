@@ -1,8 +1,7 @@
 library(testthat)
 context("choose_proband")
 test_that("returns a dataframe with the proband variable with a single proband", {
-  RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                     death_hazard = AgeSpecific_Hazards[,c(2,3)],
+  RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                      part = seq(0, 100, by = 1),
                      GRR = 50, FamID = 1,
                      num_affected = 2,
@@ -18,14 +17,13 @@ test_that("returns a dataframe with the proband variable with a single proband",
 })
 
 test_that("The proband is an affected and experienced onset during the ascertainment span", {
-  RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                    death_hazard = AgeSpecific_Hazards[,c(2,3)],
-                    part = seq(0, 100, by = 1),
-                    GRR = 50, FamID = 1,
-                    num_affected = 2,
-                    recall_probs = c(1),
-                    founder_byears = c(1900, 1970),
-                    ascertain_span = c(1980, 2015))[[1]][, c(1:14)]
+  RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
+                     part = seq(0, 100, by = 1),
+                     GRR = 50, FamID = 1,
+                     num_affected = 2,
+                     recall_probs = c(1),
+                     founder_byears = c(1900, 1970),
+                     ascertain_span = c(1980, 2015))[[1]][, c(1:14)]
 
   Tped = choose_proband(ped = RVped, num_affected = 2,
                         ascertain_span = c(1970, 2015))

@@ -4,16 +4,14 @@
 \alias{sim_RVped}
 \title{Simulate a Pedigree Ascertained to Contain Multiple Family Members Affected by a Disease}
 \usage{
-sim_RVped(onset_hazard, death_hazard, part, GRR, founder_byears, ascertain_span,
-  num_affected, FamID, recall_probs, stop_year, birth_range = c(18, 45),
-  NB_params = c(2, 4/7))
+sim_RVped(hazard_rates, part, GRR, founder_byears, ascertain_span, num_affected,
+  FamID, recall_probs, stop_year, birth_range = c(18, 45), NB_params = c(2,
+  4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
+\item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
-
-\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 
@@ -73,8 +71,7 @@ data(AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(13)
-ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                      death_hazard = AgeSpecific_Hazards[,c(2,3)],
+ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                       part = seq(0, 100, by = 1),
                       GRR = 15, FamID = 1,
                       founder_byears = c(1900, 1910),

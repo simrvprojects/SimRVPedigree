@@ -46,8 +46,7 @@ data(AgeSpecific_Hazards)
 
 #Simulate a pedigree ascertained for multiple affecteds
 set.seed(3)
-ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                      death_hazard = AgeSpecific_Hazards[,c(2,3)],
+ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                       part = seq(0, 100, by = 1),
                       num_affected = 2,
                       ascertain_span = c(1900, 2015),

@@ -61,24 +61,24 @@ This option is included to allow researchers to model the possibility that a pro
 
 To simulate a pedigree with `sim_RVped` the user must specify:
 
-1. `onset_hazard`: the population age-specific hazard rate for disease.
-2. `death_hazard`: a data frame with:
-     1. column 1: the age-specific hazard rate for death in the unaffected population.
-     2. column 2: the age-specific hazard rate for death in the affected population.
+1. `hazard_rates`: a data frame with:
+     1. column 1: the age-specific hazard rate for disease in the population.
+     2. column 2: the age-specific hazard rate for death in the unaffected population.
+     3. column 3: the age-specific hazard rate for death in the affected population.
    If the disease of interest is sufficiently rare, at the user's discretion, column 2 may be approximated by the population age-specific hazard rate for death. 
-3. `part`: a partition of ages over which to apply the age-specific hazard rates in `onset_hazard` and `death_hazard`.
-4. `GRR`: the genetic relative-risk, i.e. the relative-risk of disease for individuals who have inherited the rare variant. 
-5. `FamID`: the family ID to assign to the simulated pedigree.
-6. `founder_byears`: the span of years from which to simulate, uniformly, the founder's birth year.
-7. `ascertain_span`: the year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives. 
-8. `num_affected`: the minimum number of affected individuals in the pedigree. 
+2. `part`: a partition of ages over which to apply the age-specific hazard rates in `hazard_rates`.
+3. `GRR`: the genetic relative-risk, i.e. the relative-risk of disease for individuals who have inherited the rare variant. 
+4. `FamID`: the family ID to assign to the simulated pedigree.
+5. `founder_byears`: the span of years from which to simulate, uniformly, the founder's birth year.
+6. `ascertain_span`: the year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives. 
+7. `num_affected`: the minimum number of affected individuals in the pedigree. 
 
 Optional arguments:
 
-9. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
-10. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  If missing, it is assumed that `birth_range = c(18, 45)`.
-11. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. If missing, it is assumed that `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [2].
-12. `stop_year`: the last year of study.  If missing, the current year is used.
+8. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
+9. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  If missing, it is assumed that `birth_range = c(18, 45)`.
+10. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. If missing, it is assumed that `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [2].
+11. `stop_year`: the last year of study.  If missing, the current year is used.
 
 We will illustrate the usage and output of this function in the next section.
 
@@ -98,11 +98,11 @@ Based on the description of the family-based study described above, and referrin
 
 Additionally, the user will need to specify:
 
-1. `onset_hazard`: the population age-specific hazard rate for lymphoid cancer.
-2. `death_hazard`: a data frame with 2 columns:
-   1. `death_hazard[,1]`: the age-specific hazard rate for death in the unaffected population, i.e. individuals who have NOT had lymphoid cancer.
-   2. `death_hazard[,2]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
-3. `part`: a partition of ages over which to apply the age-specific hazard rates in `onset_hazard` and `death_hazard`.
+1. `hazard_rates`: a data frame with 3 columns:
+   1. `hazard_rates[, 1]`: the population age-specific hazard rate for lymphoid cancer.
+   2. `hazard_rates[, 2]`: the age-specific hazard rate for death in the unaffected population, i.e. individuals who have NOT had lymphoid cancer.
+   3. `hazard_rates[, 3]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
+2. `part`: a partition of ages over which to apply the age-specific hazard rates in `hazard_rates`.
 
 For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [4].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables provided by the Social Security Administration [5].
 
@@ -124,7 +124,7 @@ data("AgeSpecific_Hazards")
 colnames(AgeSpecific_Hazards)
 ```
 
-Looking at the output above, we can see that when we call `sim_RVped()`, we will set the `onset_hazard` argument to the first column in the `AgeSpecific_Hazards` data set, and the `death_hazard` argument will be set to the second and third columns (in that order) of the `AgeSpecific_Hazards` data set.  Since the `AgeSpecific_Hazards` data set supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partition to feed to the `part` argument of `sim_RVped` as follows:
+Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped().`  Since the `AgeSpecific_Hazards` data set supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partition to feed to the `part` argument of `sim_RVped` as follows:
 
 ```{r}
 # Specify age partition.
@@ -160,8 +160,7 @@ Finally, we show how `sim_RVped()` may be used to simulate a single family ascer
 ```{r}
 # Simulate a random pedigree 
 set.seed(3)
-ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                      death_hazard = AgeSpecific_Hazards[,c(2,3)],
+ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                       part = age_part,
                       num_affected = 2,
                       ascertain_span = c(2000, 2015),
@@ -464,8 +463,7 @@ RV_peds = foreach(i = seq(npeds),
                   .packages = c("kinship2", "SimRVPedigree"),  
                   .options.RNG = 1984
                   ) %dorng% {
-                    sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
-                              death_hazard = AgeSpecific_Hazards[,c(2,3)],
+                    sim_RVped(hazard_rates = AgeSpecific_Hazards,
                               part = seq(0, 100, by = 1),
                               num_affected = 2,
                               ascertain_span = c(1900, 2015),

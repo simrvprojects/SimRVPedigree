@@ -4,15 +4,13 @@
 \alias{sim_ped}
 \title{Simulate a Pedigree}
 \usage{
-sim_ped(onset_hazard, death_hazard, part, GRR, FamID, founder_byears, stop_year,
+sim_ped(hazard_rates, part, GRR, FamID, founder_byears, stop_year,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
+\item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
-
-\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 
@@ -46,13 +44,10 @@ The rare variant is transmitted to any offspring of the founder according to Men
 data(AgeSpecific_Hazards)
 
 my_part <- seq(0, 100, by = 1)
-my_onset_haz <- AgeSpecific_Hazards[,1]
-my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
 
 #Simulate a random pedigree
 set.seed(22)
-ex_ped <- sim_ped(onset_hazard = my_onset_haz,
-                  death_hazard = my_death_haz,
+ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
                   part = my_part,
                   GRR = 5, FamID = 1,
                   founder_byears = c(1900, 1910),

@@ -4,15 +4,12 @@
 \alias{sim_lifeEvents}
 \title{Simulate All Life Events}
 \usage{
-sim_lifeEvents(onset_hazard, death_hazard, part, birth_range, NB_params, RR,
-  YOB)
+sim_lifeEvents(hazard_rates, part, birth_range, NB_params, RR, YOB)
 }
 \arguments{
-\item{onset_hazard}{Numeric. The population age-specific hazard rate for disease.}
+\item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
 
-\item{death_hazard}{Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.}
-
-\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
+\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
 \item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -52,15 +49,12 @@ We make the following assumptions regarding the simulation of waiting times:
 data(AgeSpecific_Hazards)
 
 my_part <- seq(0, 100, by = 1)
-my_onset_haz <- AgeSpecific_Hazards[,1]
-my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
 
 # The following commands simulate all life events for an individual, whose
 # relative-risk of disease is 1, born in 1900.  From the output, this
 # individual has 1 child in 1944, and then dies in 1961.
 set.seed(1234)
-sim_lifeEvents(onset_hazard = my_onset_haz,
-               death_hazard = my_death_haz,
+sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
                part = my_part,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 1,
@@ -71,8 +65,7 @@ sim_lifeEvents(onset_hazard = my_onset_haz,
 # From the output, this individual also has 1 child in 1944, then
 # experiences disease onset in 1949, and dies in 1957.
 set.seed(1234)
-sim_lifeEvents(onset_hazard = my_onset_haz,
-               death_hazard = my_death_haz,
+sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
                part = my_part,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 25,

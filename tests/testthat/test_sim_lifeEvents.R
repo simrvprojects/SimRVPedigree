@@ -1,7 +1,6 @@
 context("sim_lifeEvents")
 test_that("sim_lifeEvents should always begin at start and end at death", {
-  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
-                            death_hazard = AgeSpecific_Hazards[,c(2:3)],
+  Levents <- sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),
                             RR = 25, YOB = 1900)
@@ -11,8 +10,7 @@ test_that("sim_lifeEvents should always begin at start and end at death", {
 })
 
 test_that("sim_lifeEvents never returns onset more than once", {
-  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
-                            death_hazard = AgeSpecific_Hazards[,c(2:3)],
+  Levents <- sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),
                             RR = 50, YOB = 1900)
@@ -24,8 +22,7 @@ test_that("sim_lifeEvents never returns onset more than once", {
 })
 
 test_that("sim_lifeEvents always returns death event after all other events", {
-  Levents <- sim_lifeEvents(onset_hazard = AgeSpecific_Hazards[,1],
-                            death_hazard = AgeSpecific_Hazards[,c(2:3)],
+  Levents <- sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
                             part = seq(0, 100, by = 1),
                             birth_range = c(18, 45), NB_params = c(2, 4/7),
                             RR = 50, YOB = 1900)
