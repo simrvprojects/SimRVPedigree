@@ -66,7 +66,7 @@ RV_status <- ex_ped$DA1 + ex_ped$DA2
 Affected  <- ex_ped$affected
 
 ex_pedigree <- pedigree(id = ex_ped$ID,
-                        dadid = ex_ped$dad_id,
+                        dadid = ex_ped$dadID,
                         momid = ex_ped$mom_id,
                         sex = (ex_ped$sex + 1),
                         affected = cbind(Affected, RV_status))

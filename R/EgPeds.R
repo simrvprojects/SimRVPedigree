@@ -11,7 +11,7 @@
 #' \item{FamID}{Family identification number}
 #' \item{ID}{Individual identification number}
 #' \item{sex}{sex identification variable: \code{sex = 0} for males, and \code{sex = 1} females. }
-#' \item{dad_id}{Identification number of father}
+#' \item{dadID}{Identification number of father}
 #' \item{mom_id}{Identification number of mother}
 #' \item{affected}{Affection status: \code{affected = 1} if individual has developed lymphoid cancer, and 0 otherwise.}
 #' \item{DA1}{Paternally inherited allele at the assumed disease locus: \code{DA1 = 1} if rare variant is present, and 0 otherwise.}

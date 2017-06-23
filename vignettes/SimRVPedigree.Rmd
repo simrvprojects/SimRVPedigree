@@ -189,7 +189,7 @@ The columns in the data frame above may be described as follows:
  1. `FamID`: family identification number 
  2. `ID`: individual identification number
  3. `sex`: sex identification variable: `sex = 0` for males, and `sex = 1` females. 
- 4. `dad_id`: identification number of father
+ 4. `dadID`: identification number of father
  5. `mom_id`: identification number of mother
  6. `affected`: affection status: `affected = 1` if individual has developed lymphoid cancer, and 0 otherwise.
  7. `DA1`: paternally inherited allele at the assumed disease locus: `DA1 = 1` if rare variant is present, and 0 otherwise.
@@ -215,7 +215,7 @@ Next, we will illustrate how to plot simulated pedigrees using the `kinship2` pa
 # about the ascertained pedigree, which we stored as 'studyPed', 
 # to kinship2's pedigree() function.
  ex_RVpedigree <- pedigree(id = studyPed$ID,
-                           dadid = studyPed$dad_id,
+                           dadid = studyPed$dadID,
                            momid = studyPed$mom_id,
                            sex = (studyPed$sex + 1),
                            affected = cbind(Affected = studyPed$affected,
@@ -296,7 +296,7 @@ OnsetAge2005 <- ifelse(is.na(Ped2005$onset_year),
 # the with() function to pass the censored pedigree to the pedigree() function.
 Censored_Ped <- with(Ped2005, 
                      pedigree(id = ID,
-                              dadid = dad_id,
+                              dadid = dadID,
                               momid = mom_id,
                               sex = (sex + 1),
                               affected = cbind(Affected = affected,
@@ -329,7 +329,7 @@ data(EgPeds)
 # pedigrees to a pedigree object.
 eg_peds <- with(EgPeds, pedigree(famid = FamID,
                                  id = ID,
-                                 dadid = dad_id,
+                                 dadid = dadID,
                                  momid = mom_id,
                                  sex = sex + 1,
                                  affected = affected))
@@ -344,7 +344,7 @@ RAG_peds <- rbind(assign_affectedGen(EgPeds[which(EgPeds$FamID == 1), ]),
 # Create pedigree object for pedigrees with reassigned generation numbers
 Rpeds <- with(RAG_peds, pedigree(famid = FamID,
                                  id = ID,
-                                 dadid = dad_id,
+                                 dadid = dadID,
                                  momid = mom_id,
                                  sex = sex + 1,
                                  affected = affected))

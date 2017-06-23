@@ -35,7 +35,7 @@
 #' #plot example_ped using kinship2
 #' library(kinship2)
 #' ex_pedigree <- pedigree(id = EgPeds$ID,
-#'                         dadid = EgPeds$dad_id,
+#'                         dadid = EgPeds$dadID,
 #'                         momid = EgPeds$mom_id,
 #'                         sex = (EgPeds$sex + 1),
 #'                         affected = cbind(Affected = EgPeds$affected,
@@ -64,7 +64,7 @@
 #'
 #'    #plot trimmed pedigree
 #'    Tped <- pedigree(id = TrimPed$ID,
-#'                     dadid = TrimPed$dad_id,
+#'                     dadid = TrimPed$dadID,
 #'                     momid = TrimPed$mom_id,
 #'                     sex = (TrimPed$sex + 1),
 #'                     affected = cbind(Affected = TrimPed$affected,
@@ -100,7 +100,7 @@ trim_ped = function(ped_file, recall_probs){
   #calculate the kinship matrix for our pedigree
   kin_mat <- kinship(ped_file,
                      id = ped_file$ID,
-                     dadid = ped_file$dad_id,
+                     dadid = ped_file$dadID,
                      momid = ped_file$mom_id)
 
   kin_proband <- kin_mat[, which(ped_file$ID == probandID)]
@@ -148,9 +148,9 @@ trim_ped = function(ped_file, recall_probs){
   d <- 0
   while (d == 0) {
     #find the dad IDs that are required but have been removed
-    miss_dad  <- !is.element(ped_trim$dad_id,
+    miss_dad  <- !is.element(ped_trim$dadID,
                              ped_trim$ID[which(ped_trim$sex == 0)])
-    readd_dad <- ped_trim$dad_id[miss_dad]
+    readd_dad <- ped_trim$dadID[miss_dad]
     readd_dad <- unique(readd_dad[!is.na(readd_dad)])
 
     #find the mom IDs that are required but have been removed

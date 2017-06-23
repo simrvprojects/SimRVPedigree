@@ -24,7 +24,7 @@ Users who wish to assign generation number based on affection status in pedigree
 
 \enumerate{
 \item \code{ID}: an identification number.
-\item \code{dad_id}: identification number of father.
+\item \code{dadID}: identification number of father.
 \item \code{mom_id}: identification number of mother.
 \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
@@ -42,7 +42,7 @@ library(kinship2)
 #assign to pedigree object to show before and after behavior of
 #the assign_affectedGen function
 ex_pedigree <- pedigree(id = EgPeds$ID,
-                        dadid = EgPeds$dad_id,
+                        dadid = EgPeds$dadID,
                         momid = EgPeds$mom_id,
                         sex = (EgPeds$sex + 1),
                         affected = EgPeds$affected,
@@ -59,7 +59,7 @@ for(i in 1:4){
 }
 
 RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
-                           dadid = RAG_peds$dad_id,
+                           dadid = RAG_peds$dadID,
                            momid = RAG_peds$mom_id,
                            sex = (RAG_peds$sex + 1),
                            affected = RAG_peds$affected,

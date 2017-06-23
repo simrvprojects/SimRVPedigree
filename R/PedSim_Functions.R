@@ -9,7 +9,7 @@ create_pedFile = function(){
   data.frame(FamID = numeric(),
              ID = numeric(),
              sex = numeric(),
-             dad_id = numeric(),
+             dadID = numeric(),
              mom_id = numeric(),
              affected = numeric(),
              DA1 = numeric(),
@@ -39,7 +39,7 @@ create_mate = function(partner_info, last_id){
   new_mate_info <- data.frame(FamID = partner_info$FamID,
                              ID = last_id+1,
                              sex = abs(partner_info$sex - 1),
-                             dad_id = NA,
+                             dadID = NA,
                              mom_id = NA,
                              affected = 0,
                              DA1 = 0,
@@ -78,7 +78,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
   new_child_info <- data.frame(FamID = dad_info$FamID,
                               ID = last_id+1,
                               sex = round(runif(1)),
-                              dad_id = dad_info$ID,
+                              dadID = dad_info$ID,
                               mom_id = mom_info$ID,
                               affected = 0,
                               DA1 = sample(x = c(dad_info$DA1, dad_info$DA2), size = 1),
@@ -221,7 +221,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' Affected  <- ex_ped$affected
 #'
 #' ex_pedigree <- pedigree(id = ex_ped$ID,
-#'                         dadid = ex_ped$dad_id,
+#'                         dadid = ex_ped$dadID,
 #'                         momid = ex_ped$mom_id,
 #'                         sex = (ex_ped$sex + 1),
 #'                         affected = cbind(Affected, RV_status))
@@ -241,7 +241,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
   fam_ped[1,] <- c(FamID,            #family ID
                    1,                #RV status
                    round(runif(1)),  #sex
-                   NA, NA,           #dad_id and #mom_id
+                   NA, NA,           #dadID and #mom_id
                    NA,               #affected status
                    1, 0,             #alleles 1 and 2,
                    round(runif(1, min = founder_byears[1],
@@ -401,7 +401,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #'
 #' #Define pedigree object for full pedigree, i.e. pedigree prior to trimming
 #' FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
-#'                         dadid = ex_RVped[[1]]$dad_id,
+#'                         dadid = ex_RVped[[1]]$dadID,
 #'                         momid = ex_RVped[[1]]$mom_id,
 #'                         sex = (ex_RVped[[1]]$sex + 1),
 #'                         affected = cbind(Affected = ex_RVped[[1]]$affected,
@@ -417,7 +417,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' #Define pedigree object for trimmed pedigree, i.e, pedigree with
 #' # proband selected and relatives trimmed
 #' TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
-#'                        dadid = ex_RVped[[2]]$dad_id,
+#'                        dadid = ex_RVped[[2]]$dadID,
 #'                        momid = ex_RVped[[2]]$mom_id,
 #'                        sex = (ex_RVped[[2]]$sex + 1),
 #'                        affected = cbind(Affected = ex_RVped[[2]]$affected,
