@@ -126,7 +126,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   # update disease status and onset year contingent on whether
   # or not they experience disease onset prior to stop_year
   if (is.element("Onset", names(sim_years))) {
-    o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
+    o_year <- as.numeric(sim_years[names(sim_years) == "Onset"])
     if (o_year <= stop_year) {
       nfam_ped$affected <- 1
       nfam_ped$onsetYr <- o_year
@@ -140,14 +140,14 @@ sim_nFam = function(found_info, stop_year, last_id,
   }
 
   #set the year of death if it occurs before stop_year
-  d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
+  d_year <- as.numeric(sim_years[names(sim_years) == "Death"])
   if (d_year <= stop_year) {
     nfam_ped$deathYr <- d_year
   }
 
   #store the birth years of each child
-  birth_events <- as.numeric(sim_years[which(names(sim_years) == "Child" &
-                                              sim_years <= stop_year)])
+  birth_events <- as.numeric(sim_years[names(sim_years) == "Child" &
+                                              sim_years <= stop_year])
 
   if (length(birth_events) > 0) {
     #add a mate
@@ -156,8 +156,8 @@ sim_nFam = function(found_info, stop_year, last_id,
     last_id <- new_mate[[2]]
 
     #store info for mom and dad
-    dad <- nfam_ped[which(nfam_ped$sex == 0), ]
-    mom <- nfam_ped[which(nfam_ped$sex == 1), ]
+    dad <- nfam_ped[nfam_ped$sex == 0, ]
+    mom <- nfam_ped[nfam_ped$sex == 1, ]
 
     for (k in 1:length(birth_events)) {
       #add child
