@@ -37,7 +37,7 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 
 2. We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 
-3. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases.  
+3. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative-risk of disease for genetic cases.  
 
 4. We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
@@ -67,7 +67,7 @@ To simulate a pedigree with `sim_RVped` the user must specify:
      2. column 2: the age-specific hazard rate for death in the affected population.
    If the disease of interest is sufficiently rare, at the user's discretion, column 2 may be approximated by the population age-specific hazard rate for death. 
 3. `part`: a partition of ages over which to apply the age-specific hazard rates in `onset_hazard` and `death_hazard`.
-4. `RR`: the relative risk of disease for individuals who have inherited the rare variant. 
+4. `RR`: the relative-risk of disease for individuals who have inherited the rare variant. 
 5. `FamID`: the family ID to assign to the simulated pedigree.
 6. `founder_byears`: the span of years from which to simulate, uniformly, the founder's birth year.
 7. `ascertain_span`: the year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives. 
@@ -83,7 +83,7 @@ Optional arguments:
 We will illustrate the usage and output of this function in the next section.
 
 #5. Example Application to Family-Based Study <a name="Example"></a>
-Suppose that, from 2000 to 2015, researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphoid cancer.  Researchers believe that affected members within a family share a rare variant that increases disease susceptibility.  While they are not willing to assume that the same rare variant is segregating in all families, they are willing to make the simplifying assumption that all individuals carrying a genetic susceptibility variant share the same relative risk of disease.  They also believe that carriers of the susceptibility variant are 10 times more likely to develop lymphoid cancer than non-carriers.  
+Suppose that, from 2000 to 2015, researchers collected data on 150 families that contain at least two, related individuals who are affected by a lymphoid cancer.  Researchers believe that affected members within a family share a rare variant that increases disease susceptibility.  While they are not willing to assume that the same rare variant is segregating in all families, they are willing to make the simplifying assumption that all individuals carrying a genetic susceptibility variant share the same relative-risk of disease.  They also believe that carriers of the susceptibility variant are 10 times more likely to develop lymphoid cancer than non-carriers.  
 
 Researchers are confident that all affected family members have been fully ascertained.  Upon inspecting the founders in the ascertained families, they see that all were born between 1900 and 1980.
 
@@ -197,7 +197,7 @@ The columns in the data frame above may be described as follows:
  9. `birthYr`: the individual's birth year.
  10. `onsetYr`: the individual's year of disease onset, when applicable.
  11. `deathYr`: the individual's year of death, when applicable.
- 12. `RR`: the individual's relative risk of disease.
+ 12. `RR`: the individual's relative-risk of disease.
  13. `available`: availability status: `available = 1` if individual is recalled by proband, otherwise `available = 0`.  We note that, by default, all marry-ins are unavailable since we do not simulate life events for marry-ins.
  14. `Gen`: the individual's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have `Gen = 1`, his or her offspring will have `Gen = 2`, etc.  
  15. `proband`: a proband identifier: `proband = 1` if the individual is the proband, and 0 otherwise.
@@ -399,15 +399,15 @@ In this example, in the leftmost pedigree, we see a pair of affected cousins (ID
 #6. Parallel Processing Example<a name="ParProcExample"></a>
 It is important to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affected members is directly related to (1) the rarity of the disease, and (2) arguments specified by the user.  In particular, we expect to see an increase in the required computation time as: 
 
- 1. the relative risk, `RR`, specified by the user approaches 1, particularly for rare diseases,
+ 1. the relative-risk, `RR`, specified by the user approaches 1, particularly for rare diseases,
  2. the ascertainment period, `ascertain_span`, narrows,
  3. the proband's relative recall probabilities, `recall_probs`, become smaller.
 
 For details concerning any of the arguments of the `sim_RVped()` function please refer to section 3.
 
-To illustrate the effect of the relative risk argument on the time required to simulate a study sample of 150 families for the family-study described in section 5, the following table lists the average computation times, in hours, observed over repeated simulations on a Windows OS with an i7-4790 @ 3.60 GHz, 12 GB of RAM, and a C220 SATA AHCI.
+To illustrate the effect of the relative-risk argument on the time required to simulate a study sample of 150 families for the family-study described in section 5, the following table lists the average computation times, in hours, observed over repeated simulations on a Windows OS with an i7-4790 @ 3.60 GHz, 12 GB of RAM, and a C220 SATA AHCI.
 
-Relative Risk | Average Computation Time (in hours) | Number of trials
+relative-risk | Average Computation Time (in hours) | Number of trials
 ------------- | ------------------------------------|-----------------
 1 | 9.72 | 20
 5 | 1.15 | 15

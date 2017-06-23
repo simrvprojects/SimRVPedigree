@@ -1,10 +1,10 @@
 #' Simulate Next Life Event
 #'
-#' Primarily intended as an internal function, \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative risk of disease.
+#' Primarily intended as an internal function, \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative-risk of disease.
 #'
 #' Given their current age, \code{get_nextEvent} randomly simulates an individual's next life event by generating waiting times to reproduction, onset, and death.  The event with the shortest waiting time is chosen as the next life event.
 #'
-#'  We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
+#'  We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative-risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
 #'
 #' We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population.  If the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 #'
@@ -21,7 +21,7 @@
 #' @param current_age Numeric. The individual's current age.
 #' @param disease_status Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth Numeric. The individual's birth rate.
-#' @param RR Numeric. The individual's relative risk of disease.
+#' @param RR Numeric. The individual's relative-risk of disease.
 #' @inheritParams sim_RVped
 #'
 #' @return A named matrix. The number of years until the next life event,
@@ -90,7 +90,7 @@ get_nextEvent = function(current_age, disease_status,
 #'
 #'  We make the following assumptions regarding the simulation of waiting times:
 #'  \enumerate{
-#'  \item We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
+#'  \item We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative-risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
 #'
 #'  \item We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 #'
@@ -107,7 +107,7 @@ get_nextEvent = function(current_age, disease_status,
 #' }
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
-#' @param RR Numeric. The individual's relative risk of disease.
+#' @param RR Numeric. The individual's relative-risk of disease.
 #' @inheritParams sim_RVped
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
@@ -125,7 +125,7 @@ get_nextEvent = function(current_age, disease_status,
 #' my_death_haz <- AgeSpecific_Hazards[,c(2,3)]
 #'
 #' # The following commands simulate all life events for an individual, whose
-#' # relative risk of disease is 1, born in 1900.  From the output, this
+#' # relative-risk of disease is 1, born in 1900.  From the output, this
 #' # individual has 1 child in 1944, and then dies in 1961.
 #' set.seed(1234)
 #' sim_lifeEvents(onset_hazard = my_onset_haz,
@@ -136,7 +136,7 @@ get_nextEvent = function(current_age, disease_status,
 #'                YOB = 1900)
 #'
 #' # Using the same random seed, notice how the life events can vary for
-#' # someone with an increased relative risk of disease, say 25.
+#' # someone with an increased relative-risk of disease, say 25.
 #' # From the output, this individual also has 1 child in 1944, then
 #' # experiences disease onset in 1949, and dies in 1957.
 #' set.seed(1234)

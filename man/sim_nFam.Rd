@@ -24,7 +24,7 @@ sim_nFam(found_info, stop_year, last_id, onset_hazard, death_hazard, part,
 
 \item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
-\item{RR}{Numeric. The relative risk of disease for individuals who inherit the rare variant.}
+\item{RR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 }
 \value{
 A pedigree with updated life events for the founder, and

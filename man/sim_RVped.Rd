@@ -15,7 +15,7 @@ sim_RVped(onset_hazard, death_hazard, part, RR, founder_byears, ascertain_span,
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{Numeric. The relative risk of disease for individuals who inherit the rare variant.}
+\item{RR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 
 \item{founder_byears}{Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
