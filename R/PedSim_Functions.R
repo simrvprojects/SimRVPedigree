@@ -14,9 +14,9 @@ create_pedFile = function(){
              affected = numeric(),
              DA1 = numeric(),
              DA2 = numeric(),
-             birth_year = numeric(),
-             onset_year = numeric(),
-             death_year = numeric(),
+             birthYr = numeric(),
+             onsetYr = numeric(),
+             deathYr = numeric(),
              RR = numeric(),
              available = numeric(),
              Gen = numeric(),
@@ -44,9 +44,9 @@ create_mate = function(partner_info, last_id){
                              affected = 0,
                              DA1 = 0,
                              DA2 = 0,
-                             birth_year = NA,
-                             onset_year = NA,
-                             death_year = NA,
+                             birthYr = NA,
+                             onsetYr = NA,
+                             deathYr = NA,
                              RR = 1,
                              available = 0,
                              Gen = partner_info$Gen,
@@ -83,9 +83,9 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
                               affected = 0,
                               DA1 = sample(x = c(dad_info$DA1, dad_info$DA2), size = 1),
                               DA2 = sample(x = c(mom_info$DA1, mom_info$DA2), size = 1),
-                              birth_year = byear,
-                              onset_year = NA,
-                              death_year = NA,
+                              birthYr = byear,
+                              onsetYr = NA,
+                              deathYr = NA,
                               RR = NA,
                               available = 1,
                               Gen = dad_info$Gen + 1,
@@ -120,7 +120,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   sim_years <- sim_lifeEvents(onset_hazard, death_hazard, part,
                               birth_range, NB_params,
                               RR = found_info$RR,
-                              YOB = found_info$birth_year)
+                              YOB = found_info$birthYr)
 
 
   # update disease status and onset year contingent on whether
@@ -129,20 +129,20 @@ sim_nFam = function(found_info, stop_year, last_id,
     o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
     if (o_year <= stop_year) {
       nfam_ped$affected <- 1
-      nfam_ped$onset_year <- o_year
+      nfam_ped$onsetYr <- o_year
     } else {
       nfam_ped$affected <- 0
-      nfam_ped$onset_year <- NA
+      nfam_ped$onsetYr <- NA
     }
   } else {
     nfam_ped$affected <- 0
-    nfam_ped$onset_year <- NA
+    nfam_ped$onsetYr <- NA
   }
 
   #set the year of death if it occurs before stop_year
   d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
   if (d_year <= stop_year) {
-    nfam_ped$death_year <- d_year
+    nfam_ped$deathYr <- d_year
   }
 
   #store the birth years of each child
@@ -290,10 +290,10 @@ choose_proband = function(ped, num_affected, ascertain_span){
 
   #Gather info on affecteds
   A_ID <- ped[which(ped$affected == 1),
-              which(colnames(ped) %in% c("onset_year", "ID", "proband"))]
-  A_ID <- A_ID[order(A_ID$onset_year), ]
-  A_ID <- A_ID[which(A_ID$onset_year <= ascertain_span[2]), ]
-  A_ID$proband <- ifelse(A_ID$onset_year %in% ascertain_span[1]:ascertain_span[2], 1, 0)
+              which(colnames(ped) %in% c("onsetYr", "ID", "proband"))]
+  A_ID <- A_ID[order(A_ID$onsetYr), ]
+  A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
+  A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], 1, 0)
 
   if (sum(A_ID$proband) == 1) {
     #In this scenario we have only 1 candidate proband
@@ -505,8 +505,8 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
       # affected.  If it does, we choose a proband from the available
       # candidates prior to sending it to the trim_ped function.
       if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
-          length(fam_ped$ID[which(fam_ped$onset_year <= ascertain_span[2])]) < 2 |
-          length(fam_ped$ID[which(fam_ped$onset_year %in%
+          length(fam_ped$ID[which(fam_ped$onsetYr <= ascertain_span[2])]) < 2 |
+          length(fam_ped$ID[which(fam_ped$onsetYr %in%
                                   ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
       } else {
@@ -524,7 +524,7 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
       ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
     }
 
-    Oyears <- ascertained_ped$onset_year[which(ascertained_ped$affected == 1 &
+    Oyears <- ascertained_ped$onsetYr[which(ascertained_ped$affected == 1 &
                                           ascertained_ped$available == 1 &
                                           ascertained_ped$proband == 0)]
 

@@ -168,9 +168,9 @@ trim_ped = function(ped_file, recall_probs){
 
       #remove all of their simulated data, and mark unavailable
       if (nrow(readd) >= 1) {
-        readd$birth_year <- NA
-        readd$onset_year <- NA
-        readd$death_year <- NA
+        readd$birthYr <- NA
+        readd$onsetYr <- NA
+        readd$deathYr <- NA
         readd$available <- 0
         readd$affected  <- ifelse(readd$ID %in% marry_ins, 0, NA)
         readd$RR        <- ifelse(readd$ID %in% marry_ins, 1, NA)

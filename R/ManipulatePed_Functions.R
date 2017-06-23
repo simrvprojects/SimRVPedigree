@@ -14,9 +14,9 @@
 #' \item \code{momID}: identification number of mother.
 #' \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 #' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
-#' \item \code{birth_year}: the individual's year of birth.
-#' \item \code{onset_year}: the individual's disease onset year, when applicable.
-#' \item \code{death_year}: the individual's death year, when applicable.
+#' \item \code{birthYr}: the individual's year of birth.
+#' \item \code{onsetYr}: the individual's disease onset year, when applicable.
+#' \item \code{deathYr}: the individual's death year, when applicable.
 #' \item \code{Gen}: the individual's generation number relative to the eldest founder.  For the eldest founder \code{Gen = 1}, for his or her offspring \code{Gen = 2}, etc.
 #' }
 #'
@@ -202,13 +202,13 @@ assign_affectedGen = function(ped_file){
 #' \item \code{momID}: identification number of mother.
 #' \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 #' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
-#' \item \code{birth_year}: the individual's birth year.
-#' \item \code{onset_year}: the individual's disease onset year, when applicable.
-#' \item \code{death_year}: the individual's death year, when applicable.
+#' \item \code{birthYr}: the individual's birth year.
+#' \item \code{onsetYr}: the individual's disease onset year, when applicable.
+#' \item \code{deathYr}: the individual's death year, when applicable.
 #' \item \code{proband}: (Optional) Proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.
 #' }
 #'
-#' If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
+#' If an individual has not experienced disease onset and/or death, then \code{onsetYr = NA} and/or \code{deathYr = NA}.
 #'
 #' If \code{censor_year} is missing, when the pedigree contains a proband, \code{censor_year} is set, internally, to the year that the proband experienced disease onset. However, if \code{ped_file} does not contain the proband identification variable the user must supply a value for \code{censor_year}.
 #'
@@ -263,27 +263,27 @@ censor_ped = function(ped_file, censor_year){
 
   if (missing(censor_year)) {
     if ("proband" %in% colnames(ped_file)) {
-      censor_year <- ped_file$onset_year[which(ped_file$proband == 1)]
+      censor_year <- ped_file$onsetYr[which(ped_file$proband == 1)]
     } else {
       stop("Ped file must contain a proband or user must supply censor_year")
     }
   }
 
   #create new ped file containing only individuals born before the censor year
-  censored_ped <- ped_file[which(ped_file$birth_year <= censor_year), ]
+  censored_ped <- ped_file[which(ped_file$birthYr <= censor_year), ]
 
   if (nrow(censored_ped) == 0) {
     warning("Please check censor_year, no pedigree information prior to censor_year")
     return(censored_ped)
   } else {
     #censor onset and death events prior to censor year
-    censored_ped$affected <- ifelse(is.na(censored_ped$onset_year), 0,
-                                    ifelse(censored_ped$onset_year <= censor_year,
+    censored_ped$affected <- ifelse(is.na(censored_ped$onsetYr), 0,
+                                    ifelse(censored_ped$onsetYr <= censor_year,
                                            censored_ped$affected, 0))
-    censored_ped$onset_year <- ifelse(censored_ped$onset_year <= censor_year,
-                                      censored_ped$onset_year, NA)
-    censored_ped$death_year <- ifelse(censored_ped$death_year <= censor_year,
-                                      censored_ped$death_year, NA)
+    censored_ped$onsetYr <- ifelse(censored_ped$onsetYr <= censor_year,
+                                      censored_ped$onsetYr, NA)
+    censored_ped$deathYr <- ifelse(censored_ped$deathYr <= censor_year,
+                                      censored_ped$deathYr, NA)
 
     d <- 0
     while (d == 0) {

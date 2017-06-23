@@ -28,13 +28,13 @@ Users who wish to censor pedigrees which have not been simulated by \code{\link{
 \item \code{momID}: identification number of mother.
 \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
-\item \code{birth_year}: the individual's birth year.
-\item \code{onset_year}: the individual's disease onset year, when applicable.
-\item \code{death_year}: the individual's death year, when applicable.
+\item \code{birthYr}: the individual's birth year.
+\item \code{onsetYr}: the individual's disease onset year, when applicable.
+\item \code{deathYr}: the individual's death year, when applicable.
 \item \code{proband}: (Optional) Proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.
 }
 
-If an individual has not experienced disease onset and/or death, then \code{onset_year = NA} and/or \code{death_year = NA}.
+If an individual has not experienced disease onset and/or death, then \code{onsetYr = NA} and/or \code{deathYr = NA}.
 
 If \code{censor_year} is missing, when the pedigree contains a proband, \code{censor_year} is set, internally, to the year that the proband experienced disease onset. However, if \code{ped_file} does not contain the proband identification variable the user must supply a value for \code{censor_year}.
 

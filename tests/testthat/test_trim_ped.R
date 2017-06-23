@@ -9,6 +9,6 @@ test_that("returns an error when no proband selected", {
 test_that("The proband is an affected and experienced onset during the ascertainment span", {
   Tped <- trim_ped(ped_file = EgPeds[which(EgPeds$FamID == 1), ])
   expect_true(Tped$affected[which(Tped$proband == 1)] == 1)
-  expect_true(Tped$onset_year[which(Tped$proband == 1)] >= 2000 &
-                Tped$onset_year[which(Tped$proband == 1)] <= 2015)
+  expect_true(Tped$onsetYr[which(Tped$proband == 1)] >= 2000 &
+                Tped$onsetYr[which(Tped$proband == 1)] <= 2015)
 })

@@ -40,7 +40,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
                      founder_byears = c(1900, 1910),
                      ascertain_span = c(1970, 2015))[[2]]
 
-  Oyears <- RVped$onset_year[which(RVped$affected == 1 &
+  Oyears <- RVped$onsetYr[which(RVped$affected == 1 &
                                      RVped$available == 1 &
                                      RVped$proband == 0)]
 

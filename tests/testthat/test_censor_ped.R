@@ -36,9 +36,9 @@ test_that("censor_ped does not return any info after the censor year", {
                      founder_byears = c(1900, 1980),
                      ascertain_span = c(1980, 2015))[[2]]
 
-  my_Cyear <- RVped$onset_year[which(RVped$proband == 1)]
+  my_Cyear <- RVped$onsetYr[which(RVped$proband == 1)]
   C_ped <- censor_ped(ped_file = RVped, censor_year = my_Cyear)
-  expect_gte(my_Cyear, max(C_ped$birth_year, na.rm = T))
-  expect_gte(my_Cyear, max(C_ped$onset_year, na.rm = T))
-  expect_gte(my_Cyear, max(C_ped$death_year, na.rm = T))
+  expect_gte(my_Cyear, max(C_ped$birthYr, na.rm = T))
+  expect_gte(my_Cyear, max(C_ped$onsetYr, na.rm = T))
+  expect_gte(my_Cyear, max(C_ped$deathYr, na.rm = T))
 })

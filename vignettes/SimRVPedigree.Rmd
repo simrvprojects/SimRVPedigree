@@ -194,9 +194,9 @@ The columns in the data frame above may be described as follows:
  6. `affected`: affection status: `affected = 1` if individual has developed lymphoid cancer, and 0 otherwise.
  7. `DA1`: paternally inherited allele at the assumed disease locus: `DA1 = 1` if rare variant is present, and 0 otherwise.
  8. `DA2`: maternally inherited allele at the assumed disease locus: `DA2 = 1` if rare variant is present, and 0 otherwise.
- 9. `birth_year`: the individual's birth year.
- 10. `onset_year`: the individual's year of disease onset, when applicable.
- 11. `death_year`: the individual's year of death, when applicable.
+ 9. `birthYr`: the individual's birth year.
+ 10. `onsetYr`: the individual's year of disease onset, when applicable.
+ 11. `deathYr`: the individual's year of death, when applicable.
  12. `RR`: the individual's relative risk of disease.
  13. `available`: availability status: `available = 1` if individual is recalled by proband, otherwise `available = 0`.  We note that, by default, all marry-ins are unavailable since we do not simulate life events for marry-ins.
  14. `Gen`: the individual's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have `Gen = 1`, his or her offspring will have `Gen = 2`, etc.  
@@ -222,7 +222,7 @@ Next, we will illustrate how to plot simulated pedigrees using the `kinship2` pa
                                             Proband = studyPed$proband,
                                             RV_status = studyPed$DA1 + 
                                                         studyPed$DA2),
-                           status = ifelse(is.na(studyPed$death_year), 0, 1))
+                           status = ifelse(is.na(studyPed$deathYr), 0, 1))
 
 
  # Plot pedigree by passing the pedigree object to the plot() function.
@@ -237,18 +237,18 @@ Often, there is additional individual information we would like to display along
 ```{r, fig.height = 7, fig.width = 7}
 # Since the study ended in 2015, let's create an age label for individuals 
 # for whom we have a year of birth and who haven't died by 2015.
-Age2015 <- ifelse(is.na(studyPed$birth_year) | !is.na(studyPed$death_year), 
-                     " ", paste0("\n age: ", 2015 - studyPed$birth_year))
+Age2015 <- ifelse(is.na(studyPed$birthYr) | !is.na(studyPed$deathYr), 
+                     " ", paste0("\n age: ", 2015 - studyPed$birthYr))
 
 # Create a death age label for individuals who have died by 2015.
-DeathAge2015 <- ifelse(is.na(studyPed$death_year), 
+DeathAge2015 <- ifelse(is.na(studyPed$deathYr), 
                    " ", paste0("\n death age: ", 
-                               studyPed$death_year - studyPed$birth_year))
+                               studyPed$deathYr - studyPed$birthYr))
 
 # Create an onset age label for individuals who experienced onset by 2015.
-OnsetAge2015 <- ifelse(is.na(studyPed$onset_year), 
+OnsetAge2015 <- ifelse(is.na(studyPed$onsetYr), 
                    " ", paste0("\n onset age: ", 
-                               studyPed$onset_year - studyPed$birth_year))
+                               studyPed$onsetYr - studyPed$birthYr))
 
 # Plot pedigree with new id labels that reflect pedigree ages in 2015.
 plot(ex_RVpedigree, cex = 0.9, 
@@ -264,7 +264,7 @@ It is important to note that the pedigree above may have looked quite different 
 
 ```{r}
 # Determine ascertainment year by viewing the proband's year of disease onset.
-studyPed$onset_year[which(studyPed$proband == 1)]
+studyPed$onsetYr[which(studyPed$proband == 1)]
 ```
 
 From the output above we see that the example pedigree was ascertained in 2005.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor_ped()` function to censor all events that occurred after 2005.  The following code illustrates this process.
@@ -276,19 +276,19 @@ Ped2005 <- censor_ped(ped_file = studyPed, censor_year = 2005)
 # Next, create new lables for the censored pedigree.
 # This time we first create age labels for individuals for whom we know
 # the year of birth and who hadn't died by 2005.
-Age2005 <- ifelse(is.na(Ped2005$birth_year) | !is.na(Ped2005$death_year),
-                  " ", paste0("\n age: ", 2005 - Ped2005$birth_year))
+Age2005 <- ifelse(is.na(Ped2005$birthYr) | !is.na(Ped2005$deathYr),
+                  " ", paste0("\n age: ", 2005 - Ped2005$birthYr))
 
 # Next, we create a death age label for individuals who had died by 2005
-DeathAge2005 <- ifelse(is.na(Ped2005$death_year), 
+DeathAge2005 <- ifelse(is.na(Ped2005$deathYr), 
                        " ", paste0("\n death age: ", 
-                                   Ped2005$death_year -  Ped2005$birth_year))
+                                   Ped2005$deathYr -  Ped2005$birthYr))
 
 # Finally, we create an onset age label for individuals who had 
 # experienced disease onset by the year 2005.
-OnsetAge2005 <- ifelse(is.na(Ped2005$onset_year), 
+OnsetAge2005 <- ifelse(is.na(Ped2005$onsetYr), 
                        " ", paste0("\n onset age: ",
-                                   Ped2005$onset_year - Ped2005$birth_year))
+                                   Ped2005$onsetYr - Ped2005$birthYr))
 
 # To plot the pedigree as it appeared in 2005, we must define a new pedigree 
 # object for the 2005 pedigree.  Since there are different ways to define a 
@@ -302,7 +302,7 @@ Censored_Ped <- with(Ped2005,
                               affected = cbind(Affected = affected,
                                                Proband = proband,
                                                RV_status = DA1 + DA2),
-                              status = ifelse(is.na(death_year), 0, 1)))
+                              status = ifelse(is.na(deathYr), 0, 1)))
 
 # Plot pedigree with d labels updated to reflect the pedigree in 2005.
 plot(Censored_Ped, cex = 0.9, 

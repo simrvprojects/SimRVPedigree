@@ -28,9 +28,9 @@ Users who wish to assign generation number based on affection status in pedigree
 \item \code{momID}: identification number of mother.
 \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
-\item \code{birth_year}: the individual's year of birth.
-\item \code{onset_year}: the individual's disease onset year, when applicable.
-\item \code{death_year}: the individual's death year, when applicable.
+\item \code{birthYr}: the individual's year of birth.
+\item \code{onsetYr}: the individual's disease onset year, when applicable.
+\item \code{deathYr}: the individual's death year, when applicable.
 \item \code{Gen}: the individual's generation number relative to the eldest founder.  For the eldest founder \code{Gen = 1}, for his or her offspring \code{Gen = 2}, etc.
 }
 }

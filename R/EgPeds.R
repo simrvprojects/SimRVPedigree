@@ -16,9 +16,9 @@
 #' \item{affected}{Affection status: \code{affected = 1} if individual has developed lymphoid cancer, and 0 otherwise.}
 #' \item{DA1}{Paternally inherited allele at the assumed disease locus: \code{DA1 = 1} if rare variant is present, and 0 otherwise.}
 #' \item{DA2}{Maternally inherited allele at the assumed disease locus: \code{DA2 = 1} if rare variant is present, and 0 otherwise.}
-#' \item{birth_year}{Subject's year of birth}
-#' \item{onset_year}{Subject's year of disease onset, when applicable.}
-#' \item{death_year}{Subject's year of death, when applicable.}
+#' \item{birthYr}{Subject's year of birth}
+#' \item{onsetYr}{Subject's year of disease onset, when applicable.}
+#' \item{deathYr}{Subject's year of death, when applicable.}
 #' \item{RR}{Subject's relative risk of disease}
 #' \item{available}{Availability status, \code{available  = 0} if the individual is unavailable, and 1 otherwise}
 #' \item{Gen}{The subject's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have \code{Gen = 1}, his or her offspring will have \code{Gen = 2}, etc.}
