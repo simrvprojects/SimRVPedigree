@@ -38,7 +38,7 @@ data(EgPeds)
 library(kinship2)
 ex_pedigree <- pedigree(id = EgPeds$ID,
                         dadid = EgPeds$dadID,
-                        momid = EgPeds$mom_id,
+                        momid = EgPeds$momID,
                         sex = (EgPeds$sex + 1),
                         affected = cbind(Affected = EgPeds$affected,
                                          Proband = EgPeds$proband,
@@ -67,7 +67,7 @@ for (k in 1:length(Recall_Probabilities)) {
    #plot trimmed pedigree
    Tped <- pedigree(id = TrimPed$ID,
                     dadid = TrimPed$dadID,
-                    momid = TrimPed$mom_id,
+                    momid = TrimPed$momID,
                     sex = (TrimPed$sex + 1),
                     affected = cbind(Affected = TrimPed$affected,
                                      Proband = TrimPed$proband,

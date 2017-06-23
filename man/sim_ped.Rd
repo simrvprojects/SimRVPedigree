@@ -67,7 +67,7 @@ Affected  <- ex_ped$affected
 
 ex_pedigree <- pedigree(id = ex_ped$ID,
                         dadid = ex_ped$dadID,
-                        momid = ex_ped$mom_id,
+                        momid = ex_ped$momID,
                         sex = (ex_ped$sex + 1),
                         affected = cbind(Affected, RV_status))
 plot(ex_pedigree)

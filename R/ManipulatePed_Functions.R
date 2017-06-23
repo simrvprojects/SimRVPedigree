@@ -11,7 +11,7 @@
 #' \enumerate{
 #' \item \code{ID}: an identification number.
 #' \item \code{dadID}: identification number of father.
-#' \item \code{mom_id}: identification number of mother.
+#' \item \code{momID}: identification number of mother.
 #' \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 #' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
 #' \item \code{birth_year}: the individual's year of birth.
@@ -39,7 +39,7 @@
 #' #the assign_affectedGen function
 #' ex_pedigree <- pedigree(id = EgPeds$ID,
 #'                         dadid = EgPeds$dadID,
-#'                         momid = EgPeds$mom_id,
+#'                         momid = EgPeds$momID,
 #'                         sex = (EgPeds$sex + 1),
 #'                         affected = EgPeds$affected,
 #'                         famid = EgPeds$FamID)
@@ -56,7 +56,7 @@
 #'
 #' RAG_pedigrees <-  pedigree(id = RAG_peds$ID,
 #'                            dadid = RAG_peds$dadID,
-#'                            momid = RAG_peds$mom_id,
+#'                            momid = RAG_peds$momID,
 #'                            sex = (RAG_peds$sex + 1),
 #'                            affected = RAG_peds$affected,
 #'                            famid = RAG_peds$FamID)
@@ -100,9 +100,9 @@ assign_affectedGen = function(ped_file){
       readd_dad <- unique(readd_dad[!is.na(readd_dad)])
 
       #find the mom IDs that are required but have been removed
-      miss_mom  <- !is.element(reGen_ped$mom_id,
+      miss_mom  <- !is.element(reGen_ped$momID,
                                reGen_ped$ID[which(reGen_ped$sex == 1)])
-      readd_mom <- reGen_ped$mom_id[miss_mom]
+      readd_mom <- reGen_ped$momID[miss_mom]
       readd_mom <- unique(readd_mom[!is.na(readd_mom)])
 
       #check to see if we need to readd anyone
@@ -145,7 +145,7 @@ assign_affectedGen = function(ped_file){
       kin_mat <- kinship(reGen_ped,
                          id = reGen_ped$ID,
                          dadid = reGen_ped$dadID,
-                         momid = reGen_ped$mom_id)
+                         momid = reGen_ped$momID)
 
       #find the distance between only those in the lowest generation
       kin_distance <- -log(kin_mat[which(reGen_ped$Gen == min_gen),
@@ -160,7 +160,7 @@ assign_affectedGen = function(ped_file){
       kin_mat <- kinship(reGen_ped,
                          id = reGen_ped$ID,
                          dadid = reGen_ped$dadID,
-                         momid = reGen_ped$mom_id)
+                         momid = reGen_ped$momID)
 
 
       #find the distance between only those in the lowest 2 generations
@@ -199,7 +199,7 @@ assign_affectedGen = function(ped_file){
 #' \enumerate{
 #' \item \code{ID}: an identification number.
 #' \item \code{dadID}: identification number of father.
-#' \item \code{mom_id}: identification number of mother.
+#' \item \code{momID}: identification number of mother.
 #' \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 #' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
 #' \item \code{birth_year}: the individual's birth year.
@@ -242,7 +242,7 @@ assign_affectedGen = function(ped_file){
 #' #assign simulated pedigree to pedigree object, then pass to plot function
 #' Original_ped <- pedigree(id = ex_RVped$ID,
 #'                          dadid = ex_RVped$dadID,
-#'                          momid = ex_RVped$mom_id,
+#'                          momid = ex_RVped$momID,
 #'                          sex = ex_RVped$sex + 1,
 #'                          affected = ex_RVped$affected)
 #' plot(Original_ped)
@@ -253,7 +253,7 @@ assign_affectedGen = function(ped_file){
 #' #Assign the the censored pedigree to a pedigree object and plot.
 #' Censor_ped <- pedigree(id = Cped$ID,
 #'                        dadid = Cped$dadID,
-#'                        momid = Cped$mom_id,
+#'                        momid = Cped$momID,
 #'                        sex = Cped$sex + 1,
 #'                        affected = Cped$affected)
 #' plot(Censor_ped)
@@ -294,9 +294,9 @@ censor_ped = function(ped_file, censor_year){
       readd_dad <- unique(readd_dad[!is.na(readd_dad)])
 
       #find the mom IDs that are required but have been removed
-      miss_mom  <- !is.element(censored_ped$mom_id,
+      miss_mom  <- !is.element(censored_ped$momID,
                                censored_ped$ID[which(censored_ped$sex == 1)])
-      readd_mom <- censored_ped$mom_id[miss_mom]
+      readd_mom <- censored_ped$momID[miss_mom]
       readd_mom <- unique(readd_mom[!is.na(readd_mom)])
 
       #check to see if we need to readd anyone

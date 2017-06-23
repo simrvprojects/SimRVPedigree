@@ -91,7 +91,7 @@ library(kinship2)
 #Define pedigree object for full pedigree, i.e. pedigree prior to trimming
 FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
                         dadid = ex_RVped[[1]]$dadID,
-                        momid = ex_RVped[[1]]$mom_id,
+                        momid = ex_RVped[[1]]$momID,
                         sex = (ex_RVped[[1]]$sex + 1),
                         affected = cbind(Affected = ex_RVped[[1]]$affected,
                                          RV_status = ex_RVped[[1]]$DA1 +
@@ -107,7 +107,7 @@ pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 # proband selected and relatives trimmed
 TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
                        dadid = ex_RVped[[2]]$dadID,
-                       momid = ex_RVped[[2]]$mom_id,
+                       momid = ex_RVped[[2]]$momID,
                        sex = (ex_RVped[[2]]$sex + 1),
                        affected = cbind(Affected = ex_RVped[[2]]$affected,
                                         Proband = ex_RVped[[2]]$proband,
