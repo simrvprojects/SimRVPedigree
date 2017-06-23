@@ -39,7 +39,7 @@ library(kinship2)
 ex_pedigree <- pedigree(id = EgPeds$ID,
                         dadid = EgPeds$dad_id,
                         momid = EgPeds$mom_id,
-                        sex = (EgPeds$gender + 1),
+                        sex = (EgPeds$sex + 1),
                         affected = cbind(Affected = EgPeds$affected,
                                          Proband = EgPeds$proband,
                                          RV_status = EgPeds$DA1 +
@@ -68,7 +68,7 @@ for (k in 1:length(Recall_Probabilities)) {
    Tped <- pedigree(id = TrimPed$ID,
                     dadid = TrimPed$dad_id,
                     momid = TrimPed$mom_id,
-                    sex = (TrimPed$gender + 1),
+                    sex = (TrimPed$sex + 1),
                     affected = cbind(Affected = TrimPed$affected,
                                      Proband = TrimPed$proband,
                                      RV_status = TrimPed$DA1 + TrimPed$DA2),

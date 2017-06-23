@@ -92,7 +92,7 @@ library(kinship2)
 FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
                         dadid = ex_RVped[[1]]$dad_id,
                         momid = ex_RVped[[1]]$mom_id,
-                        sex = (ex_RVped[[1]]$gender + 1),
+                        sex = (ex_RVped[[1]]$sex + 1),
                         affected = cbind(Affected = ex_RVped[[1]]$affected,
                                          RV_status = ex_RVped[[1]]$DA1 +
                                                      ex_RVped[[1]]$DA2),
@@ -108,7 +108,7 @@ pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
 TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
                        dadid = ex_RVped[[2]]$dad_id,
                        momid = ex_RVped[[2]]$mom_id,
-                       sex = (ex_RVped[[2]]$gender + 1),
+                       sex = (ex_RVped[[2]]$sex + 1),
                        affected = cbind(Affected = ex_RVped[[2]]$affected,
                                         Proband = ex_RVped[[2]]$proband,
                                         RV_status = ex_RVped[[2]]$DA1 +

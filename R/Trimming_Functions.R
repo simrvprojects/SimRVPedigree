@@ -37,7 +37,7 @@
 #' ex_pedigree <- pedigree(id = EgPeds$ID,
 #'                         dadid = EgPeds$dad_id,
 #'                         momid = EgPeds$mom_id,
-#'                         sex = (EgPeds$gender + 1),
+#'                         sex = (EgPeds$sex + 1),
 #'                         affected = cbind(Affected = EgPeds$affected,
 #'                                          Proband = EgPeds$proband,
 #'                                          RV_status = EgPeds$DA1 +
@@ -66,7 +66,7 @@
 #'    Tped <- pedigree(id = TrimPed$ID,
 #'                     dadid = TrimPed$dad_id,
 #'                     momid = TrimPed$mom_id,
-#'                     sex = (TrimPed$gender + 1),
+#'                     sex = (TrimPed$sex + 1),
 #'                     affected = cbind(Affected = TrimPed$affected,
 #'                                      Proband = TrimPed$proband,
 #'                                      RV_status = TrimPed$DA1 + TrimPed$DA2),
@@ -149,13 +149,13 @@ trim_ped = function(ped_file, recall_probs){
   while (d == 0) {
     #find the dad IDs that are required but have been removed
     miss_dad  <- !is.element(ped_trim$dad_id,
-                             ped_trim$ID[which(ped_trim$gender == 0)])
+                             ped_trim$ID[which(ped_trim$sex == 0)])
     readd_dad <- ped_trim$dad_id[miss_dad]
     readd_dad <- unique(readd_dad[!is.na(readd_dad)])
 
     #find the mom IDs that are required but have been removed
     miss_mom  <- !is.element(ped_trim$mom_id,
-                             ped_trim$ID[which(ped_trim$gender == 1)])
+                             ped_trim$ID[which(ped_trim$sex == 1)])
     readd_mom <- ped_trim$mom_id[miss_mom]
     readd_mom <- unique(readd_mom[!is.na(readd_mom)])
 

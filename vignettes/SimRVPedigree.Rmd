@@ -188,7 +188,7 @@ The columns in the data frame above may be described as follows:
 
  1. `FamID`: family identification number 
  2. `ID`: individual identification number
- 3. `gender`: gender identification variable: `gender = 0` for males, and `gender = 1` females. 
+ 3. `sex`: sex identification variable: `sex = 0` for males, and `sex = 1` females. 
  4. `dad_id`: identification number of father
  5. `mom_id`: identification number of mother
  6. `affected`: affection status: `affected = 1` if individual has developed lymphoid cancer, and 0 otherwise.
@@ -217,7 +217,7 @@ Next, we will illustrate how to plot simulated pedigrees using the `kinship2` pa
  ex_RVpedigree <- pedigree(id = studyPed$ID,
                            dadid = studyPed$dad_id,
                            momid = studyPed$mom_id,
-                           sex = (studyPed$gender + 1),
+                           sex = (studyPed$sex + 1),
                            affected = cbind(Affected = studyPed$affected,
                                             Proband = studyPed$proband,
                                             RV_status = studyPed$DA1 + 
@@ -298,7 +298,7 @@ Censored_Ped <- with(Ped2005,
                      pedigree(id = ID,
                               dadid = dad_id,
                               momid = mom_id,
-                              sex = (gender + 1),
+                              sex = (sex + 1),
                               affected = cbind(Affected = affected,
                                                Proband = proband,
                                                RV_status = DA1 + DA2),
@@ -331,7 +331,7 @@ eg_peds <- with(EgPeds, pedigree(famid = FamID,
                                  id = ID,
                                  dadid = dad_id,
                                  momid = mom_id,
-                                 sex = gender + 1,
+                                 sex = sex + 1,
                                  affected = affected))
 eg_peds
 
@@ -346,7 +346,7 @@ Rpeds <- with(RAG_peds, pedigree(famid = FamID,
                                  id = ID,
                                  dadid = dad_id,
                                  momid = mom_id,
-                                 sex = gender + 1,
+                                 sex = sex + 1,
                                  affected = affected))
 
 # Create new id labels that merge the individual IDs with their 

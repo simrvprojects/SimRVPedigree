@@ -26,7 +26,7 @@ Users who wish to censor pedigrees which have not been simulated by \code{\link{
 \item \code{ID}: an identification number.
 \item \code{dad_id}: identification number of father.
 \item \code{mom_id}: identification number of mother.
-\item \code{gender}: gender identification; if male \code{gender = 0}, if female \code{gender = 1}.
+\item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
 \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
 \item \code{birth_year}: the individual's birth year.
 \item \code{onset_year}: the individual's disease onset year, when applicable.
@@ -63,7 +63,7 @@ library(kinship2)
 Original_ped <- pedigree(id = ex_RVped$ID,
                          dadid = ex_RVped$dad_id,
                          momid = ex_RVped$mom_id,
-                         sex = ex_RVped$gender + 1,
+                         sex = ex_RVped$sex + 1,
                          affected = ex_RVped$affected)
 plot(Original_ped)
 
@@ -74,7 +74,7 @@ Cped <- censor_ped(ped_file = ex_RVped, censor_year = 1999)
 Censor_ped <- pedigree(id = Cped$ID,
                        dadid = Cped$dad_id,
                        momid = Cped$mom_id,
-                       sex = Cped$gender + 1,
+                       sex = Cped$sex + 1,
                        affected = Cped$affected)
 plot(Censor_ped)
 

@@ -8,7 +8,7 @@
 create_pedFile = function(){
   data.frame(FamID = numeric(),
              ID = numeric(),
-             gender = numeric(),
+             sex = numeric(),
              dad_id = numeric(),
              mom_id = numeric(),
              affected = numeric(),
@@ -38,7 +38,7 @@ create_pedFile = function(){
 create_mate = function(partner_info, last_id){
   new_mate_info <- data.frame(FamID = partner_info$FamID,
                              ID = last_id+1,
-                             gender = abs(partner_info$gender - 1),
+                             sex = abs(partner_info$sex - 1),
                              dad_id = NA,
                              mom_id = NA,
                              affected = 0,
@@ -77,7 +77,7 @@ create_mate = function(partner_info, last_id){
 create_offspring = function(dad_info, mom_info, byear, last_id, RR){
   new_child_info <- data.frame(FamID = dad_info$FamID,
                               ID = last_id+1,
-                              gender = round(runif(1)),
+                              sex = round(runif(1)),
                               dad_id = dad_info$ID,
                               mom_id = mom_info$ID,
                               affected = 0,
@@ -156,8 +156,8 @@ sim_nFam = function(found_info, stop_year, last_id,
     last_id <- new_mate[[2]]
 
     #store info for mom and dad
-    dad <- nfam_ped[which(nfam_ped$gender == 0), ]
-    mom <- nfam_ped[which(nfam_ped$gender == 1), ]
+    dad <- nfam_ped[which(nfam_ped$sex == 0), ]
+    mom <- nfam_ped[which(nfam_ped$sex == 1), ]
 
     for (k in 1:length(birth_events)) {
       #add child
@@ -223,7 +223,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' ex_pedigree <- pedigree(id = ex_ped$ID,
 #'                         dadid = ex_ped$dad_id,
 #'                         momid = ex_ped$mom_id,
-#'                         sex = (ex_ped$gender + 1),
+#'                         sex = (ex_ped$sex + 1),
 #'                         affected = cbind(Affected, RV_status))
 #' plot(ex_pedigree)
 #' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
@@ -236,11 +236,11 @@ sim_ped = function(onset_hazard, death_hazard, part,
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
 
-  #randomly generate birth year and gender for the founder carrying the RV,
+  #randomly generate birth year and sex for the founder carrying the RV,
   #and fill in all other fields with the appropriate info
   fam_ped[1,] <- c(FamID,            #family ID
                    1,                #RV status
-                   round(runif(1)),  #gender
+                   round(runif(1)),  #sex
                    NA, NA,           #dad_id and #mom_id
                    NA,               #affected status
                    1, 0,             #alleles 1 and 2,
@@ -403,7 +403,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
 #'                         dadid = ex_RVped[[1]]$dad_id,
 #'                         momid = ex_RVped[[1]]$mom_id,
-#'                         sex = (ex_RVped[[1]]$gender + 1),
+#'                         sex = (ex_RVped[[1]]$sex + 1),
 #'                         affected = cbind(Affected = ex_RVped[[1]]$affected,
 #'                                          RV_status = ex_RVped[[1]]$DA1 +
 #'                                                      ex_RVped[[1]]$DA2),
@@ -419,7 +419,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
 #'                        dadid = ex_RVped[[2]]$dad_id,
 #'                        momid = ex_RVped[[2]]$mom_id,
-#'                        sex = (ex_RVped[[2]]$gender + 1),
+#'                        sex = (ex_RVped[[2]]$sex + 1),
 #'                        affected = cbind(Affected = ex_RVped[[2]]$affected,
 #'                                         Proband = ex_RVped[[2]]$proband,
 #'                                         RV_status = ex_RVped[[2]]$DA1 +

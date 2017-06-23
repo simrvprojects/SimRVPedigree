@@ -68,7 +68,7 @@ Affected  <- ex_ped$affected
 ex_pedigree <- pedigree(id = ex_ped$ID,
                         dadid = ex_ped$dad_id,
                         momid = ex_ped$mom_id,
-                        sex = (ex_ped$gender + 1),
+                        sex = (ex_ped$sex + 1),
                         affected = cbind(Affected, RV_status))
 plot(ex_pedigree)
 pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
