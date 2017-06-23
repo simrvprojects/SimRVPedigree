@@ -74,7 +74,7 @@ create_mate = function(partner_info, last_id){
 #'
 #' @importFrom stats runif
 #'
-create_offspring = function(dad_info, mom_info, byear, last_id, RR){
+create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
   new_child_info <- data.frame(FamID = dad_info$FamID,
                               ID = last_id+1,
                               sex = round(runif(1)),
@@ -92,7 +92,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
                               do_sim = 1,
                               stringsAsFactors=FALSE)
   new_child_info$RR <- ifelse(sum(new_child_info$DA1, new_child_info$DA2) == 0,
-                              1, RR)
+                              1, GRR)
   child_return <- list(new_child_info, last_id+1)
   return(child_return)
 }
@@ -112,7 +112,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, RR){
 #'
 sim_nFam = function(found_info, stop_year, last_id,
                     onset_hazard, death_hazard, part,
-                    birth_range, NB_params, RR){
+                    birth_range, NB_params, GRR){
 
   nfam_ped <- found_info
 
@@ -162,7 +162,7 @@ sim_nFam = function(found_info, stop_year, last_id,
     for (k in 1:length(birth_events)) {
       #add child
       new_child <- create_offspring(dad_info = dad, mom_info = mom,
-                                    byear = birth_events[k], last_id, RR)
+                                    byear = birth_events[k], last_id, GRR)
       nfam_ped <- rbind(nfam_ped, new_child[[1]])
       last_id <- new_child[[2]]
     }
@@ -180,7 +180,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
 #'
-#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of developing disease is \code{RR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative-risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of developing disease is \code{GRR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative-risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 #'
 #' The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 #'
@@ -209,7 +209,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' ex_ped <- sim_ped(onset_hazard = my_onset_haz,
 #'                   death_hazard = my_death_haz,
 #'                   part = my_part,
-#'                   RR = 5, FamID = 1,
+#'                   GRR = 5, FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
@@ -229,7 +229,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 #'
 sim_ped = function(onset_hazard, death_hazard, part,
-                   RR, FamID, founder_byears, stop_year,
+                   GRR, FamID, founder_byears, stop_year,
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
 
@@ -247,7 +247,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
                    round(runif(1, min = founder_byears[1],
                                max = founder_byears[2])), #birth year
                    NA, NA,           #onset and death years
-                   RR,               #RR of developing disease
+                   GRR,               #RR of developing disease
                    1, 1,             #availablilty and generation no
                    1)                # do_sim
 
@@ -261,7 +261,7 @@ sim_ped = function(onset_hazard, death_hazard, part,
       new.kin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re.sim[k]),],
                           stop_year, last_id,
                           onset_hazard, death_hazard, part,
-                          birth_range, NB_params, RR)
+                          birth_range, NB_params, GRR)
 
       #replace individual by their simulated self and add family members when necessary
       fam_ped <- rbind(fam_ped[-which(fam_ped$ID==re.sim[k]), ],
@@ -355,7 +355,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' @param onset_hazard Numeric. The population age-specific hazard rate for disease.
 #' @param death_hazard Data.frame. Column 1 should specify the age-specific hazard rate for death in the unaffected population, and column 2 should specify the age-specific hazard rate for death in the affected population. See details.
 #' @param part Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.
-#' @param RR Numeric. The relative-risk of disease for individuals who inherit the rare variant.
+#' @param GRR Numeric. The relative-risk of disease for individuals who inherit the rare variant.
 #' @param founder_byears Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric list of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
@@ -387,7 +387,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
 #'                       death_hazard = AgeSpecific_Hazards[,c(2,3)],
 #'                       part = seq(0, 100, by = 1),
-#'                       RR = 15, FamID = 1,
+#'                       GRR = 15, FamID = 1,
 #'                       founder_byears = c(1900, 1910),
 #'                       ascertain_span = c(1900, 2015),
 #'                       num_affected = 2, stop_year = 2015,
@@ -429,7 +429,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 #'
 #'
-sim_RVped = function(onset_hazard, death_hazard, part, RR,
+sim_RVped = function(onset_hazard, death_hazard, part, GRR,
                      founder_byears, ascertain_span, num_affected,
                      FamID, recall_probs, stop_year,
                      birth_range = c(18, 45), NB_params = c(2, 4/7)){
@@ -474,10 +474,10 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
     stop ('please provide appropriate birth_range')
   }
 
-  if (RR <= 0) {
-    stop ('RR must be greater than 0')
-  } else if (RR < 1){
-    warning('Setting RR < 1 can significantly increase computation time')
+  if (GRR <= 0) {
+    stop ('GRR must be greater than 0')
+  } else if (GRR < 1){
+    warning('Setting GRR < 1 can significantly increase computation time')
   }
 
   if(!missing(recall_probs)) {
@@ -497,7 +497,7 @@ sim_RVped = function(onset_hazard, death_hazard, part, RR,
   while(D == 0){
     d <- 0
     while( d == 0 ){
-      fam_ped <- sim_ped(onset_hazard, death_hazard, part, RR, FamID,
+      fam_ped <- sim_ped(onset_hazard, death_hazard, part, GRR, FamID,
                          founder_byears, stop_year, birth_range, NB_params)
 
       # prior to sending the simulated pedigree to the trim function,

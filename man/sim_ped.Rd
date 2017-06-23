@@ -4,7 +4,7 @@
 \alias{sim_ped}
 \title{Simulate a Pedigree}
 \usage{
-sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
+sim_ped(onset_hazard, death_hazard, part, GRR, FamID, founder_byears, stop_year,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
@@ -14,7 +14,7 @@ sim_ped(onset_hazard, death_hazard, part, RR, FamID, founder_byears, stop_year,
 
 \item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{onset_hazard} and \code{death_hazard}.}
 
-\item{RR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
+\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -33,7 +33,7 @@ The simulated pedigree.
 Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 }
 \details{
-By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of developing disease is \code{RR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative-risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of developing disease is \code{GRR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative-risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
 
 The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
 }
@@ -54,7 +54,7 @@ set.seed(22)
 ex_ped <- sim_ped(onset_hazard = my_onset_haz,
                   death_hazard = my_death_haz,
                   part = my_part,
-                  RR = 5, FamID = 1,
+                  GRR = 5, FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 

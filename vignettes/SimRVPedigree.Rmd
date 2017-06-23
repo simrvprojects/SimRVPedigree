@@ -67,7 +67,7 @@ To simulate a pedigree with `sim_RVped` the user must specify:
      2. column 2: the age-specific hazard rate for death in the affected population.
    If the disease of interest is sufficiently rare, at the user's discretion, column 2 may be approximated by the population age-specific hazard rate for death. 
 3. `part`: a partition of ages over which to apply the age-specific hazard rates in `onset_hazard` and `death_hazard`.
-4. `RR`: the relative-risk of disease for individuals who have inherited the rare variant. 
+4. `GRR`: the genetic relative-risk, i.e. the relative-risk of disease for individuals who have inherited the rare variant. 
 5. `FamID`: the family ID to assign to the simulated pedigree.
 6. `founder_byears`: the span of years from which to simulate, uniformly, the founder's birth year.
 7. `ascertain_span`: the year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives. 
@@ -92,7 +92,7 @@ Based on the description of the family-based study described above, and referrin
 1. `num_affected` = 2
 2. `ascertain_span` = c(2000, 2015)
 3. `stop_year` = 2015
-4. `RR` = 10
+4. `GRR` = 10
 5. `recall_probs` = c(1)
 6. `founder_byears` = c(1900, 1980)
 
@@ -165,7 +165,7 @@ ex_RVped <- sim_RVped(onset_hazard = AgeSpecific_Hazards[,1],
                       part = age_part,
                       num_affected = 2,
                       ascertain_span = c(2000, 2015),
-                      RR = 10, stop_year = 2015,
+                      GRR = 10, stop_year = 2015,
                       recall_probs = c(1),
                       founder_byears = c(1900, 1980),
                       FamID = 1)
@@ -399,7 +399,7 @@ In this example, in the leftmost pedigree, we see a pair of affected cousins (ID
 #6. Parallel Processing Example<a name="ParProcExample"></a>
 It is important to note that the processing time required to simulate a sample of pedigrees ascertained for multiple affected members is directly related to (1) the rarity of the disease, and (2) arguments specified by the user.  In particular, we expect to see an increase in the required computation time as: 
 
- 1. the relative-risk, `RR`, specified by the user approaches 1, particularly for rare diseases,
+ 1. the gentic relative-risk, `GRR`, specified by the user approaches 1, particularly for rare diseases,
  2. the ascertainment period, `ascertain_span`, narrows,
  3. the proband's relative recall probabilities, `recall_probs`, become smaller.
 
@@ -469,7 +469,7 @@ RV_peds = foreach(i = seq(npeds),
                               part = seq(0, 100, by = 1),
                               num_affected = 2,
                               ascertain_span = c(1900, 2015),
-                              RR = 5, stop_year = 2015,
+                              GRR = 5, stop_year = 2015,
                               recall_probs = c(1),
                               founder_byears = c(1900, 1910),
                               FamID = i)[[2]]
