@@ -126,7 +126,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   # update disease status and onset year contingent on whether
   # or not they experience disease onset prior to stop_year
   if (is.element("Onset", names(sim_years))) {
-    o_year <- as.numeric(sim_years[names(sim_years) == "Onset"])
+    o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
     if (o_year <= stop_year) {
       nfam_ped$affected <- 1
       nfam_ped$onsetYr <- o_year
@@ -140,14 +140,14 @@ sim_nFam = function(found_info, stop_year, last_id,
   }
 
   #set the year of death if it occurs before stop_year
-  d_year <- as.numeric(sim_years[names(sim_years) == "Death"])
+  d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
   if (d_year <= stop_year) {
     nfam_ped$deathYr <- d_year
   }
 
   #store the birth years of each child
-  birth_events <- as.numeric(sim_years[names(sim_years) == "Child" &
-                                              sim_years <= stop_year])
+  birth_events <- as.numeric(sim_years[which(names(sim_years) == "Child" &
+                                               sim_years <= stop_year)])
 
   if (length(birth_events) > 0) {
     #add a mate
@@ -156,8 +156,8 @@ sim_nFam = function(found_info, stop_year, last_id,
     last_id <- new_mate[[2]]
 
     #store info for mom and dad
-    dad <- nfam_ped[nfam_ped$sex == 0, ]
-    mom <- nfam_ped[nfam_ped$sex == 1, ]
+    dad <- nfam_ped[which(nfam_ped$sex == 0), ]
+    mom <- nfam_ped[which(nfam_ped$sex == 1), ]
 
     for (k in 1:length(birth_events)) {
       #add child
@@ -249,25 +249,25 @@ sim_ped = function(hazard_rates, part,
                    1)                # do_sim
 
   last_id <- 1
-  last.gen <- 1
+  last_gen <- 1
 
   #store the ID of individuals for whom we need to simulate life events
-  re.sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
-  while (length(re.sim) > 0) {
-    for (k in 1:length(re.sim)) {
-      new.kin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re.sim[k]),],
+  re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
+  while (length(re_sim) > 0) {
+    for (k in 1:length(re_sim)) {
+      newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
                           stop_year, last_id,
                           hazard_rates, part,
                           birth_range, NB_params, GRR)
 
       #replace individual by their simulated self and add family members when necessary
-      fam_ped <- rbind(fam_ped[-which(fam_ped$ID==re.sim[k]), ],
-                       new.kin[[1]])
+      fam_ped <- rbind(fam_ped[-which(fam_ped$ID == re_sim[k]), ],
+                       newKin[[1]])
 
-      last_id <- new.kin[[2]]
+      last_id <- newKin[[2]]
     }
-    last.gen <- max(fam_ped$Gen)
-    re.sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last.gen)]
+    last_gen <- max(fam_ped$Gen)
+    re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
   }
 
   return(fam_ped[, c(1:14)])
