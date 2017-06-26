@@ -1,4 +1,4 @@
-#' Obtain the Cumulative Probability of the Waiting Time to the Next Event
+#' Obtain the cumulative probability of the waiting time to the next event
 #'
 #' Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 #'
@@ -34,7 +34,7 @@ get_WaitProb = function(last_event, wait_time,
 }
 
 
-#' Obtain the Waiting Time to the Next Event
+#' obtain the waiting time to the next event
 #'
 #' \code{get_WaitTime} approximates the result of the inverse cumulative distribution function of the waiting time to the next event associated with a non-homogeneous Poisson process conditioned of the time of the last event.
 #'

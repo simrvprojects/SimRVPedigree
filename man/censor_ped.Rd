@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{censor_ped}
 \alias{censor_ped}
-\title{Censor Pedigree After a Specified Year}
+\title{Censor pedigree after a specified year}
 \usage{
 censor_ped(ped_file, censor_year)
 }

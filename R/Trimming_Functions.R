@@ -1,4 +1,4 @@
-#' Trim Pedigree Based on Proband Recall.
+#' Trim pedigree based on proband recall
 #'
 #' Primarily intended as an internal function, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
 #'

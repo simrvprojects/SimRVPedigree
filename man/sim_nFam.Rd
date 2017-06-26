@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{sim_nFam}
 \alias{sim_nFam}
-\title{Simulate a Nuclear Family from a Single Founder}
+\title{Simulate a nuclear family from a single founder}
 \usage{
 sim_nFam(found_info, stop_year, last_id, hazard_rates, part, birth_range,
   NB_params, GRR)
@@ -16,11 +16,11 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, part, birth_range,
 
 \item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
 
-\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
+\item{part}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
-\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
-\item{NB_params}{Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
 }

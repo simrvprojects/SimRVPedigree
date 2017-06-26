@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitProb}
 \alias{get_WaitProb}
-\title{Obtain the Cumulative Probability of the Waiting Time to the Next Event}
+\title{Obtain the cumulative probability of the waiting time to the next event}
 \usage{
 get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 }

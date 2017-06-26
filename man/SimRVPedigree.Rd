@@ -4,12 +4,12 @@
 \name{SimRVPedigree}
 \alias{SimRVPedigree}
 \alias{SimRVPedigree-package}
-\title{Simulate Pedigrees Ascertained for Disease Status}
+\title{Simulate pedigrees ascertained for disease status}
 \description{
 The \code{SimRVPedigree} package provides methods to simulate and manipulate pedigrees ascertained to contain multiple family members affected by a rare disease.
 }
 \details{
-Family-based studies to identify genetic susceptibility factors associated with rare diseases have received much attention in recent years.  This resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies, Wijsman (2012).  However, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  As a result, these studies are difficult to replicate.  The \code{SimRVPedigree} package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. The distinguishing feature of the \code{SimRVPedigree} package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.
+Family-based studies to identify genetic susceptibility factors associated with rare diseases have received renewed attention in recent years.  The resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies, Wijsman (2012).  However, identifying identifying a suitable number of families for analysis could require years of continued collaboration between researchers and clinicians.  As a result, collecting new data to replicate findings or evaluate methodology is impractical.  The \code{SimRVPedigree} package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. The distinguishing feature of the \code{SimRVPedigree} package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.
 }
 \references{
 OUR MANUSCRIPT

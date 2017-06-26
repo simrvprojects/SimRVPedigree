@@ -2,7 +2,7 @@
 % Please edit documentation in R/NHPP_functions.R
 \name{get_WaitTime}
 \alias{get_WaitTime}
-\title{Obtain the Waiting Time to the Next Event}
+\title{obtain the waiting time to the next event}
 \usage{
 get_WaitTime(p, last_event, hazard, part, scale = FALSE)
 }

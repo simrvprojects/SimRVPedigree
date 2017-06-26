@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{assign_affectedGen}
 \alias{assign_affectedGen}
-\title{Assign Generation Number Based on Affected Status}
+\title{Assign generation number based on affected status}
 \usage{
 assign_affectedGen(ped_file)
 }
@@ -13,7 +13,7 @@ assign_affectedGen(ped_file)
 \code{reGen_ped} A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as, described in details.
 }
 \description{
-\code{assign_affectedGen} assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD), as defined in Thompson (2000), by affected members could have been introduced into the pedigree.
+The \code{assign_affectedGen} function assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD), as defined in Thompson (2000), by affected members could have been introduced into the pedigree.
 }
 \details{
 The \code{assign_affectedGen} function accepts a pedigree simulated by \code{sim_RVped} and reassigns generation numbers among affected family members in the pedigree.  Specifically, given a pedigree this function reassigns the generation numbers of affected members so that generation 1 is assigned to the most recent common ancestor of all affected members.  We note that the individual in generation 1 could themselves be affected, i.e. an individual can be considered their own ancestor.

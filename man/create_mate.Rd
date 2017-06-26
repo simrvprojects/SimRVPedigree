@@ -2,7 +2,7 @@
 % Please edit documentation in R/PedSim_Functions.R
 \name{create_mate}
 \alias{create_mate}
-\title{Create a New Mate}
+\title{Create a new mate}
 \usage{
 create_mate(partner_info, last_id)
 }

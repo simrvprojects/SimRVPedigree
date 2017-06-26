@@ -1,4 +1,4 @@
-#' Create an Empty Pedigree
+#' Create an empty pedigree
 #'
 #' \code{create_pedFile} initializes an empty data frame with all of the fields required by \code{sim_ped} to simulate a pedigree.
 #'
@@ -24,7 +24,7 @@ create_pedFile = function(){
              stringsAsFactors=FALSE)
 }
 
-#' Create a New Mate
+#' Create a new mate
 #'
 #' Create new mating partner in pedigree.
 #'
@@ -57,7 +57,7 @@ create_mate = function(partner_info, last_id){
   return(mate_return)
 }
 
-#' Create a New Offspring
+#' Create a new offspring
 #'
 #' Create new offspring in pedigree.
 #'
@@ -98,7 +98,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 }
 
 
-#' Simulate a Nuclear Family from a Single Founder
+#' Simulate a nuclear family from a single founder
 #'
 #' Simulate all life events for an individual and create a nuclear family, when appropriate.
 #'
@@ -175,7 +175,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   return(sim_fam_return)
 }
 
-#' Simulate a Pedigree
+#' Simulate a pedigree
 #'
 #' Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
@@ -273,9 +273,9 @@ sim_ped = function(hazard_rates, part,
   return(fam_ped[, c(1:14)])
 }
 
-#' Choose proband from simulated pedigree
+#' Choose a proband from the disease-affected relatives in a pedigree
 #'
-#' @param ped Pedigree simulated by \code{sim_ped}
+#' @param ped Pedigree simulated by \code{sim_ped}.
 #' @inheritParams sim_RVped
 #'
 #' @return Pedigree with proband selected.
@@ -327,17 +327,17 @@ choose_proband = function(ped, num_affected, ascertain_span){
   return(ped)
 }
 
-#' Simulate a Pedigree Ascertained to Contain Multiple Family Members Affected by a Disease
+#' Simulate a pedigree ascertained to contain multiple disease-affected relatives
 #'
 #' \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 #'
 #' By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
 #'
-#' \code{sim_RVped} begins pedigree simulation by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the internal \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
+#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
 #'
-#' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
+#' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
-#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
+#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
 #'
 #' Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
 #' \enumerate{
@@ -350,16 +350,16 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
 #'
 #' @param hazard_rates Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.
-#' @param part Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.
+#' @param part Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.
 #' @param GRR Numeric. The relative-risk of disease for individuals who inherit the rare variant.
-#' @param founder_byears Numeric list of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
-#' @param ascertain_span Numeric list of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
+#' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
+#' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
 #' @param FamID Numeric. The family ID to assign to the simulated pedigree.
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
-#' @param birth_range Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
-#' @param NB_params Numeric list of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
+#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
+#' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #'
 #' @return  A list containing the following data frames:
 #' @return \code{full_ped} The full pedigree, prior to proband selection and trimming.

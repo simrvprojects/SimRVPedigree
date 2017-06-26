@@ -2,7 +2,7 @@
 % Please edit documentation in R/Trimming_Functions.R
 \name{trim_ped}
 \alias{trim_ped}
-\title{Trim Pedigree Based on Proband Recall.}
+\title{Trim pedigree based on proband recall}
 \usage{
 trim_ped(ped_file, recall_probs)
 }

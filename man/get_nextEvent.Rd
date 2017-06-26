@@ -2,7 +2,7 @@
 % Please edit documentation in R/LifeSim_Functions.R
 \name{get_nextEvent}
 \alias{get_nextEvent}
-\title{Simulate Next Life Event}
+\title{Simulate the next life event}
 \usage{
 get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates, part,
   birth_range, RR)
@@ -16,9 +16,9 @@ get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates, part,
 
 \item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
 
-\item{part}{Numeric. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
+\item{part}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
-\item{birth_range}{Numeric list of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
 \item{RR}{Numeric. The individual's relative-risk of disease.}
 }
