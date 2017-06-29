@@ -116,15 +116,14 @@ sim_nFam = function(found_info, stop_year, last_id,
 
   nfam_ped <- found_info
 
-  #Simulate life steps for our founder
+  #Simulate life steps for founder
   sim_years <- sim_lifeEvents(hazard_rates, part,
                               birth_range, NB_params,
                               RR = found_info$RR,
                               YOB = found_info$birthYr)
 
 
-  # update disease status and onset year contingent on whether
-  # or not they experience disease onset prior to stop_year
+  # update disease status and onset year if onset occured prior to stop_year
   if (is.element("Onset", names(sim_years))) {
     o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
     if (o_year <= stop_year) {
