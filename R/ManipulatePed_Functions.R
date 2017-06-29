@@ -262,9 +262,13 @@ censor_ped = function(ped_file, censor_year){
 
   if (missing(censor_year)) {
     if ("proband" %in% colnames(ped_file)) {
-      censor_year <- ped_file$onsetYr[which(ped_file$proband == 1)]
+      if(sum(ped_file$proband) == 1){
+        censor_year <- ped_file$onsetYr[which(ped_file$proband == 1)]
+      } else {
+        stop("the proband variable cannot identify more than proband")
+      }
     } else {
-      stop("Ped file must contain a proband or user must supply censor_year")
+      stop("ped_file must contain a proband variable or the user must supply censor_year")
     }
   }
 

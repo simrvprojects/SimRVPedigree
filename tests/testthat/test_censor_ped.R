@@ -37,5 +37,7 @@ test_that("censor_ped does not return any info after the censor year", {
   C_ped <- censor_ped(ped_file = RVped, censor_year = my_Cyear)
   expect_gte(my_Cyear, max(C_ped$birthYr, na.rm = T))
   expect_gte(my_Cyear, max(C_ped$onsetYr, na.rm = T))
-  expect_gte(my_Cyear, max(C_ped$deathYr, na.rm = T))
+  if(!all(is.na(C_ped$deathYr))){
+    expect_gte(my_Cyear, max(C_ped$deathYr, na.rm = T))
+  }
 })
