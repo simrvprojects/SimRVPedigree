@@ -158,20 +158,23 @@ par(mfrow = c(1, 1))
 Finally, we show how `sim_RVped()` may be used to simulate a single family ascertained for study in the example described at the beginning of this section.
 
 ```{r}
-# Simulate a random pedigree 
-set.seed(3)
+# Simulate an ascertained pedigree 
+set.seed(5938525)
 ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                       part = age_part,
                       num_affected = 2,
                       ascertain_span = c(2000, 2015),
-                      GRR = 10, stop_year = 2015,
+                      GRR = 15, prob_causalRV = 1,
+                      stop_year = 2015,
                       recall_probs = c(1),
                       founder_byears = c(1900, 1980),
                       FamID = 1)
 
+# View a summary of ex_RVped 
+summary(ex_RVped)
 ```
 
-The `sim_RVped` function returns a list of two data frames.  The first data frame, named `full_ped`, represents the original pedigree, prior to proband selection and trimming.  The second data frame, named `ascertain_ped`, represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [6], they are included in the ascertained pedigree, but their information is missing, and they are be labelled as unavailable.  
+The `sim_RVped` function returns a list containing two data frames and two numeric constants [EXPLAIN HERE!].  The first data frame, named `full_ped`, represents the original pedigree, prior to proband selection and trimming.  The second data frame, named `ascertain_ped`, represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [6], they are included in the ascertained pedigree, but their information is missing, and they are be labelled as unavailable.  
 
 Since we are interested in families that were ascertained for study, we will focus on the `ascertain_ped` data frame returned by the `sim_RVped()` function.  Let's look at the information that is contained in this data frame.
 
@@ -209,7 +212,7 @@ Next, we will illustrate how to plot simulated pedigrees using the `kinship2` pa
  library(kinship2)
 ```
 
-```{r, fig.height = 5, fig.width = 7}
+```{r, fig.height = 5.5, fig.width = 7}
 # Define a pedigree object by passing all the required information 
 # about the ascertained pedigree, which we stored as 'studyPed', 
 # to kinship2's pedigree() function.
@@ -314,7 +317,7 @@ pedigree.legend(Censored_Ped, location = "topleft", radius = 0.25)
 mtext("Calendar Year 2005", side = 3, line = 1)
 ```
 
-Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, both of whom were alive.  Referring to the 2015 pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that nine years after the pedigree was ascertained the proband's sister (the pedigree member whose ID is 5) also experienced onset of lymphoid cancer.
+Looking at the pedigree above, we see that in 2005, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive.  Referring to the 2015 pedigree, we see that both individuals who were affected in 2005 have died by 2015.  Additionally, we see that one year after the pedigree was ascertained the proband's father (the pedigree member with ID: 3) also experienced onset of lymphoid cancer.
 
 
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
