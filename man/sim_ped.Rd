@@ -4,8 +4,9 @@
 \alias{sim_ped}
 \title{Simulate a pedigree}
 \usage{
-sim_ped(hazard_rates, part, GRR, FamID, founder_byears, stop_year,
-  birth_range = c(18, 45), NB_params = c(2, 4/7))
+sim_ped(hazard_rates, part, GRR, prob_causalRV, FamID, founder_byears,
+  stop_year, single_founderEntry = TRUE, birth_range = c(18, 45),
+  NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
@@ -19,6 +20,8 @@ sim_ped(hazard_rates, part, GRR, FamID, founder_byears, stop_year,
 \item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
+
+\item{single_founderEntry}{Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -48,8 +51,9 @@ my_part <- seq(0, 100, by = 1)
 #Simulate a random pedigree
 set.seed(22)
 ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-                  part = my_part,
-                  GRR = 5, FamID = 1,
+                  part = seq(0, 100, by = 1),
+                  GRR = 5, prob_causalRV = 1,
+                  FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 

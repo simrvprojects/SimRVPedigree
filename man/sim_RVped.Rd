@@ -4,8 +4,9 @@
 \alias{sim_RVped}
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
-sim_RVped(hazard_rates, part, GRR, founder_byears, ascertain_span, num_affected,
-  FamID, recall_probs, stop_year, birth_range = c(18, 45), NB_params = c(2,
+sim_RVped(hazard_rates, part, GRR, prob_causalRV, founder_byears,
+  ascertain_span, num_affected, FamID, recall_probs, stop_year,
+  single_founderEntry = TRUE, birth_range = c(18, 45), NB_params = c(2,
   4/7))
 }
 \arguments{
@@ -27,9 +28,13 @@ sim_RVped(hazard_rates, part, GRR, founder_byears, ascertain_span, num_affected,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
+\item{single_founderEntry}{Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.}
+
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+
+\item{prob_causalRV.}{Numeric.  The probability that ascertained pedigrees are segregating a genetic variant that with relative risk \code{GRR}. See details.}
 }
 \value{
 A list containing the following data frames:
@@ -73,11 +78,12 @@ data(AgeSpecific_Hazards)
 set.seed(13)
 ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                       part = seq(0, 100, by = 1),
-                      GRR = 15, FamID = 1,
+                      GRR = 50, prob_causalRV = 1, FamID = 1,
                       founder_byears = c(1900, 1910),
                       ascertain_span = c(1900, 2015),
                       num_affected = 2, stop_year = 2015,
-                      recall_probs = c(1, 0.75, 0.5))
+                      recall_probs = c(1),
+                      single_founderEntry = TRUE)
 
 
 

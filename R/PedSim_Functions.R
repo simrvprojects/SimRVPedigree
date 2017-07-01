@@ -35,25 +35,41 @@ create_pedFile = function(){
 #' @return last_id the updated value of last_id after adding the new mate.
 #' @keywords internal
 #'
-create_mate = function(partner_info, last_id){
+create_mate = function(partner_info, last_id,
+                       GRR, prob_causalRV,
+                       single_founderEntry, RV_founder){
   new_mate_info <- data.frame(FamID = partner_info$FamID,
                              ID = last_id+1,
                              sex = abs(partner_info$sex - 1),
                              dadID = NA,
                              momID = NA,
                              affected = 0,
-                             DA1 = 0,
-                             DA2 = 0,
+                             DA1 = NA,
+                             DA2 = NA,
                              birthYr = NA,
                              onsetYr = NA,
                              deathYr = NA,
-                             RR = 1,
+                             RR = NA,
                              available = 0,
                              Gen = partner_info$Gen,
                              do_sim = 0,
                              stringsAsFactors=FALSE)
+  #if RV founder already obtained and single_founderEntry selected
+  #then new parent cannot introduce RV
+  if(single_founderEntry & RV_founder){
+    new_mate_info$DA1 <- 0
+    new_mate_info$DA2 <- 0
+    new_mate_info$RR <- 1
+    RVfounder <- RV_founder
+  } else {
+    new_mate_info[1, c(7:8)] <- sample(x = c(0, ifelse(runif(1) <= prob_causalRV, 1, 0)),
+                                       size = 2, replace = F)
+    new_mate_info$RR <- ifelse(sum(new_mate_info$DA1, new_mate_info$DA2) == 0,
+                                1, GRR)
+    RVfounder <- ifelse(any(new_mate_info[1, c(7:8)] == 1), TRUE, FALSE)
+  }
 
-  mate_return <- list(new_mate_info, last_id+1)
+  mate_return <- list(new_mate_info, last_id + 1, RVfounder)
   return(mate_return)
 }
 
@@ -76,7 +92,7 @@ create_mate = function(partner_info, last_id){
 #'
 create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
   new_child_info <- data.frame(FamID = dad_info$FamID,
-                              ID = last_id+1,
+                              ID = last_id + 1,
                               sex = round(runif(1)),
                               dadID = dad_info$ID,
                               momID = mom_info$ID,
@@ -112,7 +128,9 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #'
 sim_nFam = function(found_info, stop_year, last_id,
                     hazard_rates, part,
-                    birth_range, NB_params, GRR){
+                    birth_range, NB_params, GRR,
+                    prob_causalRV,
+                    single_founderEntry, RV_founder){
 
   nfam_ped <- found_info
 
@@ -150,9 +168,12 @@ sim_nFam = function(found_info, stop_year, last_id,
 
   if (length(birth_events) > 0) {
     #add a mate
-    new_mate <- create_mate(partner_info = nfam_ped[1,], last_id)
+    new_mate <- create_mate(partner_info = nfam_ped[1,], last_id,
+                            GRR, prob_causalRV,
+                            single_founderEntry, RV_founder)
     nfam_ped <- rbind(nfam_ped, new_mate[[1]])
     last_id <- new_mate[[2]]
+    RVfounder <- new_mate[[3]]
 
     #store info for mom and dad
     dad <- nfam_ped[which(nfam_ped$sex == 0), ]
@@ -165,12 +186,14 @@ sim_nFam = function(found_info, stop_year, last_id,
       nfam_ped <- rbind(nfam_ped, new_child[[1]])
       last_id <- new_child[[2]]
     }
+  } else {
+    RVfounder <- RV_founder
   }
 
   #set do_sim to 0 for individual whose life events we just simulated
   nfam_ped$do_sim[1] = 0
 
-  sim_fam_return = list(nfam_ped, last_id)
+  sim_fam_return = list(nfam_ped, last_id, RVfounder)
   return(sim_fam_return)
 }
 
@@ -204,8 +227,9 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' #Simulate a random pedigree
 #' set.seed(22)
 #' ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-#'                   part = my_part,
-#'                   GRR = 5, FamID = 1,
+#'                   part = seq(0, 100, by = 1),
+#'                   GRR = 5, prob_causalRV = 1,
+#'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
@@ -225,12 +249,15 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
 #'
 sim_ped = function(hazard_rates, part,
-                   GRR, FamID, founder_byears, stop_year,
+                   GRR, prob_causalRV,
+                   FamID, founder_byears, stop_year,
+                   single_founderEntry = TRUE,
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
 
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
+
 
   #randomly generate birth year and sex for the founder carrying the RV,
   #and fill in all other fields with the appropriate info
@@ -239,13 +266,18 @@ sim_ped = function(hazard_rates, part,
                    round(runif(1)),  #sex
                    NA, NA,           #dadID and #momID
                    NA,               #affected status
-                   1, 0,             #alleles 1 and 2,
+                   NA, NA,             #alleles 1 and 2,
                    round(runif(1, min = founder_byears[1],
                                max = founder_byears[2])), #birth year
                    NA, NA,           #onset and death years
-                   GRR,               #RR of developing disease
+                   NA,               #RR of developing disease
                    1, 1,             #availablilty and generation no
                    1)                # do_sim
+
+  fam_ped[1, c(7:8)] <- sample(x = c(0, ifelse(runif(1) <= prob_causalRV, 1, 0)),
+                               size = 2, replace = F)
+  fam_ped$RR[1] <- ifelse(1 %in% fam_ped[1, c(7:8)], GRR, 1)
+  RVfounder <- ifelse(fam_ped$RR[1] == 1, F, T)
 
   last_id <- 1
   last_gen <- 1
@@ -255,21 +287,30 @@ sim_ped = function(hazard_rates, part,
   while (length(re_sim) > 0) {
     for (k in 1:length(re_sim)) {
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
-                          stop_year, last_id,
-                          hazard_rates, part,
-                          birth_range, NB_params, GRR)
+                         stop_year, last_id,
+                         hazard_rates, part,
+                         birth_range, NB_params,
+                         GRR, prob_causalRV,
+                         single_founderEntry, RV_founder = RVfounder)
 
       #replace individual by their simulated self and add family members when necessary
       fam_ped <- rbind(fam_ped[-which(fam_ped$ID == re_sim[k]), ],
                        newKin[[1]])
 
       last_id <- newKin[[2]]
+      RVfounder <- newKin[[3]]
     }
     last_gen <- max(fam_ped$Gen)
     re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
   }
 
-  return(fam_ped[, c(1:14)])
+  aff_GRR <- ifelse(any(fam_ped$RR[which(fam_ped$affected == 1)] != 1), GRR, 1)
+  fam_GRR <- ifelse(any(fam_ped$RR != 1), GRR, 1)
+
+  SP_return <- list(fam_ped = fam_ped[, c(1:14)],
+                    aff_GRR = aff_GRR,
+                    fam_GRR = fam_GRR)
+  return(SP_return)
 }
 
 #' Choose a proband from the disease-affected relatives in a pedigree
@@ -351,12 +392,14 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' @param hazard_rates Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.
 #' @param part Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.
 #' @param GRR Numeric. The relative-risk of disease for individuals who inherit the rare variant.
+#' @param prob_causalRV.  Numeric.  The probability that ascertained pedigrees are segregating a genetic variant that with relative risk \code{GRR}. See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
 #' @param FamID Numeric. The family ID to assign to the simulated pedigree.
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
+#' @param single_founderEntry Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.
 #' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #'
@@ -381,11 +424,12 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' set.seed(13)
 #' ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
 #'                       part = seq(0, 100, by = 1),
-#'                       GRR = 15, FamID = 1,
+#'                       GRR = 50, prob_causalRV = 1, FamID = 1,
 #'                       founder_byears = c(1900, 1910),
 #'                       ascertain_span = c(1900, 2015),
 #'                       num_affected = 2, stop_year = 2015,
-#'                       recall_probs = c(1, 0.75, 0.5))
+#'                       recall_probs = c(1),
+#'                       single_founderEntry = TRUE)
 #'
 #'
 #'
@@ -423,9 +467,9 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 #'
 #'
-sim_RVped = function(hazard_rates, part, GRR,
+sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
                      founder_byears, ascertain_span, num_affected,
-                     FamID, recall_probs, stop_year,
+                     FamID, recall_probs, stop_year, single_founderEntry = TRUE,
                      birth_range = c(18, 45), NB_params = c(2, 4/7)){
 
   if (any(is.na(hazard_rates)) | any(is.na(part))) {
@@ -475,6 +519,11 @@ sim_RVped = function(hazard_rates, part, GRR,
     warning('Setting GRR < 1 can significantly increase computation time')
   }
 
+  if (prob_causalRV < 0 | prob_causalRV > 1){
+    stop ('prob_causalRV must be a value between 0 and 1')
+  }
+
+
   if(!missing(recall_probs)) {
     if (any(recall_probs > 1) | any(recall_probs < 0) ){
       stop ('recall probabilities must be between 0 and 1')
@@ -492,20 +541,21 @@ sim_RVped = function(hazard_rates, part, GRR,
   while(D == 0){
     d <- 0
     while( d == 0 ){
-      fam_ped <- sim_ped(hazard_rates, part, GRR, FamID,
-                         founder_byears, stop_year, birth_range, NB_params)
+      fam_ped <- sim_ped(hazard_rates, part, GRR, prob_causalRV, FamID,
+                         founder_byears, stop_year,
+                         single_founderEntry, birth_range, NB_params)
 
       # prior to sending the simulated pedigree to the trim function,
       # we check to see if it meets the required criteria for number of
       # affected.  If it does, we choose a proband from the available
       # candidates prior to sending it to the trim_ped function.
-      if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
-          length(fam_ped$ID[which(fam_ped$onsetYr <= ascertain_span[2])]) < 2 |
-          length(fam_ped$ID[which(fam_ped$onsetYr %in%
+      if( nrow(fam_ped[[1]]) == 1 | sum(fam_ped[[1]]$affected) < num_affected |
+          length(fam_ped[[1]]$ID[which(fam_ped[[1]]$onsetYr <= ascertain_span[2])]) < 2 |
+          length(fam_ped[[1]]$ID[which(fam_ped[[1]]$onsetYr %in%
                                   ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
       } else {
-        fam_ped <- choose_proband(ped = fam_ped, num_affected, ascertain_span)
+        fam_ped[[1]] <- choose_proband(ped = fam_ped[[1]], num_affected, ascertain_span)
         d <- 1
       }
     }
@@ -514,9 +564,9 @@ sim_RVped = function(hazard_rates, part, GRR,
     # pedigree and check to see that the trimmed pedigree STILL meets our
     # conditions, if it does not we throw it out and start all over again.
     if (missing(recall_probs)) {
-      ascertained_ped <- trim_ped(ped_file = fam_ped)
+      ascertained_ped <- trim_ped(ped_file = fam_ped[[1]])
     } else {
-      ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
+      ascertained_ped <- trim_ped(ped_file = fam_ped[[1]], recall_probs)
     }
 
     Oyears <- ascertained_ped$onsetYr[which(ascertained_ped$affected == 1 &
@@ -530,7 +580,7 @@ sim_RVped = function(hazard_rates, part, GRR,
   }
 
   #return original and trimmed pedigrees
-  my.return <- list(fam_ped, ascertained_ped)
-  names(my.return) <- c("full_ped", "ascertained_ped")
+  my.return <- list(fam_ped[[1]], ascertained_ped, fam_ped[[2]], fam_ped[[3]])
+  names(my.return) <- c("full_ped", "ascertained_ped", "aff_GRR", "fam_GRR")
   return(my.return)
 }
