@@ -11,12 +11,10 @@ EXPed <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
                    ascertain_span = c(1970, 2015))
 
 
-test_that("returns a list containing two pedfiles and two numeric constants", {
+test_that("returns a list containing two pedfiles", {
   expect_true(is.list(EXPed))
   expect_true(is.data.frame(EXPed[[1]]))
   expect_true(is.data.frame(EXPed[[2]]))
-  expect_true(is.numeric(EXPed[[3]]))
-  expect_true(is.numeric(EXPed[[4]]))
 })
 
 test_that("pedigree always conatains more than 1 person", {

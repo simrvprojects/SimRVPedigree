@@ -236,7 +236,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                   GRR = 5, prob_causalRV = 1,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
-#'                   stop_year = 2015)[[1]]
+#'                   stop_year = 2015)
 #'
 #' #Plot pedigree with the kinship2 package
 #' library(kinship2)
@@ -309,13 +309,7 @@ sim_ped = function(hazard_rates, part,
     re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
   }
 
-  aff_GRR <- ifelse(any(fam_ped$RR[which(fam_ped$affected == 1)] != 1), GRR, 1)
-  fam_GRR <- ifelse(any(fam_ped$RR != 1), GRR, 1)
-
-  SP_return <- list(fam_ped = fam_ped[, c(1:14)],
-                    aff_GRR = aff_GRR,
-                    fam_GRR = fam_GRR)
-  return(SP_return)
+  return(fam_ped[, c(1:14)])
 }
 
 #' Choose a proband from the disease-affected relatives in a pedigree
@@ -554,13 +548,13 @@ sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
       # we check to see if it meets the required criteria for number of
       # affected.  If it does, we choose a proband from the available
       # candidates prior to sending it to the trim_ped function.
-      if( nrow(fam_ped[[1]]) == 1 | sum(fam_ped[[1]]$affected) < num_affected |
-          length(fam_ped[[1]]$ID[which(fam_ped[[1]]$onsetYr <= ascertain_span[2])]) < 2 |
-          length(fam_ped[[1]]$ID[which(fam_ped[[1]]$onsetYr %in%
+      if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
+          length(fam_ped$ID[which(fam_ped$onsetYr <= ascertain_span[2])]) < 2 |
+          length(fam_ped$ID[which(fam_ped$onsetYr %in%
                                   ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
       } else {
-        fam_ped[[1]] <- choose_proband(ped = fam_ped[[1]], num_affected, ascertain_span)
+        fam_ped <- choose_proband(ped = fam_ped, num_affected, ascertain_span)
         d <- 1
       }
     }
@@ -569,9 +563,9 @@ sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
     # pedigree and check to see that the trimmed pedigree STILL meets our
     # conditions, if it does not we throw it out and start all over again.
     if (missing(recall_probs)) {
-      ascertained_ped <- trim_ped(ped_file = fam_ped[[1]])
+      ascertained_ped <- trim_ped(ped_file = fam_ped)
     } else {
-      ascertained_ped <- trim_ped(ped_file = fam_ped[[1]], recall_probs)
+      ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
     }
 
     Oyears <- ascertained_ped$onsetYr[which(ascertained_ped$affected == 1 &
@@ -585,7 +579,7 @@ sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
   }
 
   #return original and trimmed pedigrees
-  my.return <- list(fam_ped[[1]], ascertained_ped, fam_ped[[2]], fam_ped[[3]])
-  names(my.return) <- c("full_ped", "ascertained_ped", "aff_GRR", "fam_GRR")
+  my.return <- list(fam_ped, ascertained_ped)
+  names(my.return) <- c("full_ped", "ascertained_ped")
   return(my.return)
 }

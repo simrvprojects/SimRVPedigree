@@ -57,7 +57,7 @@ ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
                   GRR = 5, prob_causalRV = 1,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
-                  stop_year = 2015)[[1]]
+                  stop_year = 2015)
 
 #Plot pedigree with the kinship2 package
 library(kinship2)

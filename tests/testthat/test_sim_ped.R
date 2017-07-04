@@ -5,7 +5,7 @@ test_that("returns a single ped file dataframe", {
                                     part = seq(0, 100, by = 1),
                                     GRR = 10, prob_causalRV = 1,
                                     FamID = 1, stop_year = 2015,
-                                    founder_byears = c(1900, 1905))[[1]]))
+                                    founder_byears = c(1900, 1905))))
 })
 
 test_that("pedigree always contains at least 1 person", {
@@ -13,7 +13,7 @@ test_that("pedigree always contains at least 1 person", {
                            part = seq(0, 100, by = 1),
                            GRR = 10, prob_causalRV = 1,
                            FamID = 1, stop_year = 2015,
-                           founder_byears = c(1900, 1905))[[1]]) >= 1)
+                           founder_byears = c(1900, 1905))) >= 1)
 })
 
 test_that("Effects of prop_causalRV = 1 and single_founderEntry = T", {
@@ -22,7 +22,7 @@ test_that("Effects of prop_causalRV = 1 and single_founderEntry = T", {
                    GRR = 10, prob_causalRV = 1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),
-                   single_founderEntry = T)[[1]]
+                   single_founderEntry = T)
 
   #expect that first founder introduces causal variant
   expect_true(1 %in% exPed[1, c(7,8)])
@@ -38,7 +38,7 @@ test_that("Effects of prop_causalRV != 1 and single_founderEntry = T", {
                    GRR = 10, prob_causalRV = 0.1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),
-                   single_founderEntry = T)[[1]]
+                   single_founderEntry = T)
 
   #expect that only one founder introduces causal variant
   expect_true(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]) <= 1)
@@ -53,7 +53,7 @@ test_that("Effects of prop_causalRV == 1 and single_founderEntry = F", {
                    GRR = 10, prob_causalRV = 1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),
-                   single_founderEntry = F)[[1]]
+                   single_founderEntry = F)
 
   #expect that every founder introduces causal variant
   expect_true(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]) == nrow(exPed[which(is.na(exPed$dadID)), ]))
