@@ -230,7 +230,8 @@ assign_affectedGen = function(ped_file){
 #'                       part = seq(0, 100, by = 1),
 #'                       num_affected = 2,
 #'                       ascertain_span = c(1900, 2015),
-#'                       GRR = 10, stop_year = 2015,
+#'                       GRR = 10, prob_causalRV = 1,
+#'                       stop_year = 2015,
 #'                       recall_probs = c(1),
 #'                       founder_byears = c(1900, 1980),
 #'                       FamID = 1)[[2]]

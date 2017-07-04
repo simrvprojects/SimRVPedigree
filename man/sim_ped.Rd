@@ -57,7 +57,7 @@ ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
                   GRR = 5, prob_causalRV = 1,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
-                  stop_year = 2015)
+                  stop_year = 2015)[[1]]
 
 #Plot pedigree with the kinship2 package
 library(kinship2)
@@ -69,10 +69,10 @@ Affected  <- ex_ped$affected
 ex_pedigree <- pedigree(id = ex_ped$ID,
                         dadid = ex_ped$dadID,
                         momid = ex_ped$momID,
-                        sex = (ex_ped$sex + 1),
+                        sex = ex_ped$sex + 1,
                         affected = cbind(Affected, RV_status))
 plot(ex_pedigree)
-pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
+pedigree.legend(ex_pedigree, location = "bottomleft",  radius = 0.25)
 
 }
 \references{
