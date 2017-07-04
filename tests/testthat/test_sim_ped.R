@@ -1,24 +1,24 @@
 library(testthat)
 context("sim_ped")
 test_that("returns a single ped file dataframe", {
-  expect_true(is.data.frame(sim_ped(hazard_rates = AgeSpecific_Hazards,
-                                    part = seq(0, 100, by = 1),
+  expect_true(is.data.frame(sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                                              AgeSpecific_Hazards),
                                     GRR = 10, prob_causalRV = 1,
                                     FamID = 1, stop_year = 2015,
                                     founder_byears = c(1900, 1905))))
 })
 
 test_that("pedigree always contains at least 1 person", {
-  expect_true(nrow(sim_ped(hazard_rates = AgeSpecific_Hazards,
-                           part = seq(0, 100, by = 1),
+  expect_true(nrow(sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                                     AgeSpecific_Hazards),
                            GRR = 10, prob_causalRV = 1,
                            FamID = 1, stop_year = 2015,
                            founder_byears = c(1900, 1905))) >= 1)
 })
 
 test_that("Effects of prop_causalRV = 1 and single_founderEntry = T", {
-  exPed <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-                   part = seq(0, 100, by = 1),
+  exPed <- sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                             AgeSpecific_Hazards),
                    GRR = 10, prob_causalRV = 1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),
@@ -33,8 +33,8 @@ test_that("Effects of prop_causalRV = 1 and single_founderEntry = T", {
 })
 
 test_that("Effects of prop_causalRV != 1 and single_founderEntry = T", {
-  exPed <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-                   part = seq(0, 100, by = 1),
+  exPed <- sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                             AgeSpecific_Hazards),
                    GRR = 10, prob_causalRV = 0.1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),
@@ -48,8 +48,8 @@ test_that("Effects of prop_causalRV != 1 and single_founderEntry = T", {
 
 
 test_that("Effects of prop_causalRV == 1 and single_founderEntry = F", {
-  exPed <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-                   part = seq(0, 100, by = 1),
+  exPed <- sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                             AgeSpecific_Hazards),
                    GRR = 10, prob_causalRV = 1,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905),

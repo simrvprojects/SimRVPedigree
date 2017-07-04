@@ -4,7 +4,7 @@
 \alias{get_nextEvent}
 \title{Simulate the next life event}
 \usage{
-get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates, part,
+get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates,
   birth_range, RR)
 }
 \arguments{
@@ -14,9 +14,7 @@ get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates, part,
 
 \item{lambda_birth}{Numeric. The individual's birth rate.}
 
-\item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
-
-\item{part}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
+\item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 

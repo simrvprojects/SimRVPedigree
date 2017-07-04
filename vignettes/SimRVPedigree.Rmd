@@ -129,6 +129,10 @@ Looking at the output above, we can see that the `AgeSpecific_Hazards` data set,
 ```{r}
 # Specify age partition.
 age_part <- seq(0, 100, by = 1)
+
+#create hazard object
+LC_hazard <- new.hazard(partition = age_part,
+                        hazardDF = AgeSpecific_Hazards)
 ```
 
 Let's quickly plot the age-specific hazard rates against the ages they apply to.
@@ -160,8 +164,7 @@ Finally, we show how `sim_RVped()` may be used to simulate a single family ascer
 ```{r}
 # Simulate an ascertained pedigree 
 set.seed(5938525)
-ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
-                      part = age_part,
+ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(2000, 2015),
                       GRR = 15, prob_causalRV = 1,
@@ -466,11 +469,10 @@ RV_peds = foreach(i = seq(npeds),
                   .packages = c("kinship2", "SimRVPedigree"),  
                   .options.RNG = 1984
                   ) %dorng% {
-                    sim_RVped(hazard_rates = AgeSpecific_Hazards,
-                              part = seq(0, 100, by = 1),
+                    sim_RVped(hazard_rates = LC_hazard,
                               num_affected = 2,
                               ascertain_span = c(1900, 2015),
-                              GRR = 5, stop_year = 2015,
+                              GRR = 5, prob_causalRV = 1, stop_year = 2015,
                               recall_probs = c(1),
                               founder_byears = c(1900, 1910),
                               FamID = i)[[2]]

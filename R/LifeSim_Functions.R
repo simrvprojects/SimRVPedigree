@@ -33,22 +33,22 @@
 #'
 #'
 get_nextEvent = function(current_age, disease_status,
-                         lambda_birth, hazard_rates, part,
+                         lambda_birth, hazard_rates,
                          birth_range, RR){
 
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
   t_onset <- ifelse(disease_status == 0,
                     get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = hazard_rates[, 1]*RR,
-                                 part), NA)
+                                 hazard = hazard_rates[[2]][, 1]*RR,
+                                 part = hazard_rates[[1]]), NA)
 
   #simulate the waiting time until death given current age.
   # NOTE: choosing rate = FASLE implies that we are assuming person will die
   t_death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
-                          hazard = hazard_rates[, (2 + disease_status)],
-                          part, scale = TRUE)
+                          hazard = hazard_rates[[2]][, (2 + disease_status)],
+                          part = hazard_rates[[1]], scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
@@ -120,14 +120,14 @@ get_nextEvent = function(current_age, disease_status,
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' my_part <- seq(0, 100, by = 1)
+#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
+#'                     hazardDF = AgeSpecific_Hazards)
 #'
 #' # The following commands simulate all life events for an individual, whose
 #' # relative-risk of disease is 1, born in 1900.  From the output, this
 #' # individual has 1 child in 1944, and then dies in 1961.
 #' set.seed(1234)
-#' sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
-#'                part = my_part,
+#' sim_lifeEvents(hazard_rates = my_HR,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 1,
 #'                YOB = 1900)
@@ -137,19 +137,17 @@ get_nextEvent = function(current_age, disease_status,
 #' # From the output, this individual also has 1 child in 1944, then
 #' # experiences disease onset in 1949, and dies in 1957.
 #' set.seed(1234)
-#' sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
-#'                part = my_part,
+#' sim_lifeEvents(hazard_rates = my_HR,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 25,
 #'                YOB = 1900)
 #'
-sim_lifeEvents = function(hazard_rates, part,
-                          birth_range, NB_params, RR, YOB){
+sim_lifeEvents = function(hazard_rates, birth_range, NB_params, RR, YOB){
 
   #initialize data frame to hold life events
   R_life  <- data.frame(Start = 0)
-  min_age <- min(part)
-  max_age <- max(part)
+  min_age <- min(hazard_rates[[1]])
+  max_age <- max(hazard_rates[[1]])
   #initialize disease status, start age at minumum age permissable under part
   DS <- 0; t <- min_age
 
@@ -161,7 +159,7 @@ sim_lifeEvents = function(hazard_rates, part,
     #generate next event
     l_event <- get_nextEvent(current_age = t, disease_status = DS,
                              lambda_birth = B_lambda, hazard_rates,
-                             part, birth_range, RR)
+                             birth_range, RR)
 
     #add to previous life events
     R_life <- cbind(R_life, l_event)

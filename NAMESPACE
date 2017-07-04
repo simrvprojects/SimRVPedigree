@@ -2,6 +2,8 @@
 
 export(assign_affectedGen)
 export(censor_ped)
+export(hazard)
+export(new.hazard)
 export(sim_RVped)
 export(sim_lifeEvents)
 export(sim_ped)

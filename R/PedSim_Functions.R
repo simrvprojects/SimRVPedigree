@@ -132,15 +132,14 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #' additional information for mate and offspring, when offspring are generated.
 #'
 sim_nFam = function(found_info, stop_year, last_id,
-                    hazard_rates, part,
-                    birth_range, NB_params, GRR,
-                    prob_causalRV,
+                    hazard_rates, birth_range, NB_params,
+                    GRR, prob_causalRV,
                     single_founderEntry, RV_founder){
 
   nfam_ped <- found_info
 
   #Simulate life steps for founder
-  sim_years <- sim_lifeEvents(hazard_rates, part,
+  sim_years <- sim_lifeEvents(hazard_rates,
                               birth_range, NB_params,
                               RR = found_info$RR,
                               YOB = found_info$birthYr)
@@ -227,12 +226,12 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' my_part <- seq(0, 100, by = 1)
+#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
+#'                     hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a random pedigree
 #' set.seed(22)
-#' ex_ped <- sim_ped(hazard_rates = AgeSpecific_Hazards,
-#'                   part = seq(0, 100, by = 1),
+#' ex_ped <- sim_ped(hazard_rates = my_HR,
 #'                   GRR = 5, prob_causalRV = 1,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
@@ -253,8 +252,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' plot(ex_pedigree)
 #' pedigree.legend(ex_pedigree, location = "bottomleft",  radius = 0.25)
 #'
-sim_ped = function(hazard_rates, part,
-                   GRR, prob_causalRV,
+sim_ped = function(hazard_rates, GRR, prob_causalRV,
                    FamID, founder_byears, stop_year,
                    single_founderEntry = TRUE,
                    birth_range = c(18, 45),
@@ -293,8 +291,7 @@ sim_ped = function(hazard_rates, part,
     for (k in 1:length(re_sim)) {
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
                          stop_year, last_id,
-                         hazard_rates, part,
-                         birth_range, NB_params,
+                         hazard_rates, birth_range, NB_params,
                          GRR, prob_causalRV,
                          single_founderEntry, RV_founder = RVfounder)
 
@@ -388,8 +385,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #'
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
 #'
-#' @param hazard_rates Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.
-#' @param part Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.
+#' @param hazard_rates on object of class \code{hazard}, created by \code{\link{new.hazard}}.
 #' @param GRR Numeric. The relative-risk of disease for individuals who inherit the causal variant.
 #' @param prob_causalRV  Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
@@ -419,10 +415,12 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' #Read in age-specific hazards
 #' data(AgeSpecific_Hazards)
 #'
+#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
+#'                     hazardDF = AgeSpecific_Hazards)
+#'
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(13)
-#' ex_RVped <- sim_RVped(hazard_rates = AgeSpecific_Hazards,
-#'                       part = seq(0, 100, by = 1),
+#' ex_RVped <- sim_RVped(hazard_rates = my_HR,
 #'                       GRR = 50, prob_causalRV = 1, FamID = 1,
 #'                       founder_byears = c(1900, 1910),
 #'                       ascertain_span = c(1900, 2015),
@@ -466,43 +464,14 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 #'
 #'
-sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
+sim_RVped = function(hazard_rates, GRR, prob_causalRV,
                      founder_byears, ascertain_span, num_affected,
                      FamID, recall_probs, stop_year, single_founderEntry = TRUE,
                      birth_range = c(18, 45), NB_params = c(2, 4/7)){
 
-  if (any(is.na(hazard_rates)) | any(is.na(part))) {
-    stop('age-specific hazards and age partition cannot contain missing values')
+  if(!is.hazard(hazard_rates)) {
+    stop("Input must be an object of class hazard")
   }
-
-  if (min(part) != 0) {
-    stop('age-specific hazards must begin at birth')
-  } else if (max(part) < 65){
-    warning ('For optimal results please specify age-specific hazard rates that begin at birth and end near the life expectancy of the population to which the age-specific hazards apply.')
-  }
-
-  if (length(part) == 1 |
-      length(part) != (nrow(hazard_rates) + 1) ) {
-    stop ('please provide hazard rates, such that length(part) == length(hazard) + 1')
-  }
-
-  if (class(hazard_rates) != "data.frame") {
-    stop("hazard_rates must be a data frame with 3 columns:
-         column 1 = population age-specific hazard rate of disease,
-         column 2 = age-specific hazard rate of death in the unaffected population,
-         column 3 = age-specific hazard rate of death in the affected population")
-  } else if (ncol(hazard_rates) != 3) {
-    stop("hazard_rates must be a data frame with 3 columns:
-         column 1 = population age-specific hazard rate of disease,
-         column 2 = age-specific hazard rate of death in the unaffected population,
-         column 3 = age-specific hazard rate of death in the affected population")
-  } else if(sum(hazard_rates[, 2] > hazard_rates[, 3]) > nrow(hazard_rates)/2 |
-           sum(which(hazard_rates[, 2] == hazard_rates[, 3])) != 0){
-    warning("Please check that you have specified hazard_rates such that:
-            column 2 = age-specific hazard rate of death in the UNAFFECTED population,
-            column 3 = age-specific hazard rate of death in the AFFECTED population")
-  }
-
 
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
     stop ('please provide appropriate ascertain_span')
@@ -540,7 +509,7 @@ sim_RVped = function(hazard_rates, part, GRR, prob_causalRV,
   while(D == 0){
     d <- 0
     while( d == 0 ){
-      fam_ped <- sim_ped(hazard_rates, part, GRR, prob_causalRV, FamID,
+      fam_ped <- sim_ped(hazard_rates, GRR, prob_causalRV, FamID,
                          founder_byears, stop_year,
                          single_founderEntry, birth_range, NB_params)
 

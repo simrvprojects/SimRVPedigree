@@ -4,12 +4,10 @@
 \alias{sim_lifeEvents}
 \title{Simulate all life events}
 \usage{
-sim_lifeEvents(hazard_rates, part, birth_range, NB_params, RR, YOB)
+sim_lifeEvents(hazard_rates, birth_range, NB_params, RR, YOB)
 }
 \arguments{
-\item{hazard_rates}{Data.frame. Column 1 should specify the population age-specific hazard rate for disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population. See details.}
-
-\item{part}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
+\item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -48,14 +46,14 @@ We make the following assumptions regarding the simulation of waiting times:
 \examples{
 data(AgeSpecific_Hazards)
 
-my_part <- seq(0, 100, by = 1)
+my_HR <- new.hazard(partition = seq(0, 100, by = 1),
+                    hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, whose
 # relative-risk of disease is 1, born in 1900.  From the output, this
 # individual has 1 child in 1944, and then dies in 1961.
 set.seed(1234)
-sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
-               part = my_part,
+sim_lifeEvents(hazard_rates = my_HR,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 1,
                YOB = 1900)
@@ -65,8 +63,7 @@ sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
 # From the output, this individual also has 1 child in 1944, then
 # experiences disease onset in 1949, and dies in 1957.
 set.seed(1234)
-sim_lifeEvents(hazard_rates = AgeSpecific_Hazards,
-               part = my_part,
+sim_lifeEvents(hazard_rates = my_HR,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 25,
                YOB = 1900)
