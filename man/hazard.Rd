@@ -4,12 +4,12 @@
 \alias{hazard}
 \title{Constructor function of object of class \code{hazard}}
 \usage{
-hazard(partition, hazardDF)
+hazard(hazardDF, partition)
 }
 \arguments{
-\item{partition}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}.}
-
 \item{hazardDF}{Data.frame. Column 1 should specify the age-specific hazard rate for individuals with no genetic predisposition to the disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population.}
+
+\item{partition}{Numeric vector. Optional. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.}
 }
 \value{
 an object of class \code{hazard}.

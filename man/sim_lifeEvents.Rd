@@ -46,8 +46,7 @@ We make the following assumptions regarding the simulation of waiting times:
 \examples{
 data(AgeSpecific_Hazards)
 
-my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-                    hazardDF = AgeSpecific_Hazards)
+my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, whose
 # relative-risk of disease is 1, born in 1900.  From the output, this

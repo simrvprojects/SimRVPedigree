@@ -40,15 +40,15 @@ get_nextEvent = function(current_age, disease_status,
   # until onset given current age
   t_onset <- ifelse(disease_status == 0,
                     get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = hazard_rates[[2]][, 1]*RR,
-                                 part = hazard_rates[[1]]), NA)
+                                 hazard = hazard_rates[[1]][, 1]*RR,
+                                 part = hazard_rates[[2]]), NA)
 
   #simulate the waiting time until death given current age.
   # NOTE: choosing rate = FASLE implies that we are assuming person will die
   t_death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
-                          hazard = hazard_rates[[2]][, (2 + disease_status)],
-                          part = hazard_rates[[1]], scale = TRUE)
+                          hazard = hazard_rates[[1]][, (2 + disease_status)],
+                          part = hazard_rates[[2]], scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
@@ -120,8 +120,7 @@ get_nextEvent = function(current_age, disease_status,
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-#'                     hazardDF = AgeSpecific_Hazards)
+#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' # The following commands simulate all life events for an individual, whose
 #' # relative-risk of disease is 1, born in 1900.  From the output, this
@@ -146,8 +145,8 @@ sim_lifeEvents = function(hazard_rates, birth_range, NB_params, RR, YOB){
 
   #initialize data frame to hold life events
   R_life  <- data.frame(Start = 0)
-  min_age <- min(hazard_rates[[1]])
-  max_age <- max(hazard_rates[[1]])
+  min_age <- min(hazard_rates[[2]])
+  max_age <- max(hazard_rates[[2]])
   #initialize disease status, start age at minumum age permissable under part
   DS <- 0; t <- min_age
 

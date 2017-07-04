@@ -124,7 +124,7 @@ data("AgeSpecific_Hazards")
 colnames(AgeSpecific_Hazards)
 ```
 
-Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped().`  Since the `AgeSpecific_Hazards` data set supplies the age specific hazard rates in yearly increments starting at age 0 and ending with age 100, we will define our partition to feed to the `part` argument of `sim_RVped` as follows:
+Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped().`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, the we define our partition to feed to the `part` argument of `sim_RVped` as follows:
 
 ```{r}
 # Specify age partition.
@@ -141,7 +141,7 @@ Let's quickly plot the age-specific hazard rates against the ages they apply to.
 # plot age-specific hazard rates in the AgeSpecific_Hazards dataset
 par(mfrow = c(1, 2), mar = c(5.1, 5.1, 4.1, 2.1))
 # plot age-specific hazard rate of disease by age
-plot(x = seq(0, 99, by = 1), y = AgeSpecific_Hazards[,1],
+plot(x = seq(1, 100, by = 1), y = AgeSpecific_Hazards[,1],
      xlab = "Age (in years)", ylab = "Hazard Rate of Disease", 
      main = "Hazard Rate of Disease by Age", 
      ylim = c(0, 0.002), col = "red3", lwd = 2, type = "s")

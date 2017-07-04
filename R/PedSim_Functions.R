@@ -226,8 +226,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-#'                     hazardDF = AgeSpecific_Hazards)
+#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a random pedigree
 #' set.seed(22)
@@ -422,8 +421,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
 #' #Read in age-specific hazards
 #' data(AgeSpecific_Hazards)
 #'
-#' my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-#'                     hazardDF = AgeSpecific_Hazards)
+#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(13)

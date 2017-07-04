@@ -1,8 +1,7 @@
 library(testthat)
 context("sim_RVped")
 
-EXPed <- sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                             AgeSpecific_Hazards),
+EXPed <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                    GRR = 35, prob_causalRV = 1,
                    FamID = 1,
                    num_affected = 2,
@@ -31,8 +30,7 @@ test_that("both pedigrees contains at least 2 affecteds when num_affected = 2", 
 
 
 test_that("proband in trimmed pedigree had 1 affected relative before onset, when num_affected = 2", {
-  RVped <- sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                               AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                      GRR = 35, prob_causalRV = 1,
                      FamID = 1,
                      num_affected = 2,
@@ -49,8 +47,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
 
 
 test_that("issues error when RR < 0", {
-  expect_error(sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                                   AgeSpecific_Hazards),
+  expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                          GRR = -1, prob_causalRV = 1, FamID = 1,
                          num_affected = 2,
                          founder_byears = c(1900, 1980),
@@ -58,8 +55,7 @@ test_that("issues error when RR < 0", {
 })
 
 test_that("issues error when ascertain_span not properly specified", {
-    expect_error(sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                                     AgeSpecific_Hazards),
+    expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                            GRR = 35, prob_causalRV = 1, FamID = 1,
                            num_affected = 2,
                            founder_byears = c(1900, 1980),
@@ -67,8 +63,7 @@ test_that("issues error when ascertain_span not properly specified", {
   })
 
 test_that("issues error when birth_range not properly specified", {
-  expect_error(sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                                   AgeSpecific_Hazards),
+  expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                          GRR = 35, prob_causalRV = 1, FamID = 1,
                          num_affected = 2,
                          birth_range = c(10, 5),
@@ -77,8 +72,7 @@ test_that("issues error when birth_range not properly specified", {
   })
 
 test_that("issues error when recall_probs not properly specified", {
-  expect_error(sim_RVped(hazard_rates = new.hazard(seq(0, 100, by = 1),
-                                                   AgeSpecific_Hazards),
+  expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                          GRR = 35, prob_causalRV = 1, FamID = 1,
                          num_affected = 2,
                          recall_probs = c(10, 5),

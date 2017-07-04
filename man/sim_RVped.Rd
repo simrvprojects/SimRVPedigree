@@ -71,8 +71,7 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 #Read in age-specific hazards
 data(AgeSpecific_Hazards)
 
-my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-                    hazardDF = AgeSpecific_Hazards)
+my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(13)

@@ -4,12 +4,12 @@
 \alias{new.hazard}
 \title{Create a hazard object for input to \code{sim_RVped}, \code{sim_ped}, and \code{sim_lifeEvents}.}
 \usage{
-new.hazard(partition, hazardDF)
+new.hazard(hazardDF, partition)
 }
 \arguments{
-\item{partition}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}.}
-
 \item{hazardDF}{Data.frame. Column 1 should specify the age-specific hazard rate for individuals with no genetic predisposition to the disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population.}
+
+\item{partition}{Numeric vector. Optional. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.}
 }
 \value{
 An object of class \code{hazard}.
@@ -18,8 +18,7 @@ An object of class \code{hazard}.
 Create a hazard object for input to \code{sim_RVped}, \code{sim_ped}, and \code{sim_lifeEvents}.
 }
 \examples{
-my_HR <- new.hazard(partition = seq(0, 100, by = 1),
-                    hazardDF = AgeSpecific_Hazards)
+my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
 class(my_HR)
 head(my_HR[[2]])
