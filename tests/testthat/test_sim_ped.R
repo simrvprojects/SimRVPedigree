@@ -58,3 +58,15 @@ test_that("Effects of prop_causalRV == 1 and single_founderEntry = F", {
   #expect that every founder introduces causal variant
   expect_true(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]) == nrow(exPed[which(is.na(exPed$dadID)), ]))
 })
+
+test_that("If GRR = 1 and single_founderEntry = T no one should have RV", {
+  exPed <- sim_ped(hazard_rates = new.hazard(seq(0, 100, by = 1),
+                                             AgeSpecific_Hazards),
+                   GRR = 1, prob_causalRV = 1,
+                   FamID = 1, stop_year = 2015,
+                   founder_byears = c(1900, 1905),
+                   single_founderEntry = T)
+
+  #expect that every founder introduces causal variant
+  expect_true(!any(exPed[, c(7,8)] == 1))
+})

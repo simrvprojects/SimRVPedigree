@@ -269,18 +269,25 @@ sim_ped = function(hazard_rates, GRR, prob_causalRV,
                    round(runif(1)),  #sex
                    NA, NA,           #dadID and #momID
                    NA,               #affected status
-                   NA, NA,             #alleles 1 and 2,
-                   round(runif(1, min = founder_byears[1],
+                   NA, NA,           #alleles 1 and 2,
+                   round(runif(1,
+                               min = founder_byears[1],
                                max = founder_byears[2])), #birth year
                    NA, NA,           #onset and death years
                    NA,               #RR of developing disease
                    1, 1,             #availablilty and generation no
                    1)                # do_sim
 
-  fam_ped[1, c(7:8)] <- sample(x = c(0, ifelse(runif(1) <= prob_causalRV, 1, 0)),
-                               size = 2, replace = F)
-  fam_ped$RR[1] <- ifelse(1 %in% fam_ped[1, c(7:8)], GRR, 1)
-  RVfounder <- ifelse(fam_ped$RR[1] == 1, F, T)
+  if(GRR == 1){
+    fam_ped[1, c(7:8)] <- c(0, 0)
+    fam_ped$RR[1] <- 1
+    RVfounder <- T
+  } else {
+    fam_ped[1, c(7:8)] <- sample(x = c(0, ifelse(runif(1) <= prob_causalRV, 1, 0)),
+                                 size = 2, replace = F)
+    fam_ped$RR[1] <- ifelse(1 %in% fam_ped[1, c(7:8)], GRR, 1)
+    RVfounder <- ifelse(fam_ped$RR[1] == 1, F, T)
+  }
 
   last_id <- 1
   last_gen <- 1
