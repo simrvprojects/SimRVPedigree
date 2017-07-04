@@ -13,7 +13,9 @@ sim_ped(hazard_rates, part, GRR, prob_causalRV, FamID, founder_byears,
 
 \item{part}{Numeric vector. The partition of ages over which to apply the age-specific hazard rates in \code{hazard_rates}.}
 
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
+\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+
+\item{prob_causalRV}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 

@@ -22,9 +22,13 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, part, birth_range,
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the rare variant.}
+\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+
+\item{prob_causalRV}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{single_founderEntry}{Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.}
+
+\item{RV_founder}{Logical. If \code{RV_founder = TRUE}, then at least 1 founder has introduced the causal variant to the pedigree. If \code{RV_founder = FALSE} then the variant has not yet been introduced to the pedigree.}
 }
 \value{
 A pedigree with updated life events for the founder, and
