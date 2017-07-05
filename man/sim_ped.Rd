@@ -51,7 +51,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate a random pedigree
 set.seed(22)
 ex_ped <- sim_ped(hazard_rates = my_HR,
-                  GRR = 5, prob_causalRV = 1,
+                  GRR = 1, prob_causalRV = 0.02,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)

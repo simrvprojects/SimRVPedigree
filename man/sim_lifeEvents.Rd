@@ -4,7 +4,7 @@
 \alias{sim_lifeEvents}
 \title{Simulate all life events}
 \usage{
-sim_lifeEvents(hazard_rates, birth_range, NB_params, RR, YOB)
+sim_lifeEvents(hazard_rates, birth_range, NB_params, RR, YOB, stop_year)
 }
 \arguments{
 \item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
@@ -16,15 +16,17 @@ sim_lifeEvents(hazard_rates, birth_range, NB_params, RR, YOB)
 \item{RR}{Numeric. The individual's relative-risk of disease.}
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
+
+\item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 }
 \value{
 A named matrix containing the years of an individual's simulated life events, named by event type, see details.
 }
 \description{
-Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death.
+Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
 }
 \details{
-Starting at birth, age 0, the \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death occurs and the process terminates.
+Starting at birth, age 0, the \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
 
 We make the following assumptions regarding the simulation of waiting times:
  \enumerate{
@@ -55,7 +57,7 @@ set.seed(1234)
 sim_lifeEvents(hazard_rates = my_HR,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 1,
-               YOB = 1900)
+               YOB = 1900, stop_year = 2000)
 
 # Using the same random seed, notice how the life events can vary for
 # someone with an increased relative-risk of disease, say 25.
@@ -65,7 +67,7 @@ set.seed(1234)
 sim_lifeEvents(hazard_rates = my_HR,
                birth_range = c(17,45),
                NB_params = c(2, 4/7), RR = 25,
-               YOB = 1900)
+               YOB = 1900, stop_year = 2000)
 
 }
 \references{

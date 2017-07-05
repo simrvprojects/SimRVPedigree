@@ -133,8 +133,8 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #'
 sim_nFam = function(found_info, stop_year, last_id,
                     hazard_rates, birth_range, NB_params,
-                    GRR, prob_causalRV,
-                    single_founderEntry, RV_founder){
+                    GRR, prob_causalRV, single_founderEntry,
+                    RV_founder){
 
   nfam_ped <- found_info
 
@@ -142,27 +142,22 @@ sim_nFam = function(found_info, stop_year, last_id,
   sim_years <- sim_lifeEvents(hazard_rates,
                               birth_range, NB_params,
                               RR = found_info$RR,
-                              YOB = found_info$birthYr)
+                              YOB = found_info$birthYr,
+                              stop_year)
 
 
   # update disease status and onset year if onset occured prior to stop_year
   if (is.element("Onset", names(sim_years))) {
     o_year <- as.numeric(sim_years[which(names(sim_years) == "Onset")])
-    if (o_year <= stop_year) {
-      nfam_ped$affected <- 1
-      nfam_ped$onsetYr <- o_year
-    } else {
-      nfam_ped$affected <- 0
-      nfam_ped$onsetYr <- NA
-    }
+    nfam_ped$affected <- 1
+    nfam_ped$onsetYr <- o_year
   } else {
     nfam_ped$affected <- 0
-    nfam_ped$onsetYr <- NA
   }
 
-  #set the year of death if it occurs before stop_year
-  d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
-  if (d_year <= stop_year) {
+  # update death status and death year if onset occured prior to stop_year
+  if (is.element("Death", names(sim_years))) {
+    d_year <- as.numeric(sim_years[which(names(sim_years) == "Death")])
     nfam_ped$deathYr <- d_year
   }
 
@@ -231,7 +226,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' #Simulate a random pedigree
 #' set.seed(22)
 #' ex_ped <- sim_ped(hazard_rates = my_HR,
-#'                   GRR = 5, prob_causalRV = 1,
+#'                   GRR = 1, prob_causalRV = 0.02,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)

@@ -84,9 +84,9 @@ get_nextEvent = function(current_age, disease_status,
 
 #' Simulate all life events
 #'
-#' Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death.
+#' Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
 #'
-#' Starting at birth, age 0, the \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death occurs and the process terminates.
+#' Starting at birth, age 0, the \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
 #'
 #'  We make the following assumptions regarding the simulation of waiting times:
 #'  \enumerate{
@@ -129,7 +129,7 @@ get_nextEvent = function(current_age, disease_status,
 #' sim_lifeEvents(hazard_rates = my_HR,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 1,
-#'                YOB = 1900)
+#'                YOB = 1900, stop_year = 2000)
 #'
 #' # Using the same random seed, notice how the life events can vary for
 #' # someone with an increased relative-risk of disease, say 25.
@@ -139,42 +139,50 @@ get_nextEvent = function(current_age, disease_status,
 #' sim_lifeEvents(hazard_rates = my_HR,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7), RR = 25,
-#'                YOB = 1900)
+#'                YOB = 1900, stop_year = 2000)
 #'
-sim_lifeEvents = function(hazard_rates, birth_range, NB_params, RR, YOB){
+sim_lifeEvents = function(hazard_rates, birth_range, NB_params,
+                          RR, YOB, stop_year){
 
   #initialize data frame to hold life events
   R_life  <- data.frame(Start = 0)
   min_age <- min(hazard_rates[[2]])
   max_age <- max(hazard_rates[[2]])
   #initialize disease status, start age at minumum age permissable under part
-  DS <- 0; t <- min_age
+  DS <- 0; t <- min_age; yr <- YOB
 
   #generate and store the birth rate for this individual
   B_lambda <- rgamma(1, shape = NB_params[1],
                        scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
                                                                  birth_range[1])
-  while(t < max_age){
+  while(t < max_age & yr <= stop_year){
     #generate next event
     l_event <- get_nextEvent(current_age = t, disease_status = DS,
                              lambda_birth = B_lambda, hazard_rates,
                              birth_range, RR)
 
-    #add to previous life events
-    R_life <- cbind(R_life, l_event)
+    if(yr + as.numeric(l_event[1,1]) <= stop_year){
+      #add to previous life events
+      R_life <- cbind(R_life, l_event)
 
-    if (colnames(l_event) == "Death") {
-      #if death occurs stop simulation by setting t = 100
-      t <- max_age
-    } else if (colnames(l_event) == "Onset") {
-      #if onset occurs change disease status and continue
-      t  <- t + as.numeric(l_event[1,1])
-      DS <- 1
+      if (colnames(l_event) == "Death") {
+        #if death occurs stop simulation by setting t = 100
+        t <- max_age
+      } else if (colnames(l_event) == "Onset") {
+        #if onset occurs change disease status and continue
+        t  <- t + as.numeric(l_event[1,1])
+        yr <- yr + as.numeric(l_event[1,1])
+        DS <- 1
+      } else {
+        #otherwise, increment counter, handles both birth event and case when no
+        # event occurs (i.e. retry)
+        t <- t + as.numeric(l_event[1,1])
+        yr <- yr + as.numeric(l_event[1,1])
+      }
     } else {
-      #otherwise, increment counter, handles both birth event and case when no
-      # event occurs (i.e. retry)
-      t <- t + as.numeric(l_event[1,1])
+      yr <- yr + as.numeric(l_event[1,1])
     }
+
   }
 
   life_events <- round(cumsum(as.numeric(R_life[1,]))) + YOB
