@@ -64,3 +64,11 @@ test_that("If GRR = 1 and single_founderEntry = T no one should have RV", {
   #expect that every founder introduces causal variant
   expect_true(!any(exPed[, c(7,8)] == 1))
 })
+
+test_that("issues error when hazard_rates is not a hazard object", {
+  expect_error(sim_ped(hazard_rates = AgeSpecific_Hazards,
+                       GRR = 1, prob_causalRV = 1,
+                       FamID = 1, stop_year = 2015,
+                       founder_byears = c(1900, 1905),
+                       single_founderEntry = T))
+})

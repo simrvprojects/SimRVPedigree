@@ -469,10 +469,6 @@ sim_RVped = function(hazard_rates, GRR, prob_causalRV,
                      FamID, recall_probs, stop_year, single_founderEntry = TRUE,
                      birth_range = c(18, 45), NB_params = c(2, 4/7)){
 
-  if(!is.hazard(hazard_rates)) {
-    stop("Input must be an object of class hazard")
-  }
-
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
     stop ('please provide appropriate ascertain_span')
   }

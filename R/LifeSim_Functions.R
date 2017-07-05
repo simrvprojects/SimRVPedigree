@@ -144,6 +144,10 @@ get_nextEvent = function(current_age, disease_status,
 sim_lifeEvents = function(hazard_rates, birth_range, NB_params,
                           RR, YOB, stop_year){
 
+  if(!is.hazard(hazard_rates)) {
+    stop("hazard_rates must be an object of class hazard")
+  }
+
   #initialize data frame to hold life events
   R_life  <- data.frame(Start = 0)
   min_age <- min(hazard_rates[[2]])

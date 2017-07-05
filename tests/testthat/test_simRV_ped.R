@@ -79,3 +79,11 @@ test_that("issues error when recall_probs not properly specified", {
                          founder_byears = c(1900, 1980),
                          ascertain_span = c(2000, 2015)))
   })
+
+test_that("issues error when hazard_rates is not a hazard object", {
+  expect_error(sim_RVped(hazard_rates = list(AgeSpecific_Hazards, seq(0, 100, by = 1)),
+                         GRR = 35, prob_causalRV = 1, FamID = 1,
+                         num_affected = 2,
+                         founder_byears = c(1900, 1980),
+                         ascertain_span = c(2000, 2015)))
+})
