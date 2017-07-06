@@ -4,8 +4,8 @@
 \alias{sim_RVped}
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
-sim_RVped(hazard_rates, GRR, prob_causalRV, founder_byears, ascertain_span,
-  num_affected, FamID, recall_probs, stop_year, single_founderEntry = TRUE,
+sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span,
+  recall_probs, stop_year, FamID, founder_byears, RVfounder = "single",
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
@@ -13,21 +13,21 @@ sim_RVped(hazard_rates, GRR, prob_causalRV, founder_byears, ascertain_span,
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{prob_causalRV}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
-
-\item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
-
-\item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
+\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
-\item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
+\item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
 
 \item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.}
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{single_founderEntry}{Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.}
+\item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
+
+\item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
+
+\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -74,16 +74,15 @@ data(AgeSpecific_Hazards)
 my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(13)
+set.seed(8008135)
 ex_RVped <- sim_RVped(hazard_rates = my_HR,
-                      GRR = 50, prob_causalRV = 1, FamID = 1,
+                      GRR = 50, carrier_prob = 0.02,
+                      RVfounder = "first",
+                      FamID = 1,
                       founder_byears = c(1900, 1910),
                       ascertain_span = c(1900, 2015),
-                      num_affected = 2, stop_year = 2015,
-                      recall_probs = c(1),
-                      single_founderEntry = TRUE)
-
-
+                      num_affected = 2,
+                      recall_probs = c(1, 1, 0.5, 0.25))
 
 
 #Plot ex_RVped pedigrees using the kinship2 package

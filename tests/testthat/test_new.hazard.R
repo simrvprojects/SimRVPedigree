@@ -1,4 +1,3 @@
-library(testthat)
 context("new.hazard")
 
 test_that("issues errors when invalid partition supplied", {

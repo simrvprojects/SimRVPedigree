@@ -1,8 +1,8 @@
-library(testthat)
 context("sim_RVped")
 
 EXPed <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 35, prob_causalRV = 1,
+                   GRR = 35, carrier_prob = 0.02,
+                   RVfounder = "first",
                    FamID = 1,
                    num_affected = 2,
                    recall_probs = c(1),
@@ -31,7 +31,8 @@ test_that("both pedigrees contains at least 2 affecteds when num_affected = 2", 
 
 test_that("proband in trimmed pedigree had 1 affected relative before onset, when num_affected = 2", {
   RVped <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                     GRR = 35, prob_causalRV = 1,
+                     GRR = 35, carrier_prob = 0.02,
+                     RVfounder = "first",
                      FamID = 1,
                      num_affected = 2,
                      recall_probs = c(1),
@@ -48,7 +49,7 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
 
 test_that("issues error when RR < 0", {
   expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                         GRR = -1, prob_causalRV = 1, FamID = 1,
+                         GRR = -1, carrier_prob = 0.02, FamID = 1,
                          num_affected = 2,
                          founder_byears = c(1900, 1980),
                          ascertain_span = c(2000, 2015)))
@@ -56,7 +57,7 @@ test_that("issues error when RR < 0", {
 
 test_that("issues error when ascertain_span not properly specified", {
     expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                           GRR = 35, prob_causalRV = 1, FamID = 1,
+                           GRR = 35, carrier_prob = 0.02, FamID = 1,
                            num_affected = 2,
                            founder_byears = c(1900, 1980),
                            ascertain_span = c(2017, 2015)))
@@ -64,7 +65,7 @@ test_that("issues error when ascertain_span not properly specified", {
 
 test_that("issues error when birth_range not properly specified", {
   expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                         GRR = 35, prob_causalRV = 1, FamID = 1,
+                         GRR = 35, carrier_prob = 0.02, FamID = 1,
                          num_affected = 2,
                          birth_range = c(10, 5),
                          founder_byears = c(1900, 1980),
@@ -73,7 +74,7 @@ test_that("issues error when birth_range not properly specified", {
 
 test_that("issues error when recall_probs not properly specified", {
   expect_error(sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                         GRR = 35, prob_causalRV = 1, FamID = 1,
+                         GRR = 35, carrier_prob = 0.03, FamID = 1,
                          num_affected = 2,
                          recall_probs = c(10, 5),
                          founder_byears = c(1900, 1980),
@@ -82,7 +83,7 @@ test_that("issues error when recall_probs not properly specified", {
 
 test_that("issues error when hazard_rates is not a hazard object", {
   expect_error(sim_RVped(hazard_rates = list(AgeSpecific_Hazards, seq(0, 100, by = 1)),
-                         GRR = 35, prob_causalRV = 1, FamID = 1,
+                         GRR = 35, carrier_prob = 0.02, FamID = 1,
                          num_affected = 2,
                          founder_byears = c(1900, 1980),
                          ascertain_span = c(2000, 2015)))

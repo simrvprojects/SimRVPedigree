@@ -1,4 +1,3 @@
-library(testthat)
 data("EgPeds")
 context("trim_ped")
 test_that("returns an error when no proband selected", {

@@ -124,7 +124,7 @@ data("AgeSpecific_Hazards")
 colnames(AgeSpecific_Hazards)
 ```
 
-Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped().`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, the we define our partition to feed to the `part` argument of `sim_RVped` as follows:
+Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped().`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, we define our partition to feed to the `part` argument of `sim_RVped` as follows:
 
 ```{r}
 # Specify age partition.
@@ -167,7 +167,8 @@ set.seed(5938525)
 ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(2000, 2015),
-                      GRR = 15, prob_causalRV = 1,
+                      GRR = 15, carrier_prob = 0.02,
+                      RVfounder = "first",
                       stop_year = 2015,
                       recall_probs = c(1),
                       founder_byears = c(1900, 1980),
@@ -472,7 +473,7 @@ RV_peds = foreach(i = seq(npeds),
                     sim_RVped(hazard_rates = LC_hazard,
                               num_affected = 2,
                               ascertain_span = c(1900, 2015),
-                              GRR = 5, prob_causalRV = 1, stop_year = 2015,
+                              GRR = 5, carrier_prob = 1, stop_year = 2015,
                               recall_probs = c(1),
                               founder_byears = c(1900, 1910),
                               FamID = i)[[2]]

@@ -4,16 +4,15 @@
 \alias{sim_ped}
 \title{Simulate a pedigree}
 \usage{
-sim_ped(hazard_rates, GRR, prob_causalRV, FamID, founder_byears, stop_year,
-  single_founderEntry = TRUE, birth_range = c(18, 45), NB_params = c(2,
-  4/7))
+sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
+  RVfounder = "single", birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{prob_causalRV}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -21,7 +20,7 @@ sim_ped(hazard_rates, GRR, prob_causalRV, FamID, founder_byears, stop_year,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{single_founderEntry}{Logical. When \code{single_founderEntry = TRUE}, only 1 founder can introduce a causal variant to the pedigee; when \code{single_founderEntry = FALSE} multiple founders may introduce the causal variant.  By default, \code{single_founderEntry = TRUE}.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -51,7 +50,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate a random pedigree
 set.seed(22)
 ex_ped <- sim_ped(hazard_rates = my_HR,
-                  GRR = 1, prob_causalRV = 0.02,
+                  GRR = 10, carrier_prob = 0.02,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
