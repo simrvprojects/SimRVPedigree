@@ -4,21 +4,25 @@
 \alias{get_nextEvent}
 \title{Simulate the next life event}
 \usage{
-get_nextEvent(current_age, disease_status, lambda_birth, hazard_rates,
-  birth_range, RR)
+get_nextEvent(current_age, disease_status, RV_status, hazard_rates, GRR,
+  carrier_prob, lambda_birth, birth_range)
 }
 \arguments{
 \item{current_age}{Numeric. The individual's current age.}
 
 \item{disease_status}{Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.}
 
-\item{lambda_birth}{Numeric. The individual's birth rate.}
+\item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
 
 \item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{RR}{Numeric. The individual's relative-risk of disease.}
+\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+
+\item{lambda_birth}{Numeric. The individual's birth rate.}
+
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 }
 \value{
 A named matrix. The number of years until the next life event,

@@ -4,20 +4,25 @@
 \alias{sim_lifeEvents}
 \title{Simulate all life events}
 \usage{
-sim_lifeEvents(hazard_rates, birth_range, NB_params, RR, YOB, stop_year)
+sim_lifeEvents(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
+  birth_range, NB_params)
 }
 \arguments{
 \item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
-\item{RR}{Numeric. The individual's relative-risk of disease.}
+\item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
+
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+
+\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 }
 \value{
 A named matrix containing the years of an individual's simulated life events, named by event type, see details.
@@ -50,24 +55,30 @@ data(AgeSpecific_Hazards)
 
 my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
-# The following commands simulate all life events for an individual, whose
-# relative-risk of disease is 1, born in 1900.  From the output, this
-# individual has 1 child in 1944, and then dies in 1961.
-set.seed(1234)
-sim_lifeEvents(hazard_rates = my_HR,
+# The following commands simulate all life events for an individual, who
+# has NOT inherited a causal variant, born in 1900.  From the output, this
+# individual has 1 child in 1927, and then dies in 1987.
+set.seed(7664)
+sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+               carrier_prob = 0.02,
+               RV_status = 0,
                birth_range = c(17,45),
-               NB_params = c(2, 4/7), RR = 1,
+               NB_params = c(2, 4/7),
                YOB = 1900, stop_year = 2000)
 
-# Using the same random seed, notice how the life events can vary for
-# someone with an increased relative-risk of disease, say 25.
-# From the output, this individual also has 1 child in 1944, then
-# experiences disease onset in 1949, and dies in 1957.
-set.seed(1234)
-sim_lifeEvents(hazard_rates = my_HR,
+# Using the same random seed, notice how life events can vary for
+# someone who has inherited the causal variant, which carries a
+# relative-risk of 25. From the output, this individual also has
+# 1 child in 1927, but then experiences disease onset in 1978,
+# and dies in 1980.
+set.seed(7664)
+sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+               carrier_prob = 0.02,
+               RV_status = 1,
                birth_range = c(17,45),
-               NB_params = c(2, 4/7), RR = 25,
+               NB_params = c(2, 4/7),
                YOB = 1900, stop_year = 2000)
+
 
 }
 \references{

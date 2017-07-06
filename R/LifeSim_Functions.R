@@ -21,8 +21,8 @@
 #' @param current_age Numeric. The individual's current age.
 #' @param disease_status Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth Numeric. The individual's birth rate.
-#' @param RR Numeric. The individual's relative-risk of disease.
 #' @inheritParams sim_RVped
+#' @inheritParams sim_lifeEvents
 #'
 #' @return A named matrix. The number of years until the next life event,
 #' named by event type.  See Details.
@@ -32,15 +32,17 @@
 #' @importFrom stats rexp
 #'
 #'
-get_nextEvent = function(current_age, disease_status,
-                         lambda_birth, hazard_rates,
-                         birth_range, RR){
+get_nextEvent = function(current_age, disease_status, RV_status,
+                         hazard_rates, GRR, carrier_prob,
+                         lambda_birth, birth_range){
+
+  RR <- ifelse(RV_status == 1, GRR, 1)
 
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
   t_onset <- ifelse(disease_status == 0,
                     get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = hazard_rates[[1]][, 1]*RR,
+                                 hazard = hazard_rates[[1]][, 1]*RR/(1 + carrier_prob*(GRR - 1)),
                                  part = hazard_rates[[2]]), NA)
 
   #simulate the waiting time until death given current age.
@@ -107,7 +109,7 @@ get_nextEvent = function(current_age, disease_status,
 #' }
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
-#' @param RR Numeric. The individual's relative-risk of disease.
+#' @param RV_status Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.
 #' @inheritParams sim_RVped
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
@@ -122,27 +124,34 @@ get_nextEvent = function(current_age, disease_status,
 #'
 #' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #'
-#' # The following commands simulate all life events for an individual, whose
-#' # relative-risk of disease is 1, born in 1900.  From the output, this
-#' # individual has 1 child in 1944, and then dies in 1961.
-#' set.seed(1234)
-#' sim_lifeEvents(hazard_rates = my_HR,
+#' # The following commands simulate all life events for an individual, who
+#' # has NOT inherited a causal variant, born in 1900.  From the output, this
+#' # individual has 1 child in 1927, and then dies in 1987.
+#' set.seed(7664)
+#' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+#'                carrier_prob = 0.02,
+#'                RV_status = 0,
 #'                birth_range = c(17,45),
-#'                NB_params = c(2, 4/7), RR = 1,
+#'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
 #'
-#' # Using the same random seed, notice how the life events can vary for
-#' # someone with an increased relative-risk of disease, say 25.
-#' # From the output, this individual also has 1 child in 1944, then
-#' # experiences disease onset in 1949, and dies in 1957.
-#' set.seed(1234)
-#' sim_lifeEvents(hazard_rates = my_HR,
+#' # Using the same random seed, notice how life events can vary for
+#' # someone who has inherited the causal variant, which carries a
+#' # relative-risk of 25. From the output, this individual also has
+#' # 1 child in 1927, but then experiences disease onset in 1978,
+#' # and dies in 1980.
+#' set.seed(7664)
+#' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+#'                carrier_prob = 0.02,
+#'                RV_status = 1,
 #'                birth_range = c(17,45),
-#'                NB_params = c(2, 4/7), RR = 25,
+#'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
 #'
-sim_lifeEvents = function(hazard_rates, birth_range, NB_params,
-                          RR, YOB, stop_year){
+#'
+sim_lifeEvents = function(hazard_rates, GRR, carrier_prob,
+                          RV_status, YOB, stop_year,
+                          birth_range, NB_params){
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
@@ -161,9 +170,9 @@ sim_lifeEvents = function(hazard_rates, birth_range, NB_params,
                                                                  birth_range[1])
   while(t < max_age & yr <= stop_year){
     #generate next event
-    l_event <- get_nextEvent(current_age = t, disease_status = DS,
-                             lambda_birth = B_lambda, hazard_rates,
-                             birth_range, RR)
+    l_event <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
+                             hazard_rates, GRR, carrier_prob,
+                             lambda_birth = B_lambda, birth_range)
 
     if(yr + as.numeric(l_event[1,1]) <= stop_year){
       #add to previous life events
