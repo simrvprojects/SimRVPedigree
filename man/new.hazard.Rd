@@ -2,7 +2,7 @@
 % Please edit documentation in R/Hazard_object_functions.R
 \name{new.hazard}
 \alias{new.hazard}
-\title{Create a hazard object for input to \code{sim_RVped}, \code{sim_ped}, and \code{sim_lifeEvents}.}
+\title{Create an object of class hazard.}
 \usage{
 new.hazard(hazardDF, partition)
 }
@@ -12,10 +12,10 @@ new.hazard(hazardDF, partition)
 \item{partition}{Numeric vector. Optional. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.}
 }
 \value{
-An object of class \code{hazard}.
+An object of class hazard.
 }
 \description{
-Create a hazard object for input to \code{sim_RVped}, \code{sim_ped}, and \code{sim_lifeEvents}.
+Create a new hazard object for input to \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_lifeEvents}}.
 }
 \examples{
 my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
