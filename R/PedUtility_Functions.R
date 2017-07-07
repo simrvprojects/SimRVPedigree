@@ -5,6 +5,8 @@
 #'
 #' @return A list containing: 1. the founder's genotype at the disease locus, their relative-risk of disease, and an updated value for intro_RV.
 #'
+#' @keywords internal
+#'
 sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
   if (GRR == 1 |
       (RVfounder == "single" & intro_RV == TRUE) |
@@ -84,4 +86,55 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
   }
 
   return(ped_file)
+}
+
+#' Checks ped_file input for expected information.
+#'
+#' @inheritParams trim_ped
+#'
+#' @keywords internal
+#'
+check_ped <- function(ped_file){
+  if (class(ped_file) != "data.frame") {
+    stop("please provide a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected")
+  }
+
+
+  if (!"FamID" %in% colnames(ped_file) |
+      !"ID" %in% colnames(ped_file) |
+      !"dadID" %in% colnames(ped_file) |
+      !"momID" %in% colnames(ped_file) |
+      !"sex" %in% colnames(ped_file) |
+      !"affected" %in% colnames(ped_file)) {
+    stop('please provide a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected')
+  }
+
+  if(any(is.na(ped_file$ID))) {
+    stop('ID contains missing values.  Please ensure all individuals have a valid ID.')
+  }
+
+  moms <- unique(ped_file$momID[!is.na(ped_file$momID)])
+  dads <- unique(ped_file$dadID[!is.na(ped_file$dadID)])
+
+  if (any(ped_file$sex[which(ped_file$ID %in% moms)] != 1) |
+      any(ped_file$sex[which(ped_file$ID %in% dads)] != 0)){
+
+    wrong_sex <- c(ped_file$ID[which(ped_file$sex[which(ped_file$ID %in% dads)] != 0)],
+      ped_file$ID[which(ped_file$sex[which(ped_file$ID %in% moms)] != 1)])
+
+    stop(paste0('Sex improperly specifed ID: ', sep = '', wrong_sex, '.  Please ensure that for males: sex = 0; and for females: sex = 1.'))
+  }
+
+  if (any(!moms %in% ped_file$ID) | any(!dads %in% ped_file$ID)) {
+
+    wrong_par <- c(ped_file$ID[which(ped_file$momID == moms[which(!moms %in% ped_file$ID)])],
+                   ped_file$ID[which(ped_file$dadID == dads[which(!dads %in% ped_file$ID)])])
+
+    stop(paste0('ID: ', sep = '', wrong_par, '.  Non-founders must have both a mother and a father, while founders have neither.'))
+  }
+
+  if (any(!is.na(ped_file$momID[is.na(ped_file$dadID)])) |
+      any(!is.na(ped_file$dadID[is.na(ped_file$momID)]))) {
+    stop("Non-founders must have both a mother and a father, while founders have missing momID and dadID.")
+  }
 }
