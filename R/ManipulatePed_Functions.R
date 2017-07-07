@@ -343,7 +343,7 @@ censor_ped = function(ped_file, censor_year){
 #' @examples
 #' data(EgPeds)
 #'
-#' Fam1 <- pedigree_summary(EgPeds[EgPeds$FamID == 1, ])
+#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, ])
 #' summary(Fam1)
 #'
 #' head(Fam1$link_format)
