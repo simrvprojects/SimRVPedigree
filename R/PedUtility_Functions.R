@@ -34,19 +34,19 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
 
 #' Choose a proband from the disease-affected relatives in a pedigree
 #'
-#' @param ped Pedigree simulated by \code{sim_ped}.
+#' @param ped_file Pedigree simulated by \code{sim_ped}.
 #' @inheritParams sim_RVped
 #'
 #' @return Pedigree with proband selected.
 #' @keywords internal
 #'
-choose_proband = function(ped, num_affected, ascertain_span){
+choose_proband = function(ped_file, num_affected, ascertain_span){
   #initialize proband ID variable
-  ped$proband <- 0
+  ped_file$proband <- 0
 
   #Gather info on affecteds
-  A_ID <- ped[which(ped$affected == 1),
-              which(colnames(ped) %in% c("onsetYr", "ID", "proband"))]
+  A_ID <- ped_file[which(ped_file$affected == 1),
+              which(colnames(ped_file) %in% c("onsetYr", "ID", "proband"))]
   A_ID <- A_ID[order(A_ID$onsetYr), ]
   A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
   A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], 1, 0)
@@ -56,7 +56,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
     #NOTE: sim_RVped has already checked to make sure
     #that there was another affected prior to this one
 
-    ped$proband[which(ped$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+    ped_file$proband[which(ped_file$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
 
   } else if (sum(abs(A_ID$proband - 1)) > (num_affected - 1)) {
 
@@ -65,7 +65,7 @@ choose_proband = function(ped, num_affected, ascertain_span){
     #amongst available probands
     probandID <- sample(size = 1,
                         x = A_ID$ID[which(A_ID$proband == 1)])
-    ped$proband[which(ped$ID == probandID)] <- 1
+    ped_file$proband[which(ped_file$ID == probandID)] <- 1
 
   } else {
 
@@ -75,13 +75,13 @@ choose_proband = function(ped, num_affected, ascertain_span){
     #must write additional if statement here because of R's interesting
     #take on how sample should work when there is only one 1 to sample from....
     if (sum(A_ID$proband) == 1) {
-      ped$proband[which(ped$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+      ped_file$proband[which(ped_file$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
     } else {
       probandID <- sample(size = 1,
                           x = A_ID$ID[which(A_ID$proband == 1)])
-      ped$proband[which(ped$ID == probandID)] <- 1
+      ped_file$proband[which(ped_file$ID == probandID)] <- 1
     }
   }
 
-  return(ped)
+  return(ped_file)
 }

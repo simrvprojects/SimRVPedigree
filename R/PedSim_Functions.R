@@ -471,7 +471,7 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
                                   ascertain_span[1]:ascertain_span[2])]) < 1 ){
         d <- 0
       } else {
-        fam_ped <- choose_proband(ped = fam_ped, num_affected, ascertain_span)
+        fam_ped <- choose_proband(ped_file = fam_ped, num_affected, ascertain_span)
         d <- 1
       }
     }

@@ -4,10 +4,10 @@
 \alias{choose_proband}
 \title{Choose a proband from the disease-affected relatives in a pedigree}
 \usage{
-choose_proband(ped, num_affected, ascertain_span)
+choose_proband(ped_file, num_affected, ascertain_span)
 }
 \arguments{
-\item{ped}{Pedigree simulated by \code{sim_ped}.}
+\item{ped_file}{Pedigree simulated by \code{sim_ped}.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
