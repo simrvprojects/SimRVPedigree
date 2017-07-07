@@ -29,6 +29,22 @@ Occasionally, a trimmed family member must be retained to ensure that the pedigr
   \item death year = NA
   \item RR = NA
 }
+
+Users who wish to trim pedigrees not been simulated by \code{\link{sim_RVped}} or \code{\link{sim_ped}} must ensure that the pedigree, \code{ped_file}, supplied to \code{trim_ped} contains the following variables for each pedigree member:
+
+\enumerate{
+\item \code{ID}: an identification number.
+\item \code{dadID}: identification number of father.
+\item \code{momID}: identification number of mother.
+\item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
+\item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.
+\item \code{birthYr}: the individual's birth year.
+\item \code{onsetYr}: the individual's disease onset year, when applicable.
+\item \code{deathYr}: the individual's death year, when applicable.
+\item \code{proband}: proband identification variable, \code{proband = 1} if the individual is the proband, and 0 otherwise.
+\item \code{RR}: the individual's relative risk of disease.
+\item \code{availability}: the individual's availability status.  For individuals with supplied data (i.e. birthYr, onsetYr, deathYr) \code{availability = 1}, otherwise \code{availability = 0}.
+}
 }
 \examples{
 #Read in example pedigree to trim
