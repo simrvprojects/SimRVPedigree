@@ -322,3 +322,82 @@ censor_ped = function(ped_file, censor_year){
 
   return(censored_ped)
 }
+
+
+#' Return useful pedigree information
+#'
+#' @inheritParams trim_ped
+#'
+#' @return  A list containing the following:
+#' @return \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
+#' @return \code{affected_info} data.frame.  Relevant information for the affected realtives only.
+#' @return \code{kin_ped} An object of class pedigree (see kinship2 package).  A pedigree object which can be plotted using R's plot function.  See example.
+#' @return \code{aff_kinMat} The kinship matrix for the affected relatives in the pedigree (see kinship2 package).
+#'
+#' @export
+#' @importFrom kinship2 kinship
+#' @importFrom kinship2 pedigree
+#'
+#' @references Terry M Therneau and Jason Sinnwell (2015). **kinship2: Pedigree Functions.** *R package version 1.6.4.* https://CRAN.R-project.org/package=kinship2
+#'
+#' @examples
+#' data(EgPeds)
+#'
+#' Fam1 <- pedigree_summary(EgPeds[EgPeds$FamID == 1, ])
+#' summary(Fam1)
+#'
+#' head(Fam1$link_format)
+#' Fam1$affected_info
+#' Fam1$aff_kinMat
+#'
+#' library(kinship2)
+#' plot(Fam1$kin_ped)
+#' pedigree.legend(Fam1$kin_ped, location = "topleft",  radius = 0.25)
+#'
+pedigree_info <- function(ped_file){
+
+  check_ped(ped_file)
+
+  link_format <- ped_file[, match(c("FamID", "ID", "dadID",
+                                    "momID", "sex", "affected"),
+                                  colnames(ped_file))]
+
+  dA_loc <- match(c("DA1", "DA2"), colnames(ped_file))
+
+  if (length(dA_loc[!is.na(dA_loc)]) == 2) {
+    ped_file$RVstatus <- ifelse(ped_file$DA1 + ped_file$DA2 != 0, 1, 0)
+  }
+
+  keep_cols <- match(c("FamID", "ID", "birthYr", "onsetYr", "deathYr", "RR", "RVstatus"), colnames(ped_file))
+
+  affected_info <- ped_file[ped_file$affected == 1, keep_cols[!is.na(keep_cols)]]
+
+  if (any(!is.na(match(c("affected", "proband", "RVstatus"), colnames(ped_file))))) {
+    affected_vrs = cbind(Affected = ped_file$affected,
+                         Proband = ped_file$proband,
+                         RV_Status = ped_file$RVstatus)
+  } else {
+    affected_vrs = ped_file$affected
+  }
+
+  if (!is.na(match("deathYr", colnames(ped_file)))) {
+    d_status = 1*!is.na(ped_file$deathYr)
+  } else {
+    d_status = rep(0, nrow(ped_file))
+  }
+
+  kin_ped <- with(ped_file, pedigree(id = ID,
+                                     dadid = dadID,
+                                     momid = momID,
+                                     sex = sex + 1,
+                                     affected = affected_vrs,
+                                     status = d_status))
+
+  aff_kinMat <- kinship(kin_ped)[ped_file$affected == 1, ped_file$affected == 1]
+
+  ped_return = list(link_format = link_format,
+                    affected_info = affected_info,
+                    kin_ped = kin_ped,
+                    aff_kinMat = aff_kinMat)
+  return(ped_return)
+}
