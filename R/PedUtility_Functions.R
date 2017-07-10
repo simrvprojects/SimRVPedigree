@@ -17,12 +17,18 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
     # for a founder to introduce the RV
     d_locus <- c(0, 0)
     fRR <- 1
-  } else if ((RVfounder == "single" & intro_RV == FALSE) | RVfounder == "multiple"){
-    # If a single founder has not been located or if multiple founders are
-    # permissable we simulate allele status at the disease locus given
-    # carrier_prob, set RR and update intro_RV appropriately
+  } else if (RVfounder == "single" & intro_RV == FALSE){
+    # If a single founder has not been located we simulate allele status at the
+    # disease locus given carrier_prob, set RR and update intro_RV appropriately
     d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
                       size = 2, replace = F)
+    fRR <- ifelse(any(d_locus == 1), GRR, 1)
+    intro_RV <- ifelse(any(d_locus == 1), T, F)
+  } else if (RVfounder == "multiple"){
+    # If multiple has been specified we allow fouders to introduce the RV with
+    # probability proprotional to its allele frequency in the population, and
+    # set RR and update intro_RV appropriately
+    d_locus <- ifelse(runif(2) <= carrier_prob, 1, 0)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
     intro_RV <- ifelse(any(d_locus == 1), T, F)
   } else {

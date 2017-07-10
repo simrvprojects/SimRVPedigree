@@ -44,11 +44,11 @@ test_that("RVfounder = first settings", {
 test_that("RVfounder = multiple settings", {
   multi_ex <- sim_founderRVstatus(GRR = 10, carrier_prob = 1,
                                   RVfounder = "multiple", intro_RV = FALSE)
-  expect_true(1 %in% multi_ex[[1]])
+  expect_equal(c(1, 1), multi_ex[[1]])
   expect_equal(multi_ex[2:3], list(10, T))
 
   multi_ex <- sim_founderRVstatus(GRR = 10, carrier_prob = 1,
                                   RVfounder = "multiple", intro_RV = TRUE)
-  expect_true(1 %in% multi_ex[[1]])
+  expect_equal(c(1, 1), multi_ex[[1]])
   expect_equal(multi_ex[2:3], list(10, T))
 })
