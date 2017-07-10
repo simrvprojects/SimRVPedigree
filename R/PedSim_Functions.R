@@ -412,8 +412,8 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
     stop ('please provide appropriate ascertain_span')
   }
 
-  if(!(RVfounder %in% c("single", "first", "mulitple"))){
-    stop ('Please set RV founder to "single", "first", or "mulitple".')
+  if(!(RVfounder %in% c("single", "first", "multiple"))){
+    stop ('Please set RV founder to "single", "first", or "multiple".')
   }
 
   if (carrier_prob < 0 | carrier_prob > 1){
