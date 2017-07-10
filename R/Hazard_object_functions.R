@@ -22,26 +22,33 @@ new.hazard <- function(hazardDF, partition) {
   } else {
 
     if (any(is.na(partition))) {
-      stop('partition cannot contain missing values')
+      stop('partition contains missing values')
+    }
+
+    if (any(duplicated(partition))) {
+      stop('partition contains duplicated entries')
     }
 
     if (min(partition) != 0) {
-      stop('age-specific hazards must begin at birth (age 0)')
+      stop('parition does not start at birth (age 0)')
     } else if (max(partition) < 65){
       warning ('For optimal results please specify age-specific hazard rates that begin at birth and end near the life expectancy of the population to which the age-specific hazards apply.')
     }
 
     if (length(partition) == 1 |
         length(partition) != (nrow(hazardDF) + 1) ) {
-      stop ('please provide hazard rates, such that length(partition) == length(hazard) + 1')
+      stop ('Incorrect partition length. Please ensure: length(partition) == nrow(hazardDF) + 1')
     }
 
   }
 
   if (any(is.na(hazardDF))) {
-    stop('hazardDF cannot contain missing values')
+    stop('hazardDF contains missing values')
   }
 
+  if (any(hazardDF < 0)) {
+    stop('hazardDF contains negative values')
+  }
 
 
   if (class(hazardDF) != "data.frame") {
