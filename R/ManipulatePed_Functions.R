@@ -327,13 +327,14 @@ censor_ped = function(ped_file, censor_year){
 #' Return useful pedigree information
 #'
 #' @inheritParams trim_ped
+#' @param label_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #'
 #' @return  A list containing the following:
 #' @return \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
 #' @return \code{affected_info} data.frame.  Relevant information for the affected realtives only.
-#' @return \code{kinshipMatrix} The kinship matrix for the pedigree (see kinship2 package).
+#' @return \code{kinshipMat} The kinship matrix for the pedigree (see kinship2 package).
 #' @return \code{kinshipPedigree} An object of class pedigree (see kinship2 package).  A pedigree object which can be plotted using R's plot function.  See example.
-#' @return \code{pedigreeLabels} ID labels which can be fed to kinship2 plotting function.  See example.
+#' @return \code{pedLabs} ID labels which can be fed to kinship2 plotting function.  See example.
 #'
 #' @export
 #' @importFrom kinship2 kinship
@@ -344,19 +345,19 @@ censor_ped = function(ped_file, censor_year){
 #' @examples
 #' data(EgPeds)
 #'
-#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, c(1:9)], label_year = 2015)
+#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, ], label_year = 2015)
 #' summary(Fam1)
 #'
 #' head(Fam1$link_format)
 #' Fam1$affected_info
-#' Fam1$kinMat
+#' Fam1$kinshipMat
 #'
 #' library(kinship2)
-#' plot(Fam1$kin_ped)
-#' pedigree.legend(Fam1$kin_ped, location = "topleft",  radius = 0.25)
+#' plot(Fam1$kinshipPedigree)
+#' pedigree.legend(Fam1$kinshipPedigree, location = "topleft",  radius = 0.25)
 #'
-#' plot(Fam1$kin_ped, id = Fam1$age_id)
-#' pedigree.legend(Fam1$kin_ped, location = "topleft",  radius = 0.25)
+#' plot(Fam1$kinshipPedigree, id = Fam1$pedLabs)
+#' pedigree.legend(Fam1$kinshipPedigree, location = "topleft",  radius = 0.25)
 #'
 pedigree_info <- function(ped_file, label_year){
 
@@ -443,6 +444,6 @@ pedigree_info <- function(ped_file, label_year){
                     affected_info = affected_info,
                     kinshipMat = kinMat,
                     kinshipPedigree = kin_ped,
-                    pedigreeLabels = age_id)
+                    pedLabs = age_id)
   return(ped_return)
 }

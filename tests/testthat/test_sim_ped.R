@@ -54,7 +54,7 @@ test_that("Effects of RVfounder = 'multiple'", {
 
   #expect that every founder introduces causal variant
   expect_equal(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]),
-               nrow(exPed[which(is.na(exPed$dadID)), ]))
+               2*nrow(exPed[which(is.na(exPed$dadID)), ]))
 })
 
 test_that("If GRR = 1", {
