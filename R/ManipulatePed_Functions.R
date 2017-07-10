@@ -331,8 +331,9 @@ censor_ped = function(ped_file, censor_year){
 #' @return  A list containing the following:
 #' @return \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
 #' @return \code{affected_info} data.frame.  Relevant information for the affected realtives only.
-#' @return \code{kin_ped} An object of class pedigree (see kinship2 package).  A pedigree object which can be plotted using R's plot function.  See example.
-#' @return \code{aff_kinMat} The kinship matrix for the affected relatives in the pedigree (see kinship2 package).
+#' @return \code{kinshipMatrix} The kinship matrix for the pedigree (see kinship2 package).
+#' @return \code{kinshipPedigree} An object of class pedigree (see kinship2 package).  A pedigree object which can be plotted using R's plot function.  See example.
+#' @return \code{pedigreeLabels} ID labels which can be fed to kinship2 plotting function.  See example.
 #'
 #' @export
 #' @importFrom kinship2 kinship
@@ -343,18 +344,21 @@ censor_ped = function(ped_file, censor_year){
 #' @examples
 #' data(EgPeds)
 #'
-#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, ])
+#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, c(1:9)], label_year = 2015)
 #' summary(Fam1)
 #'
 #' head(Fam1$link_format)
 #' Fam1$affected_info
-#' Fam1$aff_kinMat
+#' Fam1$kinMat
 #'
 #' library(kinship2)
 #' plot(Fam1$kin_ped)
 #' pedigree.legend(Fam1$kin_ped, location = "topleft",  radius = 0.25)
 #'
-pedigree_info <- function(ped_file){
+#' plot(Fam1$kin_ped, id = Fam1$age_id)
+#' pedigree.legend(Fam1$kin_ped, location = "topleft",  radius = 0.25)
+#'
+pedigree_info <- function(ped_file, label_year){
 
   check_ped(ped_file)
 
@@ -368,7 +372,9 @@ pedigree_info <- function(ped_file){
     ped_file$RVstatus <- ifelse(ped_file$DA1 + ped_file$DA2 != 0, 1, 0)
   }
 
-  keep_cols <- match(c("FamID", "ID", "birthYr", "onsetYr", "deathYr", "RR", "RVstatus"), colnames(ped_file))
+  keep_cols <- match(c("FamID", "ID",
+                       "birthYr", "onsetYr", "deathYr",
+                       "RR", "proband", "RVstatus"), colnames(ped_file))
 
   affected_info <- ped_file[ped_file$affected == 1, keep_cols[!is.na(keep_cols)]]
 
@@ -382,6 +388,7 @@ pedigree_info <- function(ped_file){
 
   if (!is.na(match("deathYr", colnames(ped_file)))) {
     d_status = 1*!is.na(ped_file$deathYr)
+
   } else {
     d_status = rep(0, nrow(ped_file))
   }
@@ -393,11 +400,49 @@ pedigree_info <- function(ped_file){
                                      affected = affected_vrs,
                                      status = d_status))
 
-  aff_kinMat <- kinship(kin_ped)[ped_file$affected == 1, ped_file$affected == 1]
+  kinMat <- kinship(kin_ped)
+
+  #create pedigree labels that reflect age data, when appropriate
+  if(!missing(label_year) & !is.na(match(c("birthYr"), colnames(ped_file)))){
+
+    if (!is.na(match("deathYr", colnames(ped_file)))) {
+      #create age lable, if death has not ocurred
+      age_lab <- ifelse(is.na(ped_file$birthYr) | !is.na(ped_file$deathYr),
+                        " ", paste0("\n age: ",
+                                    label_year - ped_file$birthYr))
+
+      # Create a death age label for individuals who have died.
+      Dage_lab <- ifelse(is.na(ped_file$deathYr),
+                         " ", paste0("\n death age: ",
+                                     ped_file$deathYr - ped_file$birthYr))
+    } else {
+      warning('Death year information not provided. Creating age lables under the assumption that all pedigree members are still alive.')
+      age_lab <- ifelse(is.na(ped_file$birthYr),
+                        " ", paste0("\n age: ",
+                                    label_year - ped_file$birthYr))
+
+      Dage_lab <- rep(" ", nrow(ped_file))
+    }
+
+    if (!is.na(match("onsetYr", colnames(ped_file)))) {
+      # Create a death age label for individuals who have died.
+      Oage_lab <- ifelse(is.na(ped_file$onsetYr),
+                         " ", paste0("\n onset age: ",
+                                     ped_file$onsetYr - ped_file$birthYr))
+    } else {
+      Oage_lab <- rep(" ", nrow(ped_file))
+    }
+
+    age_id = paste0("ID: ", sep = "", ped_file$ID,
+                    age_lab, Oage_lab, Dage_lab)
+  } else {
+    age_id = ped_file$ID
+  }
 
   ped_return = list(link_format = link_format,
                     affected_info = affected_info,
-                    kin_ped = kin_ped,
-                    aff_kinMat = aff_kinMat)
+                    kinshipMat = kinMat,
+                    kinshipPedigree = kin_ped,
+                    pedigreeLabels = age_id)
   return(ped_return)
 }
