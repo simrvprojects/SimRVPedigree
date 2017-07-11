@@ -1,7 +1,7 @@
 context("sim_lifeEvents")
 test_that("sim_lifeEvents should always begin at start and end at death when stop_year is sufficiently large", {
   Levents <- sim_lifeEvents(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                            GRR = 25, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 25, allele_freq = 0.02, RV_status = 1,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
 
@@ -11,7 +11,7 @@ test_that("sim_lifeEvents should always begin at start and end at death when sto
 
 test_that("sim_lifeEvents never returns onset more than once", {
   Levents <- sim_lifeEvents(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, allele_freq = 0.02, RV_status = 1,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
   if("Onset" %in% names(table(names(Levents)))){
@@ -23,7 +23,7 @@ test_that("sim_lifeEvents never returns onset more than once", {
 
 test_that("sim_lifeEvents always returns death event after all other events", {
   Levents <- sim_lifeEvents(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, allele_freq = 0.02, RV_status = 1,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
   Levents <- as.numeric(Levents)
@@ -35,7 +35,7 @@ test_that("sim_lifeEvents always returns death event after all other events", {
 test_that("sim_lifeEvents doesn't return any events after the stop year", {
   my_stopY <- 1900 + round(runif(1, min = 10, max = 60))
   Levents <- sim_lifeEvents(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, allele_freq = 0.02, RV_status = 1,
                             YOB = 1900, stop_year = my_stopY,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
 

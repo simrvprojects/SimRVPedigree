@@ -36,10 +36,10 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
 2. We allow users to choose from one of the following three assumptions:
-    + a. Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder.
+    + a. Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder. (Bureau)
     + b. Assume that a single founder introduces a single copy of the variant to the pedigree.  Here we allow successive founders the opportunity to introduce the rare variant with probability proprotional to its allele frequency in the population until the variant is introduced to the pedigree.  After the rare variant is introduced no other founders are permitted to re-introduce the varaint. NOTE: The founder who introduces the rare variant may not be the same founder we begin the simulation of the pedigree with.
-    + c. Allow founders to introduce the rare variant with probability proprotional to its allele frequency in the population.  NOTE: Under this assumption: founders may be homozygous for the rare variant, multiple founders may introduce the rare variant, and homozygous offspring may be observed.
-  
+    + c. Simulate founder genotype status at the disease locus based on the allele frequency of the rare varaint in the population.  NOTE: Under this assumption: founders may be homozygous for the rare variant, multiple founders may introduce the rare variant, and offspring who are homozygous for the rare variant may be observed. (Li Ch 1)
+    
 3. We transmit the rare variant from parent to offspring according to Mendel's laws.
 
 4. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative-risk of disease for genetic cases.  
@@ -172,7 +172,7 @@ set.seed(959593)
 ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
-                      GRR = 10, carrier_prob = 0.02,
+                      GRR = 10, allele_freq = 0.01,
                       RVfounder = "first",
                       stop_year = 2017,
                       recall_probs = c(1),

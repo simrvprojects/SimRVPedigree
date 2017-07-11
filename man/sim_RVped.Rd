@@ -4,7 +4,7 @@
 \alias{sim_RVped}
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
-sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span,
+sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
   recall_probs, stop_year, FamID, founder_byears, RVfounder = "single",
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
@@ -13,7 +13,7 @@ sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span,
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
@@ -76,7 +76,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(8008135)
 ex_RVped <- sim_RVped(hazard_rates = my_HR,
-                      GRR = 50, carrier_prob = 0.02,
+                      GRR = 50, allele_freq = 0.02,
                       RVfounder = "first",
                       FamID = 1,
                       founder_byears = c(1900, 1910),

@@ -7,7 +7,7 @@
 #'
 #' @keywords internal
 #'
-sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
+sim_founderRVstatus <- function(GRR, allele_freq, RVfounder, intro_RV){
   if (GRR == 1 |
       (RVfounder == "single" & intro_RV == TRUE) |
       (RVfounder == "first" & intro_RV == TRUE)) {
@@ -19,8 +19,9 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
     fRR <- 1
   } else if (RVfounder == "single" & intro_RV == FALSE){
     # If a single founder has not been located we simulate allele status at the
-    # disease locus given carrier_prob, set RR and update intro_RV appropriately
-    d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
+    # disease locus given allele_freq, set RR and update intro_RV appropriately
+    carrier_prob <- 1 - (1 - allele_freq)^2
+    d_locus <- sample(x = c(0, ifelse(runif(1) <= (1 - (1 - carrier_prob)^2), 1, 0)),
                       size = 2, replace = F)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
     intro_RV <- ifelse(any(d_locus == 1), T, F)
@@ -28,7 +29,7 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
     # If multiple has been specified we allow fouders to introduce the RV with
     # probability proprotional to its allele frequency in the population, and
     # set RR and update intro_RV appropriately
-    d_locus <- ifelse(runif(2) <= carrier_prob, 1, 0)
+    d_locus <- ifelse(runif(2) <= allele_freq, 1, 0)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
     intro_RV <- ifelse(any(d_locus == 1), T, F)
   } else {

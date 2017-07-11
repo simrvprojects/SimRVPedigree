@@ -4,7 +4,7 @@
 \alias{sim_lifeEvents}
 \title{Simulate all life events}
 \usage{
-sim_lifeEvents(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
+sim_lifeEvents(hazard_rates, GRR, allele_freq, RV_status, YOB, stop_year,
   birth_range, NB_params)
 }
 \arguments{
@@ -12,7 +12,7 @@ sim_lifeEvents(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
 
@@ -60,7 +60,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 # individual has 1 child in 1927, and then dies in 1987.
 set.seed(7664)
 sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
-               carrier_prob = 0.02,
+               allele_freq = 0.02,
                RV_status = 0,
                birth_range = c(17,45),
                NB_params = c(2, 4/7),
@@ -73,7 +73,7 @@ sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
 # and dies in 1980.
 set.seed(7664)
 sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
-               carrier_prob = 0.02,
+               allele_freq = 0.02,
                RV_status = 1,
                birth_range = c(17,45),
                NB_params = c(2, 4/7),

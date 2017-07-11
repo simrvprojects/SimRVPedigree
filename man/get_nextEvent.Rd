@@ -5,7 +5,7 @@
 \title{Simulate the next life event}
 \usage{
 get_nextEvent(current_age, disease_status, RV_status, hazard_rates, GRR,
-  carrier_prob, lambda_birth, birth_range)
+  allele_freq, lambda_birth, birth_range)
 }
 \arguments{
 \item{current_age}{Numeric. The individual's current age.}
@@ -18,7 +18,7 @@ get_nextEvent(current_age, disease_status, RV_status, hazard_rates, GRR,
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{lambda_birth}{Numeric. The individual's birth rate.}
 

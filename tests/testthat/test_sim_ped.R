@@ -1,7 +1,7 @@
 context("sim_ped")
 test_that("returns a single ped file dataframe", {
   expect_true(is.data.frame(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                                    GRR = 10, carrier_prob = 0.02,
+                                    GRR = 10, allele_freq = 0.02,
                                     RVfounder = "first",
                                     FamID = 1,
                                     stop_year = 2015,
@@ -10,7 +10,7 @@ test_that("returns a single ped file dataframe", {
 
 test_that("pedigree always contains at least 1 person", {
   expect_true(nrow(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                           GRR = 10, carrier_prob = 0.02,
+                           GRR = 10, allele_freq = 0.02,
                            RVfounder = "first",
                            FamID = 1, stop_year = 2015,
                            founder_byears = c(1900, 1905))) >= 1)
@@ -18,7 +18,7 @@ test_that("pedigree always contains at least 1 person", {
 
 test_that("Effects of RVfounder = 'first' ", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, carrier_prob = 0.05,
+                   GRR = 10, allele_freq = 0.05,
                    RVfounder = 'first',
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
@@ -33,7 +33,7 @@ test_that("Effects of RVfounder = 'first' ", {
 
 test_that("Effects of RVfounder = 'single'", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, carrier_prob = 0.25,
+                   GRR = 10, allele_freq = 0.25,
                    RVfounder = 'single',
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
@@ -47,7 +47,7 @@ test_that("Effects of RVfounder = 'single'", {
 
 test_that("Effects of RVfounder = 'multiple'", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, carrier_prob = 1,
+                   GRR = 10, allele_freq = 1,
                    RVfounder = "multiple",
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
@@ -59,7 +59,7 @@ test_that("Effects of RVfounder = 'multiple'", {
 
 test_that("If GRR = 1", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 1, carrier_prob = 0.02,
+                   GRR = 1, allele_freq = 0.02,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
 

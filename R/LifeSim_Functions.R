@@ -33,10 +33,11 @@
 #'
 #'
 get_nextEvent = function(current_age, disease_status, RV_status,
-                         hazard_rates, GRR, carrier_prob,
+                         hazard_rates, GRR, allele_freq,
                          lambda_birth, birth_range){
 
   RR <- ifelse(RV_status == 1, GRR, 1)
+  carrier_prob <- 1 - (1 - allele_freq)^2
 
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
@@ -129,7 +130,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # individual has 1 child in 1927, and then dies in 1987.
 #' set.seed(7664)
 #' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
-#'                carrier_prob = 0.02,
+#'                allele_freq = 0.02,
 #'                RV_status = 0,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7),
@@ -142,14 +143,14 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # and dies in 1980.
 #' set.seed(7664)
 #' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
-#'                carrier_prob = 0.02,
+#'                allele_freq = 0.02,
 #'                RV_status = 1,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
 #'
 #'
-sim_lifeEvents = function(hazard_rates, GRR, carrier_prob,
+sim_lifeEvents = function(hazard_rates, GRR, allele_freq,
                           RV_status, YOB, stop_year,
                           birth_range, NB_params){
 
@@ -171,7 +172,7 @@ sim_lifeEvents = function(hazard_rates, GRR, carrier_prob,
   while(t < max_age & yr <= stop_year){
     #generate next event
     l_event <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
-                             hazard_rates, GRR, carrier_prob,
+                             hazard_rates, GRR, allele_freq,
                              lambda_birth = B_lambda, birth_range)
 
     if(yr + as.numeric(l_event[1,1]) <= stop_year){

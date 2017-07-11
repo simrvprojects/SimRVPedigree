@@ -4,7 +4,7 @@
 \alias{sim_ped}
 \title{Simulate a pedigree}
 \usage{
-sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
+sim_ped(hazard_rates, GRR, allele_freq, FamID, founder_byears, stop_year,
   RVfounder = "single", birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
@@ -12,7 +12,7 @@ sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
 
 \item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
 
-\item{carrier_prob}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -50,7 +50,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate a random pedigree
 set.seed(22)
 ex_ped <- sim_ped(hazard_rates = my_HR,
-                  GRR = 10, carrier_prob = 0.02,
+                  GRR = 10, allele_freq = 0.02,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
