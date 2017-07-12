@@ -5,7 +5,7 @@
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
 sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
-  recall_probs, stop_year, FamID, founder_byears, RVfounder = "single",
+  recall_probs, stop_year, FamID, founder_byears, RVfounder = "multiple",
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
@@ -27,7 +27,7 @@ sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
 
 \item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'multiple'} or \code{'first'}.  By default, \code{RVfounder = 'multiple'} See details.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 

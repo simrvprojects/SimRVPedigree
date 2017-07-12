@@ -1,7 +1,7 @@
 context("censor_ped")
 test_that("censor_ped returns an error when no proband or censor year provided", {
   RVped <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                     GRR = 50, allele_freq = 0.02,
+                     GRR = 50, allele_freq = 0.01,
                      RVfounder = "first",
                      FamID = 1,
                      num_affected = 2,
@@ -14,7 +14,7 @@ test_that("censor_ped returns an error when no proband or censor year provided",
 
 test_that("censor_ped returns a smaller or equally sized pedfile", {
   RVped <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                     GRR = 50, allele_freq = 0.02,
+                     GRR = 50, allele_freq = 0.01,
                      RVfounder = "first",
                      FamID = 1,
                      num_affected = 2,
@@ -27,7 +27,7 @@ test_that("censor_ped returns a smaller or equally sized pedfile", {
 
 test_that("censor_ped does not return any info after the censor year", {
   RVped <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                     GRR = 50, allele_freq = 0.02,
+                     GRR = 50, allele_freq = 0.01,
                      RVfounder = "first",
                      FamID = 1,
                      num_affected = 2,

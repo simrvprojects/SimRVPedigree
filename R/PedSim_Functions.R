@@ -242,9 +242,13 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 sim_ped = function(hazard_rates, GRR, allele_freq,
                    FamID, founder_byears, stop_year,
-                   RVfounder = "single",
+                   RVfounder = "multiple",
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
+
+  if(!(RVfounder %in% c("first", "multiple"))){
+    stop ('Please set RV founder to "multiple" or "first".')
+  }
 
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
@@ -326,7 +330,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
 #' @param allele_freq  Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.
-#' @param RVfounder String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.
+#' @param RVfounder String. \code{RVfounder} may take on one of two values: \code{'multiple'} or \code{'first'}.  By default, \code{RVfounder = 'multiple'} See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
@@ -404,34 +408,29 @@ sim_RVped = function(hazard_rates, GRR, allele_freq,
                      num_affected, ascertain_span,
                      recall_probs, stop_year,
                      FamID, founder_byears,
-                     RVfounder = "single",
+                     RVfounder = "multiple",
                      birth_range = c(18, 45),
                      NB_params = c(2, 4/7)){
 
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
-    stop ('please provide appropriate ascertain_span')
+    stop ('please provide appropriate values for ascertain_span')
   }
 
-  if(!(RVfounder %in% c("single", "first", "multiple"))){
-    stop ('Please set RV founder to "single", "first", or "multiple".')
-  }
-
-  if (allele_freq < 0 | allele_freq > 1){
+  if (allele_freq <= 0 | allele_freq >= 1){
     stop ('allele_freq must be a value between 0 and 1')
+  } else if (allele_freq > 0.01) {
+    warning('allele_freq > 0.01: sim_RVped is intended for simulating the transmission of rare variants.')
   }
 
-  if (allele_freq == 1){
-    stop ('allele_freq = 1 is not valid for rare variants.')
-  } else if (allele_freq >= 0.5 & allele_freq < 1) {
-    warning('sim_RVped is intended for simulating the transmission of rare variants, large values of allele_freq will greatly increase simulation time.')
+  if (num_affected <= 0){
+    stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use sim_ped.')
   }
 
-  if (num_affected == 0){
-    stop ('To simulate pedigrees with no disease-affected relatives please use sim_ped')
-  }
-
-  if (length(birth_range) != 2 | birth_range[1] >= birth_range[2]){
-    stop ('please provide an appropriate birth_range')
+  if (length(birth_range) != 2 |
+      birth_range[1] >= birth_range[2] |
+      birth_range[1] <= 0 |
+      birth_range[2] >= hazard_rates$partition[length(hazard_rates$partition)]){
+    stop ('Please provide appropriate values for birth_range.')
   }
 
   if (GRR <= 0) {

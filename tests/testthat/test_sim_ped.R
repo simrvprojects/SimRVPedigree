@@ -31,20 +31,6 @@ test_that("Effects of RVfounder = 'first' ", {
   expect_true(!any(exPed$DA1 + exPed$DA2 == 2))
 })
 
-test_that("Effects of RVfounder = 'single'", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, allele_freq = 0.25,
-                   RVfounder = 'single',
-                   FamID = 1, stop_year = 2015,
-                   founder_byears = c(1900, 1905))
-
-  #expect that at most one founder introduces causal variant
-  expect_lte(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]), 1)
-  #expect that no children are heterozygous at the disease locus
-  expect_true(!any(exPed$DA1 + exPed$DA2 == 2))
-})
-
-
 test_that("Effects of RVfounder = 'multiple'", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                    GRR = 10, allele_freq = 1,

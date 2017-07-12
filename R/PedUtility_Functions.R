@@ -8,30 +8,21 @@
 #' @keywords internal
 #'
 sim_founderRVstatus <- function(GRR, allele_freq, RVfounder, intro_RV){
-  if (GRR == 1 |
-      (RVfounder == "single" & intro_RV == TRUE) |
-      (RVfounder == "first" & intro_RV == TRUE)) {
+  if (GRR == 1 |intro_RV == TRUE) {
     # If GRR (genetic relative risk) = 1, the variant is not associated with
     # the disease; hence we do not allow an RV to segregate in the pedigree
     # Additionally, we set intro_RV to TRUE, so that we do not needlessly search
     # for a founder to introduce the RV
     d_locus <- c(0, 0)
     fRR <- 1
-  } else if (RVfounder == "single" & intro_RV == FALSE){
-    # If a single founder has not been located we simulate allele status at the
-    # disease locus given allele_freq, set RR and update intro_RV appropriately
-    carrier_prob <- 1 - (1 - allele_freq)^2
-    d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
-                      size = 2, replace = F)
-    fRR <- ifelse(any(d_locus == 1), GRR, 1)
-    intro_RV <- ifelse(any(d_locus == 1), T, F)
+    intro_RV <- TRUE
   } else if (RVfounder == "multiple"){
     # If multiple has been specified we allow fouders to introduce the RV with
     # probability proprotional to its allele frequency in the population, and
     # set RR and update intro_RV appropriately
     d_locus <- ifelse(runif(2) <= allele_freq, 1, 0)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
-    intro_RV <- ifelse(any(d_locus == 1), T, F)
+    intro_RV <- FALSE
   } else {
     d_locus <- sample(x = c(0, 1), size = 2, replace = F)
     fRR <- GRR

@@ -24,7 +24,7 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, birth_range, NB_params,
 
 \item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'multiple'} or \code{'first'}.  By default, \code{RVfounder = 'multiple'} See details.}
 
 \item{intro_RV}{Logical. If \code{intro_RV = TRUE}, then at least 1 founder has introduced the causal variant to the pedigree. If \code{intro_RV = FALSE} then the variant has not yet been introduced to the pedigree.}
 }
