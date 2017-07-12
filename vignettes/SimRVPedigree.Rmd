@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -28,21 +28,21 @@ body{ /* Normal  */
 
 #1. Introduction <a name="introduction"></a>
 
-Family-based studies to identify genetic susceptibility factors associated with rare diseases have received much attention in recent years.  This resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies [8].  However, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  As a result, these studies are difficult to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. 
+Family-based studies to identify genetic susceptibility factors associated with rare diseases have received renewed attention in recent years.  The resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies [8].  However, garnering a suitable number of families for analysis could require decades of continued collaboration between researchers and clinicians.  As a result, these studies and their findings are difficult to replicate.  The `SimRVPedigree` package aims to address this problem by providing a platform to simulate families ascertained to contain multiple relatives affected by a rare disease. 
 
-The distinguishing feature of the `SimRVPedigree` package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.  To illustrate and fully explain these features, in the next two sections, we will first discuss the process of pedigree simulation, followed by a full exposition of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
+The distinguishing feature of the `SimRVPedigree` package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.  To illustrate and fully explain these features, in the next two sections, we first discuss the assumptions made in simulation, and next provide a comprehensive description of the study design features available to users.  Later we provide an example, which illustrates an application of `SimRVPedigree` to simulate pedigrees for a specific family-based study.
 
 #2. Individual and Pedigree Specific Assumptions <a name="PedLevel"></a>
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
-2. We allow users to choose from one of the following three assumptions:
-    + a. `'first'`: Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder. (source: Bureau)
-    + b. `'multiple'`: Simulate founder genotype status at the disease locus based on the allele frequency of the rare varaint in the population.  NOTE: Under this assumption: founders may be homozygous for the rare variant, multiple founders may introduce the rare variant, and offspring who are homozygous for the rare variant may be observed. (source: Li Ch 1)
+2. With respect to how the causal variant is introduced to the pedigree we allow users to choose from one of the following three assumptions:
+    + a. `'first'`: Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder. This setting is due to the assumptions made by Bureau [11].  We note that for diseases with low penetrance this setting may not yeild accurate results. 
+    + b. `'multiple'`: Simulate founder genotypes at the disease locus based on the allele frequency of the rare variant in the population under the assumption of random mating (or under Hardy-Weinburg equilibrium).  NOTE: Under this assumption: founders may be homozygous for the rare variant, multiple founders may introduce the rare variant, and offspring who are homozygous for the rare variant may be observed. (source: Li Ch 1 or Lange Ch 1)
     + c. `'single'`: Assume that a single founder introduces a single copy of the variant to the pedigree.  Here we allow successive founders the opportunity to introduce a single copy of the rare variant.  The probability that a founder introduces a single copy of the rare variant to the pedigree is the carrier frequency of the rare variant in the population in the population.  After the rare variant is introduced no other founders are permitted to re-introduce the variant.  NOTE: The founder who introduces the rare variant may not be the same founder we begin the simulation of the pedigree with.  (source: ????)
     
 3. We transmit the rare variant from parent to offspring according to Mendel's laws.
 
-4. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the population hazard rate of disease, as well as the relative-risk of disease for genetic cases. 
+4. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the population hazard rate of disease, the allele frequency of causal variants, and the relative-risk of disease for genetic cases.
 
 5. We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
@@ -106,11 +106,11 @@ Based on the description of the family-based study described above, and referrin
 
 Additionally, the user will need to specify:
 
-1. `hazard_rates`: a data frame with 3 columns:
-   1. `hazard_rates[, 1]`: the population age-specific hazard rate for lymphoid cancer.
-   2. `hazard_rates[, 2]`: the age-specific hazard rate for death in the unaffected population, i.e. individuals who have NOT had lymphoid cancer.
-   3. `hazard_rates[, 3]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
-2. `part`: a partition of ages over which to apply the age-specific hazard rates in `hazard_rates`.
+1. `hazardDF`: a data frame with 3 columns:
+   1. `hazardDF[, 1]`: the population age-specific hazard rate for lymphoid cancer.
+   2. `hazardDF[, 2]`: the age-specific hazard rate for death in the unaffected population, i.e. individuals who have NOT had lymphoid cancer.
+   3. `hazardDF[, 3]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
+2. `partition`: a partition of ages over which to apply the age-specific hazard rates in `hazard_rates`.
 
 For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [4].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables provided by the Social Security Administration [5].
 
@@ -450,16 +450,19 @@ RV_peds = foreach(i = seq(npeds),
                   ) %dorng% {
                     sim_RVped(hazard_rates = LC_hazard,
                               num_affected = 2,
-                              ascertain_span = c(1900, 2015),
-                              GRR = 5, carrier_prob = 1, stop_year = 2015,
+                              ascertain_span = c(1995, 2010),
+                              GRR = 10, allele_freq = 0.01,
+                              RVfounder = "first",
+                              stop_year = 2017,
                               recall_probs = c(1),
-                              founder_byears = c(1900, 1910),
+                              founder_byears = c(1900, 1920),
                               FamID = i)[[2]]
                     }
 ```
 
 
 #7. References <a name="Ref"></a>
+
 [1] Renaud Gaujoux (2014). 
   **doRNG: Generic Reproducible Parallel Backend for foreach Loops.** 
   *R package version 1.6.*
@@ -467,8 +470,8 @@ RV_peds = foreach(i = seq(npeds),
   
 [2] Ken-Ichi Kojima, Therese M. Kelleher. (1962), 
   **Survival of Mutant Genes**. 
-  The American Naturalist 96, 329-346. 
-
+  The American Naturalist; Vol. 96, No. 891, pp. 329-346. 
+  
 [3] Revolution Analytics and Steve Weston (2015).
   **doParallel: Foreach Parallel Adaptor for the 'parallel' Package.** 
   *R package version 1.0.10.*
@@ -491,3 +494,8 @@ RV_peds = foreach(i = seq(npeds),
 [8] Ellen M. Wijsman (2012). 
   *The role of large pedigrees in an era of high-throughput sequencing*. 
   Hum Genet 131, 1555-1563 
+
+[11] Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson,
+Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi,
+Terri H. Beaty, and Ingo Ruczinski (2014). **Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives**.
+	Bioinformatics; Vol. 30, No. 15, pp. 2189–2196
