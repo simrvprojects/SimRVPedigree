@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePed_Functions.R
 \name{pedigree_info}
 \alias{pedigree_info}
-\title{Return useful pedigree information}
+\title{Obtain specialized pedigree information}
 \usage{
 pedigree_info(ped_file, label_year)
 }
@@ -25,7 +25,17 @@ A list containing the following:
 \code{pedLabs} ID labels which can be fed to kinship2 plotting function.  See example.
 }
 \description{
-Return useful pedigree information
+Obtain specialized pedigree information
+}
+\details{
+Users who wish to use \code{pedigree_info} for pedigrees not simulated with the \code{SImRVPedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{pedigree_info} contains the following variables for each pedigree member:
+\enumerate{
+\item \code{ID}: an identification number.
+\item \code{dadID}: identification number of father.
+\item \code{momID}: identification number of mother.
+\item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
+\item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.}
+Optionally, \code{ped_file} may contain any of the additional variables contained in pedigrees simulated by \code{\link{sim_RVped}}.
 }
 \examples{
 data(EgPeds)

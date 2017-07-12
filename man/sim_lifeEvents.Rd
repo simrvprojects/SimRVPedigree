@@ -8,11 +8,11 @@ sim_lifeEvents(hazard_rates, GRR, allele_freq, RV_status, YOB, stop_year,
   birth_range, NB_params)
 }
 \arguments{
-\item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
 
 \item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
 
@@ -31,13 +31,13 @@ A named matrix containing the years of an individual's simulated life events, na
 Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
 }
 \details{
-Starting at birth, age 0, the \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
+Starting at birth, age 0, \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and the individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
 
 We make the following assumptions regarding the simulation of waiting times:
  \enumerate{
  \item We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline (or population) hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease onset relative to those who have inherited it.  The user is expected to supply the baseline hazard rate of disease, as well as the relative-risk of disease for genetic cases. Additionally, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.
 
-\item We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
+\item We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that disease-affected individuals experience death according to the age-specific hazard rate for death in the \emph{affected} population.  On the other hand, we assume that \emph{unaffected} individuals experience death according to the age-specific hazard rate for death in the \emph{unaffected} population.  If the disease of interest is sufficiently rare, the user may choose to substitute the \emph{population} age-specific hazard rate for death for the aforementioned age-specific hazard rate for death in the \emph{unaffected} population.  The user is expected to supply age-specific hazard rates of death for both the \emph{affected} and \emph{unaffected} populations.
 
 \item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45 years.  We do not allow for offspring to be produced outside of an individual's \code{birth_range}.
 

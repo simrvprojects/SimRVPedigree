@@ -7,11 +7,11 @@
 sim_founderRVstatus(GRR, allele_freq, RVfounder, intro_RV)
 }
 \arguments{
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.}
 
 \item{intro_RV}{Logical. If \code{intro_RV = TRUE} a founder has introduced a rare, causal variant to the pedigree, otherwise no RV has been introduced to the pedigree.}
 }

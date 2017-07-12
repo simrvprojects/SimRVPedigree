@@ -9,11 +9,11 @@ sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
@@ -27,7 +27,7 @@ sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
 
 \item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 

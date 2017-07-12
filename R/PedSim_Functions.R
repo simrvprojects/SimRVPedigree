@@ -323,10 +323,10 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
 #'
-#' @param hazard_rates on object of class \code{hazard}, created by \code{\link{new.hazard}}.
-#' @param GRR Numeric. The relative-risk of disease for individuals who inherit the causal variant.
-#' @param allele_freq  Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.
-#' @param RVfounder String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.
+#' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
+#' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
+#' @param allele_freq  Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.
+#' @param RVfounder String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.

@@ -14,17 +14,17 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, birth_range, NB_params,
 
 \item{last_id}{Numeric.  The last id used in the pedigree.}
 
-\item{hazard_rates}{on object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
-\item{GRR}{Numeric. The relative-risk of disease for individuals who inherit the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of the genetic variant with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  If "first" the first founder will introduce the rare variant to the pedigree, if "single" at most one founder will be able to intoduce the rare variant to the pedigree, if "multiple" more than one founder can intrduce the variant to the pedigree.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of three values: \code{"single"}, \code{"first"}, or \code{"multiple"}.  See details.}
 
 \item{intro_RV}{Logical. If \code{intro_RV = TRUE}, then at least 1 founder has introduced the causal variant to the pedigree. If \code{intro_RV = FALSE} then the variant has not yet been introduced to the pedigree.}
 }
