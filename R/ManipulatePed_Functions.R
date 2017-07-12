@@ -84,6 +84,8 @@
 #'
 assign_affectedGen = function(ped_file){
 
+  check_ped(ped_file)
+
   #create new ped file with affecteds only
   reGen_ped <- ped_file[which(ped_file$affected == 1), ]
 
@@ -264,6 +266,12 @@ assign_affectedGen = function(ped_file){
 #'
 censor_ped = function(ped_file, censor_year){
 
+  check_ped(ped_file)
+
+  if (any(is.na(match(c("birthYr", "onsetYr", "deathYr"), colnames(ped_file))))) {
+    stop("ped_file does not contain one or more of the following variables: birthYr, onsetYr, deathYr" )
+  }
+
   if (missing(censor_year)) {
     if ("proband" %in% colnames(ped_file)) {
       if(sum(ped_file$proband) == 1){
@@ -324,7 +332,18 @@ censor_ped = function(ped_file, censor_year){
 }
 
 
-#' Return useful pedigree information
+#' Obtain specialized pedigree information
+#'
+#' Obtain specialized pedigree information
+#'
+#' Users who wish to use \code{pedigree_info} for pedigrees not simulated with the \code{SImRVPedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{pedigree_info} contains the following variables for each pedigree member:
+#' \enumerate{
+#' \item \code{ID}: an identification number.
+#' \item \code{dadID}: identification number of father.
+#' \item \code{momID}: identification number of mother.
+#' \item \code{sex}: sex identification; if male \code{sex = 0}, if female \code{sex = 1}.
+#' \item \code{affected}: affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0}.}
+#' Optionally, \code{ped_file} may contain any of the additional variables contained in pedigrees simulated by \code{\link{sim_RVped}}.
 #'
 #' @inheritParams trim_ped
 #' @param label_year A numeric constant.  The reference year used to determine current age for pedigree members.
