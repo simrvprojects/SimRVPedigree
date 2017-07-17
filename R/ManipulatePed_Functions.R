@@ -336,7 +336,7 @@ censor_ped = function(ped_file, censor_year){
 #'
 #' Obtain specialized pedigree information
 #'
-#' Users who wish to use \code{pedigree_info} for pedigrees not simulated with the \code{SImRVPedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{pedigree_info} contains the following variables for each pedigree member:
+#' Users who wish to use \code{ped_info} for pedigrees not simulated with the \code{SImRVPedigree} package must ensure that the pedigree, \code{ped_file}, supplied to \code{ped_info} contains the following variables for each pedigree member:
 #' \enumerate{
 #' \item \code{ID}: an identification number.
 #' \item \code{dadID}: identification number of father.
@@ -346,7 +346,7 @@ censor_ped = function(ped_file, censor_year){
 #' Optionally, \code{ped_file} may contain any of the additional variables contained in pedigrees simulated by \code{\link{sim_RVped}}.
 #'
 #' @inheritParams trim_ped
-#' @param label_year A numeric constant.  The reference year used to determine current age for pedigree members.
+#' @param ref_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #'
 #' @return  A list containing the following:
 #' @return \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
@@ -364,7 +364,7 @@ censor_ped = function(ped_file, censor_year){
 #' @examples
 #' data(EgPeds)
 #'
-#' Fam1 <- pedigree_info(EgPeds[EgPeds$FamID == 1, ], label_year = 2015)
+#' Fam1 <- ped_info(EgPeds[EgPeds$FamID == 1, ], ref_year = 2015)
 #' summary(Fam1)
 #'
 #' head(Fam1$link_format)
@@ -378,7 +378,7 @@ censor_ped = function(ped_file, censor_year){
 #' plot(Fam1$kinshipPedigree, id = Fam1$pedLabs)
 #' pedigree.legend(Fam1$kinshipPedigree, location = "topleft",  radius = 0.25)
 #'
-pedigree_info <- function(ped_file, label_year){
+ped_info <- function(ped_file, ref_year){
 
   check_ped(ped_file)
 
@@ -389,7 +389,7 @@ pedigree_info <- function(ped_file, label_year){
   dA_loc <- match(c("DA1", "DA2"), colnames(ped_file))
 
   if (length(dA_loc[!is.na(dA_loc)]) == 2) {
-    ped_file$RVstatus <- ifelse(ped_file$DA1 + ped_file$DA2 != 0, 1, 0)
+    ped_file$RVstatus <- ped_file$DA1 + ped_file$DA2
   }
 
   keep_cols <- match(c("FamID", "ID",
@@ -423,13 +423,13 @@ pedigree_info <- function(ped_file, label_year){
   kinMat <- kinship(kin_ped)
 
   #create pedigree labels that reflect age data, when appropriate
-  if(!missing(label_year) & !is.na(match(c("birthYr"), colnames(ped_file)))){
+  if(!missing(ref_year) & !is.na(match(c("birthYr"), colnames(ped_file)))){
 
     if (!is.na(match("deathYr", colnames(ped_file)))) {
       #create age lable, if death has not ocurred
       age_lab <- ifelse(is.na(ped_file$birthYr) | !is.na(ped_file$deathYr),
                         " ", paste0("\n age: ",
-                                    label_year - ped_file$birthYr))
+                                    ref_year - ped_file$birthYr))
 
       # Create a death age label for individuals who have died.
       Dage_lab <- ifelse(is.na(ped_file$deathYr),
@@ -439,7 +439,7 @@ pedigree_info <- function(ped_file, label_year){
       warning('Death year information not provided. Creating age lables under the assumption that all pedigree members are still alive.')
       age_lab <- ifelse(is.na(ped_file$birthYr),
                         " ", paste0("\n age: ",
-                                    label_year - ped_file$birthYr))
+                                    ref_year - ped_file$birthYr))
 
       Dage_lab <- rep(" ", nrow(ped_file))
     }
