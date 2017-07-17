@@ -242,11 +242,11 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 sim_ped = function(hazard_rates, GRR, allele_freq,
                    FamID, founder_byears, stop_year,
-                   RVfounder = "multiple",
+                   RVfounder = "first",
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
 
-  if(!(RVfounder %in% c("first", "multiple"))){
+  if(!(RVfounder %in% c("first", "single", "multiple"))){
     stop ('Please set RV founder to "multiple" or "first".')
   }
 
@@ -408,9 +408,13 @@ sim_RVped = function(hazard_rates, GRR, allele_freq,
                      num_affected, ascertain_span,
                      recall_probs, stop_year,
                      FamID, founder_byears,
-                     RVfounder = "multiple",
+                     RVfounder = "first",
                      birth_range = c(18, 45),
                      NB_params = c(2, 4/7)){
+
+  if(!(RVfounder %in% c("first", "single"))){
+    stop ('Please set RV founder to "first" or "single".')
+  }
 
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
     stop ('please provide appropriate values for ascertain_span')
