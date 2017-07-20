@@ -5,7 +5,7 @@
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
 sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span,
-  recall_probs, stop_year, FamID, founder_byears, RVfounder = "multiple",
+  recall_probs, stop_year, FamID, founder_byears, RVfounder = "first",
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
