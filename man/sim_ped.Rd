@@ -12,7 +12,7 @@ sim_ped(hazard_rates, GRR, allele_freq, FamID, founder_byears, stop_year,
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -20,7 +20,7 @@ sim_ped(hazard_rates, GRR, allele_freq, FamID, founder_byears, stop_year,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'multiple'} or \code{'first'}.  By default, \code{RVfounder = 'multiple'} See details.}
+\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 

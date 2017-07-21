@@ -12,7 +12,7 @@ sim_lifeEvents(hazard_rates, GRR, allele_freq, RV_status, YOB, stop_year,
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.}
+\item{allele_freq}{Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.}
 
 \item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
 

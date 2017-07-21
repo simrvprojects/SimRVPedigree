@@ -247,12 +247,11 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
                    NB_params = c(2, 4/7)){
 
   if(!(RVfounder %in% c("first", "single", "multiple"))){
-    stop ('Please set RV founder to "multiple" or "first".')
+    stop ('Please set RV founder to "first" or "single".')
   }
 
   #initialize a data frame to store all the necessary info for the ped file
   fam_ped <- create_pedFile()
-
 
   #randomly generate birth year and sex for the founder carrying the RV,
   #and fill in all other fields with the appropriate info
@@ -309,13 +308,13 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 #' \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 #'
-#' By assumption, all simulated pedigrees are segregating a genetic susceptibility variant.  We assume that the variant is rare enough that it has been introduced by one founder.  We begin the simulation of the pedigree with this founder, and transmit the rare variant from parent to offspring according to Mendel's laws.
+#' When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability equal to the carrier probability of the rare variant.  The user specifies the allele frequency of the rare variant, \eqn{f}, using the \code{allele_freq} argument and the carrier probability is calculated as \eqn{1 - (1 - f)^2}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
 #'
-#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the founder who introduced the rare variant to the pedigree.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.
+#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
-#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected} \eqn{= 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
+#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
 #'
 #' Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
 #' \enumerate{
@@ -329,8 +328,8 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 #' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
-#' @param allele_freq  Numeric.  The population allele frequency of variants with relative risk \code{GRR}. See details.
-#' @param RVfounder String. \code{RVfounder} may take on one of two values: \code{'multiple'} or \code{'first'}.  By default, \code{RVfounder = 'multiple'} See details.
+#' @param allele_freq  Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.
+#' @param RVfounder String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
@@ -406,8 +405,8 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 sim_RVped = function(hazard_rates, GRR, allele_freq,
                      num_affected, ascertain_span,
-                     recall_probs, stop_year,
                      FamID, founder_byears,
+                     stop_year, recall_probs,
                      RVfounder = "first",
                      birth_range = c(18, 45),
                      NB_params = c(2, 4/7)){
