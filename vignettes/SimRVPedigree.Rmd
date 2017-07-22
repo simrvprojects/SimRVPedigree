@@ -72,7 +72,7 @@ To simulate a pedigree with `sim_RVped` the user must specify:
    If the disease of interest is sufficiently rare, at the user's discretion, column 2 may be approximated by the population age-specific hazard rate for death. 
 2. `partition`: a partition of ages over which to apply the age-specific hazard rates in `hazardDF`.
 3. `GRR`: the genetic relative-risk, i.e. the relative-risk of disease for individuals who have inherited the rare variant. 
-4. `allele_freq`: the population allele frequency of the rare variant. 
+4. `carrier_prob`: the carrier probability of all causal variants considered as a group. 
 5. `FamID`: the family ID to assign to the simulated pedigree.
 6. `founder_byears`: the span of years from which to simulate, uniformly, the founder's birth year.
 7. `ascertain_span`: the year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives. 
@@ -99,7 +99,7 @@ Based on the description of the family-based study described above, and referrin
 2. `ascertain_span` = c(1995, 2010)
 3. `stop_year` = 2017
 4. `GRR` = 10
-5. `allele_freq` = 0.01
+5. `carrier_prob` = 0.002
 6. `recall_probs` = c(1)
 7. `founder_byears` = c(1900, 1920)
 
@@ -170,11 +170,11 @@ Finally, we show how the `sim_RVped` function may be used to simulate a single f
 
 ```{r}
 # Simulate an ascertained pedigree 
-set.seed(959593)
+set.seed(11800)
 ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
-                      GRR = 10, allele_freq = 0.01,
+                      GRR = 10, carrier_prob = 0.002,
                       RVfounder = "first",
                       stop_year = 2017,
                       recall_probs = c(1),
@@ -278,27 +278,27 @@ It is important to note that the pedigree above may have looked quite different 
 ascPed$onsetYr[ascPed$proband == 1]
 ```
 
-From the output above we see that this pedigree was ascertained in 2001.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor_ped` function to censor all events that occurred after 2001.  Next, we supply the censored pedigree to the `ped_info` function and use the output to plot the pedigree with updated labels.  The following code illustrates this process.
+From the output above we see that this pedigree was ascertained in 1999.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor_ped` function to censor all events that occurred after 1999.  Next, we supply the censored pedigree to the `ped_info` function and use the output to plot the pedigree with updated labels.  The following code illustrates this process.
 
 ```{r, fig.height = 6.5, fig.width = 8.5}
-# First, we censor all events that occurred after 2001. 
-Ped2001 <- censor_ped(ped_file = ascPed, censor_year = 2001)
+# First, we censor all events that occurred after 1999. 
+Ped1999 <- censor_ped(ped_file = ascPed, censor_year = 1999)
 
-# Next, supply Ped2001 and the year of interest to the ped_info function.
-studyPed2001 <- ped_info(Ped2001, ref_year = 2001)
+# Next, supply Ped1999 and the year of interest to the ped_info function.
+studyPed1999 <- ped_info(Ped1999, ref_year = 1999)
 
-# Plot pedigree with new labels that reflect the ages of pedigree members in 2001.
-plot(studyPed2001$kinshipPedigree, cex = 0.9, 
-     id = studyPed2001$pedLabs,
+# Plot pedigree with new labels that reflect the ages of pedigree members in 1999.
+plot(studyPed1999$kinshipPedigree, cex = 0.9, 
+     id = studyPed1999$pedLabs,
      mar = c(1.1, 3.1, 5.1, 2.1))
 
 # Plot pedigree legend.
-pedigree.legend(studyPed2001$kinshipPedigree, 
+pedigree.legend(studyPed1999$kinshipPedigree, 
                 location = "topleft", radius = 0.25)
-mtext("Reference Year: 2001", side = 3, line = 1)
+mtext("Reference Year: 1999", side = 3, line = 1)
 ```
 
-Looking at the pedigree above, we see that in 2001, only 3 family members had experienced onset of lymphoid cancer, two of whom were alive (the pedigree members with IDs 6 and 7).  Referring to the 2017 pedigree, we see that both disease-affected individuals who were alive in 2001 died by 2017.  Additionally, we see that at age 77, thirteen years after the pedigree was ascertained, the proband's brother (the pedigree member with ID 3) experienced onset of lymphoid cancer.
+Looking at the pedigree above, we see that in 1999, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive (the pedigree member with IDs 6).  Referring to the 2017 pedigree, we see that both disease-affected individuals who were alive in 1999 died by 2017.  Additionally, we see that at age 48, twelve years after the pedigree was ascertained, the proband's sister (the pedigree member with ID 7) experienced onset of lymphoid cancer.
 
 
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
@@ -450,7 +450,7 @@ RV_peds = foreach(i = seq(npeds),
                     sim_RVped(hazard_rates = LC_hazard,
                               num_affected = 2,
                               ascertain_span = c(1995, 2010),
-                              GRR = 10, allele_freq = 0.01,
+                              GRR = 10, carrier_prob = 0.002,
                               RVfounder = "first",
                               stop_year = 2017,
                               recall_probs = c(1),

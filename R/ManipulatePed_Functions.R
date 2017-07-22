@@ -234,7 +234,7 @@ assign_affectedGen = function(ped_file){
 #' ex_RVped <- sim_RVped(hazard_rates = haz_obj,
 #'                       num_affected = 2,
 #'                       ascertain_span = c(1900, 2015),
-#'                       GRR = 30, allele_freq = 0.02,
+#'                       GRR = 30, carrier_prob = 0.002,
 #'                       RVfounder = "first",
 #'                       stop_year = 2015,
 #'                       recall_probs = c(1),

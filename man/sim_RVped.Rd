@@ -4,7 +4,7 @@
 \alias{sim_RVped}
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
-sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span, FamID,
+sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
   founder_byears, stop_year, recall_probs, RVfounder = "first",
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
@@ -13,7 +13,7 @@ sim_RVped(hazard_rates, GRR, allele_freq, num_affected, ascertain_span, FamID,
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.}
+\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
@@ -44,7 +44,7 @@ A list containing the following data frames:
 \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 }
 \details{
-When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability equal to the carrier probability of the rare variant.  The user specifies the allele frequency of the rare variant, \eqn{f}, using the \code{allele_freq} argument and the carrier probability is calculated as \eqn{1 - (1 - f)^2}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
+When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability \code{carrier_prob}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
 
 We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 
@@ -76,7 +76,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(8008135)
 ex_RVped <- sim_RVped(hazard_rates = my_HR,
-                      GRR = 50, allele_freq = 0.02,
+                      GRR = 50, carrier_prob = 0.002,
                       RVfounder = "first",
                       FamID = 1,
                       founder_byears = c(1900, 1910),

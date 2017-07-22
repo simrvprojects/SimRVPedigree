@@ -41,7 +41,7 @@ create_pedFile = function(){
 #'
 #'
 create_mate = function(partner_info, last_id,
-                       GRR, allele_freq,
+                       GRR, carrier_prob,
                        RVfounder, intro_RV){
 
   new_mate_info <- data.frame(FamID = partner_info$FamID,
@@ -61,7 +61,7 @@ create_mate = function(partner_info, last_id,
                              do_sim = 0,
                              stringsAsFactors=FALSE)
 
-  founder_dat <- sim_founderRVstatus(GRR, allele_freq,
+  founder_dat <- sim_founderRVstatus(GRR, carrier_prob,
                                      RVfounder, intro_RV)
 
   new_mate_info[1, 7:8] <- founder_dat[[1]]
@@ -127,12 +127,12 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #'
 sim_nFam = function(found_info, stop_year, last_id,
                     hazard_rates, birth_range, NB_params,
-                    GRR, allele_freq, RVfounder, intro_RV){
+                    GRR, carrier_prob, RVfounder, intro_RV){
 
   nfam_ped <- found_info
 
   #Simulate life steps for founder
-  sim_years <- sim_lifeEvents(hazard_rates, GRR, allele_freq,
+  sim_years <- sim_lifeEvents(hazard_rates, GRR, carrier_prob,
                               RV_status = any(found_info[, c(7:8)] == 1)*1,
                               YOB = found_info$birthYr, stop_year,
                               birth_range, NB_params)
@@ -161,7 +161,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   if (length(birth_events) > 0) {
     #add a mate
     new_mate <- create_mate(partner_info = nfam_ped[1,], last_id,
-                            GRR, allele_freq,
+                            GRR, carrier_prob,
                             RVfounder, intro_RV)
 
     nfam_ped <- rbind(nfam_ped, new_mate[[1]])
@@ -220,7 +220,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' #Simulate a random pedigree
 #' set.seed(22)
 #' ex_ped <- sim_ped(hazard_rates = my_HR,
-#'                   GRR = 10, allele_freq = 0.02,
+#'                   GRR = 10, carrier_prob = 0.002,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
@@ -240,7 +240,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' plot(ex_pedigree)
 #' pedigree.legend(ex_pedigree, location = "bottomleft",  radius = 0.25)
 #'
-sim_ped = function(hazard_rates, GRR, allele_freq,
+sim_ped = function(hazard_rates, GRR, carrier_prob,
                    FamID, founder_byears, stop_year,
                    RVfounder = "first",
                    birth_range = c(18, 45),
@@ -269,7 +269,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
                    1, 1,             #availablilty and generation no
                    1)                # do_sim
 
-  founder_dat <- sim_founderRVstatus(GRR, allele_freq,
+  founder_dat <- sim_founderRVstatus(GRR, carrier_prob,
                                      RVfounder, intro_RV = FALSE)
 
   fam_ped[1, c(7:8)] <- founder_dat[[1]]
@@ -286,7 +286,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
                          stop_year, last_id,
                          hazard_rates, birth_range, NB_params,
-                         GRR, allele_freq,
+                         GRR, carrier_prob,
                          RVfounder, intro_RV = IRV)
 
       #replace individual by their simulated self and add family members when necessary
@@ -308,7 +308,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 #' \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 #'
-#' When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability equal to the carrier probability of the rare variant.  The user specifies the allele frequency of the rare variant, \eqn{f}, using the \code{allele_freq} argument and the carrier probability is calculated as \eqn{1 - (1 - f)^2}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
+#' When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability \code{carrier_prob}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
 #'
 #' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 #'
@@ -328,7 +328,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #'
 #' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
-#' @param allele_freq  Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.
+#' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.
 #' @param RVfounder String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
@@ -361,7 +361,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(8008135)
 #' ex_RVped <- sim_RVped(hazard_rates = my_HR,
-#'                       GRR = 50, allele_freq = 0.02,
+#'                       GRR = 50, carrier_prob = 0.002,
 #'                       RVfounder = "first",
 #'                       FamID = 1,
 #'                       founder_byears = c(1900, 1910),
@@ -403,7 +403,7 @@ sim_ped = function(hazard_rates, GRR, allele_freq,
 #' pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
 #'
 #'
-sim_RVped = function(hazard_rates, GRR, allele_freq,
+sim_RVped = function(hazard_rates, GRR, carrier_prob,
                      num_affected, ascertain_span,
                      FamID, founder_byears,
                      stop_year, recall_probs,
@@ -419,10 +419,10 @@ sim_RVped = function(hazard_rates, GRR, allele_freq,
     stop ('please provide appropriate values for ascertain_span')
   }
 
-  if (allele_freq <= 0 | allele_freq >= 1){
-    stop ('allele_freq must be a value between 0 and 1')
-  } else if (allele_freq > 0.01) {
-    warning('allele_freq > 0.01: sim_RVped is intended for simulating the transmission of rare variants.')
+  if (carrier_prob <= 0 | carrier_prob >= 1){
+    stop ('carrier_prob must be a value between 0 and 1')
+  } else if (carrier_prob > 0.002) {
+    warning('carrier_prob > 0.002: sim_RVped is intended for simulating the transmission of rare variants.')
   }
 
   if (num_affected <= 0){
@@ -459,7 +459,7 @@ sim_RVped = function(hazard_rates, GRR, allele_freq,
   while(D == 0){
     d <- 0
     while( d == 0 ){
-      fam_ped <- sim_ped(hazard_rates, GRR, allele_freq, FamID,
+      fam_ped <- sim_ped(hazard_rates, GRR, carrier_prob, FamID,
                          founder_byears, stop_year,
                          RVfounder, birth_range, NB_params)
 

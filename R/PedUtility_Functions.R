@@ -7,7 +7,7 @@
 #'
 #' @keywords internal
 #'
-sim_founderRVstatus <- function(GRR, allele_freq, RVfounder, intro_RV){
+sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
   if (GRR == 1 |intro_RV == TRUE) {
     # If GRR (genetic relative risk) = 1, the variant is not associated with
     # the disease; hence we do not allow an RV to segregate in the pedigree
@@ -21,7 +21,6 @@ sim_founderRVstatus <- function(GRR, allele_freq, RVfounder, intro_RV){
     # FIRST FOUNDER, the opportunity to introduce 1 copy of the RV with
     # proportional to its carrier frequency in the population, and set RR and
     # update intro_RV appropriately
-    carrier_prob <- 1 - (1 - allele_freq)^2
     d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
                       size = 2, replace = F)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
@@ -30,6 +29,7 @@ sim_founderRVstatus <- function(GRR, allele_freq, RVfounder, intro_RV){
     # If multiple has been specified we allow fouders to introduce the RV with
     # probability proprotional to its allele frequency in the population, and
     # set RR and update intro_RV appropriately
+    allele_freq <- 1 - sqrt(1 - carrier_prob)
     d_locus <- ifelse(runif(2) <= allele_freq, 1, 0)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
     intro_RV <- FALSE

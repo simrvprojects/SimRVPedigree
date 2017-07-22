@@ -4,12 +4,12 @@
 \alias{sim_founderRVstatus}
 \title{Determine founder genotype at the disease locus and determime their relative-risk of disease}
 \usage{
-sim_founderRVstatus(GRR, allele_freq, RVfounder, intro_RV)
+sim_founderRVstatus(GRR, carrier_prob, RVfounder, intro_RV)
 }
 \arguments{
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
-\item{allele_freq}{Numeric.  The population allele frequency a genetic variant with relative risk of disease \code{GRR}.}
+\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
 \item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
 
