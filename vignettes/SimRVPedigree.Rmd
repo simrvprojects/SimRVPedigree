@@ -217,7 +217,7 @@ The columns in the data frame above may be described as follows:
 To obtain specialized information about the simulated pedigree we supply the ascertained pedigree to the `ped_info` function.
 
 ```{r}
-# obtain information about the ascertained pedigree by suppyling it to ped_info 
+# obtain information about the ascertained pedigree by supplying it to ped_info 
 studyPed <- ped_info(ascPed)
 
 # View a summary of studyPed
@@ -260,7 +260,7 @@ Often, there is additional individual information we would like to display along
 # obtain specialized labels for pedigree by supplying ref_year = 2017 to ped_info
 studyPed2017 <- ped_info(ascPed, ref_year = 2017)
 
-# Plot pedigree with labels that reflect the ages of pedigree memebers in 2017.
+# Plot pedigree with labels that reflect the ages of pedigree members in 2017.
 plot(studyPed2017$kinshipPedigree, cex = 0.9, 
      id = studyPed2017$pedLabs,
      mar = c(1.1, 3.1, 5.1, 2.1))
@@ -343,7 +343,7 @@ ID2 = paste0("ID", sep = ":",
              sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 1), 14])
 
 # Plot pedigrees before and after reassigning
-# generation number based on affcted status
+# generation number based on affected status
 par(mfrow = c(1,2))
 plot(eg_peds['1'], id = ID1, mar = c(2, 1, 4, 2))
 mtext("Pedigree 1: Before", side = 3, line = 1, cex = 1.15)
@@ -356,7 +356,7 @@ Looking at the before and after for this pedigree, the most striking observation
 
 ```{r, fig.height = 5.5, fig.width = 7}
 #Repeat same steps as before, this time for the pedigree with FamID = 5
-#First, create some new id lables that merge the individual IDs with 
+#First, create some new id labels that merge the individual IDs with 
 #their generation numbers.
 ID1 = paste0("ID", sep = ":",
              EgPeds[which(EgPeds$FamID == 5), 2],
@@ -367,7 +367,7 @@ ID2 = paste0("ID", sep = ":",
              sep = "\n Gen:", RAG_peds[which(RAG_peds$FamID == 5), 14])
 
 # Plot pedigrees before and after reassigning
-# generation number based on affcted status
+# generation number based on affected status
 par(mfrow = c(1,2))
 plot(eg_peds['5'], id = ID1, mar = c(2, 1, 4, 2))
 mtext("Pedigree 5: Before", side = 3, line = 1, cex = 1.15)
@@ -403,8 +403,8 @@ Other combinations of simulation settings could also result in longer computatio
 The following parallel processing example uses the `doParallel` [4] and `doRNG` [2] packages to simulate an entire study sample of 150 pedigrees for the family-based study described in section 5.  The following code has been tested on both Windows and Macintosh operating systems, however, slight modifications may be necessary for users working other operating systems. 
 
 ```{r, eval = FALSE}
-#Note that: while parallel processing may achieved using only the doParallel 
-#package, to ensure that simulations are reproducible we must also incorporate 
+#Note that parallel processing is achieved using the doParallel package, 
+#however, to ensure that simulations are reproducible we incorporate 
 #the doRNG package.
 
 #assuming they have been installed, the required packages are loaded using the 
@@ -417,7 +417,7 @@ library(doRNG)
 #a cluster yet, this function should return 1.
 getDoParWorkers()
 
-#The number of cores available for parallel processing will depend on the the 
+#The number of cores available for parallel processing will depend on the 
 #computer.  To determine how many cores are available on your computer,  
 #execute the following command:
 detectCores()
