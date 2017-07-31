@@ -35,13 +35,13 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 #2. Individual and Pedigree Specific Assumptions <a name="PedLevel"></a>
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
-2. With respect to how the causal variant is introduced to the pedigree we allow users to choose from one of the following three assumptions:
+2. With respect to how the causal variant is introduced to the pedigree we allow users to choose from one of the following two assumptions:
     + a. `'first'`: Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in [1].
-    + b. `'single'`: Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not transmit the rare variant.
+    + b. `'single'`: Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
     
 3. When the rare variant is present, we transmit it from parent to offspring according to Mendel's laws.
 
-4. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the rare variant experience disease onset according to the baseline hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the population hazard rate of disease, the allele frequency of causal variants, and the relative-risk of disease for genetic cases.
+4. We assume that, given an individual's current age, their time to disease onset is the waiting time in a non-homogeneous Poisson process with an age-specific hazard rate that follows a proportional hazards model.  In this model, individuals who have NOT inherited the causal variant experience disease onset according to the baseline, age-specific, hazard rate of disease.  On the other hand, individuals who have inherited the rare variant are assumed to have an increased risk of disease relative to those who have not inherited it.  The user is expected to supply the population, age-specific, hazard rate of disease, the allele frequency of causal variants, and the relative-risk of disease for genetic cases.
 
 5. We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
@@ -82,7 +82,7 @@ Optional arguments:
 
 9. `stop_year`: the last year of study.  If missing, the current year is used.
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
-11. `RVfounder`: The method by which the rare variant is introduced to the pedigree.  We allow three modes of introduction discussed in [Individual and Pedigree Specific Assumptions](#PedLevel): `'first'`, which corresponds to assumption 2.a.; `'single'`, which corresponds to assumption 2.b.  By default, `RVfounder = 'first'`.
+11. `segregate_RV`: A logical variable indicating if we shoudl assume that all pedigrees segregate the rare variant.  When `segregate_RV = TRUE` all pedigrees will segregate the causal rare-variant.  However, when `segregate_RV = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `segregate_RV = FALSE` a simulated pedigree may be comprised entirely of sporadic cases.  By default, `segregate_RV = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
 
@@ -170,7 +170,7 @@ Finally, we show how the `sim_RVped` function may be used to simulate a single f
 
 ```{r}
 # Simulate an ascertained pedigree 
-set.seed(11800)
+set.seed(2140)
 ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
@@ -238,7 +238,7 @@ The second item returned by ped_info is named `affected_info` and provides infor
 studyPed$affected_info
 ```
 
-The third item returned by ped_info is named `kinshipMat` is the kinship matrix for the pedigree obtained by the `kinship` function of the `kinship2` package  (execute the command `help(kinship)` for more information).  The fourth and fifth items returned by `ped_info` are useful when plotting pedigrees using the `kinship2` package, which we illustrate in the following code block. 
+The third item returned by ped_info is named `kinshipMat` and is the kinship matrix for the pedigree obtained by the `kinship` function of the `kinship2` package  (execute the command `help(kinship)` for more information).  The fourth and fifth items returned by `ped_info` are useful when plotting pedigrees using the `kinship2` package, which we illustrate in the following code block. 
 
 ```{r, results = FALSE, tidy = TRUE, echo = TRUE, message=FALSE}
 # Pedigrees may be plotted using the kinship2 package.  Assuming the
@@ -254,7 +254,7 @@ The third item returned by ped_info is named `kinshipMat` is the kinship matrix 
  pedigree.legend(studyPed$kinshipPedigree, location = "topleft",  radius = 0.25)
 ```
 
-Often, there is additional individual information we would like to display along with the pedigree; for example: an individual's age of onset, and their current age or their age at death at a given reference year.  The following code illustrates how we can use the fifth item returned by `ped_info` to accomplish this for the year 2017.
+Often, there is additional individual information we would like to display with the pedigree; for example: an individual's age of onset, and their age at death or their current age at a given reference year.  The following code illustrates how we can use the fifth item returned by `ped_info` to accomplish this for the year 2017.
 
 ```{r, fig.height = 7, fig.width = 8.5}
 # obtain specialized labels for pedigree by supplying ref_year = 2017 to ped_info
@@ -271,34 +271,34 @@ pedigree.legend(studyPed2017$kinshipPedigree,
 mtext("Reference Year: 2017", side = 3, line = 1)
 ```
 
-It is important to note that the pedigree above may have looked quite different at the time of ascertainment.  For pedigrees simulated by `sim_RVped`, we assume that ascertainment occurs during the same calendar year that the proband experiences disease onset. We can determine what year the pedigree above was ascertained using the following command.
+It is important to note that the pedigree above may have looked quite different at the time of ascertainment.  We assume that ascertainment occured during the same calendar year that the proband experienced disease onset. We can determine what year the pedigree above was ascertained using the following command.
 
 ```{r}
 # Determine ascertainment year by viewing the proband's year of disease onset.
 ascPed$onsetYr[ascPed$proband == 1]
 ```
 
-From the output above we see that this pedigree was ascertained in 1999.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor_ped` function to censor all events that occurred after 1999.  Next, we supply the censored pedigree to the `ped_info` function and use the output to plot the pedigree with updated labels.  The following code illustrates this process.
+From the output above we see that this pedigree was ascertained in 2003.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor_ped` function to censor all events that occurred after 2003.  Next, we supply the censored pedigree to the `ped_info` function and use the output to plot the pedigree with updated labels.  The following code illustrates this process.
 
 ```{r, fig.height = 6.5, fig.width = 8.5}
-# First, we censor all events that occurred after 1999. 
-Ped1999 <- censor_ped(ped_file = ascPed, censor_year = 1999)
+# First, we censor all events that occurred after 2003. 
+Ped2003 <- censor_ped(ped_file = ascPed, censor_year = 2003)
 
-# Next, supply Ped1999 and the year of interest to the ped_info function.
-studyPed1999 <- ped_info(Ped1999, ref_year = 1999)
+# Next, supply Ped2003 and the year of interest to the ped_info function.
+studyPed2003 <- ped_info(Ped2003, ref_year = 2003)
 
-# Plot pedigree with new labels that reflect the ages of pedigree members in 1999.
-plot(studyPed1999$kinshipPedigree, cex = 0.9, 
-     id = studyPed1999$pedLabs,
+# Plot pedigree with new labels that reflect the ages of pedigree members in 2003.
+plot(studyPed2003$kinshipPedigree, cex = 0.9, 
+     id = studyPed2003$pedLabs,
      mar = c(1.1, 3.1, 5.1, 2.1))
 
 # Plot pedigree legend.
-pedigree.legend(studyPed1999$kinshipPedigree, 
+pedigree.legend(studyPed2003$kinshipPedigree, 
                 location = "topleft", radius = 0.25)
-mtext("Reference Year: 1999", side = 3, line = 1)
+mtext("Reference Year: 2003", side = 3, line = 1)
 ```
 
-Looking at the pedigree above, we see that in 1999, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive (the pedigree member with IDs 6).  Referring to the 2017 pedigree, we see that both disease-affected individuals who were alive in 1999 died by 2017.  Additionally, we see that at age 48, twelve years after the pedigree was ascertained, the proband's sister (the pedigree member with ID 7) experienced onset of lymphoid cancer.
+Looking at the pedigree above, we see that in 2003, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive (the pedigree member with ID 3).  Referring to the 2017 pedigree, we see that the proband died five years after the pedigree was ascertained.  Additionally, we see that at age 53, ten years after the pedigree was ascertained, the proband's son (the pedigree member with ID 7) experienced onset of lymphoid cancer.
 
 
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `assign_affectedGen` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
