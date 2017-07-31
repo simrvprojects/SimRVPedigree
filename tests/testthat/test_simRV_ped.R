@@ -43,7 +43,9 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
                                      RVped$available == 1 &
                                      RVped$proband == 0)]
 
-  expect_gte(length(Oyears[which(Oyears <= 2015 & Oyears >= 1970)]), 1)
+  POyear <- RVped$onsetYr[RVped$proband == 1]
+
+  expect_gte(sum(Oyears <= POyear), 1)
 })
 
 

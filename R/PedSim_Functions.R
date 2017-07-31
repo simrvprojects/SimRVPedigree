@@ -467,10 +467,7 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
       # we check to see if it meets the required criteria for number of
       # affected.  If it does, we choose a proband from the available
       # candidates prior to sending it to the trim_ped function.
-      if( nrow(fam_ped) == 1 | sum(fam_ped$affected) < num_affected |
-          length(fam_ped$ID[which(fam_ped$onsetYr <= ascertain_span[2])]) < num_affected |
-          length(fam_ped$ID[which(fam_ped$onsetYr %in%
-                                  ascertain_span[1]:ascertain_span[2])]) < 1 ){
+      if( disqualify_ped(ped_file = fam_ped, num_affected, ascertain_span) ){
         d <- 0
       } else {
         fam_ped <- choose_proband(ped_file = fam_ped, num_affected, ascertain_span)
@@ -480,20 +477,15 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
 
     # Now that we have a full pedigree that meets our conditions, we trim the
     # pedigree and check to see that the trimmed pedigree STILL meets our
-    # conditions, if it does not we throw it out and start all over again.
+    # conditions, if it doesn't we throw it out and start all over again.
     if (missing(recall_probs)) {
       ascertained_ped <- trim_ped(ped_file = fam_ped)
     } else {
       ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
     }
 
-    Oyears <- ascertained_ped$onsetYr[which(ascertained_ped$affected == 1 &
-                                          ascertained_ped$available == 1 &
-                                          ascertained_ped$proband == 0)]
-
     #determine the number of available affected individuals
-    D <- ifelse(length(which(Oyears <= ascertain_span[[2]] &
-                               Oyears >= ascertain_span[[1]])) >= (num_affected - 1),
+    D <- ifelse(ascertain_trimmedPed(ped_file = ascertained_ped, num_affected),
                 1, 0)
   }
 
