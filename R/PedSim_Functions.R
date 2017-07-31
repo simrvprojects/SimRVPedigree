@@ -473,7 +473,5 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
   }
 
   #return original and trimmed pedigrees
-  my.return <- list(fam_ped, ascertained_ped)
-  names(my.return) <- c("full_ped", "ascertained_ped")
-  return(my.return)
+  return(list(full_ped = fam_ped, ascertained_ped = ascertained_ped))
 }
