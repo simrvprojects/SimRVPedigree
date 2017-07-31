@@ -73,7 +73,7 @@ new.hazard <- function(hazardDF, partition) {
   return(hazard(hazardDF, partition))
 }
 
-#' Constructor function of object of class \code{hazard}
+#' Constructor function for an object of class \code{hazard}
 #'
 #' @inheritParams new.hazard
 #'
