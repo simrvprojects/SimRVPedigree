@@ -79,7 +79,7 @@ is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs)
   # candidates prior to sending it to the trim_ped function.
   if( disqualify_ped(ped_file, num_affected, ascertain_span) ){
     ascertained <- FALSE
-    pedigree = ped_file
+    return_ped = ped_file
   } else {
     #choose a proband
     pro_ped <- choose_proband(ped_file, num_affected, ascertain_span)
@@ -94,11 +94,11 @@ is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs)
     }
 
     ascertained <- ascertain_trimmedPed(ped_file = ascertained_ped, num_affected)
-    pedigree = ascertained_ped
+    return_ped = ascertained_ped
   }
 
   return(list(ascertain = ascertained,
-              ped_file = pedigree))
+              ped_file = return_ped))
 }
 
 
