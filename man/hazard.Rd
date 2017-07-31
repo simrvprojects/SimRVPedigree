@@ -2,7 +2,7 @@
 % Please edit documentation in R/Hazard_object_functions.R
 \name{hazard}
 \alias{hazard}
-\title{Constructor function of object of class \code{hazard}}
+\title{Constructor function for an object of class \code{hazard}}
 \usage{
 hazard(hazardDF, partition)
 }
@@ -15,7 +15,7 @@ hazard(hazardDF, partition)
 an object of class \code{hazard}.
 }
 \description{
-Constructor function of object of class \code{hazard}
+Constructor function for an object of class \code{hazard}
 }
 \examples{
 my_HR <- hazard(partition = seq(0, 100, by = 1),
