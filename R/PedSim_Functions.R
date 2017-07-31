@@ -445,6 +445,10 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
   if(!missing(recall_probs)) {
     if (any(recall_probs > 1) | any(recall_probs < 0) ){
       stop ('recall probabilities must be between 0 and 1')
+    } else if (recall_probs != cummin(recall_probs)){
+      warning('Nondecreasing values specified for recall_probs')
+    } else if (recall_probs[1] != 1){
+      warning('recall_probs: First-degree relatives may not be recalled.')
     }
   }
 
