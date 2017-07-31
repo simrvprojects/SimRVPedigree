@@ -445,7 +445,7 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
   if(!missing(recall_probs)) {
     if (any(recall_probs > 1) | any(recall_probs < 0) ){
       stop ('recall probabilities must be between 0 and 1')
-    } else if (recall_probs != cummin(recall_probs)){
+    } else if (any(recall_probs != cummin(recall_probs))){
       warning('Nondecreasing values specified for recall_probs')
     } else if (recall_probs[1] != 1){
       warning('recall_probs: First-degree relatives may not be recalled.')
@@ -456,41 +456,20 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
   }
 
-  #generate the family pedigree, check to see that the untrimmed pedigree has
-  # the appropriate number of affected individuals, if so choose a proband
-  # and send to trim_ped
-  D <- 0
-  while(D == 0){
-    d <- 0
-    while( d == 0 ){
-      fam_ped <- sim_ped(hazard_rates, GRR, carrier_prob, FamID,
-                         founder_byears, stop_year,
-                         RVfounder, birth_range, NB_params)
+  ascertained <- FALSE
+  while(ascertained == FALSE){
+    #generate pedigree
+    fam_ped <- sim_ped(hazard_rates, GRR, carrier_prob, FamID,
+                       founder_byears, stop_year,
+                       RVfounder, birth_range, NB_params)
 
-      # prior to sending the simulated pedigree to the trim function,
-      # we check to see if it meets the required criteria for number of
-      # affected.  If it does, we choose a proband from the available
-      # candidates prior to sending it to the trim_ped function.
-      if( disqualify_ped(ped_file = fam_ped, num_affected, ascertain_span) ){
-        d <- 0
-      } else {
-        fam_ped <- choose_proband(ped_file = fam_ped, num_affected, ascertain_span)
-        d <- 1
-      }
-    }
+    #check to see if pedigree is ascertained
+    check_pedigree <- is_ascertained(ped_file = fam_ped, num_affected,
+                                     ascertain_span, recall_probs)
 
-    # Now that we have a full pedigree that meets our conditions, we trim the
-    # pedigree and check to see that the trimmed pedigree STILL meets our
-    # conditions, if it doesn't we throw it out and start all over again.
-    if (missing(recall_probs)) {
-      ascertained_ped <- trim_ped(ped_file = fam_ped)
-    } else {
-      ascertained_ped <- trim_ped(ped_file = fam_ped, recall_probs)
-    }
-
-    #determine the number of available affected individuals
-    D <- ifelse(ascertain_trimmedPed(ped_file = ascertained_ped, num_affected),
-                1, 0)
+    #store updated pedigree
+    ascertained <- check_pedigree[[1]]
+    ascertained_ped <- check_pedigree[[2]]
   }
 
   #return original and trimmed pedigrees
