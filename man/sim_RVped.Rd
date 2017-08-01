@@ -5,7 +5,7 @@
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
 sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
-  founder_byears, stop_year, recall_probs, RVfounder = "first",
+  founder_byears, stop_year, recall_probs, RVfounder = FALSE,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
@@ -27,7 +27,7 @@ sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
 
 \item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
+\item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
@@ -77,7 +77,7 @@ my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 set.seed(8008135)
 ex_RVped <- sim_RVped(hazard_rates = my_HR,
                       GRR = 50, carrier_prob = 0.002,
-                      RVfounder = "first",
+                      RVfounder = TRUE,
                       FamID = 1,
                       founder_byears = c(1900, 1910),
                       ascertain_span = c(1900, 2015),

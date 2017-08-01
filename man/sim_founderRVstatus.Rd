@@ -11,7 +11,7 @@ sim_founderRVstatus(GRR, carrier_prob, RVfounder, intro_RV)
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
+\item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
 \item{intro_RV}{Logical. If \code{intro_RV = TRUE} a founder has introduced a rare, causal variant to the pedigree, otherwise no RV has been introduced to the pedigree.}
 }

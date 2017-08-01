@@ -36,8 +36,8 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
 2. With respect to how the causal variant is introduced to the pedigree we allow users to choose from one of the following two assumptions:
-    + a. `'first'`: Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in [1].
-    + b. `'single'`: Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
+    + a. Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in [1].
+    + b. Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
     
 3. When the rare variant is present, we transmit it from parent to offspring according to Mendel's laws.
 
@@ -82,7 +82,7 @@ Optional arguments:
 
 9. `stop_year`: the last year of study.  If missing, the current year is used.
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
-11. `segregate_RV`: A logical variable indicating if we shoudl assume that all pedigrees segregate the rare variant.  When `segregate_RV = TRUE` all pedigrees will segregate the causal rare-variant.  However, when `segregate_RV = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `segregate_RV = FALSE` a simulated pedigree may be comprised entirely of sporadic cases.  By default, `segregate_RV = FALSE`.
+11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigre will segregate the causal rare-variant, which is originally introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may contain only sporadic cases.  By default, `RVfounder = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
 
@@ -175,7 +175,7 @@ ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
                       GRR = 10, carrier_prob = 0.002,
-                      RVfounder = "first",
+                      RVfounder = TRUE,
                       stop_year = 2017,
                       recall_probs = c(1),
                       founder_byears = c(1900, 1920),
@@ -451,7 +451,7 @@ RV_peds = foreach(i = seq(npeds),
                               num_affected = 2,
                               ascertain_span = c(1995, 2010),
                               GRR = 10, carrier_prob = 0.002,
-                              RVfounder = "first",
+                              RVfounder = TRUE,
                               stop_year = 2017,
                               recall_probs = c(1),
                               founder_byears = c(1900, 1920),

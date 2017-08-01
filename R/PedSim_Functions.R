@@ -242,12 +242,12 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 sim_ped = function(hazard_rates, GRR, carrier_prob,
                    FamID, founder_byears, stop_year,
-                   RVfounder = "first",
+                   RVfounder = FALSE,
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
 
-  if(!(RVfounder %in% c("first", "single"))){
-    stop ('Please set RV founder to "first" or "single".')
+  if(!(RVfounder %in% c(T, F))){
+    stop ('Please set RVfounder to TRUE or FALSE.')
   }
 
   if (carrier_prob <= 0 | carrier_prob >= 1){
@@ -339,7 +339,7 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
 #' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
 #' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.
-#' @param RVfounder String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.
+#' @param RVfounder Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
 #' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
@@ -372,7 +372,7 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
 #' set.seed(8008135)
 #' ex_RVped <- sim_RVped(hazard_rates = my_HR,
 #'                       GRR = 50, carrier_prob = 0.002,
-#'                       RVfounder = "first",
+#'                       RVfounder = TRUE,
 #'                       FamID = 1,
 #'                       founder_byears = c(1900, 1910),
 #'                       ascertain_span = c(1900, 2015),
@@ -417,12 +417,12 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
                      num_affected, ascertain_span,
                      FamID, founder_byears,
                      stop_year, recall_probs,
-                     RVfounder = "first",
+                     RVfounder = FALSE,
                      birth_range = c(18, 45),
                      NB_params = c(2, 4/7)){
 
-  if(!(RVfounder %in% c("first", "single"))){
-    stop ('Please set RV founder to "first" or "single".')
+  if(!(RVfounder %in% c(FALSE, TRUE))){
+    stop ('Please set RVfounder to TRUE or FALSE.')
   }
 
   if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){

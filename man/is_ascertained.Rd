@@ -32,7 +32,7 @@ set.seed(37)
 ex_ped <- sim_ped(hazard_rates = my_HR,
                   GRR = 50, carrier_prob = 0.002,
                   FamID = 1,
-                  RVfounder = "first",
+                  RVfounder = TRUE,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 

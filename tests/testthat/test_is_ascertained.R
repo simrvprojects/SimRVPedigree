@@ -2,7 +2,7 @@ context("is_ascertained")
 
 EXPed <- sim_RVped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                    GRR = 35, carrier_prob = 0.002,
-                   RVfounder = "first",
+                   RVfounder = TRUE,
                    FamID = 1,
                    num_affected = 2,
                    recall_probs = c(1),

@@ -16,7 +16,7 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
     d_locus <- c(0, 0)
     fRR <- 1
     intro_RV <- TRUE
-  } else if (RVfounder == "single" & intro_RV == FALSE){
+  } else if (RVfounder == FALSE & intro_RV == FALSE){
     # If single has been selected we allow the first founder, AND ONLY THE
     # FIRST FOUNDER, the opportunity to introduce 1 copy of the RV with
     # proportional to its carrier frequency in the population, and set RR and
@@ -25,15 +25,7 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
                       size = 2, replace = F)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
     intro_RV <- TRUE
-  } else if (RVfounder == "multiple"){
-    # If multiple has been specified we allow fouders to introduce the RV with
-    # probability proprotional to its allele frequency in the population, and
-    # set RR and update intro_RV appropriately
-    allele_freq <- 1 - sqrt(1 - carrier_prob)
-    d_locus <- ifelse(runif(2) <= allele_freq, 1, 0)
-    fRR <- ifelse(any(d_locus == 1), GRR, 1)
-    intro_RV <- FALSE
-  } else if (RVfounder == "first" & intro_RV == FALSE){
+  } else if (RVfounder == TRUE & intro_RV == FALSE){
     d_locus <- sample(x = c(0, 1), size = 2, replace = F)
     fRR <- GRR
     intro_RV <- TRUE

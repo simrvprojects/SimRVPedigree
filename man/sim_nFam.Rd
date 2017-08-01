@@ -24,7 +24,7 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, birth_range, NB_params,
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
+\item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
 \item{intro_RV}{Logical. If \code{intro_RV = TRUE}, then at least 1 founder has introduced the causal variant to the pedigree. If \code{intro_RV = FALSE} then the variant has not yet been introduced to the pedigree.}
 }

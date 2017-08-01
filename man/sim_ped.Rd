@@ -5,7 +5,7 @@
 \title{Simulate a pedigree}
 \usage{
 sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
-  RVfounder = "first", birth_range = c(18, 45), NB_params = c(2, 4/7))
+  RVfounder = FALSE, birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
@@ -20,7 +20,7 @@ sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
-\item{RVfounder}{String. \code{RVfounder} may take on one of two values: \code{'first'} or \code{'single'}.  By default, \code{RVfounder = 'first'} See details.}
+\item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 
