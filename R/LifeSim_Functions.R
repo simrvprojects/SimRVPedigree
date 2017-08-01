@@ -121,7 +121,6 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)
-#'
 #' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' # The following commands simulate all life events for an individual, who
@@ -155,6 +154,17 @@ sim_lifeEvents = function(hazard_rates, GRR, carrier_prob,
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
+  }
+
+  if (length(birth_range) != 2 |
+      birth_range[1] >= birth_range[2] |
+      birth_range[1] <= 0 |
+      birth_range[2] >= hazard_rates$partition[length(hazard_rates$partition)]){
+    stop ('Please provide appropriate values for birth_range.')
+  }
+
+  if (GRR <= 0) {
+    stop ('GRR must be greater than 0')
   }
 
   #initialize data frame to hold life events

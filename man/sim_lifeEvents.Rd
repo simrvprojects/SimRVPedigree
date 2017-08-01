@@ -52,7 +52,6 @@ We make the following assumptions regarding the simulation of waiting times:
 }
 \examples{
 data(AgeSpecific_Hazards)
-
 my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, who

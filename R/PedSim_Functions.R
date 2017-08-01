@@ -246,8 +246,18 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
                    birth_range = c(18, 45),
                    NB_params = c(2, 4/7)){
 
-  if(!(RVfounder %in% c("first", "single", "multiple"))){
+  if(!(RVfounder %in% c("first", "single"))){
     stop ('Please set RV founder to "first" or "single".')
+  }
+
+  if (carrier_prob <= 0 | carrier_prob >= 1){
+    stop ('carrier_prob must be a value between 0 and 1')
+  } else if (carrier_prob > 0.002) {
+    warning('carrier_prob > 0.002: sim_RVped is intended for simulating the transmission of rare variants.')
+  }
+
+  if(missing(stop_year)){
+    stop_year <- as.numeric(format(Sys.Date(),'%Y'))
   }
 
   #initialize a data frame to store all the necessary info for the ped file
@@ -419,26 +429,12 @@ sim_RVped = function(hazard_rates, GRR, carrier_prob,
     stop ('please provide appropriate values for ascertain_span')
   }
 
-  if (carrier_prob <= 0 | carrier_prob >= 1){
-    stop ('carrier_prob must be a value between 0 and 1')
-  } else if (carrier_prob > 0.002) {
-    warning('carrier_prob > 0.002: sim_RVped is intended for simulating the transmission of rare variants.')
-  }
 
   if (num_affected <= 0){
     stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use sim_ped.')
   }
 
-  if (length(birth_range) != 2 |
-      birth_range[1] >= birth_range[2] |
-      birth_range[1] <= 0 |
-      birth_range[2] >= hazard_rates$partition[length(hazard_rates$partition)]){
-    stop ('Please provide appropriate values for birth_range.')
-  }
-
-  if (GRR <= 0) {
-    stop ('GRR must be greater than 0')
-  } else if (GRR < 1){
+  if (GRR > 0 & GRR < 1){
     warning('Setting GRR < 1 can significantly increase computation time')
   }
 

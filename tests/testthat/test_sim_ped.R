@@ -1,7 +1,7 @@
 context("sim_ped")
 test_that("returns a single ped file dataframe", {
   expect_true(is.data.frame(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                                    GRR = 10, carrier_prob = 0.02,
+                                    GRR = 10, carrier_prob = 0.002,
                                     RVfounder = "first",
                                     FamID = 1,
                                     stop_year = 2015,
@@ -10,7 +10,7 @@ test_that("returns a single ped file dataframe", {
 
 test_that("pedigree always contains at least 1 person", {
   expect_true(nrow(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                           GRR = 10, carrier_prob = 0.02,
+                           GRR = 10, carrier_prob = 0.002,
                            RVfounder = "first",
                            FamID = 1, stop_year = 2015,
                            founder_byears = c(1900, 1905))) >= 1)
@@ -18,7 +18,7 @@ test_that("pedigree always contains at least 1 person", {
 
 test_that("Effects of RVfounder = 'first' ", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, carrier_prob = 0.05,
+                   GRR = 10, carrier_prob = 0.002,
                    RVfounder = 'first',
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
@@ -31,32 +31,20 @@ test_that("Effects of RVfounder = 'first' ", {
   expect_true(!any(exPed$DA1 + exPed$DA2 == 2))
 })
 
-test_that("Effects of RVfounder = 'multiple'", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
-                   GRR = 10, carrier_prob = 1,
-                   RVfounder = "multiple",
-                   FamID = 1, stop_year = 2015,
-                   founder_byears = c(1900, 1905))
-
-  #expect that every founder introduces causal variant
-  expect_equal(sum(exPed[which(is.na(exPed$dadID)), c(7, 8)]),
-               2*nrow(exPed[which(is.na(exPed$dadID)), ]))
-})
-
 test_that("If GRR = 1", {
   exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
                    GRR = 1, carrier_prob = 0.002,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))
 
-  #expect that every founder introduces causal variant
+  #expect that no founder introduce causal variant
   expect_true(!any(exPed[, c(7,8)] == 1))
 })
 
 test_that("issues error when hazard_rates is not a hazard object", {
   expect_error(sim_ped(hazard_rates = AgeSpecific_Hazards,
-                       GRR = 1, prob_causalRV = 1,
+                       GRR = 1, carrier_prob = 0.002,
                        FamID = 1, stop_year = 2015,
                        founder_byears = c(1900, 1905),
-                       single_founderEntry = T))
+                       RVfounder = "first"))
 })
