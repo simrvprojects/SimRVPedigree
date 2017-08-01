@@ -396,7 +396,8 @@ ped_info <- function(ped_file, ref_year){
                        "birthYr", "onsetYr", "deathYr",
                        "RR", "proband", "RVstatus"), colnames(ped_file))
 
-  affected_info <- ped_file[ped_file$affected == 1, keep_cols[!is.na(keep_cols)]]
+  affected_info <- ped_file[ped_file$affected == 1 & ped_file$available == 1,
+                            keep_cols[!is.na(keep_cols)]]
 
   if (any(!is.na(match(c("affected", "proband", "RVstatus"), colnames(ped_file))))) {
     affected_vrs = cbind(Affected = ped_file$affected,
