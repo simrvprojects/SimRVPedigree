@@ -14,7 +14,7 @@ disqualify_ped(ped_file, num_affected, ascertain_span)
 \item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
 }
 \value{
-Logical. If TRUE, pedigree will not be ascertained.
+Logical. If TRUE, pedigree is discarded.
 }
 \description{
 Initial checks to disqualify a pedigree from ascertainment.

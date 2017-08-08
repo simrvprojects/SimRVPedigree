@@ -2,13 +2,11 @@
 #'
 #' @inheritParams choose_proband
 #'
-#' @return Logical. If TRUE, pedigree will not be ascertained.
+#' @return Logical. If TRUE, pedigree is discarded.
 #' @keywords internal
 disqualify_ped <- function(ped_file, num_affected, ascertain_span){
-  nrow(ped_file) < num_affected | sum(ped_file$affected) < num_affected |
-    length(ped_file$ID[which(ped_file$onsetYr <= ascertain_span[2])]) < num_affected |
-    length(ped_file$ID[which(ped_file$onsetYr %in%
-                               ascertain_span[1]:ascertain_span[2])]) < 1
+  length(which(ped_file$onsetYr <= ascertain_span[2])) < num_affected |
+    length(which(ped_file$onsetYr %in% ascertain_span[1]:ascertain_span[2])) < 1
 }
 
 #' Check to see if a trimmed pedigree is ascertained.
@@ -18,21 +16,82 @@ disqualify_ped <- function(ped_file, num_affected, ascertain_span){
 #' @return Logical. If TRUE, pedigree is ascertained.
 #' @keywords internal
 ascertain_trimmedPed <- function(ped_file, num_affected){
-  #Gather the onset years for all remaining affecteds, and for the proband.
+  #Gather the onset years for all affecteds, and for the proband.
   #We need to ensure that at least num_affected - 1 were affected prior to
   #the proband for the pedigree to be ascertained.
   POyear <- ped_file$onsetYr[ped_file$proband == 1]
 
-  Oyears <- ped_file$onsetYr[which(ped_file$affected == 1 &
-                                     ped_file$available == 1 &
-                                     ped_file$proband == 0)]
-
+  Oyears <- ped_file$onsetYr[ped_file$affected == 1
+                             & ped_file$available == 1
+                             & ped_file$proband == 0]
 
   #determine the number of available affected individuals
   ascertained <- sum(Oyears <= POyear) >= (num_affected - 1)
 
   return(ascertained)
 }
+
+
+#' Determine if a previously ascertained pedigree meets new criteria.
+#'
+#' @inheritParams ped_info
+#' @inheritParams sim_RVped
+#' @param asc_ped Data.frame.  The previously ascertained pedigree. Optionally, asc_ped may contain ped_file information for the affected relatives only.
+#'
+#' @return Logical. If TRUE, pedigree is re-ascertained.
+#' @export
+#' @examples
+#' #Read in age-specific hazards
+#' data(AgeSpecific_Hazards)
+#'
+#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+#'
+#' #Simulate pedigree ascertained for multiple affected individuals
+#' set.seed(8008135)
+#' ex_ped <- sim_ped(hazard_rates = my_HR,
+#'                   GRR = 50, carrier_prob = 0.002,
+#'                   RVfounder = TRUE,
+#'                   FamID = 1,
+#'                   founder_byears = c(1900, 1910))
+#'
+#' head(ex_ped)
+#' Aped <- is_ascertained(ped_file = ex_ped,
+#'                        num_affected = 2,
+#'                        ascertain_span = c(2000, 2015),
+#'                        recall_probs = c(1, 1, 0.5, 0.25))
+#'
+#' Aped[[1]]
+#'
+#' Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), ]
+#'
+#' is_reAscertained(asc_ped = Aped[[2]],
+#'                  num_affected = 3,
+#'                  ref_year = 2012)
+#'
+#' is_reAscertained(asc_ped = Aped[[2]],
+#'                  num_affected = 3,
+#'                  ref_year = 2016)
+#'
+#' is_reAscertained(asc_ped = Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), -15],
+#'                  num_affected = 3,
+#'                  ref_year = 2016)
+#'
+is_reAscertained <- function(asc_ped, num_affected, ref_year){
+  if (!("proband" %in% colnames(asc_ped))) {
+    warning("Proband missing: is_reAscertained is intended for ascertained pedigrees.")
+  }
+  # Gather the onset years for all affecteds.
+  # Check to see if the pedigree had at least num_affected
+  # individuals at the selected ref_year.
+  Oyears <- asc_ped$onsetYr[asc_ped$affected == 1 & asc_ped$available == 1]
+
+
+  #determine the number of available affected individuals
+  ascertained <- sum(Oyears <= ref_year) >= num_affected
+
+  return(ascertained)
+}
+
 
 #' Determine if a pedigree is ascertained
 #'
