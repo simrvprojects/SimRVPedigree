@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -82,7 +82,7 @@ Optional arguments:
 
 9. `stop_year`: the last year of study.  If missing, the current year is used.
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
-11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigre will segregate the causal rare-variant, which is originally introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may contain only sporadic cases.  By default, `RVfounder = FALSE`.
+11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigre will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
 

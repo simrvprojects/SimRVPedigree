@@ -195,9 +195,14 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 #'
 #'
-#' By assumption, all pedigrees are segregating a rare variant, which is rare enough to have been introduced by exactly one founder.  \code{sim_ped} starts simulating the pedigree by generating the birth year for this founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after an individual has experienced disease onset, their waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population (i.e. the second column specified in \code{death_hazard}).  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of developing disease is \code{GRR}, according to a proportional hazards model. For all individuals who have not inherited the rare variant the relative-risk of disease onset is 1.  Any life events that occur after \code{stop_year} are censored.
+#' To introduce the rare variant to the pedigree, We allow users to choose from one of the following two assumptions:
+#' \enumerate{
+#' \item Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in Bureau (2014).
+#' \item Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
+#' }
+#' The \code{sim_ped} function starts simulating the pedigree by generating the birth year for the starting founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_lifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after disease onset, the waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population.  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of disease is \code{GRR}, according to a proportional hazards model.  The relative-risk of disease onset for individuals who have not inherited the causal variant is assumed to be 1.  Any life events that occur after \code{stop_year} are censored.
 #'
-#' The rare variant is transmitted to any offspring of the founder according to Mendel's laws, and the process of simulating life events is repeated for offspring, recursively, until no additional offspring are produced.
+#' When segregating in the pedigree, the rare variant is transmitted from parent to offspring according to Mendel's laws.  The process of simulating life events is repeated for any offspring that are produced before \code{stop_year}.
 #'
 #'
 #' @inheritParams sim_RVped
@@ -208,6 +213,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 #' @references OUR MANUSCRIPT
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
+#' @references Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson, Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi, Terri H. Beaty, and Ingo Ruczinski (2014). \emph{Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.} Bioinformatics; Vol. 30, No. 15, pp. 2189–2196.
 #'
 #' @section See Also:
 #' \code{\link{sim_RVped}}
@@ -318,7 +324,9 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
 #'
 #' \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
 #'
-#' When \code{RV_founder = 'first'}, all simulated pedigrees are segregating a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = 'single'} we simulate the starting founder's rare varaint status with probability \code{carrier_prob}.  When \code{RV_founder = 'single'} pedigrees may not segregate the genetic susceptibility variant.  We note that when \code{GRR = 1}, pedigrees do not segregate the rare variant regardless of the setting selected for \code{RVfounder}.  When the rare variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws
+#' When \code{RV_founder = TRUE}, all simulated pedigrees will segregate a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = FALSE} we simulate the starting founder's causal variant status with probability \code{carrier_prob}.  When \code{RV_founder = FALSE} pedigrees may not segregate the genetic susceptibility variant.  The default selection is \code{RV_founder = FALSE}.  Additionally, we note that \code{SimRVPedigree} is intended for rare causal variants; users will recieve a warning if \code{carrier_prob > 0.002}.
+#'
+#' We note that when \code{GRR = 1}, pedigrees do not segregate the causal variant regardless of the setting selected for \code{RVfounder}.  When the causal variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws.
 #'
 #' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_lifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 #'
