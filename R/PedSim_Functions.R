@@ -316,6 +316,8 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
     re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
   }
 
+  rownames(fam_ped) <- NULL
+
   return(fam_ped[, c(1:14)])
 }
 
