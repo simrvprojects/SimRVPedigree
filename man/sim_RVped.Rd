@@ -9,7 +9,7 @@ sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
@@ -73,7 +73,7 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 #Read in age-specific hazards
 data(AgeSpecific_Hazards)
 
-my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(8008135)

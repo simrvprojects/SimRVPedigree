@@ -8,7 +8,7 @@ sim_ped(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
   RVfounder = FALSE, birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
-\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
@@ -50,7 +50,7 @@ When segregating in the pedigree, the rare variant is transmitted from parent to
 \examples{
 data(AgeSpecific_Hazards)
 
-my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate a random pedigree
 set.seed(22)

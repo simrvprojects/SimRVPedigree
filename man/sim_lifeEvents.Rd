@@ -8,7 +8,7 @@ sim_lifeEvents(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
   birth_range, NB_params)
 }
 \arguments{
-\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
 
@@ -52,7 +52,7 @@ We make the following assumptions regarding the simulation of waiting times:
 }
 \examples{
 data(AgeSpecific_Hazards)
-my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, who
 # has NOT inherited a causal variant, born in 1900.  From the output, this

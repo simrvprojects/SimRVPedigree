@@ -121,7 +121,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)
-#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' # The following commands simulate all life events for an individual, who
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this

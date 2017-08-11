@@ -226,8 +226,8 @@ assign_affectedGen = function(ped_file){
 #' #Read in example pedigree to trim
 #' data(AgeSpecific_Hazards)
 #'
-#' haz_obj <- new.hazard(partition = seq(0, 100, by = 1),
-#'                       hazardDF = AgeSpecific_Hazards)
+#' haz_obj <- hazard(partition = seq(0, 100, by = 1),
+#'                   hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a pedigree ascertained for multiple affecteds
 #' set.seed(3)

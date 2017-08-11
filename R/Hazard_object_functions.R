@@ -1,6 +1,6 @@
 #' Create an object of class hazard.
 #'
-#' Create a new hazard object for input to \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_lifeEvents}}.
+#' Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_lifeEvents}} functions.
 #'
 #' The data frame supplied as \code{hazardDF} must contain 3 columns that meet the following criteria:
 #' \describe{
@@ -24,19 +24,19 @@
 #' nrow(AgeSpecific_Hazards)
 #'
 #' my_part = seq(0, 100, by = 1)
-#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards,
-#'                     partition = my_part)
+#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards,
+#'                 partition = my_part)
 #'
 #' class(my_HR)
 #' head(my_HR[[1]])
 #' my_HR[[2]]
 #'
 #'
-#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #' class(my_HR)
 #' my_HR[[2]]
 #'
-new.hazard <- function(hazardDF, partition) {
+hazard <- function(hazardDF, partition) {
   # Set up a new object of class Hazard
 
   if(missing(partition)){
@@ -90,24 +90,6 @@ new.hazard <- function(hazardDF, partition) {
             column 3 = age-specific hazard rate of death in the AFFECTED population")
   }
 
-  # Return Hazard object with the user-supplied hazard rates and partition
-  return(hazard(hazardDF, partition))
-}
-
-#' Constructor function for an object of class \code{hazard}
-#'
-#' @inheritParams new.hazard
-#'
-#' @return an object of class \code{hazard}.
-#' @export
-#'
-#' @examples
-#' data(AgeSpecific_Hazards)
-#' my_HR <- hazard(partition = seq(0, 100, by = 1),
-#'                 hazardDF = AgeSpecific_Hazards)
-#' class(my_HR)
-#'
-hazard <- function(hazardDF, partition) {
   obj <- list(hazardDF = hazardDF,
               partition = partition)
   class(obj) <- "hazard"
@@ -125,13 +107,8 @@ is.hazard <- function(x) {
   return(inherits(x, "hazard"))
 }
 
-#' Prints hazard object.
-#'
-#' Prints \code{\link{hazard}} object.
-#'
-#' @param x hazard object
 #' @export
-print.hazard <- function(x) {
+print.hazard <- function(x, ...) {
   cat("Hazard object with age-specific hazard rates spanning from age",
       x$partition[1], "to age",  x$partition[length(x$partition)])
   cat("\n")

@@ -138,8 +138,8 @@ Looking at the output above, we can see that the `AgeSpecific_Hazards` data set,
 age_part <- seq(0, 100, by = 1)
 
 #create hazard object
-LC_hazard <- new.hazard(partition = age_part,
-                        hazardDF = AgeSpecific_Hazards)
+LC_hazard <- hazard(partition = age_part,
+                    hazardDF = AgeSpecific_Hazards)
 ```
 
 Let's quickly plot the age-specific hazard rates against the ages they apply to.

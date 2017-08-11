@@ -25,7 +25,7 @@ Intended priamrily as an internal function, \code{is_ascertained} checks to see 
 }
 \examples{
 data(AgeSpecific_Hazards)
-my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate a random pedigree
 set.seed(37)

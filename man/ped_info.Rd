@@ -16,7 +16,7 @@ A list containing the following:
 
 \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
 
-\code{affected_info} data.frame.  Information for the affected relatives only.
+\code{affected_info} data.frame.  Information for affected relatives only.
 
 \code{kinshipMat} The kinship matrix for the pedigree (see kinship2 package).
 

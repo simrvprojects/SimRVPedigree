@@ -1,6 +1,6 @@
 context("sim_ped")
 test_that("returns a single ped file dataframe", {
-  expect_true(is.data.frame(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  expect_true(is.data.frame(sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                                     GRR = 10, carrier_prob = 0.002,
                                     RVfounder = TRUE,
                                     FamID = 1,
@@ -9,7 +9,7 @@ test_that("returns a single ped file dataframe", {
 })
 
 test_that("pedigree always contains at least 1 person", {
-  expect_true(nrow(sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  expect_true(nrow(sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                            GRR = 10, carrier_prob = 0.002,
                            RVfounder = TRUE,
                            FamID = 1, stop_year = 2015,
@@ -17,7 +17,7 @@ test_that("pedigree always contains at least 1 person", {
 })
 
 test_that("Effects of RVfounder = 'first' ", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 10, carrier_prob = 0.002,
                    RVfounder = TRUE,
                    FamID = 1, stop_year = 2015,
@@ -32,7 +32,7 @@ test_that("Effects of RVfounder = 'first' ", {
 })
 
 test_that("If GRR = 1", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 1, carrier_prob = 0.002,
                    FamID = 1, stop_year = 2015,
                    founder_byears = c(1900, 1905))

@@ -1,7 +1,7 @@
 context("disqualify_ped")
 
 test_that("peds with fewer than num_affected relatives or affecteds are discarded", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                     GRR = 50, carrier_prob = 0.002,
                    RVfounder = TRUE, FamID = 1,
                    founder_byears = c(1900, 1910))
@@ -24,7 +24,7 @@ test_that("peds with fewer than num_affected relatives or affecteds are discarde
 
 
 test_that("pedigrees must have members with appropriate onset years to be ascertained", {
-  exPed <- sim_ped(hazard_rates = new.hazard(AgeSpecific_Hazards),
+  exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 50, carrier_prob = 0.002,
                    RVfounder = TRUE, FamID = 1,
                    founder_byears = c(1900, 1910))

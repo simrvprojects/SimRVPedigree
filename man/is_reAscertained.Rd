@@ -23,7 +23,7 @@ Determine if a previously ascertained pedigree meets new criteria.
 #Read in age-specific hazards
 data(AgeSpecific_Hazards)
 
-my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(8008135)

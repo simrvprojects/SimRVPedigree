@@ -14,7 +14,7 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, birth_range, NB_params,
 
 \item{last_id}{Numeric.  The last id used in the pedigree.}
 
-\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{new.hazard}}.}
+\item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Hazard_object_functions.R
 \name{hazard}
 \alias{hazard}
-\title{Constructor function for an object of class \code{hazard}}
+\title{Create an object of class hazard.}
 \usage{
 hazard(hazardDF, partition)
 }
@@ -12,15 +12,38 @@ hazard(hazardDF, partition)
 \item{partition}{Numeric vector. Optional. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.  See details.}
 }
 \value{
-an object of class \code{hazard}.
+An object of class hazard.
 }
 \description{
-Constructor function for an object of class \code{hazard}
+Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_lifeEvents}} functions.
+}
+\details{
+The data frame supplied as \code{hazardDF} must contain 3 columns that meet the following criteria:
+\describe{
+ \item{column 1:}{age-specific hazard rates of \emph{disease} for the population of interest}
+ \item{column 2:}{age-specific hazard rates of \emph{death} for the \strong{unaffected} population.  If the disease of interest is sufficiently rare, so that death by the disease is rare, the user may choose to use the population, age-specific, hazard rates of death instead.}
+ \item{column 3:}{age-specific hazard rates of \emph{death} for the \strong{affected} population.}
+}
+
+Users must provide \code{partition} in years; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must be valid for all of the age-specific hazard rates in \code{hazardDF}.
 }
 \examples{
 data(AgeSpecific_Hazards)
-my_HR <- hazard(partition = seq(0, 100, by = 1),
-                hazardDF = AgeSpecific_Hazards)
+
+head(AgeSpecific_Hazards)
+nrow(AgeSpecific_Hazards)
+
+my_part = seq(0, 100, by = 1)
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards,
+                partition = my_part)
+
 class(my_HR)
+head(my_HR[[1]])
+my_HR[[2]]
+
+
+my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
+class(my_HR)
+my_HR[[2]]
 
 }

@@ -221,7 +221,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a random pedigree
 #' set.seed(22)
@@ -344,7 +344,7 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
 #'
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
 #'
-#' @param hazard_rates An object of class \code{hazard}, created by \code{\link{new.hazard}}.
+#' @param hazard_rates An object of class \code{hazard}, created by \code{\link{hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
 #' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.
 #' @param RVfounder Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.
@@ -374,7 +374,7 @@ sim_ped = function(hazard_rates, GRR, carrier_prob,
 #' #Read in age-specific hazards
 #' data(AgeSpecific_Hazards)
 #'
-#' my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards)
+#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(8008135)
