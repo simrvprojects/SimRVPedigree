@@ -25,7 +25,7 @@ The data frame supplied as \code{hazardDF} must contain 3 columns that meet the 
  \item{column 3:}{age-specific hazard rates of \emph{death} for the \strong{affected} population.}
 }
 
-We expect that users provide \code{partition} in year units; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must be a valid parition for each of the age-specific hazard rates in \code{hazardDF}.
+Users must provide \code{partition} in years; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must be valid for all of the age-specific hazard rates in \code{hazardDF}.
 }
 \examples{
 data(AgeSpecific_Hazards)
@@ -36,6 +36,7 @@ nrow(AgeSpecific_Hazards)
 my_part = seq(0, 100, by = 1)
 my_HR <- new.hazard(hazardDF = AgeSpecific_Hazards,
                     partition = my_part)
+
 class(my_HR)
 head(my_HR[[1]])
 my_HR[[2]]

@@ -350,7 +350,7 @@ censor_ped = function(ped_file, censor_year){
 #'
 #' @return  A list containing the following:
 #' @return \code{link_format} data.frame. The pedigree in linkage format; i.e. containing only the fields: FamID, ID, dadID, momID, affected.
-#' @return \code{affected_info} data.frame.  Information for the affected relatives only.
+#' @return \code{affected_info} data.frame.  Information for affected relatives only.
 #' @return \code{kinshipMat} The kinship matrix for the pedigree (see kinship2 package).
 #' @return \code{kinshipPedigree} An object of class pedigree (see kinship2 package).  A pedigree object which can be plotted using R's plot function.  See example.
 #' @return \code{pedLabs} ID labels which can be fed to kinship2 plotting function.  See example.
