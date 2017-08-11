@@ -18,7 +18,7 @@ An object of class hazard.
 Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_lifeEvents}} functions.
 }
 \details{
-The data frame supplied as \code{hazardDF} must contain 3 columns that meet the following criteria:
+\code{hazardDF} must contain 3 columns that meet the following criteria:
 \describe{
  \item{column 1:}{age-specific hazard rates of \emph{disease} for the population of interest}
  \item{column 2:}{age-specific hazard rates of \emph{death} for the \strong{unaffected} population.  If the disease of interest is sufficiently rare, so that death by the disease is rare, the user may choose to use the population, age-specific, hazard rates of death instead.}
@@ -37,6 +37,7 @@ my_part = seq(0, 100, by = 1)
 my_HR <- hazard(hazardDF = AgeSpecific_Hazards,
                 partition = my_part)
 
+my_HR
 class(my_HR)
 head(my_HR[[1]])
 my_HR[[2]]
