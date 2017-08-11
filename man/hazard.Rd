@@ -7,9 +7,9 @@
 hazard(hazardDF, partition)
 }
 \arguments{
-\item{hazardDF}{Data.frame. Column 1 should specify the age-specific hazard rate for individuals with no genetic predisposition to the disease, column 2 should specify the age-specific hazard rate for death in the unaffected population, and column 3 should specify the age-specific hazard rate for death in the affected population.}
+\item{hazardDF}{Data.frame. Column 1 specifies the age-specific hazard rate of \emph{disease} in the population of interest, column 2 specifies the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and column 3 specifies the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.}
 
-\item{partition}{Numeric vector. Optional. The partition of ages over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.}
+\item{partition}{Numeric vector. Optional. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.  See details.}
 }
 \value{
 an object of class \code{hazard}.
@@ -18,6 +18,7 @@ an object of class \code{hazard}.
 Constructor function for an object of class \code{hazard}
 }
 \examples{
+data(AgeSpecific_Hazards)
 my_HR <- hazard(partition = seq(0, 100, by = 1),
                 hazardDF = AgeSpecific_Hazards)
 class(my_HR)
