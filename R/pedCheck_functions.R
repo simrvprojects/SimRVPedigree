@@ -15,7 +15,8 @@ disqualify_ped <- function(ped_file, num_affected, ascertain_span){
 #'
 #' @return Logical. If TRUE, pedigree is ascertained.
 #' @keywords internal
-ascertain_trimmedPed <- function(ped_file, num_affected){
+ascertainTrim_ped <- function(ped_file, num_affected){
+
   #Gather the onset years for all affecteds, and for the proband.
   #We need to ensure that at least num_affected - 1 were affected prior to
   #the proband for the pedigree to be ascertained.
@@ -34,10 +35,9 @@ ascertain_trimmedPed <- function(ped_file, num_affected){
 
 #' Determine if a previously ascertained pedigree meets new criteria.
 #'
-#' @inheritParams ped_info
 #' @inheritParams sim_RVped
 #' @param asc_ped Data.frame.  The previously ascertained pedigree. Optionally, asc_ped may contain ped_file information for the affected relatives only.
-#'
+#' @param ref_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #' @return Logical. If TRUE, pedigree is re-ascertained.
 #' @export
 #' @examples
@@ -54,7 +54,7 @@ ascertain_trimmedPed <- function(ped_file, num_affected){
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910))
 #'
-#' head(ex_ped)
+#' head(ex_ped, n = 3)
 #' Aped <- is_ascertained(ped_file = ex_ped,
 #'                        num_affected = 2,
 #'                        ascertain_span = c(2000, 2015),
@@ -72,11 +72,12 @@ ascertain_trimmedPed <- function(ped_file, num_affected){
 #'                  num_affected = 3,
 #'                  ref_year = 2016)
 #'
-#' is_reAscertained(asc_ped = Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), -15],
-#'                  num_affected = 3,
-#'                  ref_year = 2016)
-#'
 is_reAscertained <- function(asc_ped, num_affected, ref_year){
+
+  if (!is.ped(asc_ped)) {
+    stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
+  }
+
   if (!("proband" %in% colnames(asc_ped))) {
     warning("Proband missing: is_reAscertained is intended for ascertained pedigrees.")
   }
@@ -97,7 +98,7 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 #'
 #' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
 #'
-#' @inheritParams trim_ped
+#' @inheritParams trim.ped
 #' @inheritParams sim_RVped
 #'
 #' @return  A list containing the following data frames:
@@ -109,7 +110,7 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 #' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a random pedigree
-#' set.seed(37)
+#' set.seed(2)
 #' ex_ped <- sim_ped(hazard_rates = my_HR,
 #'                   GRR = 50, carrier_prob = 0.002,
 #'                   FamID = 1,
@@ -121,21 +122,21 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 #' is_ascertained(ped_file = ex_ped,
 #'                num_affected = 2,
 #'                ascertain_span = c(2000, 2015),
-#'                recall_probs = c(1, 1, 0.5, 0.25))
+#'                recall_probs = c(1, 1, 0.5, 0.25))[[1]]
 #'
 #' data(EgPeds)
 #' EgPeds[EgPeds$FamID == 1, ]
-#' is_ascertained(ped_file = EgPeds[EgPeds$FamID == 1, -15],
+#' is_ascertained(ped_file = ped(EgPeds[EgPeds$FamID == 1, -15]),
 #'                num_affected = 2,
 #'                ascertain_span = c(2000, 2015),
-#'                recall_probs = c(1))
+#'                recall_probs = c(1))[[1]]
 #'
 is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs){
 
   # prior to sending the simulated pedigree to the trim function,
   # we check to see if it meets the required criteria for number of
   # affected.  If it does, we choose a proband from the available
-  # candidates prior to sending it to the trim_ped function.
+  # candidates prior to sending it to the trim.ped function.
   if( disqualify_ped(ped_file, num_affected, ascertain_span) ){
     ascertained <- FALSE
     return_ped = ped_file
@@ -147,12 +148,12 @@ is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs)
     # pedigree and check to see that the trimmed pedigree STILL meets our
     # conditions, we then update ascertained appropriately.
     if (missing(recall_probs)) {
-      ascertained_ped <- trim_ped(ped_file = pro_ped)
+      ascertained_ped <- trim.ped(ped_file = pro_ped)
     } else {
-      ascertained_ped <- trim_ped(ped_file = pro_ped, recall_probs)
+      ascertained_ped <- trim.ped(ped_file = pro_ped, recall_probs)
     }
 
-    ascertained <- ascertain_trimmedPed(ped_file = ascertained_ped, num_affected)
+    ascertained <- ascertainTrim_ped(ped_file = ascertained_ped, num_affected)
     return_ped = ascertained_ped
   }
 
@@ -161,15 +162,15 @@ is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs)
 }
 
 
-#' Checks ped_file input for expected information.
+#' Checks ped_file for expected information, used before converting to ped object.
 #'
-#' @inheritParams trim_ped
+#' @param ped_file data.frame The pedigree in data frame format.
 #'
 #' @keywords internal
 #'
 check_ped <- function(ped_file){
   if (class(ped_file) != "data.frame") {
-    stop("please provide a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected")
+    stop("ped_file must be a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected")
   }
 
 

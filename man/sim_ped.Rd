@@ -60,20 +60,8 @@ ex_ped <- sim_ped(hazard_rates = my_HR,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 
-#Plot pedigree with the kinship2 package
-library(kinship2)
-
-#Define pedigree and pass to plot function
-RV_status <- ex_ped$DA1 + ex_ped$DA2
-Affected  <- ex_ped$affected
-
-ex_pedigree <- pedigree(id = ex_ped$ID,
-                        dadid = ex_ped$dadID,
-                        momid = ex_ped$momID,
-                        sex = ex_ped$sex + 1,
-                        affected = cbind(Affected, RV_status))
-plot(ex_pedigree)
-pedigree.legend(ex_pedigree, location = "bottomleft",  radius = 0.25)
+ex_ped
+summary(ex_ped)
 
 }
 \references{

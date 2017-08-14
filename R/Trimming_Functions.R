@@ -1,6 +1,6 @@
 #' Trim pedigree based on proband recall
 #'
-#' Primarily intended as an internal function, \code{trim_ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
+#' Primarily intended as an internal function, \code{trim.ped} chooses a proband and trims relatives based on the proband's probability of recalling his or her relatives.
 #'
 #' By default \code{recall_probs} is four times the kinship coefficient, as defined by Thompson (see references), between the proband and the probands relative, which results in a recall probability of \eqn{2^{-(n-1)}} for a relative of degree \eqn{n}. Alternatively, the user may specify a list of recall probabilities of length \eqn{l > 0}, in which case the first \emph{l-1} items in \code{recall_probs} are the respective proband recall probabilities for relatives of degree \emph{1, 2, ..., l-1}, and the \emph{l}th item in \code{recall_probs} is the proband's recall probability for all relatives of degree \strong{\emph{l} or greater}.  For example if \code{recall_probs = c(1)} all relatives will be recalled by the proband with probability 1.
 #'
@@ -15,7 +15,7 @@
 #'   \item RR = NA
 #' }
 #'
-#' Users who wish to trim pedigrees not been simulated by \code{\link{sim_RVped}} or \code{\link{sim_ped}} must ensure that the pedigree, \code{ped_file}, supplied to \code{trim_ped} contains the following variables for each pedigree member:
+#' Users who wish to trim pedigrees not been simulated by \code{\link{sim_RVped}} or \code{\link{sim_ped}} must ensure that the pedigree, \code{ped_file}, supplied to \code{trim.ped} contains the following variables for each pedigree member:
 #'
 #' \enumerate{
 #' \item \code{ID}: an identification number.
@@ -46,25 +46,19 @@
 #' @examples
 #' #Read in example pedigree to trim
 #' data(EgPeds)
+#' egPeds <- ped(EgPeds)
 #'
 #' #plot example_ped using kinship2
+#' ex_pedigree <- ped2pedigree(egPeds)
+#'
 #' library(kinship2)
-#' ex_pedigree <- pedigree(id = EgPeds$ID,
-#'                         dadid = EgPeds$dadID,
-#'                         momid = EgPeds$momID,
-#'                         sex = (EgPeds$sex + 1),
-#'                         affected = cbind(Affected = EgPeds$affected,
-#'                                          Proband = EgPeds$proband,
-#'                                          RV_status = EgPeds$DA1 +
-#'                                                      EgPeds$DA2),
-#'                         famid = EgPeds$FamID)['1']
-#' plot(ex_pedigree)
-#' pedigree.legend(ex_pedigree, location = "topleft",  radius = 0.25)
+#' plot(ex_pedigree['1'])
+#' pedigree.legend(ex_pedigree['1'], location = "topleft",  radius = 0.25)
 #' mtext("Original Pedigree", side = 3, line = 2)
 #'
 #'
 #' ## Trim pedigree examples
-#' #illustrate the effects of various recall_probs settings
+#' # Illustrate the effect of various settings for recall_probs
 #' Recall_Probabilities <- list(c(1),
 #'                              c(1, 0),
 #'                              c(1, 0.75, 0.5),
@@ -74,18 +68,11 @@
 #' for (k in 1:length(Recall_Probabilities)) {
 #'    set.seed(2)
 #'    #trim pedigree
-#'    TrimPed <- trim_ped(ped_file = EgPeds[which(EgPeds$FamID == 1), ],
+#'    TrimPed <- trim.ped(ped_file = egPeds[egPeds$FamID == 1, ],
 #'                        recall_probs = Recall_Probabilities[[k]])
 #'
 #'    #plot trimmed pedigree
-#'    Tped <- pedigree(id = TrimPed$ID,
-#'                     dadid = TrimPed$dadID,
-#'                     momid = TrimPed$momID,
-#'                     sex = (TrimPed$sex + 1),
-#'                     affected = cbind(Affected = TrimPed$affected,
-#'                                      Proband = TrimPed$proband,
-#'                                      RV_status = TrimPed$DA1 + TrimPed$DA2),
-#'                     famid = TrimPed$FamID)['1']
+#'    Tped <- ped2pedigree(TrimPed)
 #'
 #'    plot(Tped)
 #'    pedigree.legend(Tped, location = "topleft",  radius = 0.25)
@@ -95,7 +82,11 @@
 #' }
 #'
 #'
-trim_ped = function(ped_file, recall_probs){
+trim.ped = function(ped_file, recall_probs){
+
+  if (!is.ped(ped_file)) {
+    stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
+  }
 
   #issue error message if proband variable not supplied with single proband selected.
   if (!("proband" %in% colnames(ped_file))) {

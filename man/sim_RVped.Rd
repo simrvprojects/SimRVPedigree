@@ -36,9 +36,9 @@ sim_RVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
 \value{
 A list containing the following data frames:
 
-\code{full_ped} The full pedigree, prior to proband selection and trimming.
+\item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
 
-\code{ascertained_ped} The ascertained pedigree, with proband selected and trimmed according to proband recall probability.
+\item{\code{ascertained_ped} }{The ascertained pedigree, with proband selected and trimmed according to proband recall probability.  See details.}
 }
 \description{
 \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
@@ -66,7 +66,7 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 }
 \section{See Also}{
 
-\code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{sim_lifeEvents}}
+\code{\link{sim_ped}}, \code{\link{trim.ped}}, \code{\link{sim_lifeEvents}}
 }
 
 \examples{
@@ -87,37 +87,27 @@ ex_RVped <- sim_RVped(hazard_rates = my_HR,
                       recall_probs = c(1, 1, 0.5, 0.25))
 
 
-#Plot ex_RVped pedigrees using the kinship2 package
+# Original pedigree prior to proband selection and trimming
+summary(ex_RVped[[1]])
+
+# The ascertained pedigree
+summary(ex_RVped[[2]])
+
+
+# Plot ex_RVped pedigrees using the ped2pedigree function
+# and kinship2's plot and pedigree.legend functions
+
+# Convert ped objects to kinship2 pedigree objects
+Orig_RVped <- ped2pedigree(ex_RVped[[1]])
+Asc_RVped <- ped2pedigree(ex_RVped[[2]])
+
+# Use kinship2 functions
 library(kinship2)
+plot(Orig_RVped)
+pedigree.legend(Orig_RVped, location = "topleft",  radius = 0.25)
 
-#Define pedigree object for full pedigree, i.e. pedigree prior to trimming
-FullRVped <- pedigree(id = ex_RVped[[1]]$ID,
-                        dadid = ex_RVped[[1]]$dadID,
-                        momid = ex_RVped[[1]]$momID,
-                        sex = (ex_RVped[[1]]$sex + 1),
-                        affected = cbind(Affected = ex_RVped[[1]]$affected,
-                                         RV_status = ex_RVped[[1]]$DA1 +
-                                                     ex_RVped[[1]]$DA2),
-                        famid = ex_RVped[[1]]$FamID)
-
-#plot pedigree and legend
-plot(FullRVped['1'])
-pedigree.legend(FullRVped, location = "topleft",  radius = 0.25)
-
-
-#Define pedigree object for trimmed pedigree, i.e, pedigree with
-# proband selected and relatives trimmed
-TrimRVped <- pedigree(id = ex_RVped[[2]]$ID,
-                       dadid = ex_RVped[[2]]$dadID,
-                       momid = ex_RVped[[2]]$momID,
-                       sex = (ex_RVped[[2]]$sex + 1),
-                       affected = cbind(Affected = ex_RVped[[2]]$affected,
-                                        Proband = ex_RVped[[2]]$proband,
-                                        RV_status = ex_RVped[[2]]$DA1 +
-                                                    ex_RVped[[2]]$DA2),
-                       famid = ex_RVped[[2]]$FamID)['1']
-plot(TrimRVped)
-pedigree.legend(TrimRVped, location = "topleft",  radius = 0.25)
+plot(Asc_RVped)
+pedigree.legend(Asc_RVped, location = "topleft",  radius = 0.25)
 
 
 }

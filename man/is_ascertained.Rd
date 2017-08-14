@@ -28,7 +28,7 @@ data(AgeSpecific_Hazards)
 my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate a random pedigree
-set.seed(37)
+set.seed(2)
 ex_ped <- sim_ped(hazard_rates = my_HR,
                   GRR = 50, carrier_prob = 0.002,
                   FamID = 1,
@@ -40,13 +40,13 @@ ex_ped
 is_ascertained(ped_file = ex_ped,
                num_affected = 2,
                ascertain_span = c(2000, 2015),
-               recall_probs = c(1, 1, 0.5, 0.25))
+               recall_probs = c(1, 1, 0.5, 0.25))[[1]]
 
 data(EgPeds)
 EgPeds[EgPeds$FamID == 1, ]
-is_ascertained(ped_file = EgPeds[EgPeds$FamID == 1, -15],
+is_ascertained(ped_file = ped(EgPeds[EgPeds$FamID == 1, -15]),
                num_affected = 2,
                ascertain_span = c(2000, 2015),
-               recall_probs = c(1))
+               recall_probs = c(1))[[1]]
 
 }

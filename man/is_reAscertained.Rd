@@ -33,7 +33,7 @@ ex_ped <- sim_ped(hazard_rates = my_HR,
                   FamID = 1,
                   founder_byears = c(1900, 1910))
 
-head(ex_ped)
+head(ex_ped, n = 3)
 Aped <- is_ascertained(ped_file = ex_ped,
                        num_affected = 2,
                        ascertain_span = c(2000, 2015),
@@ -48,10 +48,6 @@ is_reAscertained(asc_ped = Aped[[2]],
                  ref_year = 2012)
 
 is_reAscertained(asc_ped = Aped[[2]],
-                 num_affected = 3,
-                 ref_year = 2016)
-
-is_reAscertained(asc_ped = Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), -15],
                  num_affected = 3,
                  ref_year = 2016)
 
