@@ -126,7 +126,7 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 #'
 #' data(EgPeds)
 #' EgPeds[EgPeds$FamID == 1, ]
-#' is_ascertained(ped_file = ped(EgPeds[EgPeds$FamID == 1, -15]),
+#' is_ascertained(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
 #'                num_affected = 2,
 #'                ascertain_span = c(2000, 2015),
 #'                recall_probs = c(1))[[1]]

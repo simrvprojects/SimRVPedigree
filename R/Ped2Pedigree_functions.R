@@ -1,13 +1,13 @@
-#' Convert a ped object to a kinship2 pedigree object
+#' Create a kinship2 pedigree structure from an object of class ped
 #'
-#' Convert a SimRVPedigree ped object to a kinship 2 pedigree object
+#' Create a kinship2 pedigree structure from an object of class ped
 #'
 #' @param x A ped object.
 #'
-#' @return A pedigree object.  See ?kinship2::pedigree for details.
+#' @return A pedigree object.  See \code{\link{pedigree}} for details.
 #' @importFrom kinship2 pedigree
 #' @export
-#'
+#' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 #' @examples
 #' data(EgPeds)
 #'
@@ -96,9 +96,9 @@ ped2pedigree <- function(x){
 #' @param x An object of class ped.
 #' @param ref_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #'
-#' @return A list of labels that can be used with kinship2's plot function.
+#' @return A list of labels that can be used with kinship2's plot function. See \code{\link{plot.pedigree}} for details.
 #' @export
-#'
+#' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 #' @examples
 #' data(EgPeds)
 #'
@@ -115,6 +115,7 @@ ped2pedigree <- function(x){
 #' plot(kinPed,
 #'      id = kinLabs,
 #'      mar = c(3, 3, 4, 3) + 0.1)
+#' pedigree.legend(kinPed, location = "topleft", radius = 0.2)
 #'
 #'
 #' AllPeds = new.ped(EgPeds)
@@ -131,6 +132,7 @@ ped2pedigree <- function(x){
 #' plot(kinPed_multi['4'],
 #'      id = kinLabs_multi[AllPeds$FamID == 4],
 #'      mar = c(3, 3, 4, 3) + 0.1)
+#' pedigree.legend(kinPed['4'], location = "topleft", radius = 0.2)
 #'
 #'
 pedigreeLabels <- function(x, ref_year){

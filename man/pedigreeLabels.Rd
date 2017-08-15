@@ -12,7 +12,7 @@ pedigreeLabels(x, ref_year)
 \item{ref_year}{A numeric constant.  The reference year used to determine current age for pedigree members.}
 }
 \value{
-A list of labels that can be used with kinship2's plot function.
+A list of labels that can be used with kinship2's plot function. See \code{\link{plot.pedigree}} for details.
 }
 \description{
 Create pedigree labels
@@ -33,6 +33,7 @@ library(kinship2)
 plot(kinPed,
      id = kinLabs,
      mar = c(3, 3, 4, 3) + 0.1)
+pedigree.legend(kinPed, location = "topleft", radius = 0.2)
 
 
 AllPeds = new.ped(EgPeds)
@@ -49,6 +50,10 @@ unique(AllPeds$FamID)
 plot(kinPed_multi['4'],
      id = kinLabs_multi[AllPeds$FamID == 4],
      mar = c(3, 3, 4, 3) + 0.1)
+pedigree.legend(kinPed['4'], location = "topleft", radius = 0.2)
 
 
+}
+\references{
+Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 }

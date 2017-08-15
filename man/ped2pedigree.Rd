@@ -2,7 +2,7 @@
 % Please edit documentation in R/Ped2Pedigree_functions.R
 \name{ped2pedigree}
 \alias{ped2pedigree}
-\title{Convert a ped object to a kinship2 pedigree object}
+\title{Create a kinship2 pedigree structure from an object of class ped}
 \usage{
 ped2pedigree(x)
 }
@@ -10,10 +10,10 @@ ped2pedigree(x)
 \item{x}{A ped object.}
 }
 \value{
-A pedigree object.  See ?kinship2::pedigree for details.
+A pedigree object.  See \code{\link{pedigree}} for details.
 }
 \description{
-Convert a SimRVPedigree ped object to a kinship 2 pedigree object
+Create a kinship2 pedigree structure from an object of class ped
 }
 \examples{
 data(EgPeds)
@@ -50,4 +50,7 @@ pedigree.legend(kinPed_multi['4'], location="topleft", radius=.25)
 
 
 
+}
+\references{
+Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 }

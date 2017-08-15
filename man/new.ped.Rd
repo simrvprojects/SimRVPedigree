@@ -24,20 +24,24 @@ The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain 
 \code{dadID} \tab numeric \tab identification number of father \cr
 \code{momID} \tab numeric \tab identification number of mother \cr
 \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-\code{affected  } \tab numeric \tab disease-affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0} \cr
+\code{affected  } \tab numeric \tab disease-affection status, \code{affected} = 1 if affected by disease, and 0 otherwise. \cr
 }
 
 Optionally, \code{ped_file} \emph{may} contain any of the following columns:
 \tabular{lll}{
 \strong{name} \tab \strong{type}\tab \strong{description} \cr
-\code{available} \tab numeric \tab availibility status; \code{available} = 1 if available, and 0 otherwise.  If missing all pedigree members are assumed to be available \cr
-\code{DA1} \tab numeric \tab paternally inherited allele at the assumed disease locus: \code{DA1} = 1 if rare variant is present, and 0 otherwise\cr
-\code{DA2} \tab numeric \tab maternally inherited allele at the assumed disease locus: \code{DA2} = 1 if rare variant is present, and 0 otherwise\cr
+\code{available} \tab numeric \tab availibility status; \cr
+\tab\tab \code{available} = 1 if available, and 0 otherwise. \cr
+\code{DA1} \tab numeric \tab paternally inherited allele at the assumed disease locus: \cr
+\tab \tab \code{DA1} = 1 if rare variant is present, and 0 otherwise\cr
+\code{DA2} \tab numeric \tab maternally inherited allele at the assumed disease locus: \cr
+\tab \tab \code{DA2} = 1 if rare variant is present, and 0 otherwise\cr
 \code{birthYr} \tab numeric \tab the individual's birth year \cr
 \code{onsetYr} \tab numeric \tab the individual's year of disease onset, when applicable \cr
 \code{deathYr} \tab numeric \tab the individual's year of death, when applicable \cr
 \code{RR} \tab numeric \tab the individual's relative-risk of disease \cr
-\code{Gen} \tab numeric \tab the individual's generation number relative to the founder who introduced the rare variant.  That is, the founder who introduced the rare variant will have \code{Gen} = 1, his or her offspring will have \code{Gen} = 2, etc. \cr
+\code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
+\tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
 \code{proband} \tab numeric \tab a proband identifier: \code{proband} = 1 if the individual is the proband, and 0 otherwise.\cr
 }
 
