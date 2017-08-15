@@ -35,7 +35,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 
 #' Determine if a previously ascertained pedigree meets new criteria.
 #'
-#' @inheritParams sim_RVped
+#' @inheritParams simRVped
 #' @param asc_ped Data.frame.  The previously ascertained pedigree. Optionally, asc_ped may contain ped_file information for the affected relatives only.
 #' @param ref_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #' @return Logical. If TRUE, pedigree is re-ascertained.
@@ -48,7 +48,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
 #' set.seed(8008135)
-#' ex_ped <- sim_ped(hazard_rates = my_HR,
+#' ex_ped <- simPed(hazard_rates = my_HR,
 #'                   GRR = 50, carrier_prob = 0.002,
 #'                   RVfounder = TRUE,
 #'                   FamID = 1,
@@ -96,10 +96,10 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 
 #' Determine if a pedigree is ascertained
 #'
-#' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
+#' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{simPed}} is ascertained.
 #'
 #' @inheritParams trim.ped
-#' @inheritParams sim_RVped
+#' @inheritParams simRVped
 #'
 #' @return  A list containing the following data frames:
 #' @return \code{ascertained} Logical.  Indicates if pedigree is ascertained.
@@ -111,7 +111,7 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
 #'
 #' #Simulate a random pedigree
 #' set.seed(2)
-#' ex_ped <- sim_ped(hazard_rates = my_HR,
+#' ex_ped <- simPed(hazard_rates = my_HR,
 #'                   GRR = 50, carrier_prob = 0.002,
 #'                   FamID = 1,
 #'                   RVfounder = TRUE,

@@ -27,7 +27,7 @@ my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
 set.seed(8008135)
-ex_ped <- sim_ped(hazard_rates = my_HR,
+ex_ped <- simPed(hazard_rates = my_HR,
                   GRR = 50, carrier_prob = 0.002,
                   RVfounder = TRUE,
                   FamID = 1,

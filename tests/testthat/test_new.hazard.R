@@ -22,7 +22,7 @@ test_that("issues error when part contains NA values", {
 })
 
 test_that("issues error when part doesn't start at zero", {
-  expect_error(sim_RVped(hazardDF = AgeSpecific_Hazards,
+  expect_error(simRVped(hazardDF = AgeSpecific_Hazards,
                          part = seq(50, 100, by = 0.5),
                          GRR = 35, prob_causalRV = 1, FamID = 1,
                          num_affected = 2,

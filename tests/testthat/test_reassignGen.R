@@ -1,6 +1,6 @@
 context("reassignGen.ped")
 test_that("reassignGen.ped returns a smaller or equally sized pedfile", {
-  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -14,7 +14,7 @@ test_that("reassignGen.ped returns a smaller or equally sized pedfile", {
 
 
 test_that("maximum re-assigned gen is at most maximum gen from original pedigree ", {
-  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -28,7 +28,7 @@ test_that("maximum re-assigned gen is at most maximum gen from original pedigree
 
 
 test_that("never have two affected individuals with reassigned gen = 1", {
-  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002, RVfounder = TRUE,
                      FamID = 1,
                      num_affected = 2,

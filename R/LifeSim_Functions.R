@@ -21,8 +21,8 @@
 #' @param current_age Numeric. The individual's current age.
 #' @param disease_status Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth Numeric. The individual's birth rate.
-#' @inheritParams sim_RVped
-#' @inheritParams sim_lifeEvents
+#' @inheritParams simRVped
+#' @inheritParams simLifeEvents
 #'
 #' @return A named matrix. The number of years until the next life event,
 #' named by event type.  See Details.
@@ -86,9 +86,9 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 
 #' Simulate all life events
 #'
-#' Primarily intended as an internal function, \code{sim_lifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
+#' Primarily intended as an internal function, \code{simLifeEvents} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
 #'
-#' Starting at birth, age 0, \code{sim_lifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and the individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
+#' Starting at birth, age 0, \code{simLifeEvents} generates waiting times to reproduction, onset, and death. The event with the shortest waiting time is chosen as the next life event, and the individual's age is updated by the waiting time of the winning event.  Conditioned on the individual's new age, this process is applied recursively, until death or until the end of the study is reached.
 #'
 #'  We make the following assumptions regarding the simulation of waiting times:
 #'  \enumerate{
@@ -101,7 +101,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'  }
 #'
 #'
-#' \code{sim_lifeEvents} will return a named matrix, which contains the years of the simulated life events, named by event type.  The possible event types are as follows:
+#' \code{simLifeEvents} will return a named matrix, which contains the years of the simulated life events, named by event type.  The possible event types are as follows:
 #' \itemize{
 #'  \item "Child" a reproductive event, i.e. creation of offspring
 #'  \item "Onset" disease onset event,
@@ -110,7 +110,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
 #' @param RV_status Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.
-#' @inheritParams sim_RVped
+#' @inheritParams simRVped
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
 #'
@@ -127,7 +127,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this
 #' # individual has 1 child in 1927, and then dies in 1987.
 #' set.seed(7664)
-#' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+#' simLifeEvents(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
 #'                RV_status = 0,
 #'                birth_range = c(17,45),
@@ -140,7 +140,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # 1 child in 1927, but then experiences disease onset in 1976,
 #' # and dies in 1978.
 #' set.seed(7664)
-#' sim_lifeEvents(hazard_rates = my_HR, GRR = 10,
+#' simLifeEvents(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
 #'                RV_status = 1,
 #'                birth_range = c(17,45),
@@ -148,7 +148,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'                YOB = 1900, stop_year = 2000)
 #'
 #'
-sim_lifeEvents = function(hazard_rates, GRR, carrier_prob,
+simLifeEvents = function(hazard_rates, GRR, carrier_prob,
                           RV_status, YOB, stop_year,
                           birth_range, NB_params){
 

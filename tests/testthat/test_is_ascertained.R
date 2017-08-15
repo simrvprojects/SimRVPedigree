@@ -1,6 +1,6 @@
 context("is_ascertained")
 
-EXPed <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+EXPed <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 35, carrier_prob = 0.002,
                    RVfounder = TRUE,
                    FamID = 1,
@@ -10,7 +10,7 @@ EXPed <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                    ascertain_span = c(1970, 2015))
 
 
-test_that("is_ascertained always returns TRUE for sim_RVped pedigrees", {
+test_that("is_ascertained always returns TRUE for simRVped pedigrees", {
   expect_true(is_ascertained(EXPed[[1]],
               num_affected = 2,
               ascertain_span = c(1970, 2015),
@@ -26,7 +26,7 @@ test_that("is_ascertained always a pedigree of size less than or equal to the or
 
 
 test_that("ascertained pedigrees meet number affected criteria", {
-  exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
+  exPed <- simPed(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 50, carrier_prob = 0.002,
                    RVfounder = TRUE, FamID = 1,
                    founder_byears = c(1900, 1910))
