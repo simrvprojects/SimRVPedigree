@@ -4,15 +4,14 @@
 \alias{simPed}
 \title{Simulate a pedigree}
 \usage{
-simPed(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
-  RVfounder = FALSE, birth_range = c(18, 45), NB_params = c(2, 4/7))
+simPed(hazard_rates, GRR, FamID, founder_byears, stop_year,
+  carrier_prob = 0.002, RVfounder = FALSE, birth_range = c(18, 45),
+  NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
-
-\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
@@ -20,11 +19,13 @@ simPed(hazard_rates, GRR, carrier_prob, FamID, founder_byears, stop_year,
 
 \item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
 
+\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
+
 \item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.}
 
-\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 }
 \value{
 The simulated pedigree.
@@ -55,12 +56,15 @@ my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #Simulate a random pedigree
 set.seed(22)
 ex_ped <- simPed(hazard_rates = my_HR,
-                  GRR = 10, carrier_prob = 0.002,
+                  GRR = 10,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 
 ex_ped
+plot(ex_ped)
+plot(ex_ped, ref_year = 1990, cex= 0.75, symbolsize = 1.25)
+
 summary(ex_ped)
 
 }

@@ -226,19 +226,23 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' #Simulate a random pedigree
 #' set.seed(22)
 #' ex_ped <- simPed(hazard_rates = my_HR,
-#'                   GRR = 10, carrier_prob = 0.002,
+#'                   GRR = 10,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
 #' ex_ped
+#' plot(ex_ped)
+#' plot(ex_ped, ref_year = 1990, cex= 0.75, symbolsize = 1.25)
+#'
 #' summary(ex_ped)
 #'
-simPed = function(hazard_rates, GRR, carrier_prob,
-                   FamID, founder_byears, stop_year,
-                   RVfounder = FALSE,
-                   birth_range = c(18, 45),
-                   NB_params = c(2, 4/7)){
+simPed = function(hazard_rates, GRR,
+                  FamID, founder_byears, stop_year,
+                  carrier_prob = 0.002,
+                  RVfounder = FALSE,
+                  birth_range = c(18, 45),
+                  NB_params = c(2, 4/7)){
 
   if(!(RVfounder %in% c(T, F))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -336,7 +340,7 @@ simPed = function(hazard_rates, GRR, carrier_prob,
 #'
 #' @param hazard_rates An object of class \code{hazard}, created by \code{\link{hazard}}.
 #' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
-#' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.
+#' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}
 #' @param RVfounder Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.
 #' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
 #' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
@@ -344,8 +348,8 @@ simPed = function(hazard_rates, GRR, carrier_prob,
 #' @param FamID Numeric. The family ID to assign to the simulated pedigree.
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
-#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.
-#' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
+#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.
+#' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #'
 #' @return  A list containing the following data frames:
 #' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
@@ -372,8 +376,8 @@ simPed = function(hazard_rates, GRR, carrier_prob,
 #'                       GRR = 50, carrier_prob = 0.002,
 #'                       RVfounder = TRUE,
 #'                       FamID = 1,
-#'                       founder_byears = c(1900, 1910),
-#'                       ascertain_span = c(1900, 2015),
+#'                       founder_byears = c(1900, 1920),
+#'                       ascertain_span = c(1995, 2015),
 #'                       num_affected = 2,
 #'                       recall_probs = c(1, 1, 0.5, 0.25))
 #'
@@ -384,30 +388,35 @@ simPed = function(hazard_rates, GRR, carrier_prob,
 #' # The ascertained pedigree
 #' summary(ex_RVped[[2]])
 #'
-#'
-#' # Plot ex_RVped pedigrees using the ped2pedigree function
-#' # and kinship2's plot and pedigree.legend functions
-#'
-#' # Convert ped objects to kinship2 pedigree objects
-#' Orig_RVped <- ped2pedigree(ex_RVped[[1]])
-#' Asc_RVped <- ped2pedigree(ex_RVped[[2]])
-#'
-#' # Use kinship2 functions
-#' library(kinship2)
-#' plot(Orig_RVped)
-#' pedigree.legend(Orig_RVped, location = "topleft",  radius = 0.25)
-#'
-#' plot(Asc_RVped)
-#' pedigree.legend(Asc_RVped, location = "topleft",  radius = 0.25)
+#' #Simulate pedigree ascertained for multiple affected individuals
+#' set.seed(85)
+#' ex_RVped <- simRVped(hazard_rates = my_HR,
+#'                       GRR = 10,
+#'                       RVfounder = FALSE,
+#'                       FamID = 1,
+#'                       founder_byears = c(1900, 1920),
+#'                       ascertain_span = c(1995, 2015),
+#'                       num_affected = 2,
+#'                       stop_year = 2017,
+#'                       recall_probs = c(1))
 #'
 #'
-simRVped = function(hazard_rates, GRR, carrier_prob,
-                     num_affected, ascertain_span,
-                     FamID, founder_byears,
-                     stop_year, recall_probs,
-                     RVfounder = FALSE,
-                     birth_range = c(18, 45),
-                     NB_params = c(2, 4/7)){
+#' # Original pedigree prior to proband selection and trimming
+#' summary(ex_RVped[[1]])
+#' plot(ex_RVped[[1]], legendRadius = 0.75)
+#'
+#' # The ascertained pedigree
+#' summary(ex_RVped[[2]])
+#' plot(ex_RVped[[2]], legendRadius = 0.75)
+#'
+simRVped = function(hazard_rates, GRR,
+                    num_affected, ascertain_span,
+                    FamID, founder_byears,
+                    stop_year, recall_probs,
+                    carrier_prob = 0.002,
+                    RVfounder = FALSE,
+                    birth_range = c(18, 45),
+                    NB_params = c(2, 4/7)){
 
   if(!(RVfounder %in% c(FALSE, TRUE))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -443,9 +452,9 @@ simRVped = function(hazard_rates, GRR, carrier_prob,
   ascertained <- FALSE
   while(ascertained == FALSE){
     #generate pedigree
-    fam_ped <- simPed(hazard_rates, GRR, carrier_prob, FamID,
-                       founder_byears, stop_year,
-                       RVfounder, birth_range, NB_params)
+    fam_ped <- simPed(hazard_rates, GRR, FamID,
+                      founder_byears, stop_year, carrier_prob,
+                      RVfounder, birth_range, NB_params)
 
     #check to see if pedigree is ascertained
     check_pedigree <- is_ascertained(ped_file = fam_ped, num_affected,

@@ -4,16 +4,14 @@
 \alias{simRVped}
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
-simRVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
-  founder_byears, stop_year, recall_probs, RVfounder = FALSE,
+simRVped(hazard_rates, GRR, num_affected, ascertain_span, FamID, founder_byears,
+  stop_year, recall_probs, carrier_prob = 0.002, RVfounder = FALSE,
   birth_range = c(18, 45), NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
-
-\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.}
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
@@ -27,11 +25,13 @@ simRVped(hazard_rates, GRR, carrier_prob, num_affected, ascertain_span, FamID,
 
 \item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.}
 
+\item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
+
 \item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.}
 
-\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+\item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 }
 \value{
 A list containing the following data frames:
@@ -81,8 +81,8 @@ ex_RVped <- simRVped(hazard_rates = my_HR,
                       GRR = 50, carrier_prob = 0.002,
                       RVfounder = TRUE,
                       FamID = 1,
-                      founder_byears = c(1900, 1910),
-                      ascertain_span = c(1900, 2015),
+                      founder_byears = c(1900, 1920),
+                      ascertain_span = c(1995, 2015),
                       num_affected = 2,
                       recall_probs = c(1, 1, 0.5, 0.25))
 
@@ -93,22 +93,26 @@ summary(ex_RVped[[1]])
 # The ascertained pedigree
 summary(ex_RVped[[2]])
 
+#Simulate pedigree ascertained for multiple affected individuals
+set.seed(85)
+ex_RVped <- simRVped(hazard_rates = my_HR,
+                      GRR = 10,
+                      RVfounder = FALSE,
+                      FamID = 1,
+                      founder_byears = c(1900, 1920),
+                      ascertain_span = c(1995, 2015),
+                      num_affected = 2,
+                      stop_year = 2017,
+                      recall_probs = c(1))
 
-# Plot ex_RVped pedigrees using the ped2pedigree function
-# and kinship2's plot and pedigree.legend functions
 
-# Convert ped objects to kinship2 pedigree objects
-Orig_RVped <- ped2pedigree(ex_RVped[[1]])
-Asc_RVped <- ped2pedigree(ex_RVped[[2]])
+# Original pedigree prior to proband selection and trimming
+summary(ex_RVped[[1]])
+plot(ex_RVped[[1]], legendRadius = 0.75)
 
-# Use kinship2 functions
-library(kinship2)
-plot(Orig_RVped)
-pedigree.legend(Orig_RVped, location = "topleft",  radius = 0.25)
-
-plot(Asc_RVped)
-pedigree.legend(Asc_RVped, location = "topleft",  radius = 0.25)
-
+# The ascertained pedigree
+summary(ex_RVped[[2]])
+plot(ex_RVped[[2]], legendRadius = 0.75)
 
 }
 \references{
