@@ -137,7 +137,7 @@ ped2pedigree <- function(x){
 #'
 pedigreeLabels <- function(x, ref_year){
 
-  if (!is.ped(x)) stop("please supply an object of class ped")
+  if (!is.ped(x)) stop("\n \n Please supply an object of class ped. \n")
 
   m <- length(unique(x$FamID))
 
@@ -145,17 +145,30 @@ pedigreeLabels <- function(x, ref_year){
   if(!missing(ref_year) & !is.na(match(c("birthYr"), colnames(x)))){
 
     if (!is.na(match("deathYr", colnames(x)))) {
+
       #create age lable, if death has not ocurred
       age_lab <- ifelse(is.na(x$birthYr) | !is.na(x$deathYr),
-                        " ", paste0("\n age: ",
-                                    ref_year - x$birthYr))
+                        " ", ifelse(ref_year - x$birthYr > 0,
+                                    paste0("\n age: ", ref_year - x$birthYr),
+                                    paste0("\n born in: ", x$birthYr)))
+
+      # #create age lable, if death has not ocurred
+      # age_lab <- ifelse(is.na(x$birthYr) | !is.na(x$deathYr),
+      #                   " ", paste0("\n age: ",
+      #                               ref_year - x$birthYr))
 
       # Create a death age label for individuals who have died.
       Dage_lab <- ifelse(is.na(x$deathYr),
-                         " ", paste0("\n death age: ",
-                                     x$deathYr - x$birthYr))
+                         " ", paste0("\n (", x$birthYr, " - ", x$deathYr, ")"))
     } else {
-      warning('Death year information not provided. Creating age lables under the assumption that all pedigree members are still alive.')
+      warning('\n Death data is missing.  \n Creating age lables under the assumption that all pedigree members are still alive. \n')
+
+      # age_lab <- ifelse(is.na(x$birthYr),
+      #                   " ", ifelse(ref_year - x$birthYr > 0,
+      #                               paste0("\n age: ", ref_year - x$birthYr),
+      #                               paste0("\n YOB: ", x$birthYr)))
+
+
       age_lab <- ifelse(is.na(x$birthYr),
                         " ", paste0("\n age: ",
                                     ref_year - x$birthYr))
@@ -173,7 +186,7 @@ pedigreeLabels <- function(x, ref_year){
     }
 
     ped_labs = paste0("ID: ", sep = "", x$ID,
-                    age_lab, Oage_lab, Dage_lab)
+                    age_lab, Dage_lab, Oage_lab)
   } else {
     ped_labs = x$ID
   }

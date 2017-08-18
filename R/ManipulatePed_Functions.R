@@ -444,8 +444,10 @@ affVars <- function(ped_file){
 
   affected_info <- ped_file[ped_file$affected == 1 & ped_file$available == 1,
                             keep_cols[!is.na(keep_cols)]]
+
   rownames(affected_info) <- NULL
-  class(affected_info) <- "data.frame"
+  class(affected_info)    <- "data.frame"
+
   return(affected_info)
 }
 
@@ -480,22 +482,37 @@ affKinM <- function(ped_file){
 #' @return A data frame containing the relevant summary information
 #' @keywords internal
 sumVars <- function(ped_file){
+
   AV <- affVars(ped_file)
+  if (nrow(AV) > 0) {
+    FID <- AV$FamID[1]
+    TR <- nrow(ped_file)
+    NAF <- nrow(AV)
 
-  FID <- AV$FamID[1]
-  TR <- nrow(ped_file)
-  NAF <- nrow(AV)
+    YRcols <- match(c("birthYr", "onsetYr"), colnames(ped_file))
+    AOO <- ifelse(length(YRcols[!is.na(YRcols)]) == 2,
+                  mean(AV$onsetYr - AV$birthYr, na.rm = T), NA)
 
-  YRcols <- match(c("birthYr", "onsetYr"), colnames(ped_file))
-  AOO <- ifelse(length(YRcols[!is.na(YRcols)]) == 2,
-                mean(AV$onsetYr - AV$birthYr, na.rm = T), NA)
-  AY <- AV$onsetYr[AV$proband == 1]
+    AY <- ifelse(sum(AV$proband) > 0,
+                 AV$onsetYr[AV$proband == 1],
+                 NA)
 
-  AK <- affKinM(ped_file)
-  AIBD <- 2*mean(AK[upper.tri(AK)])
+
+    AK <- affKinM(ped_file)
+    AIBD <- 2*mean(AK[upper.tri(AK)])
+  } else {
+    FID <- ped_file$FamID[1]
+    TR <- nrow(ped_file)
+    NAF <- 0
+    AOO <- NA
+    AIBD <- NA
+    AY <- NA
+  }
+
   return(data.frame(FamID = FID,
                     totalRelatives = TR,
                     numberAffected = NAF,
                     aveOnsetAge = AOO,
-                    aveIBD = AIBD))
+                    aveIBD = AIBD,
+                    ascYr = AY))
 }
