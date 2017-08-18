@@ -100,3 +100,89 @@ summary.ped <- function(object, ...) {
 
   return(do.call(rbind, famdat))
 }
+
+
+#' Plot pedigree
+#'
+#' @param x An object of class ped.
+#' @param ref_year When provided, the reference year for age age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.
+#' @param legendLocation The location for the pedigree legend, \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, \code{"bottomleft"}.  By default, \code{legendLocation}\code{ = "topleft"}.
+#' @param legendRadius The radius of the pedigree legend.  By default, \code{legendRadius}\code{ = 0.25}.
+#' @param ... Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.
+#' @seealso \code{\link{plot.pedigree}}, \code{\link{plot}}
+#' @importFrom graphics plot
+#' @importFrom graphics mtext
+#' @importFrom kinship2 pedigree.legend
+#' @export
+#'
+#' @examples
+#' #Read in age-specific harard data and create hazard object.
+#' data(AgeSpecific_Hazards)
+#' haz_obj <- hazard(hazardDF = AgeSpecific_Hazards)
+#'
+#' #Simulate a pedigree ascertained for multiple affecteds
+#' set.seed(4)
+#' RVped2015 <- simRVped(hazard_rates = haz_obj,
+#'                        num_affected = 2,
+#'                        ascertain_span = c(1900, 2015),
+#'                        GRR = 30, carrier_prob = 0.002,
+#'                        RVfounder = TRUE,
+#'                        stop_year = 2015,
+#'                        recall_probs = c(1),
+#'                        founder_byears = c(1900, 1925),
+#'                        FamID = 1)[[2]]
+#' summary(RVped2015)
+#'
+#' #plot pedigree without age labels
+#' plot(RVped2015)
+#'
+#' #plot pedigree with age labels, since unspecified
+#' #reference year defaults to ascertainment year
+#' plot(RVped2015, ref_year = "ascYR")
+#' plot(RVped2015, ref_year = "ascYR", cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 2000, cex= 0.75, symbolsize = 1.25)
+#'
+#' #plot pedigree with age lablels at specified reference years.
+#' plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 1975, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 1960, cex= 0.75, symbolsize = 1.25)
+#'
+plot.ped <- function(x, ref_year,
+                     legendLocation = "topleft", legendRadius = 0.25, ...) {
+
+  if (missing(ref_year)) {
+    k2ped <- ped2pedigree(x)
+    pedLabs = x$ID
+  } else if (ref_year == "ascYR") {
+    if ("proband" %in% colnames(x)
+        & "onsetYr" %in% colnames(x)
+        & sum(x$proband) == 1
+        & !all(is.na(x$onsetYr))) {
+
+      cped <- censor.ped(x, censor_year = x$onsetYr[x$proband == 1])
+      pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband == 1])
+      k2ped <- ped2pedigree(cped)
+      pYr <- x$onsetYr[x$proband == 1]
+
+    } else {
+      stop("\n This pedigree has not been ascertained.  Please supply ref_year. \n")
+    }
+  } else if (is.numeric(ref_year)) {
+    cped <- censor.ped(x, censor_year = ref_year)
+    pedLabs <- pedigreeLabels(x = cped, ref_year)
+    k2ped <- ped2pedigree(cped)
+    pYr <- ref_year
+  }
+
+
+  plot(x = k2ped, id = pedLabs,
+       status = k2ped$status, affected = k2ped$affected, ...)
+  pedigree.legend(ped = k2ped, location = legendLocation, radius = legendRadius)
+
+  if (!missing(ref_year)) {
+    mtext(paste0("Reference Year: ",  pYr), adj = 1, line = 2)
+  }
+}
