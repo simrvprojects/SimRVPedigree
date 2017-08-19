@@ -27,6 +27,7 @@
 #' my_HR <- hazard(hazardDF = AgeSpecific_Hazards,
 #'                 partition = my_part)
 #'
+#'
 #' my_HR
 #' class(my_HR)
 #' head(my_HR[[1]])
@@ -113,5 +114,5 @@ print.hazard <- function(x, ...) {
   cat("Hazard object with age-specific hazard rates spanning from age",
       x$partition[1], "to age",  x$partition[length(x$partition)])
   cat("\n")
-  cat("Lifetime risk of disease = ", 1 - exp(-sum(x$hazardDF[, 1])), "\n")
+  cat("Lifetime risk of disease = ", 1 - exp(-sum(diff(x$partition)*x$hazardDF[, 1])), "\n")
 }
