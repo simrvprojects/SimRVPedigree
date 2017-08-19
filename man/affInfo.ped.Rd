@@ -68,3 +68,4 @@ Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions
 \seealso{
 \code{\link{new.ped}}
 }
+

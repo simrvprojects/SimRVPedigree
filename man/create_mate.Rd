@@ -30,3 +30,4 @@ create_mate(partner_info, last_id, GRR, carrier_prob, RVfounder, intro_RV)
 Create new mating partner in pedigree.
 }
 \keyword{internal}
+

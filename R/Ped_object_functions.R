@@ -17,7 +17,7 @@
 #' \tabular{lll}{
 #' \strong{name} \tab \strong{type}\tab \strong{description} \cr
 #' \code{available} \tab numeric \tab availibility status; \cr
-#' \tab\tab \code{available} = 1 if available, and 0 otherwise. \cr
+#' \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
 #' \code{DA1} \tab numeric \tab paternally inherited allele at the assumed disease locus: \cr
 #' \tab \tab \code{DA1} = 1 if rare variant is present, and 0 otherwise\cr
 #' \code{DA2} \tab numeric \tab maternally inherited allele at the assumed disease locus: \cr
@@ -62,7 +62,7 @@ new.ped <- function(ped_file) {
     check_ped(ped_file)
   }
 
-  if (!"available" %in% colnames(ped_file)) ped_file$available <- 1
+  if (!"available" %in% colnames(ped_file)) ped_file$available <- T
 
   return(ped(ped_file))
 
@@ -134,16 +134,20 @@ summary.ped <- function(object, ...) {
 #' summary(RVped2015)
 #'
 #' #plot pedigree without age labels
-#' plot(RVped2015)
+#' plot(RVped2015, cex = 0.25)
 #'
 #' #plot pedigree with age labels, since unspecified
 #' #reference year defaults to ascertainment year
 #' plot(RVped2015, ref_year = "ascYR")
 #' plot(RVped2015, ref_year = "ascYR", cex= 0.75, symbolsize = 1.25)
-#' plot(RVped2015, ref_year = 2000, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 2000,
+#'      cex= 1, symbolsize = 1.5,
+#'      legendLocation = "topleft",
+#'      legendRadius = 0.1)
 #'
 #' #plot pedigree with age lablels at specified reference years.
-#' plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 2015,
+#' cex= 0.75, symbolsize = 1.25, legendRadius = 0.15)
 #' plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)

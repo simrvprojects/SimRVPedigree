@@ -22,3 +22,4 @@ A list containing: 1. the founder's genotype at the disease locus, their relativ
 Determine founder genotype at the disease locus and determime their relative-risk of disease
 }
 \keyword{internal}
+

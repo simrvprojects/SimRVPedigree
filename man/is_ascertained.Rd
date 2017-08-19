@@ -50,3 +50,4 @@ is_ascertained(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
                recall_probs = c(1))[[1]]
 
 }
+

@@ -13,3 +13,4 @@ check_ped(ped_file)
 Checks ped_file for expected information, used before converting to ped object.
 }
 \keyword{internal}
+

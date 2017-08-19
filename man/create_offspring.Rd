@@ -26,3 +26,4 @@ last_id the updated value of last_id after adding new offspring
 Create new offspring in pedigree.
 }
 \keyword{internal}
+

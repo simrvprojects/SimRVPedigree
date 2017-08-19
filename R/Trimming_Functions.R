@@ -31,7 +31,7 @@
 #' \code{proband} \tab numeric \tab a proband identifier: \code{proband} = 1 if the individual is the proband, and 0 otherwise.\cr
 #' \code{RR} \tab numeric \tab the individual's relative risk of disease. \cr
 #' \code{available} \tab numeric \tab availibility status; \cr
-#' \tab\tab \code{available} = 1 if available, and 0 otherwise. \cr
+#' \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
 #' }
 #'
 #' @inheritParams simRVped
@@ -103,7 +103,7 @@ trim.ped = function(ped_file, recall_probs){
   probandID <- ped_file$ID[which(ped_file$proband == 1)]
 
   #store info on marry-ins by ID
-  marry_ins <- ped_file$ID[which(ped_file$available == 0)]
+  marry_ins <- ped_file$ID[ped_file$available == FALSE]
 
   # generate a vector of Unif(0,1) RVs, to determine who is trimmed
   u <- runif(length(ped_file$ID))
@@ -182,7 +182,7 @@ trim.ped = function(ped_file, recall_probs){
         readd$birthYr <- NA
         readd$onsetYr <- NA
         readd$deathYr <- NA
-        readd$available <- 0
+        readd$available <- F
         readd$RR        <- NA
         readd$affected  <- ifelse(readd$ID %in% marry_ins, 0, NA)
       }

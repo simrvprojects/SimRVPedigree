@@ -31,7 +31,7 @@ Optionally, \code{ped_file} \emph{may} contain any of the following columns:
 \tabular{lll}{
 \strong{name} \tab \strong{type}\tab \strong{description} \cr
 \code{available} \tab numeric \tab availibility status; \cr
-\tab\tab \code{available} = 1 if available, and 0 otherwise. \cr
+\tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
 \code{DA1} \tab numeric \tab paternally inherited allele at the assumed disease locus: \cr
 \tab \tab \code{DA1} = 1 if rare variant is present, and 0 otherwise\cr
 \code{DA2} \tab numeric \tab maternally inherited allele at the assumed disease locus: \cr
@@ -62,3 +62,4 @@ class(AllPeds)
 summary(AllPeds)
 
 }
+

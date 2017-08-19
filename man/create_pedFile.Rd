@@ -13,3 +13,4 @@ An empty data frame with all fields required by \code{simPed} to generate a pedi
 \code{create_pedFile} initializes an empty data frame with all of the fields required by \code{simPed} to simulate a pedigree.
 }
 \keyword{internal}
+

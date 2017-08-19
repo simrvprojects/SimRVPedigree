@@ -23,7 +23,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
   POyear <- ped_file$onsetYr[ped_file$proband == 1]
 
   Oyears <- ped_file$onsetYr[ped_file$affected == 1
-                             & ped_file$available == 1
+                             & ped_file$available
                              & ped_file$proband == 0]
 
   #determine the number of available affected individuals
@@ -62,7 +62,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #'
 #' Aped[[1]]
 #'
-#' Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), ]
+#' Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available), ]
 #'
 #' is_reAscertained(asc_ped = Aped[[2]],
 #'                  num_affected = 3,
@@ -84,7 +84,7 @@ is_reAscertained <- function(asc_ped, num_affected, ref_year){
   # Gather the onset years for all affecteds.
   # Check to see if the pedigree had at least num_affected
   # individuals at the selected ref_year.
-  Oyears <- asc_ped$onsetYr[asc_ped$affected == 1 & asc_ped$available == 1]
+  Oyears <- asc_ped$onsetYr[asc_ped$affected == 1 & asc_ped$available]
 
 
   #determine the number of available affected individuals

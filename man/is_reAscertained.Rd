@@ -41,7 +41,7 @@ Aped <- is_ascertained(ped_file = ex_ped,
 
 Aped[[1]]
 
-Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available == 1), ]
+Aped[[2]][(Aped[[2]]$affected == 1 & Aped[[2]]$available), ]
 
 is_reAscertained(asc_ped = Aped[[2]],
                  num_affected = 3,
@@ -52,3 +52,4 @@ is_reAscertained(asc_ped = Aped[[2]],
                  ref_year = 2016)
 
 }
+

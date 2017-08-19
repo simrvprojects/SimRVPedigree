@@ -20,3 +20,4 @@ Logical. If TRUE, pedigree is discarded.
 Initial checks to disqualify a pedigree from ascertainment.
 }
 \keyword{internal}
+

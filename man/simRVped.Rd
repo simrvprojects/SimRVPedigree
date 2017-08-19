@@ -68,7 +68,6 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 
 \code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{simLifeEvents}}
 }
-
 \examples{
 #Read in age-specific hazards
 data(AgeSpecific_Hazards)
@@ -122,3 +121,4 @@ Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. T
 
 Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 }
+

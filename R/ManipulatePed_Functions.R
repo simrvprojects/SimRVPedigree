@@ -429,7 +429,7 @@ affVars <- function(ped_file){
   aLoc <- match(c("available"), colnames(ped_file))
 
   if (is.na(aLoc)) {
-    ped_file$available <- 1
+    ped_file$available <- T
   }
 
   dA_loc <- match(c("DA1", "DA2"), colnames(ped_file))
@@ -442,7 +442,7 @@ affVars <- function(ped_file){
                        "birthYr", "onsetYr", "deathYr",
                        "RR", "proband", "RVstatus"), colnames(ped_file))
 
-  affected_info <- ped_file[ped_file$affected == 1 & ped_file$available == 1,
+  affected_info <- ped_file[ped_file$affected == 1 & ped_file$available,
                             keep_cols[!is.na(keep_cols)]]
 
   rownames(affected_info) <- NULL
@@ -464,13 +464,13 @@ affKinM <- function(ped_file){
   aLoc <- match(c("available"), colnames(ped_file))
 
   if (is.na(aLoc)) {
-    ped_file$available <- 1
+    ped_file$available <- T
   }
 
   kin_ped <- ped2pedigree(ped_file)
 
-  kinMat <- kinship(kin_ped)[ped_file$affected == 1 & ped_file$available == 1,
-                             ped_file$affected == 1 & ped_file$available == 1]
+  kinMat <- kinship(kin_ped)[ped_file$affected == 1 & ped_file$available,
+                             ped_file$affected == 1 & ped_file$available]
 
   return(kinMat)
 }

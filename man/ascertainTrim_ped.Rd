@@ -18,3 +18,4 @@ Logical. If TRUE, pedigree is ascertained.
 Check to see if a trimmed pedigree is ascertained.
 }
 \keyword{internal}
+

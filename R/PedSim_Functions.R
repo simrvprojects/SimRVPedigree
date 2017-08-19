@@ -18,9 +18,9 @@ create_pedFile = function(){
              onsetYr = numeric(),
              deathYr = numeric(),
              RR = numeric(),
-             available = numeric(),
+             available = logical(),
              Gen = numeric(),
-             do_sim = numeric(),
+             do_sim = logical(),
              stringsAsFactors=FALSE)
 }
 
@@ -56,9 +56,9 @@ create_mate = function(partner_info, last_id,
                              onsetYr = NA,
                              deathYr = NA,
                              RR = NA,
-                             available = 0,
+                             available = F,
                              Gen = partner_info$Gen,
-                             do_sim = 0,
+                             do_sim = F,
                              stringsAsFactors=FALSE)
 
   founder_dat <- sim_founderRVstatus(GRR, carrier_prob,
@@ -102,9 +102,9 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
                               onsetYr = NA,
                               deathYr = NA,
                               RR = NA,
-                              available = 1,
+                              available = T,
                               Gen = dad_info$Gen + 1,
-                              do_sim = 1,
+                              do_sim = T,
                               stringsAsFactors=FALSE)
   new_child_info$RR <- ifelse(sum(new_child_info$DA1, new_child_info$DA2) == 0,
                               1, GRR)
@@ -184,7 +184,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   }
 
   #set do_sim to 0 for individual whose life events we just simulated
-  nfam_ped$do_sim[1] = 0
+  nfam_ped$do_sim[1] = F
 
   sim_fam_return = list(nfam_ped, last_id, IRV)
   return(sim_fam_return)
@@ -274,8 +274,8 @@ simPed = function(hazard_rates, GRR,
                                max = founder_byears[2])), #birth year
                    NA, NA,           #onset and death years
                    NA,               #RR of developing disease
-                   1, 1,             #availablilty and generation no
-                   1)                # do_sim
+                   T, 1,             #availablilty and generation no
+                   T)                # do_sim
 
   founder_dat <- sim_founderRVstatus(GRR, carrier_prob,
                                      RVfounder, intro_RV = FALSE)
@@ -288,7 +288,7 @@ simPed = function(hazard_rates, GRR,
   last_gen <- 1
 
   #store the ID of individuals for whom we need to simulate life events
-  re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
+  re_sim <- fam_ped$ID[which(fam_ped$do_sim & fam_ped$Gen == last_gen)]
   while (length(re_sim) > 0) {
     for (k in 1:length(re_sim)) {
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
@@ -305,7 +305,7 @@ simPed = function(hazard_rates, GRR,
       IRV <- newKin[[3]]
     }
     last_gen <- max(fam_ped$Gen)
-    re_sim <- fam_ped$ID[which(fam_ped$do_sim == 1 & fam_ped$Gen == last_gen)]
+    re_sim <- fam_ped$ID[which(fam_ped$do_sim & fam_ped$Gen == last_gen)]
   }
 
   rownames(fam_ped) <- NULL

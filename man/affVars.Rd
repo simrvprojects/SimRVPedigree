@@ -16,3 +16,4 @@ affVars(ped_file)
 Gather information for the affected relatives
 }
 \keyword{internal}
+

@@ -47,7 +47,6 @@ When segregating in the pedigree, the rare variant is transmitted from parent to
 
 \code{\link{simRVped}}
 }
-
 \examples{
 data(AgeSpecific_Hazards)
 
@@ -75,3 +74,4 @@ Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. T
 
 Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson, Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi, Terri H. Beaty, and Ingo Ruczinski (2014). \emph{Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.} Bioinformatics; Vol. 30, No. 15, pp. 2189-2196.
 }
+

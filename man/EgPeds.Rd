@@ -29,3 +29,4 @@ data(EgPeds)
 A dataset containing five example pedigrees.
 }
 \keyword{datasets}
+
