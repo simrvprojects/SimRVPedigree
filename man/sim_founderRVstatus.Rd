@@ -4,7 +4,7 @@
 \alias{sim_founderRVstatus}
 \title{Determine founder genotype at the disease locus and determime their relative-risk of disease}
 \usage{
-sim_founderRVstatus(GRR, carrier_prob, RVfounder, intro_RV)
+sim_founderRVstatus(GRR, carrier_prob, RVfounder)
 }
 \arguments{
 \item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
@@ -22,4 +22,3 @@ A list containing: 1. the founder's genotype at the disease locus, their relativ
 Determine founder genotype at the disease locus and determime their relative-risk of disease
 }
 \keyword{internal}
-

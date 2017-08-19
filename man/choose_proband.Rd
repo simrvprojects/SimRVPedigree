@@ -20,4 +20,3 @@ Pedigree with proband selected.
 Choose a proband from the disease-affected relatives in a pedigree
 }
 \keyword{internal}
-

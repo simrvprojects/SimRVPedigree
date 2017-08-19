@@ -30,8 +30,8 @@ test_that("The proband is an affected and experienced onset during the ascertain
                         ascertain_span = c(1970, 2015))
 
 
-  expect_true(Tped$affected[which(Tped$proband == 1)] == 1)
-  expect_true(Tped$onsetYr[which(Tped$proband == 1)] >= 1970 &
-                Tped$onsetYr[which(Tped$proband == 1)] <= 2015)
+  expect_true(Tped$affected[Tped$proband] == 1)
+  expect_true(Tped$onsetYr[Tped$proband] >= 1970 &
+                Tped$onsetYr[Tped$proband] <= 2015)
 
 })

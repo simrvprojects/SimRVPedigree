@@ -7,31 +7,26 @@
 #'
 #' @keywords internal
 #'
-sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
-  if (GRR == 1 |intro_RV == TRUE) {
+sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder){
+  if (GRR == 1) {
     # If GRR (genetic relative risk) = 1, the variant is not associated with
     # the disease; hence we do not allow an RV to segregate in the pedigree
-    # Additionally, we set intro_RV to TRUE, so that we do not needlessly search
-    # for a founder to introduce the RV
     d_locus <- c(0, 0)
     fRR <- 1
-    intro_RV <- TRUE
-  } else if (RVfounder == FALSE & intro_RV == FALSE){
-    # If single has been selected we allow the first founder, AND ONLY THE
-    # FIRST FOUNDER, the opportunity to introduce 1 copy of the RV with
+  } else if (RVfounder == FALSE){
+    # If FALSE has been selected we allow the founder
+    # the opportunity to introduce 1 copy of the RV with
     # proportional to its carrier frequency in the population, and set RR and
     # update intro_RV appropriately
     d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
                       size = 2, replace = F)
     fRR <- ifelse(any(d_locus == 1), GRR, 1)
-    intro_RV <- TRUE
-  } else if (RVfounder == TRUE & intro_RV == FALSE){
+  } else if (RVfounder == TRUE){
     d_locus <- sample(x = c(0, 1), size = 2, replace = F)
     fRR <- GRR
-    intro_RV <- TRUE
   }
 
-  founder_dat <- list(d_locus, fRR, intro_RV)
+  founder_dat <- list(d_locus, fRR)
   return(founder_dat)
 }
 
@@ -45,21 +40,21 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder, intro_RV){
 #'
 choose_proband = function(ped_file, num_affected, ascertain_span){
   #initialize proband ID variable
-  ped_file$proband <- 0
+  ped_file$proband <- F
 
   #Gather info on affecteds
-  A_ID <- ped_file[which(ped_file$affected == 1),
+  A_ID <- ped_file[ped_file$affected,
               which(colnames(ped_file) %in% c("onsetYr", "ID", "proband"))]
   A_ID <- A_ID[order(A_ID$onsetYr), ]
   A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
-  A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], 1, 0)
+  A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], T, F)
 
   if (sum(A_ID$proband) == 1) {
     #In this scenario we have only 1 candidate proband
     #NOTE: simRVped has already checked to make sure
     #that there was another affected prior to this one
 
-    ped_file$proband[which(ped_file$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+    ped_file$proband[which(ped_file$ID == A_ID$ID[A_ID$proband])] <- T
 
   } else if (sum(abs(A_ID$proband - 1)) > (num_affected - 1)) {
 
@@ -67,22 +62,22 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
     #been met by start of ascertainment period, so simply choose randomly
     #amongst available probands
     probandID <- sample(size = 1,
-                        x = A_ID$ID[which(A_ID$proband == 1)])
-    ped_file$proband[which(ped_file$ID == probandID)] <- 1
+                        x = A_ID$ID[A_ID$proband])
+    ped_file$proband[which(ped_file$ID == probandID)] <- T
 
   } else {
 
     #no affecteds before ascertainment period, must choose from among
     #the nth or greater to experience onset
-    A_ID$proband[1:(num_affected - 1)] <- 0
+    A_ID$proband[1:(num_affected - 1)] <- F
     #must write additional if statement here because of R's interesting
     #take on how sample should work when there is only one 1 to sample from....
     if (sum(A_ID$proband) == 1) {
-      ped_file$proband[which(ped_file$ID == A_ID$ID[which(A_ID$proband == 1)])] <- 1
+      ped_file$proband[which(ped_file$ID == A_ID$ID[A_ID$proband])] <- T
     } else {
       probandID <- sample(size = 1,
-                          x = A_ID$ID[which(A_ID$proband == 1)])
-      ped_file$proband[which(ped_file$ID == probandID)] <- 1
+                          x = A_ID$ID[A_ID$proband])
+      ped_file$proband[which(ped_file$ID == probandID)] <- T
     }
   }
 
