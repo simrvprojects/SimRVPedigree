@@ -10,7 +10,7 @@
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected  } \tab numeric \tab disease-affection status, \code{affected} = 1 if affected by disease, and 0 otherwise. \cr
+#' \code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 #' }
 #'
 #' Optionally, \code{ped_file} \emph{may} contain any of the following columns:
@@ -28,7 +28,7 @@
 #' \code{RR} \tab numeric \tab the individual's relative-risk of disease \cr
 #' \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
 #' \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
-#' \code{proband} \tab numeric \tab a proband identifier: \code{proband} = 1 if the individual is the proband, and 0 otherwise.\cr
+#' \code{proband} \tab numeric \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
 #' }
 #'
 #' \emph{We note that some of the optional fields above may be required for different ped functions}
@@ -166,10 +166,10 @@ plot.ped <- function(x, ref_year,
         & sum(x$proband) == 1
         & !all(is.na(x$onsetYr))) {
 
-      cped <- censor.ped(x, censor_year = x$onsetYr[x$proband == 1])
-      pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband == 1])
+      cped <- censor.ped(x, censor_year = x$onsetYr[x$proband])
+      pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband])
       k2ped <- ped2pedigree(cped)
-      pYr <- x$onsetYr[x$proband == 1]
+      pYr <- x$onsetYr[x$proband]
 
     } else {
       stop("\n This pedigree has not been ascertained.  Please supply ref_year. \n")

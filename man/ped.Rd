@@ -16,4 +16,3 @@ an object of class \code{ped}.
 Constructor function for an object of class ped
 }
 \keyword{internal}
-

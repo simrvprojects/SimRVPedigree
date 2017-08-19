@@ -16,4 +16,3 @@ Logical. Indicates if \code{x} is of class \code{ped}.
 Check to see if object is of class ped
 }
 \keyword{internal}
-

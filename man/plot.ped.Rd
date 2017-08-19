@@ -64,4 +64,3 @@ plot(RVped2015, ref_year = 1960, cex= 0.75, symbolsize = 1.25)
 \seealso{
 \code{\link{plot.pedigree}}, \code{\link{plot}}
 }
-
