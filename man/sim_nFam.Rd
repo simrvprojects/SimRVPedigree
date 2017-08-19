@@ -25,8 +25,6 @@ sim_nFam(found_info, stop_year, last_id, hazard_rates, birth_range, NB_params,
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
 
 \item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
-
-\item{intro_RV}{Logical. If \code{intro_RV = TRUE}, then at least 1 founder has introduced the causal variant to the pedigree. If \code{intro_RV = FALSE} then the variant has not yet been introduced to the pedigree.}
 }
 \value{
 A pedigree with updated life events for the founder, and
@@ -36,4 +34,3 @@ additional information for mate and offspring, when offspring are generated.
 Simulate all life events for an individual and create a nuclear family, when appropriate.
 }
 \keyword{internal}
-

@@ -68,50 +68,37 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 
 \code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{simLifeEvents}}
 }
+
 \examples{
 #Read in age-specific hazards
 data(AgeSpecific_Hazards)
 
-my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
-
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(8008135)
-ex_RVped <- simRVped(hazard_rates = my_HR,
-                      GRR = 50, carrier_prob = 0.002,
-                      RVfounder = TRUE,
-                      FamID = 1,
-                      founder_byears = c(1900, 1920),
-                      ascertain_span = c(1995, 2015),
-                      num_affected = 2,
-                      recall_probs = c(1, 1, 0.5, 0.25))
+set.seed(2410)
+ex_RVped <- simRVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+                     GRR = 10,
+                     RVfounder = TRUE,
+                     FamID = 1,
+                     founder_byears = c(1900, 1920),
+                     ascertain_span = c(1995, 2015),
+                     num_affected = 2,
+                     stop_year = 2017,
+                     recall_probs = c(1, 0.5))
 
 
 # Original pedigree prior to proband selection and trimming
 summary(ex_RVped[[1]])
+plot(ex_RVped[[1]])
 
 # The ascertained pedigree
 summary(ex_RVped[[2]])
-
-#Simulate pedigree ascertained for multiple affected individuals
-set.seed(85)
-ex_RVped <- simRVped(hazard_rates = my_HR,
-                      GRR = 10,
-                      RVfounder = FALSE,
-                      FamID = 1,
-                      founder_byears = c(1900, 1920),
-                      ascertain_span = c(1995, 2015),
-                      num_affected = 2,
-                      stop_year = 2017,
-                      recall_probs = c(1))
+plot(ex_RVped[[2]])
 
 
-# Original pedigree prior to proband selection and trimming
-summary(ex_RVped[[1]])
-plot(ex_RVped[[1]], legendRadius = 0.75)
+# Simulate ascertained pedigree but this time set RVfounder = F.
+# Under this setting pedigrees segregate a causal
+# variant with probability equal to carrier prob.
 
-# The ascertained pedigree
-summary(ex_RVped[[2]])
-plot(ex_RVped[[2]], legendRadius = 0.75)
 
 }
 \references{
@@ -121,4 +108,3 @@ Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. T
 
 Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 }
-

@@ -47,23 +47,40 @@ When segregating in the pedigree, the rare variant is transmitted from parent to
 
 \code{\link{simRVped}}
 }
+
 \examples{
 data(AgeSpecific_Hazards)
 
-my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
-
 #Simulate a random pedigree
 set.seed(22)
-ex_ped <- simPed(hazard_rates = my_HR,
+ex_ped <- simPed(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
                   GRR = 10,
                   FamID = 1,
                   founder_byears = c(1900, 1910),
                   stop_year = 2015)
 
 ex_ped
-plot(ex_ped)
-plot(ex_ped, ref_year = 1990, cex= 0.75, symbolsize = 1.25)
+plot(ex_ped, legendLocation = "bottomleft")
+plot(ex_ped, ref_year = 2015,
+     cex= 0.75, symbolsize = 1.25,
+     legendLocation = "bottomleft")
 
+summary(ex_ped)
+
+#Simulate a random pedigree
+set.seed(22)
+ex_ped <- simPed(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+                 RVfounder = TRUE,
+                 GRR = 10,
+                 FamID = 1,
+                 founder_byears = c(1900, 1910),
+                 stop_year = 2015)
+
+ex_ped
+plot(ex_ped)
+plot(ex_ped, ref_year = 2015,
+     cex= 0.75, symbolsize = 1.25,
+     legendLocation = "topleft")
 summary(ex_ped)
 
 }
@@ -74,4 +91,3 @@ Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. T
 
 Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson, Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi, Terri H. Beaty, and Ingo Ruczinski (2014). \emph{Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.} Bioinformatics; Vol. 30, No. 15, pp. 2189-2196.
 }
-
