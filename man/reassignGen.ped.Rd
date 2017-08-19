@@ -31,7 +31,7 @@ Users who wish to assign generation number based on affection status in pedigree
 \code{dadID} \tab numeric \tab identification number of father \cr
 \code{momID} \tab numeric \tab identification number of mother \cr
 \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-\code{affected  } \tab numeric \tab disease-affection status, \code{affected} = 1 if affected by disease, and 0 otherwise. \cr
+\code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
 \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
 }
@@ -86,4 +86,3 @@ Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.
 \seealso{
 \code{\link{new.ped}}
 }
-

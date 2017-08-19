@@ -17,7 +17,7 @@
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected  } \tab numeric \tab disease-affection status, \code{affected} = 1 if affected by disease, and 0 otherwise. \cr
+#' \code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 #' \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
 #' \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
 #' }
@@ -79,7 +79,7 @@ reassignGen.ped = function(ped_file){
   }
 
   #create new ped file with affecteds only
-  reGen_ped <- ped_file[which(ped_file$affected == 1), ]
+  reGen_ped <- ped_file[ped_file$affected, ]
 
   if (nrow(reGen_ped) == 0) {
     warning("No affecteds to assign affected generation")
@@ -113,8 +113,7 @@ reassignGen.ped = function(ped_file){
     }
 
     #Change Generation number so that only affecteds have a gen number
-    reGen_ped$Gen <- ifelse((reGen_ped$affected == 1),
-                            reGen_ped$Gen, NA)
+    reGen_ped$Gen <- ifelse(reGen_ped$affected, reGen_ped$Gen, NA)
 
     #table affected generation number
     Gen_tab <- table(reGen_ped$Gen)
@@ -259,10 +258,10 @@ censor.ped = function(ped_file, censor_year){
   if (missing(censor_year)) {
     if ("proband" %in% colnames(ped_file)) {
       if(sum(ped_file$proband) == 1){
-        if (is.na(ped_file$onsetYr[ped_file$proband == 1])) {
+        if (is.na(ped_file$onsetYr[ped_file$proband])) {
           stop("\n \n Proband's onset year is missing. \n Specify the proband's onset year or specify censor_year.")
         } else {
-          censor_year <- ped_file$onsetYr[which(ped_file$proband == 1)]
+          censor_year <- ped_file$onsetYr[ped_file$proband]
         }
       } else {
         stop("\n \n Multiple probands detected.\n  Please identify a single proband or specify censor_year. \n ")
@@ -274,7 +273,7 @@ censor.ped = function(ped_file, censor_year){
 
   #censor any onset or death info before censor year
   ped_file$affected <- ifelse(is.na(ped_file$onsetYr), 0,
-                              ifelse(ped_file$onsetYr <= censor_year, 1, 0))
+                              ifelse(ped_file$onsetYr <= censor_year, T, F))
   ped_file$onsetYr <- ifelse(is.na(ped_file$onsetYr), NA,
                              ifelse(ped_file$onsetYr <= censor_year,
                                     ped_file$onsetYr, NA))
@@ -442,7 +441,7 @@ affVars <- function(ped_file){
                        "birthYr", "onsetYr", "deathYr",
                        "RR", "proband", "RVstatus"), colnames(ped_file))
 
-  affected_info <- ped_file[ped_file$affected == 1 & ped_file$available,
+  affected_info <- ped_file[ped_file$affected & ped_file$available,
                             keep_cols[!is.na(keep_cols)]]
 
   rownames(affected_info) <- NULL
@@ -469,8 +468,8 @@ affKinM <- function(ped_file){
 
   kin_ped <- ped2pedigree(ped_file)
 
-  kinMat <- kinship(kin_ped)[ped_file$affected == 1 & ped_file$available,
-                             ped_file$affected == 1 & ped_file$available]
+  kinMat <- kinship(kin_ped)[ped_file$affected & ped_file$available,
+                             ped_file$affected & ped_file$available]
 
   return(kinMat)
 }
@@ -484,6 +483,12 @@ affKinM <- function(ped_file){
 sumVars <- function(ped_file){
 
   AV <- affVars(ped_file)
+
+  RVcols <- any(is.na(match(c("DA1", "DA2"), colnames(ped_file))))
+  SRV <- ifelse(RVcols, NA,
+                ifelse(any(ped_file$DA1 == 1) | any(ped_file$DA2 == 1),
+                       TRUE, FALSE))
+
   if (nrow(AV) > 0) {
     FID <- AV$FamID[1]
     TR <- nrow(ped_file)
@@ -493,13 +498,14 @@ sumVars <- function(ped_file){
     AOO <- ifelse(length(YRcols[!is.na(YRcols)]) == 2,
                   mean(AV$onsetYr - AV$birthYr, na.rm = T), NA)
 
-    AY <- ifelse(sum(AV$proband) > 0,
-                 AV$onsetYr[AV$proband == 1],
+    AY <- ifelse(!is.na(match(c("proband"), colnames(ped_file))) & sum(AV$proband) > 0,
+                 AV$onsetYr[AV$proband],
                  NA)
 
 
     AK <- affKinM(ped_file)
     AIBD <- 2*mean(AK[upper.tri(AK)])
+
   } else {
     FID <- ped_file$FamID[1]
     TR <- nrow(ped_file)
@@ -514,5 +520,6 @@ sumVars <- function(ped_file){
                     numberAffected = NAF,
                     aveOnsetAge = AOO,
                     aveIBD = AIBD,
-                    ascYr = AY))
+                    ascYr = AY,
+                    segRV = SRV))
 }
