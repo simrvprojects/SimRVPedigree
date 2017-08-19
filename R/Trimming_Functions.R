@@ -23,12 +23,12 @@
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected} \tab numeric \tab disease-affection status, if affected by disease \code{affected  = 1}, otherwise, \code{affected = 0} \cr
+#' \code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 #' \tab\tab\cr
 #' \code{birthYr} \tab numeric \tab the individual's birth year.\cr
 #' \code{onsetYr} \tab numeric \tab the individual's disease onset year, when applicable.\cr
 #' \code{deathYr} \tab numeric \tab the individual's death year, when applicable.\cr
-#' \code{proband} \tab numeric \tab a proband identifier: \code{proband} = 1 if the individual is the proband, and 0 otherwise.\cr
+#' \code{proband} \tab numeric \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
 #' \code{RR} \tab numeric \tab the individual's relative risk of disease. \cr
 #' \code{available} \tab numeric \tab availibility status; \cr
 #' \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
@@ -100,7 +100,7 @@ trim.ped = function(ped_file, recall_probs){
     stop ('pedigree may not contain mulitple probands, please ensure that a single individual is designated as the proband ')
   }
 
-  probandID <- ped_file$ID[which(ped_file$proband == 1)]
+  probandID <- ped_file$ID[ped_file$proband]
 
   #store info on marry-ins by ID
   marry_ins <- ped_file$ID[ped_file$available == FALSE]
@@ -114,7 +114,7 @@ trim.ped = function(ped_file, recall_probs){
                      dadid = ped_file$dadID,
                      momid = ped_file$momID)
 
-  kin_proband <- kin_mat[, which(ped_file$ID == probandID)]
+  kin_proband <- kin_mat[, ped_file$ID == probandID]
 
   #if recall_probs have not been supplied just use 4*kinship coefficent
   if (missing(recall_probs)) {
@@ -132,12 +132,12 @@ trim.ped = function(ped_file, recall_probs){
     rprobs <- rep(NA, length(ped_file$ID))
 
     # set recall probability for proband to 1
-    rprobs[which(kin_proband == 0.5)] <- 1
+    rprobs[kin_proband == 0.5] <- 1
 
     # set recall probability for marry-ins to 0
     # NOTE: we will re-add essential marry-ins
     # (i.e. those needed to create ped) at a later step
-    rprobs[which(kin_proband == 0)] <- 0
+    rprobs[kin_proband == 0] <- 0
 
     # create a vector of kinship coefficients with the same length
     # as recall_probs, specified by the user
@@ -146,7 +146,7 @@ trim.ped = function(ped_file, recall_probs){
     # use kinship coefficient to associate recall_prob with
     # appropriate family member
     for (i in 1:(length(kin_list)-1)) {
-      rprobs[which(kin_proband == kin_list[i])] <- recall_probs[i]
+      rprobs[kin_proband == kin_list[i]] <- recall_probs[i]
     }
     rprobs[is.na(rprobs)] <- recall_probs[length(recall_probs)]
 
@@ -160,13 +160,13 @@ trim.ped = function(ped_file, recall_probs){
   while (d == 0) {
     #find the dad IDs that are required but have been removed
     miss_dad  <- !is.element(ped_trim$dadID,
-                             ped_trim$ID[which(ped_trim$sex == 0)])
+                             ped_trim$ID[ped_trim$sex == 0])
     readd_dad <- ped_trim$dadID[miss_dad]
     readd_dad <- unique(readd_dad[!is.na(readd_dad)])
 
     #find the mom IDs that are required but have been removed
     miss_mom  <- !is.element(ped_trim$momID,
-                             ped_trim$ID[which(ped_trim$sex == 1)])
+                             ped_trim$ID[ped_trim$sex == 1])
     readd_mom <- ped_trim$momID[miss_mom]
     readd_mom <- unique(readd_mom[!is.na(readd_mom)])
 
@@ -175,7 +175,7 @@ trim.ped = function(ped_file, recall_probs){
       d <- 1
     } else {
       #Now pull the rows containing the required parents from the original ped_file
-      readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
+      readd <- ped_file[ped_file$ID %in% c(readd_dad, readd_mom), ]
 
       #remove all of their simulated data, and mark unavailable
       if (nrow(readd) >= 1) {
@@ -184,7 +184,7 @@ trim.ped = function(ped_file, recall_probs){
         readd$deathYr <- NA
         readd$available <- F
         readd$RR        <- NA
-        readd$affected  <- ifelse(readd$ID %in% marry_ins, 0, NA)
+        readd$affected  <- ifelse(readd$ID %in% marry_ins, F, NA)
       }
 
       #add back to pedigree
