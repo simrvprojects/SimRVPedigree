@@ -36,20 +36,19 @@ get_nextEvent = function(current_age, disease_status, RV_status,
                          hazard_rates, GRR, carrier_prob,
                          lambda_birth, birth_range){
 
-  RR <- ifelse(RV_status == 1, GRR, 1)
+  RR <- ifelse(RV_status, GRR, 1)
 
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
-  t_onset <- ifelse(disease_status == 0,
+  t_onset <- ifelse(disease_status, NA,
                     get_WaitTime(p = runif(1), last_event = current_age,
                                  hazard = hazard_rates[[1]][, 1]*RR/(1 + carrier_prob*(GRR - 1)),
-                                 part = hazard_rates[[2]]), NA)
+                                 part = hazard_rates[[2]]))
 
   #simulate the waiting time until death given current age.
-  # NOTE: choosing rate = FASLE implies that we are assuming person will die
   t_death <- get_WaitTime(p = runif(1),
                           last_event = current_age,
-                          hazard = hazard_rates[[1]][, (2 + disease_status)],
+                          hazard = hazard_rates[[1]][, (2 + 1*disease_status)],
                           part = hazard_rates[[2]], scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
@@ -70,18 +69,30 @@ get_nextEvent = function(current_age, disease_status, RV_status,
                            NA))
 
   #create list of simulated times
-  times <- as.list(c(Child = t_birth,  Onset = t_onset, Death = t_death))
+  times <- c(t_birth, t_onset, t_death)
 
   #find the smallest waiting time
-  if (sum(which.min(times)) != 0) {
-    nyears <- as.matrix(times[[which.min(times)]], ncol = 1)
-    colnames(nyears) <- c(paste(names(which.min(times))))
-  }else if (sum(which.min(times)) == 0) {
-    nyears <- as.matrix(0, ncol = 1)
-    colnames(nyears) <- c("retry")
+  min_time <- which.min(times)
+  dupTimes <- anyDuplicated(times)
+
+  if (dupTimes == 0 | sum(is.na(times)) == 2) {
+    # nyears <- as.matrix(times[[which.min(times)]], ncol = 1)
+    # colnames(nyears) <- c(paste(names(which.min(times))))
+
+    t_event <- times[min_time]
+    eventType <- ifelse(min_time == 1, "Child",
+                        ifelse(min_time == 2, "Onset", "Death"))
+
+  } else if (times[dupTimes] != times[min_time]) {
+    t_event <- times[min_time]
+    eventType <- ifelse(min_time == 1, "Child",
+                        ifelse(min_time == 2, "Onset", "Death"))
+  } else {
+    t_event <- 0
+    eventType <- "retry"
   }
 
-  return(nyears)
+  return(list(t_event, eventType))
 }
 
 #' Simulate all life events
@@ -109,7 +120,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' }
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
-#' @param RV_status Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.
+#' @param RV_status Numeric. \code{RV_status = TRUE} if the individual is a carrier of a rare variant that increases disease suseptibility, and \code{FALSE} otherwise.
 #' @inheritParams simRVped
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
@@ -129,7 +140,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' set.seed(7664)
 #' simLifeEvents(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
-#'                RV_status = 0,
+#'                RV_status = FALSE,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
@@ -142,15 +153,15 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' set.seed(7664)
 #' simLifeEvents(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
-#'                RV_status = 1,
+#'                RV_status = TRUE,
 #'                birth_range = c(17,45),
 #'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
 #'
 #'
 simLifeEvents = function(hazard_rates, GRR, carrier_prob,
-                          RV_status, YOB, stop_year,
-                          birth_range, NB_params){
+                         RV_status, YOB, stop_year,
+                         birth_range, NB_params){
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
@@ -167,12 +178,13 @@ simLifeEvents = function(hazard_rates, GRR, carrier_prob,
     stop ('GRR must be greater than 0')
   }
 
-  #initialize data frame to hold life events
-  R_life  <- data.frame(Start = 0)
+  #initialize lists to store event times and types
+  R_life <- c(0)
+  R_life_names  <- c("Start")
   min_age <- min(hazard_rates[[2]])
   max_age <- max(hazard_rates[[2]])
   #initialize disease status, start age at minumum age permissable under part
-  DS <- 0; t <- min_age; yr <- YOB
+  DS <- F; t <- min_age; yr <- YOB
 
   #generate and store the birth rate for this individual
   B_lambda <- rgamma(1, shape = NB_params[1],
@@ -184,32 +196,33 @@ simLifeEvents = function(hazard_rates, GRR, carrier_prob,
                              hazard_rates, GRR, carrier_prob,
                              lambda_birth = B_lambda, birth_range)
 
-    if(yr + as.numeric(l_event[1,1]) <= stop_year){
+    if(yr + l_event[[1]] <= stop_year){
       #add to previous life events
-      R_life <- cbind(R_life, l_event)
+      R_life <- c(R_life, l_event[[1]])
+      R_life_names <- c(R_life_names, l_event[[2]])
 
-      if (colnames(l_event) == "Death") {
+      if (l_event[[2]] == "Death") {
         #if death occurs stop simulation by setting t = 100
         t <- max_age
-      } else if (colnames(l_event) == "Onset") {
+      } else if (l_event[[2]] == "Onset") {
         #if onset occurs change disease status and continue
-        t  <- t + as.numeric(l_event[1,1])
-        yr <- yr + as.numeric(l_event[1,1])
-        DS <- 1
+        t  <- t + l_event[[1]]
+        yr <- yr + l_event[[1]]
+        DS <- T
       } else {
         #otherwise, increment counter, handles both birth event and case when no
         # event occurs (i.e. retry)
-        t <- t + as.numeric(l_event[1,1])
-        yr <- yr + as.numeric(l_event[1,1])
+        t <- t + l_event[[1]]
+        yr <- yr + l_event[[1]]
       }
     } else {
-      yr <- yr + as.numeric(l_event[1,1])
+      yr <- yr + l_event[[1]]
     }
 
   }
 
-  life_events <- round(cumsum(as.numeric(R_life[1,]))) + YOB
-  names(life_events) <- names(R_life)
+  life_events <- matrix(round(cumsum(as.numeric(R_life))) + YOB, nrow = 1)
+  colnames(life_events) <- R_life_names
   return(life_events)
 
 }

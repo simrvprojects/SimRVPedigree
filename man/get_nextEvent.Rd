@@ -12,7 +12,7 @@ get_nextEvent(current_age, disease_status, RV_status, hazard_rates, GRR,
 
 \item{disease_status}{Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.}
 
-\item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
+\item{RV_status}{Numeric. \code{RV_status = TRUE} if the individual is a carrier of a rare variant that increases disease suseptibility, and \code{FALSE} otherwise.}
 
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
@@ -48,4 +48,3 @@ If get_nextEvent returns the waiting time to the next life event, named for even
 }
 }
 \keyword{internal}
-

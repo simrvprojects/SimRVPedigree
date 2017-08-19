@@ -14,7 +14,7 @@ simLifeEvents(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
 
-\item{RV_status}{Numeric. \code{RV_status = 1} if the individual is a carrier of a rare variant that increases disease suseptibility, and 0 otherwise.}
+\item{RV_status}{Numeric. \code{RV_status = TRUE} if the individual is a carrier of a rare variant that increases disease suseptibility, and \code{FALSE} otherwise.}
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
 
@@ -60,7 +60,7 @@ my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 set.seed(7664)
 simLifeEvents(hazard_rates = my_HR, GRR = 10,
                carrier_prob = 0.002,
-               RV_status = 0,
+               RV_status = FALSE,
                birth_range = c(17,45),
                NB_params = c(2, 4/7),
                YOB = 1900, stop_year = 2000)
@@ -73,7 +73,7 @@ simLifeEvents(hazard_rates = my_HR, GRR = 10,
 set.seed(7664)
 simLifeEvents(hazard_rates = my_HR, GRR = 10,
                carrier_prob = 0.002,
-               RV_status = 1,
+               RV_status = TRUE,
                birth_range = c(17,45),
                NB_params = c(2, 4/7),
                YOB = 1900, stop_year = 2000)
@@ -85,4 +85,3 @@ OUR MANUSCRIPT
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 }
-

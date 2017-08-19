@@ -1,29 +1,29 @@
 context("simLifeEvents")
 test_that("simLifeEvents should always begin at start and end at death when stop_year is sufficiently large", {
   Levents <- simLifeEvents(hazard_rates = hazard(AgeSpecific_Hazards),
-                            GRR = 25, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 25, carrier_prob = 0.02, RV_status = T,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
 
-  expect_equal(names(Levents)[1], "Start")
-  expect_equal(names(Levents)[length(Levents)], "Death")
+  expect_equal(colnames(Levents)[1], "Start")
+  expect_equal(colnames(Levents)[length(Levents)], "Death")
 })
 
 test_that("simLifeEvents never returns onset more than once", {
   Levents <- simLifeEvents(hazard_rates = hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, carrier_prob = 0.02, RV_status = T,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
-  if("Onset" %in% names(table(names(Levents)))){
-    expect_equal(as.numeric(table(names(Levents))[which(names(table(names(Levents))) ==
-                                                          "Onset")]),
+  if("Onset" %in% names(table(colnames(Levents)))){
+    expect_equal(as.numeric(table(colnames(Levents))[names(table(colnames(Levents))) ==
+                                                       "Onset"]),
                  1)
   }
 })
 
 test_that("simLifeEvents always returns death event after all other events", {
   Levents <- simLifeEvents(hazard_rates = hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, carrier_prob = 0.02, RV_status = T,
                             YOB = 1900, stop_year = 2001,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
   Levents <- as.numeric(Levents)
@@ -35,7 +35,7 @@ test_that("simLifeEvents always returns death event after all other events", {
 test_that("simLifeEvents doesn't return any events after the stop year", {
   my_stopY <- 1900 + round(runif(1, min = 10, max = 60))
   Levents <- simLifeEvents(hazard_rates = hazard(AgeSpecific_Hazards),
-                            GRR = 50, carrier_prob = 0.02, RV_status = 1,
+                            GRR = 50, carrier_prob = 0.02, RV_status = T,
                             YOB = 1900, stop_year = my_stopY,
                             birth_range = c(18, 45), NB_params = c(2, 4/7))
 
