@@ -16,4 +16,3 @@ Logical. Indicates if \code{x} is of class \code{hazard}.
 Check to see if object is of class hazard
 }
 \keyword{internal}
-

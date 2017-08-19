@@ -57,4 +57,3 @@ pedigree.legend(kinPed['4'], location = "topleft", radius = 0.2)
 \references{
 Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 }
-

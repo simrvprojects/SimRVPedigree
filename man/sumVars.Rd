@@ -16,4 +16,3 @@ A data frame containing the relevant summary information
 Obtain summary information
 }
 \keyword{internal}
-

@@ -24,4 +24,3 @@ get_WaitProb(last_event, wait_time, hazard, part, scale = FALSE)
 Determine the cumulative probability of the waiting time associated with a non-homogenous Poisson process, given the time of the last event.
 }
 \keyword{internal}
-

@@ -49,4 +49,3 @@ class(my_HR)
 my_HR[[2]]
 
 }
-

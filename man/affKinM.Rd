@@ -16,4 +16,3 @@ affKinM(ped_file)
 Compute kinship matrix for the affected relatives
 }
 \keyword{internal}
-
