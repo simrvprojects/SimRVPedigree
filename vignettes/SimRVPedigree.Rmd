@@ -82,7 +82,7 @@ Optional arguments:
 
 9. `stop_year`: the last year of study.  If missing, the current year is used.
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
-11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigre will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
+11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigree will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
 
@@ -166,16 +166,12 @@ lines(x = seq(1, 100, by = 1), y = AgeSpecific_Hazards[,2],
 legend("topleft", title = "Population", legend = c("General", "Affected"),
        col = c("dodgerblue", "goldenrod2"), lwd = 3)
 ```
-```{r, echo=FALSE}
-# reset plot defaults
-par(mfrow = c(1, 1))
-```
 
 Finally, we show how the `simRVped` function may be used to simulate a single family ascertained for study in the example described at the beginning of this section.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
 
 ```{r}
 # Simulate an ascertained pedigree 
-set.seed(2140)
+set.seed(3170)
 ex_RVped <- simRVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
@@ -233,8 +229,7 @@ The columns displayed in the output above may be described as follows:
 To obtain information for the disease-affected relatives we supply the ascertained pedigree to the `affInfo.ped` function.
 
 ```{r}
-# obtain information about the ascertained 
-# pedigree by supplying it to affInfo.ped 
+# obtain information about the ascertained pedigree by supplying it to affInfo.ped 
 pedInfo <- affInfo.ped(ascPed)
 class(pedInfo)
 names(pedInfo)
@@ -255,83 +250,33 @@ The second item returned by `affInfo.ped` is named `affKin` and is a matrix of t
 pedInfo$affKin
 ```
 
-To plot pedigrees we make use of the `kinship2` package; however, to do so we must first use the `ped2pedigree` function, which creates objects of class `pedigree`  from ojbects of class `ped`. 
-
-```{r}
-class(ascPed)
-
-# Create an instance of pedigree.
-kped <- ped2pedigree(ascPed)
-class(kped)
-kped
-```
-```{r, results = FALSE, tidy = TRUE, echo = TRUE, message=FALSE}
-# Pedigrees may be plotted using the kinship2 package.  
-# Assuming the package has been installed it is loaded 
-# by executing the command:
-library(kinship2)
-```
-```{r, fig.height = 5.5, fig.width = 7.5}
- # Plot the pedigree by passing it to the plot function.
- plot(kped)
-
- # Plot legend for shaded variables.
- pedigree.legend(kped, location = "topleft",  radius = 0.25)
+To plot pedigrees we use the `plot` function. 
+```{r, fig.height = 6.5, fig.width = 6.5}
+# Plot the ascertained pedigree
+plot(ascPed, legendLocation = "bottomleft")
 ```
 
-Often, there is additional individual information we would like to display with the pedigree; for example: an individual's age of onset, and their age at death or their current age at a given reference year.  We can use the `pedigreeLabels` function to accomplish this for the year 2017.
+The legend, in the upper left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 3, 4, and 5) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 5) is indicated by shading in the lower third of an individual's symbol.  Individuals who have inherited a causal variant (IDs 1, 4, and 10) are indicated by shading in the upper right third of their symbol.
 
-```{r, fig.height = 7, fig.width = 8.5}
-# Obtain labels for the pedigree by supplying the ped object, ascPed,
-# and ref_year = 2017 to the pedigreeLabels function.
-labs2017 <- pedigreeLabels(ascPed, ref_year = 2017)
-
-# Plot pedigree with labels that reflect the ages of pedigree members in 2017.
-plot(kped, cex = 0.9, 
-     id = labs2017,
-     mar = c(1.1, 3.1, 5.1, 2.1))
-
-# Plot pedigree legend.
-pedigree.legend(kped, 
-                location = "topleft", radius = 0.25)
-mtext("Reference Year: 2017", side = 3, line = 1)
+Often, there is additional individual information we would like to display with the pedigree; for example: an individual's age of onset, and their age at death or their current age at a given reference year.  We can create age labels at the year 2017 by supplying the argument `ref_year = 2017` to the `plot` function.
+```{r, fig.height = 6.5, fig.width = 6.5}
+# Plot the pedigree, with age labels, in 2017.
+plot(ascPed, ref_year = 2017,
+     legendLocation = "bottomleft",
+     cex = 0.75, symbolsize = 1.15,
+     mar = c(1, 2, 3, 2))
 ```
 
-It is important to note that the pedigree above may have looked quite different at the time of ascertainment.  We assume that ascertainment occured during the same calendar year that the proband experienced disease onset. We can determine what year the pedigree above was ascertained using the following command.
+It is important to note that the pedigree above may have looked quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = ascYr` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
 
-```{r}
-# Determine ascertainment year by viewing the proband's year of disease onset.
-ascPed$onsetYr[ascPed$proband == 1]
-```
-
-From the output above we see that this pedigree was ascertained in 2003.  To view the pedigree as it would have appeared at the time of ascertainment, we can use the `censor.ped` function to censor all events that occurred after 2003.  Next, we create a `pedigree` object and updated labels for the censored pedigree.  Finally, we plot the censored pedigree.  The following code illustrates this process.
-
-```{r, fig.height = 6.5, fig.width = 8.5}
-# First, we censor all events that occurred after 2003. 
-Ped2003 <- censor.ped(ped_file = ascPed, censor_year = 2003)
-
-# Next, create a pedigree object for the censored pedigree.
-kped2003 <- ped2pedigree(Ped2003)
-
-# Create lables for the censored pedigree for the desired reference year.
-labs2003 <- pedigreeLabels(Ped2003, ref_year = 2003)
-
-par(mfrow = c(1, 2))
-# Plot pedigree with new labels that reflect the ages of pedigree members in 2003.
-plot(kped2003, cex = 0.9, 
-     id = labs2003,
-     mar = c(1.1, 3.1, 5.1, 2.1))
-mtext("Reference Year: 2003", side = 3, line = 1)
-
-# Plot 2017 pedigree for comparison.
-plot(kped, cex = 0.9, 
-     id = labs2017,
-     mar = c(1.1, 3.1, 5.1, 2.1))
-mtext("Reference Year: 2017", side = 3, line = 1)
-
-# Plot pedigree legend.
-pedigree.legend(kped, 
-                location = "bottomleft", radius = 0.15)
+```{r, fig.height = 6.5, fig.width = 6.5}
+# Plot the pedigrees, with age labels,
+# at the time of ascertainment.
+plot(ascPed, ref_year = "ascYr",
+     legendLocation = "bottomleft",
+     legendRadius = 0.15,
+     cex = 0.75, symbolsize = 1.15,
+     mar = c(1, 2, 3, 2))
 ```
 
 Looking at the pedigree above, we see that in 2003, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive: the proband (the pedigree member with ID 3).  Referring to the 2017 pedigree, we see that the proband died five years after the pedigree was ascertained.  Additionally, we see that at age 53, ten years after the pedigree was ascertained, the proband's son (the pedigree member with ID 7) experienced onset of lymphoid cancer.
@@ -340,72 +285,61 @@ Looking at the pedigree above, we see that in 2003, only 2 family members had ex
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassignGen.ped` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
 
 
-```{r, fig.height = 5.5, fig.width = 7}
+```{r, fig.height = 5.5, fig.width = 7.5}
 # We load the EgPeds dataset with the command
 data(EgPeds)
 class(EgPeds)
 
-#to use the reassignGen.ped function we must create a ped object
+# To use the reassignGen.ped function we must create a ped object
 Bpeds <- new.ped(EgPeds)
-class(EgPeds)
 
-# Let's re-assign the generation numbers among the affected members for the 
-# two of the pedigrees in this dataset, the pedigrees with FamID = 1 and 5, 
-# and store them as Apeds
-Apeds <- rbind(reassignGen.ped(Bpeds[Bpeds$FamID == 1, ]),
-               reassignGen.ped(Bpeds[Bpeds$FamID == 5, ]))
+# Plot pedigree with FamID = 1
+plot(Bpeds[Bpeds$FamID == 1,])
 
-# To plot the pedigrees we use the kinship2 package.  
-# We use the ped2pedigree function to create 
-# a kinship2 pedigree object from a ped object.
-kin2peds_before <- ped2pedigree(Bpeds)
-kin2peds_after  <- ped2pedigree(Apeds)
+# Re-assign the generation numbers among the affected members
+# in the pedigree with FamID = 1 and store it as Aped1
+Aped1 <- reassignGen.ped(Bpeds[Bpeds$FamID == 1, ])
 
-# Create new id labels that merge the individual IDs with their 
-# generation numbers, so that we can compare the generation numbers
-ID1 = paste0("ID", sep = ":",
-             Bpeds$ID[Bpeds$FamID == 1],
-             sep = "\n Gen:", Bpeds$Gen[Bpeds$FamID == 1])
-
-ID2 = paste0("ID", sep = ":",
-             Apeds$ID[Apeds$FamID == 1],
-             sep = "\n Gen:", Apeds$Gen[Apeds$FamID == 1])
-
-# Plot pedigrees before and after reassigning
-# generation number based on affected status
-par(mfrow = c(1,2))
-plot(kin2peds_before['1'], id = ID1, mar = c(2, 1, 4, 2))
-mtext("Pedigree 1: Before", side = 3, line = 1, cex = 1.15)
-
-plot(kin2peds_after['1'], id = ID2, mar = c(2, 2, 4, 1))
-mtext("Pedigree 1: After", side = 3, line = 1, cex = 1.15)
+# Print before and after generation numbers for the disease-affected relatives
+cbind(ID = Bpeds[Bpeds$FamID == 1 & Bpeds$affected, 2],
+      Gen_Before = Bpeds[Bpeds$FamID == 1 & Bpeds$affected, 14],
+      Gen_After = Aped1[Aped1$affected, 14])
 ```
 
-Looking at the before and after for this pedigree, the most striking observation is the reduction of the pedigree to include only affected members, their parents, and common ancestors.  Additionally, we see that the generation numbers of the affected members have not changed.  This is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).  Since the focus of this assignment scheme is on the affected members, all other family members are now missing generation numbers in the rightmost plot, labelled "after".
+Looking at the output above we see that the generation numbers of the affected members have not changed.  Referring back to the plotted pedigree we see that this is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).
 
-```{r, fig.height = 5.5, fig.width = 7}
-#Repeat same steps as before, this time for the pedigree with FamID = 5
-#First, create some new id labels that merge the individual IDs with 
-#their generation numbers.
-ID1 = paste0("ID", sep = ":",
-             Bpeds$ID[Bpeds$FamID == 5],
-             sep = "\n Gen:", Bpeds$Gen[Bpeds$FamID == 5])
+We note that, `Aped1` is a reduced version of the original pedigree and will contain only affected members, their parents, and common ancestors.  Since the focus of this assignment scheme is on the affected members, all other family members will now have missing generation numbers. 
 
-ID2 = paste0("ID", sep = ":",
-             Apeds$ID[Apeds$FamID == 5],
-             sep = "\n Gen:", Apeds$Gen[Apeds$FamID == 5])
+```{r, fig.height = 5.5, fig.width = 6.5}
+#plot pedigree with reassigned generation numbers
+plot(Aped1,
+     legendLocation = "bottomleft")
 
-# Plot pedigrees before and after reassigning
-# generation number based on affected status
-par(mfrow = c(1,2))
-plot(kin2peds_before['5'], id = ID1, mar = c(2, 1, 4, 2))
-mtext("Pedigree 5: Before", side = 3, line = 1, cex = 1.15)
-
-plot(kin2peds_after['5'], id = ID2, mar = c(2, 2, 4, 1))
-mtext("Pedigree 5: After", side = 3, line = 1, cex = 1.15)
+# Print generation numbers of unaffected relatives after reassignment.
+# Notice that after reassignment they are all NA.
+Aped1$Gen[Aped1$affected == FALSE]
 ```
 
-In this example, in the leftmost pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therefore, in the rightmost pedigree, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9).
+
+```{r, fig.height = 5.5, fig.width = 8}
+# Plot pedigree with FamID = 5
+plot(Bpeds[Bpeds$FamID == 5,])
+
+# Re-assign the generation numbers among the affected members
+# in the pedigree with FamID = 5 and store it as Aped5
+Aped5 <- reassignGen.ped(Bpeds[Bpeds$FamID == 5, ])
+
+# Re-assign the generation numbers among the affected members
+# in the pedigree with FamID = 5 and store it as Aped5
+Aped5 <- reassignGen.ped(Bpeds[Bpeds$FamID == 5, ])
+
+# Print before and after generation numbers for the disease-affected relatives
+cbind(ID = Bpeds[Bpeds$FamID == 5 & Bpeds$affected, 2],
+      Gen_Before = Bpeds[Bpeds$FamID == 5 & Bpeds$affected, 14],
+      Gen_After = Aped5[Aped5$affected, 14])
+```
+
+In this example, referring to the plotted pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therefore, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9). 
 
 
 #6. Parallel Processing Example<a name="ParProcExample"></a>
