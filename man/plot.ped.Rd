@@ -27,7 +27,7 @@ data(AgeSpecific_Hazards)
 haz_obj <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate a pedigree ascertained for multiple affecteds
-set.seed(4)
+set.seed(6)
 RVped2015 <- simRVped(hazard_rates = haz_obj,
                        num_affected = 2,
                        ascertain_span = c(1900, 2015),
@@ -40,25 +40,18 @@ RVped2015 <- simRVped(hazard_rates = haz_obj,
 summary(RVped2015)
 
 #plot pedigree without age labels
-plot(RVped2015, cex = 0.25)
+plot(RVped2015)
 
 #plot pedigree with age labels, since unspecified
 #reference year defaults to ascertainment year
-plot(RVped2015, ref_year = "ascYR")
-plot(RVped2015, ref_year = "ascYR", cex= 0.75, symbolsize = 1.25)
-plot(RVped2015, ref_year = 2000,
-     cex= 1, symbolsize = 1.5,
-     legendLocation = "topleft",
-     legendRadius = 0.1)
+plot(RVped2015, ref_year = "ascYr")
+plot(RVped2015, ref_year = "ascYr", cex= 0.75, symbolsize = 1.25)
 
 #plot pedigree with age lablels at specified reference years.
-plot(RVped2015, ref_year = 2015,
-cex= 0.75, symbolsize = 1.25, legendRadius = 0.15)
+plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
-plot(RVped2015, ref_year = 1975, cex= 0.75, symbolsize = 1.25)
-plot(RVped2015, ref_year = 1960, cex= 0.75, symbolsize = 1.25)
 
 }
 \seealso{

@@ -56,9 +56,9 @@ ped2pedigree <- function(x){
   }
 
   if (any(!is.na(match(c("affected", "proband", "RVstatus"), colnames(x))))) {
-    affected_vrs = cbind(Affected = x$affected,
-                         Proband = x$proband,
-                         RV_Status = x$RVstatus)
+    affected_vrs = cbind(affected = x$affected,
+                         proband = x$proband,
+                         RVstatus = x$RVstatus)
   } else {
     affected_vrs = x$affected
   }
@@ -152,22 +152,11 @@ pedigreeLabels <- function(x, ref_year){
                                     paste0("\n age: ", ref_year - x$birthYr),
                                     paste0("\n born in: ", x$birthYr)))
 
-      # #create age lable, if death has not ocurred
-      # age_lab <- ifelse(is.na(x$birthYr) | !is.na(x$deathYr),
-      #                   " ", paste0("\n age: ",
-      #                               ref_year - x$birthYr))
-
       # Create a death age label for individuals who have died.
       Dage_lab <- ifelse(is.na(x$deathYr),
                          " ", paste0("\n (", x$birthYr, " - ", x$deathYr, ")"))
     } else {
       warning('\n Death data is missing.  \n Creating age lables under the assumption that all pedigree members are still alive. \n')
-
-      # age_lab <- ifelse(is.na(x$birthYr),
-      #                   " ", ifelse(ref_year - x$birthYr > 0,
-      #                               paste0("\n age: ", ref_year - x$birthYr),
-      #                               paste0("\n YOB: ", x$birthYr)))
-
 
       age_lab <- ifelse(is.na(x$birthYr),
                         " ", paste0("\n age: ",

@@ -121,7 +121,7 @@ summary.ped <- function(object, ...) {
 #' haz_obj <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
 #' #Simulate a pedigree ascertained for multiple affecteds
-#' set.seed(4)
+#' set.seed(6)
 #' RVped2015 <- simRVped(hazard_rates = haz_obj,
 #'                        num_affected = 2,
 #'                        ascertain_span = c(1900, 2015),
@@ -134,46 +134,42 @@ summary.ped <- function(object, ...) {
 #' summary(RVped2015)
 #'
 #' #plot pedigree without age labels
-#' plot(RVped2015, cex = 0.25)
+#' plot(RVped2015)
 #'
 #' #plot pedigree with age labels, since unspecified
 #' #reference year defaults to ascertainment year
-#' plot(RVped2015, ref_year = "ascYR")
-#' plot(RVped2015, ref_year = "ascYR", cex= 0.75, symbolsize = 1.25)
-#' plot(RVped2015, ref_year = 2000,
-#'      cex= 1, symbolsize = 1.5,
-#'      legendLocation = "topleft",
-#'      legendRadius = 0.1)
+#' plot(RVped2015, ref_year = "ascYr")
+#' plot(RVped2015, ref_year = "ascYr", cex= 0.75, symbolsize = 1.25)
 #'
 #' #plot pedigree with age lablels at specified reference years.
-#' plot(RVped2015, ref_year = 2015,
-#' cex= 0.75, symbolsize = 1.25, legendRadius = 0.15)
+#' plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
-#' plot(RVped2015, ref_year = 1975, cex= 0.75, symbolsize = 1.25)
-#' plot(RVped2015, ref_year = 1960, cex= 0.75, symbolsize = 1.25)
 #'
-plot.ped <- function(x, ref_year,
-                     legendLocation = "topleft", legendRadius = 0.25, ...) {
+plot.ped <- function(x, ref_year, pedIDs,
+                     legendLocation = "topleft",
+                     legendRadius = 0.25, ...) {
 
   if (missing(ref_year)) {
     k2ped <- ped2pedigree(x)
     pedLabs = x$ID
-  } else if (ref_year == "ascYR") {
-    if ("proband" %in% colnames(x)
-        & "onsetYr" %in% colnames(x)
-        & sum(x$proband) == 1
-        & !all(is.na(x$onsetYr))) {
-
-      cped <- censor.ped(x, censor_year = x$onsetYr[x$proband])
-      pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband])
-      k2ped <- ped2pedigree(cped)
-      pYr <- x$onsetYr[x$proband]
-
-    } else {
-      stop("\n This pedigree has not been ascertained.  Please supply ref_year. \n")
+  } else if (ref_year == "ascYr") {
+    if(!("proband" %in% colnames(x))){
+      stop("\n \n Proband not detected, cannot determine ascertainment year. \n Please supply ref_year. \n")
+    } else if (sum(x$proband) > 1) {
+      stop("\n \n Multiple probands selected, cannot determine ascertainment year. \n Please supply ref_year. \n")
+    } else if (!("onsetYr" %in% colnames(x))) {
+      stop("\n \n OnsetYr not detected, cannot determine ascertainment year. \n Please supply ref_year. \n")
+    } else if (all(is.na(x$onsetYr))) {
+      stop("\n \n OnsetYr missing, cannot determine ascertainment year. \n Please supply ref_year. \n")
     }
+
+    cped <- censor.ped(x, censor_year = x$onsetYr[x$proband])
+    pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband])
+    k2ped <- ped2pedigree(cped)
+    pYr <- x$onsetYr[x$proband]
+
   } else if (is.numeric(ref_year)) {
     cped <- censor.ped(x, censor_year = ref_year)
     pedLabs <- pedigreeLabels(x = cped, ref_year)
