@@ -147,7 +147,7 @@ summary.ped <- function(object, ...) {
 #' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
 #'
-plot.ped <- function(x, ref_year, pedIDs,
+plot.ped <- function(x, ref_year,
                      legendLocation = "topleft",
                      legendRadius = 0.25, ...) {
 
