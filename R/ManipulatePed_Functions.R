@@ -219,26 +219,18 @@ reassignGen.ped = function(ped_file){
 #'                        founder_byears = c(1900, 1905),
 #'                        FamID = 1)[[2]]
 #'
-#' #Censor ex_RVped after 1960
+#' # Plot the 2015 pedigree
+#' plot(RVped2015)
+#' mtext(side = 3, line = 2, "Reference Year: 2017")
+#'
+#' # Censor RVped2015 after 1960
 #' RVped1960 <- censor.ped(ped_file = RVped2015, censor_year = 1960)
 #'
-#' #To plot, first convert to kinship2 pedigree class
-#' pedigree2015 <- ped2pedigree(RVped2015)
-#' pedigree1960 <- ped2pedigree(RVped1960)
+#' # Plot the 1960 pedigree
+#' plot(RVped1960)
+#' mtext(side = 3, line = 2, "Reference Year: 1960")
 #'
-#' #To plot pedigrees, use the kinship2 package
-#' library(kinship2)
-#'
-#' par(mfrow = c(1, 2))
-#' plot(pedigree2015)
-#' pedigree.legend(pedigree2015, location = "bottomleft",  radius = 0.25)
-#' mtext(side = 3, "Reference Year: 2015")
-#'
-#' plot(pedigree1960)
-#' mtext(side = 3, "Reference Year: 1960")
-#' par(mfrow = c(1, 1))
-#'
-censor.ped = function(ped_file, censor_year){
+censor.ped = function(ped_file, censor_year = NULL){
 
   if (!is.ped(ped_file)) {
     stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
@@ -246,7 +238,7 @@ censor.ped = function(ped_file, censor_year){
 
   if (any(is.na(match(c("birthYr", "onsetYr", "deathYr"),
                       colnames(ped_file))))) {
-    stop("\n \n Missing date data. \n Please ensure that the following variables are provided:\n birthYr, onsetYr, deathYr" )
+    stop("\n \n Missing date data. \n Please ensure that ped_file includes the following variables:\n birthYr, onsetYr, deathYr" )
   }
 
   if (all(is.na(ped_file$birthYr))
@@ -255,19 +247,19 @@ censor.ped = function(ped_file, censor_year){
     stop("\n \n Nothing to censor, all date data is missing.")
   }
 
-  if (missing(censor_year)) {
+  if (is.null(censor_year)) {
     if ("proband" %in% colnames(ped_file)) {
       if(sum(ped_file$proband) == 1){
-        if (is.na(ped_file$onsetYr[ped_file$proband])) {
+        if (is.na(summary(ped_file)$ascYr)) {
           stop("\n \n Proband's onset year is missing. \n Specify the proband's onset year or specify censor_year.")
         } else {
           censor_year <- ped_file$onsetYr[ped_file$proband]
         }
       } else {
-        stop("\n \n Multiple probands detected.\n  Please identify a single proband or specify censor_year. \n ")
+        stop("\n \n Proband cannot be uniquely identified.\n  Please identify a single proband or specify censor_year. \n ")
       }
     } else {
-      stop("\n \n Proband and censor_year missing.\n  Please provide a proband variable or specify censor_year.")
+      stop("\n \n Proband cannot be identified. \n  Please identify a proband or specify censor_year.")
     }
   }
 
@@ -498,7 +490,7 @@ sumVars <- function(ped_file){
     AOO <- ifelse(length(YRcols[!is.na(YRcols)]) == 2,
                   mean(AV$onsetYr - AV$birthYr, na.rm = T), NA)
 
-    AY <- ifelse(!is.na(match(c("proband"), colnames(ped_file))) & sum(AV$proband) > 0,
+    AY <- ifelse(!is.na(match(c("proband"), colnames(ped_file))) & sum(AV$proband) == 1,
                  AV$onsetYr[AV$proband],
                  NA)
 
