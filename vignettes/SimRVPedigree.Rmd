@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -89,7 +89,7 @@ Optional arguments:
 We will illustrate the usage and output of this function in the next section.
 
 #5. Example Application to Family-Based Study <a name="Example"></a>
-Suppose that, from 1995 to 2010, researchers ascertained 100 families that contained at least two, related individuals affected by a lymphoid cancer.  Data was collected for the 100 families until the year 2017.  Researchers believe that affected members within a family share a rare variant that increases disease susceptibility.  While they are not willing to assume that the same rare variant is segregating in all families, they are willing to make the simplifying assumption that all individuals carrying a genetic susceptibility variant share the same relative-risk of disease.  They believe that the population allele frequency of causal rare variants is roughly 0.002.  They also believe that carriers of the susceptibility variant are 10 times more likely to develop lymphoid cancer than non-carriers.
+Suppose that, from 1995 to 2010, researchers ascertained 100 families that contained at least two, related individuals affected by a lymphoid cancer.  Data was collected for the 100 families until the year 2017.  Researchers believe that affected members within a family share a rare variant that increases disease susceptibility.  They make the simplifying assumption that all individuals carrying a genetic susceptibility variant share the same relative-risk of disease.  They believe that the population allele frequency of all causal rare variants is roughly 0.002.  They also believe that carriers of the susceptibility variant are 10 times more likely to develop lymphoid cancer than non-carriers.
 
 Researchers are confident that all affected family members have been fully ascertained.  Upon inspecting the founders in the ascertained families, they see that all were born between 1900 and 1920.
 
@@ -109,9 +109,9 @@ Additionally, the user will need to specify:
    1. `hazardDF[, 1]`: the population age-specific hazard rate for lymphoid cancer.
    2. `hazardDF[, 2]`: the age-specific hazard rate for death in the unaffected population, i.e. individuals who have NOT had lymphoid cancer.
    3. `hazardDF[, 3]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
-2. `partition`: a partition of ages over which to apply the age-specific hazard rates in `hazard_rates`.
+2. `partition`: a partition of ages over which to apply the age-specific hazard rates in `hazardDF`.
 
-For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [5].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables provided by the Social Security Administration [6].
+For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [5].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables such as those provided by the U.S. Social Security Administration [6].
 
 For the sake of illustration, suppose that the family study in the example was conducted in the United States.  The `AgeSpecific_Hazards` data set included with the `SimRVPedigree` package contains age-specific hazard rates which were generated to roughly mimic those required for lymphoid cancer onset in the United States as described above.  The three columns in the `AgeSpecific_Hazards` data set provide the required age-specific hazard rates, in yearly increments, beginning at age 0 and ending with age 100.  That is, the values in the first row describe the hazard rates for an individual whose age is contained in the interval [0, 1), while the values in the second row describe the hazard rates for an individual whose age is contained in the interval [1, 2), and so on.  For more information on the `AgeSpecific_Hazards` data set type the command `help(AgeSpecific_Hazards)` into the `R` console.
 
@@ -124,20 +124,20 @@ library(SimRVPedigree)
 Next, we load the age-specific hazard rates for this application as follows:
 
 ```{r}
-#load example hazards 
+# load example hazards 
 data("AgeSpecific_Hazards")
 
-#print column names 
-colnames(AgeSpecific_Hazards)
+# print first three rows of AgeSpecific_Hazards dataset 
+head(AgeSpecific_Hazards, n = 3)
 ```
 
-Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `simRVped.`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, we define our partition to feed to the `part` argument of `simRVped` as follows:
+Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `simRVped.`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, we define the partition as follows:
 
 ```{r}
-# Specify age partition.
+# specify partition of ages
 age_part <- seq(0, 100, by = 1)
 
-#create hazard object
+# create hazard object
 LC_hazard <- hazard(partition = age_part,
                     hazardDF = AgeSpecific_Hazards)
 LC_hazard
@@ -167,10 +167,11 @@ legend("topleft", title = "Population", legend = c("General", "Affected"),
        col = c("dodgerblue", "goldenrod2"), lwd = 3)
 ```
 
-Finally, we show how the `simRVped` function may be used to simulate a single family ascertained for study in the example described at the beginning of this section.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
+\newpage
+Now we show how `simRVped` may be used to simulate a pedigree ascertained for the previously described study.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
 
 ```{r}
-# Simulate an ascertained pedigree 
+# simulate an ascertained pedigree 
 set.seed(3170)
 ex_RVped <- simRVped(hazard_rates = LC_hazard,
                       num_affected = 2,
@@ -182,7 +183,7 @@ ex_RVped <- simRVped(hazard_rates = LC_hazard,
                       founder_byears = c(1900, 1920),
                       FamID = 1)
 
-# View a summary of ex_RVped 
+# view a summary of ex_RVped 
 summary(ex_RVped)
 ```
 
@@ -191,40 +192,40 @@ The `simRVped` function returns a list containing two objects of class `ped`.  T
 Since we are interested in families ascertained for study, we will focus our attention on `ascertained_ped`.  We can view a summary of `ascertained_ped` by executing the following commands. 
 
 ```{r}
-#Store the ascertained pedigree as ascPed
+# store the ascertained pedigree as ascPed
 ascPed <- ex_RVped$ascertained_ped
 
-# Use summary function to view a summary of the ascertained pedigree
+# use summary function to view a summary of the ascertained pedigree
 summary(ascPed)
 ```
 
-We note that objects of class `ped` inherit from `data.frame`.  Thus, to view the first three lines of `ascertained_ped` we can use the `head` function. 
+We note that objects of class `ped` inherit from `data.frame`.  Thus, many of the methods for objects of class `data.frame` will also work for objects of class `ped`.  For example, to view the first two lines of `ascPed` we can use the `head` function. 
 
 ```{r}
-#determine the class of ascPed
+# determine the class of ascPed
 class(ascPed)
 
-# view first three rows of the ascertained pedigree
-head(ascPed, n = 3)
+# view first two rows of the ascertained pedigree
+head(ascPed, n = 2)
 ```
 
-The columns displayed in the output above may be described as follows:
+The columns displayed in the output produced by `head` may be described as follows:
 
  1. `FamID`: family identification number 
  2. `ID`: individual identification number
  3. `sex`: sex identification variable: `sex = 0` for males, and `sex = 1` females. 
  4. `dadID`: identification number of father
  5. `momID`: identification number of mother
- 6. `affected`: affection status: `affected = 1` if individual has developed lymphoid cancer, and 0 otherwise.
- 7. `DA1`: paternally inherited allele at the assumed disease locus: `DA1 = 1` if rare variant is present, and 0 otherwise.
- 8. `DA2`: maternally inherited allele at the assumed disease locus: `DA2 = 1` if rare variant is present, and 0 otherwise.
+ 6. `affected`: affection status: `affected = TRUE` if individual has developed lymphoid cancer, and `FALSE` otherwise.
+ 7. `DA1`: paternally inherited allele at the assumed disease locus: `DA1 = 1` if rare variant is present, and `0` otherwise.
+ 8. `DA2`: maternally inherited allele at the assumed disease locus: `DA2 = 1` if rare variant is present, and `0` otherwise.
  9. `birthYr`: the individual's birth year.
  10. `onsetYr`: the individual's year of disease onset, when applicable.
  11. `deathYr`: the individual's year of death, when applicable.
  12. `RR`: the individual's relative-risk of disease.
- 13. `available`: availability status: `available = 1` if individual is recalled by proband, otherwise `available = 0`.  We note that, by default, all marry-ins are unavailable since we do not simulate life events for marry-ins.
- 14. `Gen`: the individual's generation number relative to the eldest pedigree founder.  That is, the eldest founder will have `Gen = 1`, his or her offspring will have `Gen = 2`, etc.  
- 15. `proband`: a proband identifier: `proband = 1` if the individual is the proband, and 0 otherwise.
+ 13. `available`: availability status: `available = TRUE` if individual is recalled by proband, and `FALSE` otherwise.  We note that, by default, all marry-ins are unavailable since we do not simulate life events for marry-ins.
+ 14. `Gen`: the individual's generation number relative to the eldest pedigree founder.  That is, the eldest founder will have `Gen = 1`, his or her offspring will have `Gen = 2`, etc. 
+ 15. `proband`: a proband identifier: `proband = TRUE` if the individual is the proband, and `FALSE` otherwise.
 
 To obtain information for the disease-affected relatives we supply the ascertained pedigree to the `affInfo.ped` function.
 
@@ -256,8 +257,8 @@ To plot pedigrees we use the `plot` function.
 plot(ascPed, legendLocation = "bottomleft")
 ```
 
-The legend, in the upper left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 3, 4, and 5) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 5) is indicated by shading in the lower third of an individual's symbol.  Individuals who have inherited a causal variant (IDs 1, 4, and 10) are indicated by shading in the upper right third of their symbol.
-
+The legend, in the lower left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 3, and 7) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 3) is indicated by shading in the lower third the symbol.  Individuals who have inherited a causal variant (IDs 1, 3, 4, 7, 6, and 9) have shading in the upper right third of their symbol.
+ \newpage
 Often, there is additional individual information we would like to display with the pedigree; for example: an individual's age of onset, and their age at death or their current age at a given reference year.  We can create age labels at the year 2017 by supplying the argument `ref_year = 2017` to the `plot` function.
 ```{r, fig.height = 6.5, fig.width = 6.5}
 # Plot the pedigree, with age labels, in 2017.
@@ -266,10 +267,12 @@ plot(ascPed, ref_year = 2017,
      cex = 0.75, symbolsize = 1.15,
      mar = c(1, 2, 3, 2))
 ```
+When `ref_year` is supplied, additional information will be plotted when possible.  If year of birth and year of death information is provided, the pedigree will contain an age identifier for individuals who alive at the specified reference year.  If the individual has died, their year of birth and death is displayed instead.  If year of disease-onset data is provided, the disease-onset age will be displayed below individuals who have experienced disease-onset by the selected reference year.  For example, the pedigree member with ID 1 was born in 1914,  died in 1959, and experienced disease onset at age 38.
 
-It is important to note that the pedigree above may have looked quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = ascYr` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
+\newpage
+It is important to note that the pedigree may have been quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = ascYr` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
 
-```{r, fig.height = 6.5, fig.width = 6.5}
+```{r, fig.height = 5.5, fig.width = 5.5}
 # Plot the pedigrees, with age labels,
 # at the time of ascertainment.
 plot(ascPed, ref_year = "ascYr",
@@ -279,64 +282,65 @@ plot(ascPed, ref_year = "ascYr",
      mar = c(1, 2, 3, 2))
 ```
 
-Looking at the pedigree above, we see that in 2003, only 2 family members had experienced onset of lymphoid cancer, one of whom was alive: the proband (the pedigree member with ID 3).  Referring to the 2017 pedigree, we see that the proband died five years after the pedigree was ascertained.  Additionally, we see that at age 53, ten years after the pedigree was ascertained, the proband's son (the pedigree member with ID 7) experienced onset of lymphoid cancer.
+Looking at the pedigree above, we see that in 2009, only 2 family members had experienced onset of lymphoid cancer: the proband (the pedigree member with ID 3) and her mother (ID 1).  Referring to the 2017 pedigree, we see that four years after the pedigree was ascertained the proband's nephew (ID 7)  experienced disease disease at age 26.
+
+\newpage
+Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassignGen.ped` function provided with the `SimRVPedigree` package may be used to accomplish this task, provided no inbreeding or loops are present in the pedigree.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
 
 
-Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the two affected members are a parent and an offspring, then the parent would be assigned generation 1 and the offspring generation 2.  If instead, the two affected members were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassignGen.ped` function provided with the `SimRVPedigree` package may be used to accomplish this task.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
-
-
-```{r, fig.height = 5.5, fig.width = 7.5}
-# We load the EgPeds dataset with the command
+```{r, fig.height = 5, fig.width = 6.5}
+# load the EgPeds dataset
 data(EgPeds)
 class(EgPeds)
 
-# To use the reassignGen.ped function we must create a ped object
-Bpeds <- new.ped(EgPeds)
+# create a ped object 
+Bped1 <- new.ped(EgPeds[EgPeds$FamID == 1, ])
 
 # Plot pedigree with FamID = 1
-plot(Bpeds[Bpeds$FamID == 1,])
+plot(Bped1,
+     mar = c(1, 2, 3, 2))
 
-# Re-assign the generation numbers among the affected members
-# in the pedigree with FamID = 1 and store it as Aped1
-Aped1 <- reassignGen.ped(Bpeds[Bpeds$FamID == 1, ])
+# Re-assign the generation numbers and store as Aped1
+Aped1 <- reassignGen.ped(Bped1)
 
-# Print before and after generation numbers for the disease-affected relatives
-cbind(ID = Bpeds[Bpeds$FamID == 1 & Bpeds$affected, 2],
-      Gen_Before = Bpeds[Bpeds$FamID == 1 & Bpeds$affected, 14],
-      Gen_After = Aped1[Aped1$affected, 14])
+# Print before and after generations for the disease-affected relatives
+cbind(ID = Bped1$ID[Bped1$affected],
+      Gen_Before = Bped1$Gen[Bped1$affected],
+      Gen_After  = Aped1$Gen[Aped1$affected])
 ```
 
 Looking at the output above we see that the generation numbers of the affected members have not changed.  Referring back to the plotted pedigree we see that this is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).
 
 We note that, `Aped1` is a reduced version of the original pedigree and will contain only affected members, their parents, and common ancestors.  Since the focus of this assignment scheme is on the affected members, all other family members will now have missing generation numbers. 
 
-```{r, fig.height = 5.5, fig.width = 6.5}
+```{r, fig.height = 4, fig.width = 6.5}
 #plot pedigree with reassigned generation numbers
 plot(Aped1,
-     legendLocation = "bottomleft")
+     legendLocation = "bottomleft",
+     mar = c(1, 2, 1, 2))
 
 # Print generation numbers of unaffected relatives after reassignment.
 # Notice that after reassignment they are all NA.
 Aped1$Gen[Aped1$affected == FALSE]
 ```
+\newpage
 
+In this example, we reassign the generation numbers for the fifth pedigree contained in `EgPeds`.
 
 ```{r, fig.height = 5.5, fig.width = 8}
-# Plot pedigree with FamID = 5
-plot(Bpeds[Bpeds$FamID == 5,])
+# create a ped object from family 5 in EgPeds
+Bped5 <- new.ped(EgPeds[EgPeds$FamID == 5, ])
 
-# Re-assign the generation numbers among the affected members
-# in the pedigree with FamID = 5 and store it as Aped5
-Aped5 <- reassignGen.ped(Bpeds[Bpeds$FamID == 5, ])
+# Plot pedigree
+plot(Bped5)
 
-# Re-assign the generation numbers among the affected members
-# in the pedigree with FamID = 5 and store it as Aped5
-Aped5 <- reassignGen.ped(Bpeds[Bpeds$FamID == 5, ])
+# Re-assign the generation numbers and store as Aped5
+Aped5 <- reassignGen.ped(Bped5)
 
-# Print before and after generation numbers for the disease-affected relatives
-cbind(ID = Bpeds[Bpeds$FamID == 5 & Bpeds$affected, 2],
-      Gen_Before = Bpeds[Bpeds$FamID == 5 & Bpeds$affected, 14],
-      Gen_After = Aped5[Aped5$affected, 14])
+# Print before and after generations for the disease-affected relatives
+cbind(ID = Bped5$ID[Bped5$affected],
+      Gen_Before = Bped5$Gen[Bped5$affected],
+      Gen_After  = Aped5$Gen[Aped5$affected])
 ```
 
 In this example, referring to the plotted pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therefore, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9). 
@@ -348,6 +352,7 @@ It is important to note that the processing time required to simulate a sample o
  1. the genetic relative-risk, `GRR`, specified by the user approaches 1, particularly for rare diseases,
  2. the ascertainment period, `ascertain_span`, narrows,
  3. the proband's relative recall probabilities, `recall_probs`, become smaller.
+ 4. the rarity of the disease increases.
  
 For details concerning any of the arguments of the `simRVped()` function please refer to section 3.
 
