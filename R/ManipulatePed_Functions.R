@@ -78,8 +78,8 @@ reassignGen.ped = function(ped_file){
     stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
   }
 
-  #create new ped file with affecteds only
-  reGen_ped <- ped_file[ped_file$affected, ]
+  #create new ped file with available affecteds only
+  reGen_ped <- ped_file[ped_file$affected & ped_file$available, ]
 
   if (nrow(reGen_ped) == 0) {
     warning("No affecteds to assign affected generation")
