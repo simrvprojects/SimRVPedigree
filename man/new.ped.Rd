@@ -13,7 +13,7 @@ new.ped(ped_file)
 An object of class ped.
 }
 \description{
-Create a ped object, required input for \code{\link{reassignGen.ped}}, \code{\link{censor.ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim.ped}} functions.
+Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassignGen.ped}}, \code{\link{censor.ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim.ped}} functions.
 }
 \details{
 The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following columns:
@@ -24,28 +24,28 @@ The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain 
 \code{dadID} \tab numeric \tab identification number of father \cr
 \code{momID} \tab numeric \tab identification number of mother \cr
 \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-\code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
+\code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 }
 
 Optionally, \code{ped_file} \emph{may} contain any of the following columns:
 \tabular{lll}{
 \strong{name} \tab \strong{type}\tab \strong{description} \cr
-\code{available} \tab numeric \tab availibility status; \cr
+\code{available} \tab logical \tab availibility status; \cr
 \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
 \code{DA1} \tab numeric \tab paternally inherited allele at the assumed disease locus: \cr
 \tab \tab \code{DA1} = 1 if rare variant is present, and 0 otherwise\cr
 \code{DA2} \tab numeric \tab maternally inherited allele at the assumed disease locus: \cr
 \tab \tab \code{DA2} = 1 if rare variant is present, and 0 otherwise\cr
 \code{birthYr} \tab numeric \tab the individual's birth year \cr
-\code{onsetYr} \tab numeric \tab the individual's year of disease onset, when applicable \cr
-\code{deathYr} \tab numeric \tab the individual's year of death, when applicable \cr
+\code{onsetYr} \tab numeric \tab the individual's year of disease onset, when applicable, otherwise \code{NA} \cr
+\code{deathYr} \tab numeric \tab the individual's year of death, when applicable, otherwise \code{NA} \cr
 \code{RR} \tab numeric \tab the individual's relative-risk of disease \cr
 \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
 \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
-\code{proband} \tab numeric \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+\code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
 }
 
-\emph{We note that some of the optional fields above may be required for different ped functions}
+\emph{We note that some of the optional fields above may be required for various ped functions}
 }
 \examples{
 data(EgPeds)

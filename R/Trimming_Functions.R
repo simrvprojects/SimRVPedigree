@@ -23,14 +23,14 @@
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected} \tab numeric \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
+#' \code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 #' \tab\tab\cr
 #' \code{birthYr} \tab numeric \tab the individual's birth year.\cr
 #' \code{onsetYr} \tab numeric \tab the individual's disease onset year, when applicable.\cr
 #' \code{deathYr} \tab numeric \tab the individual's death year, when applicable.\cr
-#' \code{proband} \tab numeric \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+#' \code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
 #' \code{RR} \tab numeric \tab the individual's relative risk of disease. \cr
-#' \code{available} \tab numeric \tab availibility status; \cr
+#' \code{available} \tab logical \tab availibility status; \cr
 #' \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
 #' }
 #'

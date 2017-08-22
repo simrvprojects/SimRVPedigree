@@ -4,12 +4,12 @@
 \alias{hazard}
 \title{Create an object of class hazard.}
 \usage{
-hazard(hazardDF, partition)
+hazard(hazardDF, partition = NULL)
 }
 \arguments{
 \item{hazardDF}{Data.frame. Column 1 specifies the age-specific hazard rate of \emph{disease} in the population of interest, column 2 specifies the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and column 3 specifies the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.}
 
-\item{partition}{Numeric vector. Optional. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If missing, it is assumed that \code{partition} starts at 0 and increases in yearly increments.  See details.}
+\item{partition}{Numeric vector. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If not supplied,  defaults to a partition that starts at 0 and increases in yearly increments.  See details.}
 }
 \value{
 An object of class hazard.
@@ -25,7 +25,7 @@ Create a hazard object, required input for \code{\link{simRVped}}, \code{\link{s
  \item{column 3:}{age-specific hazard rates of \emph{death} for the \strong{affected} population.}
 }
 
-Users must provide \code{partition} in years; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must be valid for all of the age-specific hazard rates in \code{hazardDF}.
+Users must provide \code{partition} in years; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must apply to all of the age-specific hazard rates in \code{hazardDF}.
 }
 \examples{
 data(AgeSpecific_Hazards)
