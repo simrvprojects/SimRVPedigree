@@ -41,15 +41,15 @@ get_nextEvent = function(current_age, disease_status, RV_status,
   # Assuming that the person is not yet affected, simulate the waiting time
   # until onset given current age
   t_onset <- ifelse(disease_status, NA,
-                    get_WaitTime(p = runif(1), last_event = current_age,
-                                 hazard = hazard_rates[[1]][, 1]*RR/(1 + carrier_prob*(GRR - 1)),
-                                 part = hazard_rates[[2]]))
+                    get_wait_time(p = runif(1), last_event = current_age,
+                                  hazard = hazard_rates[[1]][, 1]*RR/(1 + carrier_prob*(GRR - 1)),
+                                  part = hazard_rates[[2]]))
 
   #simulate the waiting time until death given current age.
-  t_death <- get_WaitTime(p = runif(1),
-                          last_event = current_age,
-                          hazard = hazard_rates[[1]][, (2 + 1*disease_status)],
-                          part = hazard_rates[[2]], scale = TRUE)
+  t_death <- get_wait_time(p = runif(1),
+                           last_event = current_age,
+                           hazard = hazard_rates[[1]][, (2 + 1*disease_status)],
+                           part = hazard_rates[[2]], scale = TRUE)
 
   # Want to adjust the waiting time until birth based on current age
   # and also ensure that birth cannot occur after the maximum birth age
@@ -73,26 +73,26 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 
   #find the smallest waiting time
   min_time <- which.min(times)
-  dupTimes <- anyDuplicated(times)
+  duplicate_times <- anyDuplicated(times)
 
-  if (dupTimes == 0 | sum(is.na(times)) == 2) {
+  if (duplicate_times == 0 | sum(is.na(times)) == 2) {
     # nyears <- as.matrix(times[[which.min(times)]], ncol = 1)
     # colnames(nyears) <- c(paste(names(which.min(times))))
 
     t_event <- times[min_time]
-    eventType <- ifelse(min_time == 1, "Child",
+    event_type <- ifelse(min_time == 1, "Child",
                         ifelse(min_time == 2, "Onset", "Death"))
 
-  } else if (times[dupTimes] != times[min_time]) {
+  } else if (times[duplicate_times] != times[min_time]) {
     t_event <- times[min_time]
-    eventType <- ifelse(min_time == 1, "Child",
+    event_type <- ifelse(min_time == 1, "Child",
                         ifelse(min_time == 2, "Onset", "Death"))
   } else {
     t_event <- 0
-    eventType <- "retry"
+    event_type <- "retry"
   }
 
-  return(list(t_event, eventType))
+  return(list(t_event, event_type))
 }
 
 #' Simulate all life events
