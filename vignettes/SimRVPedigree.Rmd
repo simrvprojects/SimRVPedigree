@@ -356,15 +356,14 @@ It is important to note that the processing time required to simulate a sample o
  
 For details concerning any of the arguments of the `simRVped()` function please refer to section 3.
 
-To illustrate the effect of the relative-risk argument on the time required to simulate a study sample of 150 families for the family-study described in section 5, the following table lists the average computation times, in hours, observed over repeated simulations on a Windows OS with an i7-4790 @ 3.60 GHz, 12 GB of RAM, and a C220 SATA AHCI.
+To illustrate the effect of the relative-risk argument on the time required to simulate a pedigree for the family-study described in section 5, the following table lists the average computation times, in minutes, observed over repeated simulations on a Windows OS with an i7-4790 @ 3.60 GHz, 12 GB of RAM, and a C220 SATA AHCI.
 
-relative-risk | Average Computation Time (in hours) | Number of trials
-------------- | ------------------------------------|-----------------
-1 | 9.72 | 20
-5 | 1.15 | 15
-10 | 0.44 | 18
-15| 0.28 | 13
-20 | 0.18 | 17
+relative-risk | Average Computation Time (in minutes) | Number of trials
+------------- | --------------------------------------|-----------------
+1  | 5.43 | 10
+2  | 1.69 | 10
+5  | 0.45 | 10
+10 | 0.16 | 10
 
 Other combinations of simulation settings could also result in longer computation times.  For this reason, when possible, we recommend the use of parallel processing to simulate a large number of pedigrees ascertained for multiple affected members.  
 
