@@ -35,7 +35,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 
 #' Determine if a pedigree is ascertained
 #'
-#' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{simPed}} is ascertained.
+#' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
 #'
 #' @inheritParams trim.ped
 #' @inheritParams simRVped
@@ -50,7 +50,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #'
 #' #Simulate a random pedigree
 #' set.seed(2)
-#' ex_ped <- simPed(hazard_rates = my_HR,
+#' ex_ped <- sim_ped(hazard_rates = my_HR,
 #'                   GRR = 50, carrier_prob = 0.002,
 #'                   FamID = 1,
 #'                   RVfounder = TRUE,

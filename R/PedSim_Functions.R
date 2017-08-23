@@ -1,8 +1,8 @@
 #' Create an empty pedigree
 #'
-#' \code{create_pedFile} initializes an empty data frame with all of the fields required by \code{simPed} to simulate a pedigree.
+#' \code{create_pedFile} initializes an empty data frame with all of the fields required by \code{sim_ped} to simulate a pedigree.
 #'
-#' @return An empty data frame with all fields required by \code{simPed} to generate a pedigree.
+#' @return An empty data frame with all fields required by \code{sim_ped} to generate a pedigree.
 #' @keywords internal
 #'
 create_pedFile = function(){
@@ -213,7 +213,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 
 #' Simulate a pedigree
 #'
-#' Please note the distinction between \code{simPed} and \code{simRVped}.  Pedigrees simulated using \code{simPed} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{simRVped}}.
+#' Please note the distinction between \code{sim_ped} and \code{simRVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{simRVped}}.
 #'
 #'
 #' To introduce the rare variant to the pedigree, We allow users to choose from one of the following two assumptions:
@@ -221,7 +221,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' \item Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in Bureau (2014).
 #' \item Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
 #' }
-#' The \code{simPed} function starts simulating the pedigree by generating the birth year for the starting founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_life}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after disease onset, the waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population.  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of disease is \code{GRR}, according to a proportional hazards model.  The relative-risk of disease onset for individuals who have not inherited the causal variant is assumed to be 1.  Any life events that occur after \code{stop_year} are censored.
+#' The \code{sim_ped} function starts simulating the pedigree by generating the birth year for the starting founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_life}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after disease onset, the waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population.  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of disease is \code{GRR}, according to a proportional hazards model.  The relative-risk of disease onset for individuals who have not inherited the causal variant is assumed to be 1.  Any life events that occur after \code{stop_year} are censored.
 #'
 #' When segregating in the pedigree, the rare variant is transmitted from parent to offspring according to Mendel's laws.  The process of simulating life events is repeated for any offspring that are produced before \code{stop_year}.
 #'
@@ -244,7 +244,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 #' #Simulate a random pedigree
 #' set.seed(22)
-#' ex_ped <- simPed(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+#' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
 #'                   GRR = 10,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
@@ -260,12 +260,12 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'
 #' #Simulate a random pedigree
 #' set.seed(22)
-#' ex_ped <- simPed(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-#'                  RVfounder = TRUE,
-#'                  GRR = 10,
-#'                  FamID = 1,
-#'                  founder_byears = c(1900, 1910),
-#'                  stop_year = 2015)
+#' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+#'                   RVfounder = TRUE,
+#'                   GRR = 10,
+#'                   FamID = 1,
+#'                   founder_byears = c(1900, 1910),
+#'                   stop_year = 2015)
 #'
 #' ex_ped
 #' plot(ex_ped)
@@ -274,12 +274,12 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'      legendLocation = "topleft")
 #' summary(ex_ped)
 #'
-simPed = function(hazard_rates, GRR,
-                  FamID, founder_byears, stop_year,
-                  carrier_prob = 0.002,
-                  RVfounder = FALSE,
-                  birth_range = c(18, 45),
-                  NB_params = c(2, 4/7)){
+sim_ped = function(hazard_rates, GRR,
+                   FamID, founder_byears, stop_year,
+                   carrier_prob = 0.002,
+                   RVfounder = FALSE,
+                   birth_range = c(18, 45),
+                   NB_params = c(2, 4/7)){
 
   if(!(RVfounder %in% c(T, F))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -340,7 +340,7 @@ simPed = function(hazard_rates, GRR,
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
-#' \code{simRVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{simRVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{simRVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{simPed}}.
+#' \code{simRVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{simRVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{simRVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
 #'
 #' Upon simulating a pedigree with \code{num_affected} individuals, \code{simRVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
 #' \enumerate{
@@ -376,7 +376,7 @@ simPed = function(hazard_rates, GRR,
 #'
 #'
 #' @section See Also:
-#' \code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
+#' \code{\link{sim_ped}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
 #'
 #' @examples
 #' #Read in age-specific hazards
@@ -428,7 +428,7 @@ simRVped = function(hazard_rates, GRR,
 
 
   if (num_affected <= 0){
-    stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use simPed.')
+    stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use sim_ped.')
   }
 
   if (GRR > 0 & GRR < 1){
@@ -452,7 +452,7 @@ simRVped = function(hazard_rates, GRR,
   ascertained <- FALSE
   while(ascertained == FALSE){
     #generate pedigree
-    fam_ped <- simPed(hazard_rates, GRR, FamID,
+    fam_ped <- sim_ped(hazard_rates, GRR, FamID,
                       founder_byears, stop_year, carrier_prob,
                       RVfounder, birth_range, NB_params)
 

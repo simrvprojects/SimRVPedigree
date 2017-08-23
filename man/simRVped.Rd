@@ -52,7 +52,7 @@ We begin simulating the pedigree by generating the year of birth, uniformly, bet
 
 We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 
-\code{simRVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{simRVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{simRVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{simPed}}.
+\code{simRVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{simRVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{simRVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
 
 Upon simulating a pedigree with \code{num_affected} individuals, \code{simRVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
 \enumerate{
@@ -66,7 +66,7 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 }
 \section{See Also}{
 
-\code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
+\code{\link{sim_ped}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
 }
 
 \examples{
