@@ -307,7 +307,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' summary(ex_ped)
 #'
 sim_ped = function(hazard_rates, GRR,
-                   FamID, founder_byears, stop_year,
+                   FamID, founder_byears, stop_year = NULL,
                    carrier_prob = 0.002,
                    RVfounder = FALSE,
                    birth_range = c(18, 45),
@@ -323,7 +323,7 @@ sim_ped = function(hazard_rates, GRR,
     warning('carrier_prob > 0.002: sim_RVped is intended for simulating the transmission of rare variants.')
   }
 
-  if(missing(stop_year)){
+  if(is.null(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
   }
 

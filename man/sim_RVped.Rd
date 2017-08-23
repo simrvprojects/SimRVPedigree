@@ -5,8 +5,9 @@
 \title{Simulate a pedigree ascertained to contain multiple disease-affected relatives}
 \usage{
 sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
-  founder_byears, stop_year, recall_probs, carrier_prob = 0.002,
-  RVfounder = FALSE, birth_range = c(18, 45), NB_params = c(2, 4/7))
+  founder_byears, stop_year = NULL, recall_probs = NULL,
+  carrier_prob = 0.002, RVfounder = FALSE, birth_range = c(18, 45),
+  NB_params = c(2, 4/7))
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
@@ -21,9 +22,9 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 
 \item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
+\item{stop_year}{Numeric. The last year of study.  If not supplied, defaults to the current year.}
 
-\item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.}
+\item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If not supplied, the default value of four times kinship coefficient between the proband and the relative is used.}
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
 
@@ -66,7 +67,7 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 }
 \section{See Also}{
 
-\code{\link{sim_ped}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
+\code{\link{sim_ped}}, \code{\link{trim_ped}}, \code{\link{sim_life}}
 }
 
 \examples{

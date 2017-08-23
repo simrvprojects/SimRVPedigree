@@ -4,7 +4,7 @@
 \alias{sim_ped}
 \title{Simulate a pedigree}
 \usage{
-sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year,
+sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year = NULL,
   carrier_prob = 0.002, RVfounder = FALSE, birth_range = c(18, 45),
   NB_params = c(2, 4/7))
 }
@@ -17,7 +17,7 @@ sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year,
 
 \item{founder_byears}{Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.}
 
-\item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
+\item{stop_year}{Numeric. The last year of study.  If not supplied, defaults to the current year.}
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
 

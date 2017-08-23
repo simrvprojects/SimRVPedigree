@@ -13,7 +13,7 @@ new.ped(ped_file)
 An object of class ped.
 }
 \description{
-Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassignGen.ped}}, \code{\link{censor.ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim.ped}} functions.
+Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassign_gen}}, \code{\link{censor_ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim_ped}} functions.
 }
 \details{
 The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following columns:

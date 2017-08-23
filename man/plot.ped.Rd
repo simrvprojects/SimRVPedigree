@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{An object of class ped.}
 
-\item{ref_year}{When provided, the reference year for age age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.}
+\item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.}
 
 \item{legendLocation}{The location for the pedigree legend, \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, \code{"bottomleft"}.  By default, \code{legendLocation}\code{ = "topleft"}.}
 

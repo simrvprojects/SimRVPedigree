@@ -1,6 +1,6 @@
 #' Create an object of class ped.
 #'
-#' Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassignGen.ped}}, \code{\link{censor.ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim.ped}} functions.
+#' Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassign_gen}}, \code{\link{censor_ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim_ped}} functions.
 #'
 #' The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following columns:
 #' \tabular{lll}{
@@ -105,7 +105,7 @@ summary.ped <- function(object, ...) {
 #' Plot pedigree
 #'
 #' @param x An object of class ped.
-#' @param ref_year When provided, the reference year for age age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.
+#' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.
 #' @param legendLocation The location for the pedigree legend, \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, \code{"bottomleft"}.  By default, \code{legendLocation}\code{ = "topleft"}.
 #' @param legendRadius The radius of the pedigree legend.  By default, \code{legendRadius}\code{ = 0.25}.
 #' @param ... Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.
@@ -165,13 +165,13 @@ plot.ped <- function(x, ref_year,
       stop("\n \n OnsetYr missing, cannot determine ascertainment year. \n Please supply ref_year. \n")
     }
 
-    cped <- censor.ped(x, censor_year = x$onsetYr[x$proband])
+    cped <- censor_ped(x, censor_year = x$onsetYr[x$proband])
     pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband])
     k2ped <- ped2pedigree(cped)
     pYr <- x$onsetYr[x$proband]
 
   } else if (is.numeric(ref_year)) {
-    cped <- censor.ped(x, censor_year = ref_year)
+    cped <- censor_ped(x, censor_year = ref_year)
     pedLabs <- pedigreeLabels(x = cped, ref_year)
     k2ped <- ped2pedigree(cped)
     pYr <- ref_year

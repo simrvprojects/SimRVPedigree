@@ -285,7 +285,7 @@ plot(ascPed, ref_year = "ascYr",
 Looking at the pedigree above, we see that in 2009, only 2 family members had experienced onset of lymphoid cancer: the proband (the pedigree member with ID 3) and her mother (ID 1).  Referring to the 2017 pedigree, we see that four years after the pedigree was ascertained the proband's nephew (ID 7)  experienced disease disease at age 26.
 
 \newpage
-Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassignGen.ped` function provided with the `SimRVPedigree` package may be used to accomplish this task, provided no inbreeding or loops are present in the pedigree.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
+Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassign_gen` function provided with the `SimRVPedigree` package may be used to accomplish this task, provided no inbreeding or loops are present in the pedigree.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
 
 
 ```{r, fig.height = 5, fig.width = 6.5}
@@ -301,7 +301,7 @@ plot(Bped1,
      mar = c(1, 2, 3, 2))
 
 # Re-assign the generation numbers and store as Aped1
-Aped1 <- reassignGen.ped(Bped1)
+Aped1 <- reassign_gen(Bped1)
 
 # Print before and after generations for the disease-affected relatives
 cbind(ID = Bped1$ID[Bped1$affected],
@@ -335,7 +335,7 @@ Bped5 <- new.ped(EgPeds[EgPeds$FamID == 5, ])
 plot(Bped5)
 
 # Re-assign the generation numbers and store as Aped5
-Aped5 <- reassignGen.ped(Bped5)
+Aped5 <- reassign_gen(Bped5)
 
 # Print before and after generations for the disease-affected relatives
 cbind(ID = Bped5$ID[Bped5$affected],

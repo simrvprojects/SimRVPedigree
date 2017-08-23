@@ -18,7 +18,7 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 
 \item{YOB}{A positive number. The indivdiual's year of birth.}
 
-\item{stop_year}{Numeric. The last year of study.  If missing, the current year is used.}
+\item{stop_year}{Numeric. The last year of study.  If not supplied, defaults to the current year.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.}
 
