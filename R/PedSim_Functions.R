@@ -24,6 +24,38 @@ create_pedFile = function(){
              stringsAsFactors = FALSE)
 }
 
+#' Determine founder genotype at the disease locus and determime their relative-risk of disease
+#'
+#' @inheritParams sim_RVped
+#' @param intro_RV Logical. If \code{intro_RV = TRUE} a founder has introduced a rare, causal variant to the pedigree, otherwise no RV has been introduced to the pedigree.
+#'
+#' @return A list containing: 1. the founder's genotype at the disease locus, their relative-risk of disease, and an updated value for intro_RV.
+#'
+#' @keywords internal
+#'
+sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder){
+  if (GRR == 1) {
+    # If GRR (genetic relative risk) = 1, the variant is not associated with
+    # the disease; hence we do not allow an RV to segregate in the pedigree
+    d_locus <- c(0, 0)
+    fRR <- 1
+  } else if (RVfounder == FALSE){
+    # If FALSE has been selected we allow the founder
+    # the opportunity to introduce 1 copy of the RV with
+    # proportional to its carrier frequency in the population, and set RR and
+    # update intro_RV appropriately
+    d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
+                      size = 2, replace = F)
+    fRR <- ifelse(any(d_locus == 1), GRR, 1)
+  } else if (RVfounder == TRUE){
+    d_locus <- sample(x = c(0, 1), size = 2, replace = F)
+    fRR <- GRR
+  }
+
+  founder_dat <- list(d_locus, fRR)
+  return(founder_dat)
+}
+
 #' Create a new seed founder
 #'
 #' Create new seed founder for pedigree.
@@ -325,146 +357,4 @@ sim_ped = function(hazard_rates, GRR,
   rownames(fam_ped) <- NULL
 
   return(ped(fam_ped[, c(1:14)]))
-}
-
-
-#' Simulate a pedigree ascertained to contain multiple disease-affected relatives
-#'
-#' \code{sim_RVped} simulates a pedigree ascertained to contain multiple affected members, selects a proband, and trims the pedigree to contain only those individuals that are recalled by the proband.
-#'
-#' When \code{RV_founder = TRUE}, all simulated pedigrees will segregate a genetic susceptibility variant.  In this scenario, we assume that the variant is rare enough that it has been introduced by one founder, and we begin the simulation of the pedigree with this founder.  Alternatively, when \code{RV_founder = FALSE} we simulate the starting founder's causal variant status with probability \code{carrier_prob}.  When \code{RV_founder = FALSE} pedigrees may not segregate the genetic susceptibility variant.  The default selection is \code{RV_founder = FALSE}.  Additionally, we note that \code{sim_RVpedigree} is intended for rare causal variants; users will recieve a warning if \code{carrier_prob > 0.002}.
-#'
-#' We note that when \code{GRR = 1}, pedigrees do not segregate the causal variant regardless of the setting selected for \code{RVfounder}.  When the causal variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws.
-#'
-#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_life}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
-#'
-#' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
-#'
-#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
-#'
-#' Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped} chooses a proband from the set of available candidates.  Candidates for proband selection must have the following qualities:
-#' \enumerate{
-#'   \item experienced disease onset between the years specified by \code{ascertain_span},
-#'   \item if less than \code{num_affected} - 1 individuals experienced disease onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} affected individuals when the pedigree was ascertained through the proband.
-#' }
-#'
-#' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient, as defined by Thompson (see references), between the proband and his or her relatives are assumed.  This has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length \eqn{l}, such that the first \eqn{l-1} items represent the respective recall probabilities for relatives of degree \eqn{1, 2, ... , l-1} and the \eqn{l^{th}} item represents the recall probability of a relative of degree \eqn{l} or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
-#'
-#' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
-#'
-#' @param hazard_rates An object of class \code{hazard}, created by \code{\link{hazard}}.
-#' @param GRR Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.
-#' @param carrier_prob  Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}
-#' @param RVfounder Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.
-#' @param founder_byears Numeric vector of length 2.  The span of years from which to simulate, uniformly, the birth year for the founder who introduced the rare variant to the pedigree.
-#' @param ascertain_span Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.
-#' @param num_affected Numeric.  The minimum number of affected individuals in the pedigree.
-#' @param FamID Numeric. The family ID to assign to the simulated pedigree.
-#' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If missing, four times kinship coefficient between the proband and the relative is used.
-#' @param stop_year Numeric. The last year of study.  If missing, the current year is used.
-#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.
-#' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
-#'
-#' @return  A list containing the following data frames:
-#' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
-#' @return \item{\code{ascertained_ped} }{The ascertained pedigree, with proband selected and trimmed according to proband recall probability.  See details.}
-#' @export
-#'
-#' @references OUR MANUSCRIPT
-#' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
-#' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
-#'
-#'
-#' @section See Also:
-#' \code{\link{sim_ped}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
-#'
-#' @examples
-#' #Read in age-specific hazards
-#' data(AgeSpecific_Hazards)
-#'
-#' #Simulate pedigree ascertained for multiple affected individuals
-#' set.seed(2410)
-#' ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-#'                      GRR = 10,
-#'                      RVfounder = TRUE,
-#'                      FamID = 1,
-#'                      founder_byears = c(1900, 1920),
-#'                      ascertain_span = c(1995, 2015),
-#'                      num_affected = 2,
-#'                      stop_year = 2017,
-#'                      recall_probs = c(1, 0.5))
-#'
-#'
-#' # Original pedigree prior to proband selection and trimming
-#' summary(ex_RVped[[1]])
-#' plot(ex_RVped[[1]])
-#'
-#' # The ascertained pedigree
-#' summary(ex_RVped[[2]])
-#' plot(ex_RVped[[2]])
-#'
-#'
-#' # Simulate ascertained pedigree but this time set RVfounder = F.
-#' # Under this setting pedigrees segregate a causal
-#' # variant with probability equal to carrier prob.
-#'
-#'
-sim_RVped = function(hazard_rates, GRR,
-                    num_affected, ascertain_span,
-                    FamID, founder_byears,
-                    stop_year, recall_probs,
-                    carrier_prob = 0.002,
-                    RVfounder = FALSE,
-                    birth_range = c(18, 45),
-                    NB_params = c(2, 4/7)){
-
-  if(!(RVfounder %in% c(FALSE, TRUE))){
-    stop ('Please set RVfounder to TRUE or FALSE.')
-  }
-
-  if (length(ascertain_span) != 2 | ascertain_span[1] >= ascertain_span[2]){
-    stop ('please provide appropriate values for ascertain_span')
-  }
-
-
-  if (num_affected <= 0){
-    stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use sim_ped.')
-  }
-
-  if (GRR > 0 & GRR < 1){
-    warning('Setting GRR < 1 can significantly increase computation time')
-  }
-
-  if(!missing(recall_probs)) {
-    if (any(recall_probs > 1) | any(recall_probs < 0) ){
-      stop ('recall probabilities must be between 0 and 1')
-    } else if (any(recall_probs != cummin(recall_probs))){
-      warning('Nondecreasing values specified for recall_probs')
-    } else if (recall_probs[1] != 1){
-      warning('recall_probs: First-degree relatives may not be recalled.')
-    }
-  }
-
-  if(missing(stop_year)){
-    stop_year <- as.numeric(format(Sys.Date(),'%Y'))
-  }
-
-  ascertained <- FALSE
-  while(ascertained == FALSE){
-    #generate pedigree
-    fam_ped <- sim_ped(hazard_rates, GRR, FamID,
-                      founder_byears, stop_year, carrier_prob,
-                      RVfounder, birth_range, NB_params)
-
-    #check to see if pedigree is ascertained
-    check_pedigree <- is_ascertained(ped_file = fam_ped, num_affected,
-                                     ascertain_span, recall_probs)
-
-    #store updated pedigree
-    ascertained <- check_pedigree[[1]]
-    ascertained_ped <- check_pedigree[[2]]
-  }
-
-  #return original and trimmed pedigrees
-  return(list(full_ped = fam_ped, ascertained_ped = ascertained_ped))
 }

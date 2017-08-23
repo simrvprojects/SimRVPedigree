@@ -1,38 +1,3 @@
-#' Initial checks to disqualify a pedigree from ascertainment.
-#'
-#' @inheritParams choose_proband
-#'
-#' @return Logical. If TRUE, pedigree is discarded.
-#' @keywords internal
-disqualify_ped <- function(ped_file, num_affected, ascertain_span){
-  length(which(ped_file$onsetYr <= ascertain_span[2])) < num_affected |
-    length(which(ped_file$onsetYr %in% ascertain_span[1]:ascertain_span[2])) < 1
-}
-
-#' Check to see if a trimmed pedigree is ascertained.
-#'
-#' @inheritParams choose_proband
-#'
-#' @return Logical. If TRUE, pedigree is ascertained.
-#' @keywords internal
-ascertainTrim_ped <- function(ped_file, num_affected){
-
-  #Gather the onset years for all affecteds, and for the proband.
-  #We need to ensure that at least num_affected - 1 were affected prior to
-  #the proband for the pedigree to be ascertained.
-  POyear <- ped_file$onsetYr[ped_file$proband]
-
-  Oyears <- ped_file$onsetYr[ped_file$affected
-                             & ped_file$available
-                             & ped_file$proband == FALSE]
-
-  #determine the number of available affected individuals
-  ascertained <- sum(Oyears <= POyear) >= (num_affected - 1)
-
-  return(ascertained)
-}
-
-
 #' Determine if a pedigree is ascertained
 #'
 #' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
