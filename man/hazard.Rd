@@ -15,7 +15,7 @@ hazard(hazardDF, partition = NULL)
 An object of class hazard.
 }
 \description{
-Create a hazard object, required input for \code{\link{simRVped}}, \code{\link{sim_ped}}, and \code{\link{sim_life}} functions.
+Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_life}} functions.
 }
 \details{
 \code{hazardDF} must contain 3 columns that meet the following criteria:

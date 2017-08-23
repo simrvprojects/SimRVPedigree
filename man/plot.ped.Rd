@@ -28,7 +28,7 @@ haz_obj <- hazard(hazardDF = AgeSpecific_Hazards)
 
 #Simulate a pedigree ascertained for multiple affecteds
 set.seed(6)
-RVped2015 <- simRVped(hazard_rates = haz_obj,
+RVped2015 <- sim_RVped(hazard_rates = haz_obj,
                        num_affected = 2,
                        ascertain_span = c(1900, 2015),
                        GRR = 30, carrier_prob = 0.002,

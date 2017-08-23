@@ -38,7 +38,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
 #'
 #' @inheritParams trim.ped
-#' @inheritParams simRVped
+#' @inheritParams sim_RVped
 #'
 #' @return  A list containing the following data frames:
 #' @return \code{ascertained} Logical.  Indicates if pedigree is ascertained.

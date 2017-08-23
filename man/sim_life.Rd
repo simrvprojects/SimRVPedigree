@@ -56,18 +56,18 @@ my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, who
 # has NOT inherited a causal variant, born in 1900.  From the output, this
-# individual has 1 child in 1927, and then dies in 1987.
+# individual has 2 children: one in 1927, and one in 1934, and dies in 1987.
 set.seed(7664)
 sim_life(hazard_rates = my_HR, GRR = 10,
-               carrier_prob = 0.002,
-               RV_status = FALSE,
-               birth_range = c(17,45),
-               NB_params = c(2, 4/7),
-               YOB = 1900, stop_year = 2000)
+         carrier_prob = 0.002,
+         RV_status = FALSE,
+         birth_range = c(17,45),
+         NB_params = c(2, 4/7),
+         YOB = 1900, stop_year = 2000)
 
 # Using the same random seed, notice how life events can vary for
 # someone who has inherited the causal variant, which carries a
-# relative-risk of 25. From the output, this individual also has
+# relative-risk of 10. From the output, this individual also has
 # 1 child in 1927, but then experiences disease onset in 1976,
 # and dies in 1978.
 set.seed(7664)

@@ -1,6 +1,6 @@
 context("censor.ped")
 test_that("censor.ped returns an error when expected", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -27,7 +27,7 @@ test_that("censor.ped returns an error when expected", {
 })
 
 test_that("censor.ped returns a smaller or equally sized ped", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -40,7 +40,7 @@ test_that("censor.ped returns a smaller or equally sized ped", {
 })
 
 test_that("censor.ped does not return any info after the censor year", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -59,7 +59,7 @@ test_that("censor.ped does not return any info after the censor year", {
 })
 
 test_that("censor.ped issues a warnign if birthYr data missing", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,

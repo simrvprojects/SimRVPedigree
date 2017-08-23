@@ -20,7 +20,7 @@ body{ /* Normal  */
 1. [Introduction](#introduction)
 2. [Individual and Pedigree Specific Assumptions](#PedLevel)
 3. [Study Design/Ascertainment Scheme Features](#StudyLevel)
-4. [`simRVped()` Arguments](#simRVped)
+4. [`sim_RVped()` Arguments](#simRVped)
 5. [Example Application to Family-Based Study](#Example)
 6. [Parallel Processing Example](#ParProcExample)
 7. [References](#Ref)
@@ -50,7 +50,7 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 7. We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 
 #3. Study Design/Ascertainment Scheme Features <a name="StudyLevel"></a>
-The `simRVped` function is used to randomly simulate families ascertained to have multiple affected relatives. The study design features available to the user are specified via the following arguments:
+The `sim_RVped` function is used to randomly simulate families ascertained to have multiple affected relatives. The study design features available to the user are specified via the following arguments:
 
 1. `num_affected`: the minimum number of relatives affected by the disease of interest in each pedigree. 
 
@@ -61,9 +61,9 @@ This option is included to allow researchers to model the possibility that a pro
 
 3. `stop_year`: the stop year represents either: the year that the study ends or the last full year that data have been collected.  All events that occur after the stop year are censored.
 
-#4. `simRVped` Arguments <a name="simRVped"></a>
+#4. `sim_RVped` Arguments <a name="simRVped"></a>
 
-To simulate a pedigree with `simRVped` the user must specify:
+To simulate a pedigree with `sim_RVped` the user must specify:
 
 1. `hazardDF`: a data frame with:
      1. column 1: the age-specific hazard rate for disease in the population.
@@ -93,7 +93,7 @@ Suppose that, from 1995 to 2010, researchers ascertained 100 families that conta
 
 Researchers are confident that all affected family members have been fully ascertained.  Upon inspecting the founders in the ascertained families, they see that all were born between 1900 and 1920.
 
-Based on the description of the family-based study described above, and referring to the input requirements in the last section, to simulate families ascertained by this study with the `simRVped` function, users will set:
+Based on the description of the family-based study described above, and referring to the input requirements in the last section, to simulate families ascertained by this study with the `sim_RVped` function, users will set:
 
 1. `num_affected` = 2
 2. `ascertain_span` = c(1995, 2010)
@@ -131,7 +131,7 @@ data("AgeSpecific_Hazards")
 head(AgeSpecific_Hazards, n = 3)
 ```
 
-Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `simRVped.`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, we define the partition as follows:
+Looking at the output above, we can see that the `AgeSpecific_Hazards` data set, already specifies the age-specific hazard rates in the order required by `sim_RVped.`  Since the `AgeSpecific_Hazards` data set supplies the age-specific hazard rates in yearly increments starting at age 0 and ending with age 100, we define the partition as follows:
 
 ```{r}
 # specify partition of ages
@@ -168,12 +168,12 @@ legend("topleft", title = "Population", legend = c("General", "Affected"),
 ```
 
 \newpage
-Now we show how `simRVped` may be used to simulate a pedigree ascertained for the previously described study.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
+Now we show how `sim_RVped` may be used to simulate a pedigree ascertained for the previously described study.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
 
 ```{r}
 # simulate an ascertained pedigree 
 set.seed(3170)
-ex_RVped <- simRVped(hazard_rates = LC_hazard,
+ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
                       GRR = 10, carrier_prob = 0.002,
@@ -187,7 +187,7 @@ ex_RVped <- simRVped(hazard_rates = LC_hazard,
 summary(ex_RVped)
 ```
 
-The `simRVped` function returns a list containing two objects of class `ped`.  The first is  named `full_ped` and represents the original pedigree, prior to proband selection and trimming.  The second is named `ascertained_ped` and represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [7], they are included in the ascertained pedigree, but their information is missing, and they are labelled unavailable.  
+The `sim_RVped` function returns a list containing two objects of class `ped`.  The first is  named `full_ped` and represents the original pedigree, prior to proband selection and trimming.  The second is named `ascertained_ped` and represents the ascertained pedigree, and includes an additional variable to identify the proband.  Any relatives not recalled by the proband are removed from the ascertained pedigree.  If a relative is not recalled by the proband, but is required to plot the pedigree using the `kinship2` package [7], they are included in the ascertained pedigree, but their information is missing, and they are labelled unavailable.  
 
 Since we are interested in families ascertained for study, we will focus our attention on `ascertained_ped`.  We can view a summary of `ascertained_ped` by executing the following commands. 
 
@@ -354,7 +354,7 @@ It is important to note that the processing time required to simulate a sample o
  3. the proband's relative recall probabilities, `recall_probs`, become smaller.
  4. the rarity of the disease increases.
  
-For details concerning any of the arguments of the `simRVped()` function please refer to section 3.
+For details concerning any of the arguments of the `sim_RVped()` function please refer to section 3.
 
 To illustrate the effect of the relative-risk argument on the time required to simulate a pedigree for the family-study described in section 5, the following table lists the average computation times, in minutes, observed over repeated simulations on a Windows OS with an i7-4790 @ 3.60 GHz, 12 GB of RAM, and a C220 SATA AHCI.
 
@@ -414,7 +414,7 @@ RV_peds = foreach(i = seq(npeds),
                   .packages = c("kinship2", "SimRVPedigree"),  
                   .options.RNG = 1984
                   ) %dorng% {
-                    simRVped(hazard_rates = LC_hazard,
+                    sim_RVped(hazard_rates = LC_hazard,
                               num_affected = 2,
                               ascertain_span = c(1995, 2010),
                               GRR = 10, carrier_prob = 0.002,

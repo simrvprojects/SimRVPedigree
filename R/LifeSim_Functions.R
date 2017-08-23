@@ -21,7 +21,7 @@
 #' @param current_age Numeric. The individual's current age.
 #' @param disease_status Numeric. The individual's disease status, where \code{disease_status = 1} if individual has experienced disease onset, otherwise \code{disease_status = 0}.
 #' @param lambda_birth Numeric. The individual's birth rate.
-#' @inheritParams simRVped
+#' @inheritParams sim_RVped
 #' @inheritParams sim_life
 #'
 #' @return A named matrix. The number of years until the next life event,
@@ -121,7 +121,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' @param YOB A positive number. The indivdiual's year of birth.
 #' @param RV_status Numeric. \code{RV_status = TRUE} if the individual is a carrier of a rare variant that increases disease suseptibility, and \code{FALSE} otherwise.
-#' @inheritParams simRVped
+#' @inheritParams sim_RVped
 #'
 #' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
 #'
@@ -136,18 +136,18 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' # The following commands simulate all life events for an individual, who
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this
-#' # individual has 1 child in 1927, and then dies in 1987.
+#' # individual has 2 children: one in 1927, and one in 1934, and dies in 1987.
 #' set.seed(7664)
 #' sim_life(hazard_rates = my_HR, GRR = 10,
-#'                carrier_prob = 0.002,
-#'                RV_status = FALSE,
-#'                birth_range = c(17,45),
-#'                NB_params = c(2, 4/7),
-#'                YOB = 1900, stop_year = 2000)
+#'          carrier_prob = 0.002,
+#'          RV_status = FALSE,
+#'          birth_range = c(17,45),
+#'          NB_params = c(2, 4/7),
+#'          YOB = 1900, stop_year = 2000)
 #'
 #' # Using the same random seed, notice how life events can vary for
 #' # someone who has inherited the causal variant, which carries a
-#' # relative-risk of 25. From the output, this individual also has
+#' # relative-risk of 10. From the output, this individual also has
 #' # 1 child in 1927, but then experiences disease onset in 1976,
 #' # and dies in 1978.
 #' set.seed(7664)

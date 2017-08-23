@@ -1,6 +1,6 @@
 #' Determine founder genotype at the disease locus and determime their relative-risk of disease
 #'
-#' @inheritParams simRVped
+#' @inheritParams sim_RVped
 #' @param intro_RV Logical. If \code{intro_RV = TRUE} a founder has introduced a rare, causal variant to the pedigree, otherwise no RV has been introduced to the pedigree.
 #'
 #' @return A list containing: 1. the founder's genotype at the disease locus, their relative-risk of disease, and an updated value for intro_RV.
@@ -33,7 +33,7 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder){
 #' Choose a proband from the disease-affected relatives in a pedigree
 #'
 #' @param ped_file Pedigree simulated by \code{sim_ped}.
-#' @inheritParams simRVped
+#' @inheritParams sim_RVped
 #'
 #' @return Pedigree with proband selected.
 #' @keywords internal
@@ -51,7 +51,7 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
 
   if (sum(A_ID$proband) == 1) {
     #In this scenario we have only 1 candidate proband
-    #NOTE: simRVped has already checked to make sure
+    #NOTE: sim_RVped has already checked to make sure
     #that there was another affected prior to this one
 
     ped_file$proband[which(ped_file$ID == A_ID$ID[A_ID$proband])] <- T

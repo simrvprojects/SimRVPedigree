@@ -1,6 +1,6 @@
 context("choose_proband")
 test_that("returns a dataframe with the proband variable with a single proband", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE,
                      FamID = 1,
@@ -17,7 +17,7 @@ test_that("returns a dataframe with the proband variable with a single proband",
 })
 
 test_that("The proband is an affected and experienced onset during the ascertainment span", {
-  RVped <- simRVped(hazard_rates = hazard(AgeSpecific_Hazards),
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.001,
                      RVfounder = TRUE,
                      FamID = 1,

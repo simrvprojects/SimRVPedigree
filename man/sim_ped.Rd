@@ -31,7 +31,7 @@ sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year,
 The simulated pedigree.
 }
 \description{
-Please note the distinction between \code{sim_ped} and \code{simRVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{simRVped}}.
+Please note the distinction between \code{sim_ped} and \code{sim_RVped}.  Pedigrees simulated using \code{sim_ped} do not account for study design.  To simulate a pedigree ascertained to contain multiple family members affected by a disease please use \code{\link{sim_RVped}}.
 }
 \details{
 To introduce the rare variant to the pedigree, We allow users to choose from one of the following two assumptions:
@@ -45,7 +45,7 @@ When segregating in the pedigree, the rare variant is transmitted from parent to
 }
 \section{See Also}{
 
-\code{\link{simRVped}}
+\code{\link{sim_RVped}}
 }
 
 \examples{
