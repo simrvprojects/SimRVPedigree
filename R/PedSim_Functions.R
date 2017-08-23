@@ -159,10 +159,10 @@ sim_nFam = function(found_info, stop_year, last_id,
   nfam_ped <- found_info
 
   #Simulate life steps for founder
-  sim_years <- simLifeEvents(hazard_rates, GRR, carrier_prob,
-                             RV_status = any(found_info[, c(7:8)] == 1),
-                             YOB = found_info$birthYr, stop_year,
-                             birth_range, NB_params)
+  sim_years <- sim_life(hazard_rates, GRR, carrier_prob,
+                        RV_status = any(found_info[, c(7:8)] == 1),
+                        YOB = found_info$birthYr, stop_year,
+                        birth_range, NB_params)
 
 
 
@@ -221,7 +221,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' \item Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in Bureau (2014).
 #' \item Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
 #' }
-#' The \code{simPed} function starts simulating the pedigree by generating the birth year for the starting founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{simLifeEvents}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after disease onset, the waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population.  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of disease is \code{GRR}, according to a proportional hazards model.  The relative-risk of disease onset for individuals who have not inherited the causal variant is assumed to be 1.  Any life events that occur after \code{stop_year} are censored.
+#' The \code{simPed} function starts simulating the pedigree by generating the birth year for the starting founder, uniformly between the years specified by \code{founder_byears}.  Next, all life events are simulated for the founder via \code{\link{sim_life}}.  Possible life events include: reproduction, disease onset, and death.  We only allow disease onset to occur once, i.e. no remission.  Computationally, this implies that after disease onset, the waiting time to death is always simulated using the age-specific mortality rates for the \emph{affected} population.  Life events for individuals who have inherited the rare variant are simulated such that their relative-risk of disease is \code{GRR}, according to a proportional hazards model.  The relative-risk of disease onset for individuals who have not inherited the causal variant is assumed to be 1.  Any life events that occur after \code{stop_year} are censored.
 #'
 #' When segregating in the pedigree, the rare variant is transmitted from parent to offspring according to Mendel's laws.  The process of simulating life events is repeated for any offspring that are produced before \code{stop_year}.
 #'
@@ -336,7 +336,7 @@ simPed = function(hazard_rates, GRR,
 #'
 #' We note that when \code{GRR = 1}, pedigrees do not segregate the causal variant regardless of the setting selected for \code{RVfounder}.  When the causal variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws.
 #'
-#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{simLifeEvents}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
+#' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_life}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
@@ -376,7 +376,7 @@ simPed = function(hazard_rates, GRR,
 #'
 #'
 #' @section See Also:
-#' \code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{simLifeEvents}}
+#' \code{\link{simPed}}, \code{\link{trim.ped}}, \code{\link{sim_life}}
 #'
 #' @examples
 #' #Read in age-specific hazards
