@@ -15,42 +15,6 @@ A pedigree object.  See \code{\link{pedigree}} for details.
 \description{
 Create a kinship2 pedigree structure from an object of class ped
 }
-\examples{
-data(EgPeds)
-
-ped1 = new.ped(EgPeds[EgPeds$FamID == 1, ])
-head(ped1, n = 3)
-class(ped1)
-summary(ped1)
-
-kinPed <- ped2pedigree(ped1)
-kinPed
-
-library(kinship2)
-plot(kinPed)
-pedigree.legend(kinPed, location="topleft", radius=.25)
-
-
-
-AllPeds = new.ped(EgPeds)
-summary(AllPeds)
-
-kinPed_multi <- ped2pedigree(AllPeds)
-kinPed_multi
-
-unique(AllPeds$FamID)
-
-# If pedigree object contains more than 1 family
-# take care to specify the family ID when plotting
-plot(kinPed_multi['2'])
-pedigree.legend(kinPed_multi['2'], location="topleft", radius=.25)
-
-plot(kinPed_multi['4'])
-pedigree.legend(kinPed_multi['4'], location="topleft", radius=.25)
-
-
-
-}
 \references{
 Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 }

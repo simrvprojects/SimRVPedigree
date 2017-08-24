@@ -8,41 +8,6 @@
 #' @importFrom kinship2 pedigree
 #' @export
 #' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
-#' @examples
-#' data(EgPeds)
-#'
-#' ped1 = new.ped(EgPeds[EgPeds$FamID == 1, ])
-#' head(ped1, n = 3)
-#' class(ped1)
-#' summary(ped1)
-#'
-#' kinPed <- ped2pedigree(ped1)
-#' kinPed
-#'
-#' library(kinship2)
-#' plot(kinPed)
-#' pedigree.legend(kinPed, location="topleft", radius=.25)
-#'
-#'
-#'
-#' AllPeds = new.ped(EgPeds)
-#' summary(AllPeds)
-#'
-#' kinPed_multi <- ped2pedigree(AllPeds)
-#' kinPed_multi
-#'
-#' unique(AllPeds$FamID)
-#'
-#' # If pedigree object contains more than 1 family
-#' # take care to specify the family ID when plotting
-#' plot(kinPed_multi['2'])
-#' pedigree.legend(kinPed_multi['2'], location="topleft", radius=.25)
-#'
-#' plot(kinPed_multi['4'])
-#' pedigree.legend(kinPed_multi['4'], location="topleft", radius=.25)
-#'
-#'
-#'
 ped2pedigree <- function(x){
 
   if (!is.ped(x)) stop("please supply an object of class ped")
@@ -97,44 +62,8 @@ ped2pedigree <- function(x){
 #' @param ref_year A numeric constant.  The reference year used to determine current age for pedigree members.
 #'
 #' @return A list of labels that can be used with kinship2's plot function. See \code{\link{plot.pedigree}} for details.
-#' @export
+#' @keywords internal
 #' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
-#' @examples
-#' data(EgPeds)
-#'
-#' ped1 = new.ped(EgPeds[EgPeds$FamID == 2, ])
-#' head(ped1, n = 3)
-#' class(ped1)
-#' summary(ped1)
-#'
-#' kinPed <- ped2pedigree(ped1)
-#' kinPed
-#' kinLabs <- pedigreeLabels(ped1, ref_year = 2016)
-#'
-#' library(kinship2)
-#' plot(kinPed,
-#'      id = kinLabs,
-#'      mar = c(3, 3, 4, 3) + 0.1)
-#' pedigree.legend(kinPed, location = "topleft", radius = 0.2)
-#'
-#'
-#' AllPeds = new.ped(EgPeds)
-#' summary(AllPeds)
-#'
-#' kinPed_multi <- ped2pedigree(AllPeds)
-#' kinPed_multi
-#' kinLabs_multi <- pedigreeLabels(AllPeds, ref_year = 2016)
-#'
-#' unique(AllPeds$FamID)
-#'
-#' # If pedigree object contains more than 1 family
-#' # take care to specify the family ID when plotting
-#' plot(kinPed_multi['4'],
-#'      id = kinLabs_multi[AllPeds$FamID == 4],
-#'      mar = c(3, 3, 4, 3) + 0.1)
-#' pedigree.legend(kinPed['4'], location = "topleft", radius = 0.2)
-#'
-#'
 pedigreeLabels <- function(x, ref_year){
 
   if (!is.ped(x)) stop("\n \n Please supply an object of class ped. \n")
