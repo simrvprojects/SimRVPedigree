@@ -90,16 +90,71 @@ is.ped <- function(x) {
   return(inherits(x, "ped"))
 }
 
+#' Summarize a sample of pedigrees
+#'
+#' Summarize a sample of pedigrees
+#'
+#' The \code{summary.ped} function returns two data frames. The first is called \code{family_info}, and contains the following fields for each family supplied.
+#' \tabular{ll}{
+#' \strong{variable} \tab \strong{description} \cr
+#' \code{FamID} \tab family identification number\cr
+#' \code{totalRelatives} \tab the total number of relatives \cr
+#' \code{numAffected}\tab the total number of disease-affected individuals\cr
+#' \code{aveOnsetAge}\tab the average onset age among the disease-affected relatives\cr
+#' \code{aveIBD}\tab the average of the pairwise IBD probabilities among the disease-affected relatives\cr
+#' \code{ascertainYear}\tab the year the pedigree was ascertained\cr
+#' \code{segRV} \tab logical Indicates whether or not pedigree segregates a causal variant. \cr \tab If the pedigree segregates the variant \code{segRV = TRUE}.\cr
+#' }
+#'
+#' The second item returned by \code{summary.ped} is called \code{affected_info}, and contains the following fields for each disease-affected relative supplied.
+#' \tabular{ll}{
+#' \strong{variable} \tab \strong{description} \cr
+#' \code{FamID} \tab family identification number \cr
+#' \code{ID} \tab individual identification number \cr
+#' \code{birthYr}\tab the individual's birth year, when applicable, otherwise \code{NA} \cr
+#' \code{onsetYr}\tab the individual's year of disease onset, when applicable, otherwise \code{NA} \cr
+#' \code{deathYr}\tab the individual's year of death, when applicable, otherwise \code{NA} \cr
+#' \code{RR}\tab the individual's relative-risk of disease \cr
+#' \code{proband}\tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+#' }
+#'
+#' @param object An object of class ped.
+#' @param ... additional arguments passed to other methods.
+#'
+#' @return \item{\code{family_info} }{A data frame containing family specific variables for each pedigree supplied.  See details.}
+#' @return \item{\code{affected_info} }{A data frame containing information for the affected individuals in each pedigree supplied.  See details.}
 #' @export
+#'
+#' @examples
+#' #Read in age-specific harard data and create hazard object.
+#' data(AgeSpecific_Hazards)
+#' haz_obj <- hazard(hazardDF = AgeSpecific_Hazards)
+#'
+#' #Simulate a pedigree ascertained for multiple affecteds
+#' set.seed(6)
+#' RVped2015 <- sim_RVped(hazard_rates = haz_obj,
+#'                        num_affected = 2,
+#'                        ascertain_span = c(1900, 2015),
+#'                        GRR = 30, carrier_prob = 0.002,
+#'                        RVfounder = TRUE,
+#'                        stop_year = 2015,
+#'                        recall_probs = c(1),
+#'                        founder_byears = c(1900, 1925),
+#'                        FamID = 1)[[2]]
+#' summary(RVped2015)
+#'
+#' data(EgPeds)
+#' summary(EgPeds)
+#'
 summary.ped <- function(object, ...) {
   n <- length(unique(object$FamID))
 
-  famdat <- lapply(unique(object$FamID), function(x){
-    get_famInfo(object[object$FamID == x, ])
+  famdat <- lapply(unique(object$FamID), function(y){
+    get_famInfo(object[object$FamID == y, ])
   })
 
-  afdat <- lapply(unique(object$FamID), function(x){
-    get_affectedInfo(object[object$FamID == x, ])
+  afdat <- lapply(unique(object$FamID), function(y){
+    get_affectedInfo(object[object$FamID == y, ])
     })
 
   return(list(family_info = do.call(rbind, famdat),
