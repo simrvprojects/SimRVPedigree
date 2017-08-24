@@ -75,28 +75,28 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 data(AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(2410)
+set.seed(1960)
 ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-                     GRR = 10,
-                     RVfounder = TRUE,
-                     FamID = 1,
-                     founder_byears = c(1900, 1920),
-                     ascertain_span = c(1995, 2015),
-                     num_affected = 2,
-                     stop_year = 2017,
-                     recall_probs = c(1, 0.5))
+                      GRR = 10,
+                      RVfounder = TRUE,
+                      FamID = 1,
+                      founder_byears = c(1900, 1920),
+                      ascertain_span = c(1995, 2015),
+                      num_affected = 2,
+                      stop_year = 2017,
+                      recall_probs = c(1, 1, 0))
 
 
 # Original pedigree prior to proband selection and trimming
-summary(ex_RVped[[1]])
 plot(ex_RVped[[1]])
 
 # The ascertained pedigree
-summary(ex_RVped[[2]])
 plot(ex_RVped[[2]])
+summary(ex_RVped[[2]])
 
 
-# Simulate ascertained pedigree but this time set RVfounder = F.
+# Simulate ascertained pedigree with RVfounder = FALSE.
+# NOTE: by default, RVfounder = FALSE.
 # Under this setting pedigrees segregate a causal
 # variant with probability equal to carrier prob.
 

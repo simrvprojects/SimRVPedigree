@@ -4,17 +4,28 @@
 \alias{plot.ped}
 \title{Plot pedigree}
 \usage{
-\method{plot}{ped}(x, ref_year, legendLocation = "topleft",
-  legendRadius = 0.25, ...)
+\method{plot}{ped}(x, ref_year = NULL, location = "topleft", radius = 0.2,
+  density = c(-1, 35, 55), angle = c(90, 65, 40), cex = 1, adj = 1,
+  line = 2, ...)
 }
 \arguments{
 \item{x}{An object of class ped.}
 
-\item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.}
+\item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.}
 
-\item{legendLocation}{The location for the pedigree legend, \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, \code{"bottomleft"}.  By default, \code{legendLocation}\code{ = "topleft"}.}
+\item{location}{The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.}
 
-\item{legendRadius}{The radius of the pedigree legend.  By default, \code{legendRadius}\code{ = 0.25}.}
+\item{radius}{The radius size for the pedigree legend, as in \code{\link{pedigree.legend}}.  By default, \code{radius = 0.2}.}
+
+\item{density}{The density of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{density = c(-1, 35, 55)}.}
+
+\item{angle}{The angle of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{angle = c(90, 65, 40)}.}
+
+\item{cex}{The text size. By default, \code{cex = 1}}
+
+\item{adj}{When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{adj = 1}.}
+
+\item{line}{When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{line = 2}.}
 
 \item{...}{Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.}
 }
@@ -42,10 +53,13 @@ summary(RVped2015)
 #plot pedigree without age labels
 plot(RVped2015)
 
+
 #plot pedigree with age labels, since unspecified
 #reference year defaults to ascertainment year
 plot(RVped2015, ref_year = "ascYr")
-plot(RVped2015, ref_year = "ascYr", cex= 0.75, symbolsize = 1.25)
+plot(RVped2015, ref_year = "ascYr",
+     cex = 0.75, symbolsize = 1.25,
+     mar = c(1, 2, 3, 2))
 
 #plot pedigree with age lablels at specified reference years.
 plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
@@ -54,6 +68,9 @@ plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
 
 }
+\references{
+Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
+}
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{plot}}
+\code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}
 }

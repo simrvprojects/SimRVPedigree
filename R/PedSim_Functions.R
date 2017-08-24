@@ -283,10 +283,10 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                   stop_year = 2015)
 #'
 #' ex_ped
-#' plot(ex_ped, legendLocation = "bottomleft")
+#' plot(ex_ped, location = "bottomleft")
 #' plot(ex_ped, ref_year = 2015,
 #'      cex= 0.75, symbolsize = 1.25,
-#'      legendLocation = "bottomleft")
+#'      location = "bottomleft")
 #'
 #' summary(ex_ped)
 #'
@@ -302,8 +302,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' ex_ped
 #' plot(ex_ped)
 #' plot(ex_ped, ref_year = 2015,
-#'      cex= 0.75, symbolsize = 1.25,
-#'      legendLocation = "topleft")
+#'      cex= 0.75, symbolsize = 1.25)
 #' summary(ex_ped)
 #'
 sim_ped = function(hazard_rates, GRR,

@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -199,6 +199,10 @@ ascPed <- ex_RVped$ascertained_ped
 summary(ascPed)
 ```
 
+When an object of class ped is supplied to the `summary` function it will return a list containing two data frames. The first, `family_info` contains information for each pedigree supplied to `summary`.  Specifically, for each pedigree `family_info` contains: the family ID, the total number of relatives, the total number of affected relatives, the average onset age of the disease-affected realtives, the avarage of the pairwise kinship coefficients between the disease-affected relatives, the year the pedigree was ascertained, and a logical variable that indicates if the pedigree is segregating a causal variant. 
+
+The second data frame returned by `summary` contains information for the disease-affected relatives in each pedigree.  This item is called `affected_info`.  For each disease-affected relative in each pedigree supplied, `affected_info` contains: their family ID, their ID, their year of birth, their year of onset, their year of death (when applicable), their relative risk of disease, a logical variable which indicated whether or not they are the proband, and their rare variant status.  
+
 We note that objects of class `ped` inherit from `data.frame`.  Thus, many of the methods for objects of class `data.frame` will also work for objects of class `ped`.  For example, to view the first two lines of `ascPed` we can use the `head` function. 
 
 ```{r}
@@ -227,34 +231,11 @@ The columns displayed in the output produced by `head` may be described as follo
  14. `Gen`: the individual's generation number relative to the eldest pedigree founder.  That is, the eldest founder will have `Gen = 1`, his or her offspring will have `Gen = 2`, etc. 
  15. `proband`: a proband identifier: `proband = TRUE` if the individual is the proband, and `FALSE` otherwise.
 
-To obtain information for the disease-affected relatives we supply the ascertained pedigree to the `affInfo.ped` function.
-
-```{r}
-# obtain information about the ascertained pedigree by supplying it to affInfo.ped 
-pedInfo <- affInfo.ped(ascPed)
-class(pedInfo)
-names(pedInfo)
-```
-
-The `affInfo.ped` function returns a list containing two items. The item first is named `affVars.`  This is a `data.frame` containing data for the affected relatives. 
-
-```{r}
-# View data for the affected relatives.
-pedInfo$affVars
-```
-
-The second item returned by `affInfo.ped` is named `affKin` and is a matrix of the pairwise kinship coefficients for the affected relatives.
-
-```{r}
-# View matrix of the pairwise kinship 
-# coefficients for the affected relatives.
-pedInfo$affKin
-```
-
+\newpage
 To plot pedigrees we use the `plot` function. 
 ```{r, fig.height = 6.5, fig.width = 6.5}
 # Plot the ascertained pedigree
-plot(ascPed, legendLocation = "bottomleft")
+plot(ascPed, location = "bottomleft")
 ```
 
 The legend, in the lower left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 3, and 7) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 3) is indicated by shading in the lower third the symbol.  Individuals who have inherited a causal variant (IDs 1, 3, 4, 7, 6, and 9) have shading in the upper right third of their symbol.
@@ -263,7 +244,7 @@ Often, there is additional individual information we would like to display with 
 ```{r, fig.height = 6.5, fig.width = 6.5}
 # Plot the pedigree, with age labels, in 2017.
 plot(ascPed, ref_year = 2017,
-     legendLocation = "bottomleft",
+     location = "bottomleft",
      cex = 0.75, symbolsize = 1.15,
      mar = c(1, 2, 3, 2))
 ```
@@ -272,12 +253,11 @@ When `ref_year` is supplied, additional information will be plotted when possibl
 \newpage
 It is important to note that the pedigree may have been quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = ascYr` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
 
-```{r, fig.height = 5.5, fig.width = 5.5}
+```{r, fig.height = 5.5, fig.width = 6.5}
 # Plot the pedigrees, with age labels,
 # at the time of ascertainment.
 plot(ascPed, ref_year = "ascYr",
-     legendLocation = "bottomleft",
-     legendRadius = 0.15,
+     location = "bottomleft",
      cex = 0.75, symbolsize = 1.15,
      mar = c(1, 2, 3, 2))
 ```
@@ -314,9 +294,9 @@ Looking at the output above we see that the generation numbers of the affected m
 We note that, `Aped1` is a reduced version of the original pedigree and will contain only affected members, their parents, and common ancestors.  Since the focus of this assignment scheme is on the affected members, all other family members will now have missing generation numbers. 
 
 ```{r, fig.height = 4, fig.width = 6.5}
-#plot pedigree with reassigned generation numbers
+#plot pedigree after reassigning generation numbers
 plot(Aped1,
-     legendLocation = "bottomleft",
+     location = "bottomleft", radius = 0.3,
      mar = c(1, 2, 1, 2))
 
 # Print generation numbers of unaffected relatives after reassignment.

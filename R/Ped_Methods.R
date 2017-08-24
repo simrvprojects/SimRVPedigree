@@ -1,6 +1,6 @@
 #' Create an object of class ped.
 #'
-#' Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassign_gen}}, \code{\link{censor_ped}}, \code{\link{affInfo.ped}}, and \code{\link{trim_ped}} functions.
+#' Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassign_gen}}, \code{\link{censor_ped}}, and \code{\link{trim_ped}} functions.
 #'
 #' The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following columns:
 #' \tabular{lll}{
@@ -95,24 +95,36 @@ summary.ped <- function(object, ...) {
   n <- length(unique(object$FamID))
 
   famdat <- lapply(unique(object$FamID), function(x){
-    sumVars(object[object$FamID == x, ])
+    get_famInfo(object[object$FamID == x, ])
   })
 
-  return(do.call(rbind, famdat))
+  afdat <- lapply(unique(object$FamID), function(x){
+    get_affectedInfo(object[object$FamID == x, ])
+    })
+
+  return(list(family_info = do.call(rbind, famdat),
+              affected_info = do.call(rbind, afdat)))
 }
 
 
 #' Plot pedigree
 #'
 #' @param x An object of class ped.
-#' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  When missing, no age labels are created.
-#' @param legendLocation The location for the pedigree legend, \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, \code{"bottomleft"}.  By default, \code{legendLocation}\code{ = "topleft"}.
-#' @param legendRadius The radius of the pedigree legend.  By default, \code{legendRadius}\code{ = 0.25}.
+#' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.
+#' @param location The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.
+#' @param radius The radius size for the pedigree legend, as in \code{\link{pedigree.legend}}.  By default, \code{radius = 0.2}.
+#' @param density The density of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{density = c(-1, 35, 55)}.
+#' @param angle The angle of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{angle = c(90, 65, 40)}.
+#' @param cex The text size. By default, \code{cex = 1}
+#' @param adj When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{adj = 1}.
+#' @param line When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{line = 2}.
 #' @param ... Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.
-#' @seealso \code{\link{plot.pedigree}}, \code{\link{plot}}
+#'
+#' @seealso \code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}
 #' @importFrom graphics plot
 #' @importFrom graphics mtext
 #' @importFrom kinship2 pedigree.legend
+#' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 #' @export
 #'
 #' @examples
@@ -136,10 +148,13 @@ summary.ped <- function(object, ...) {
 #' #plot pedigree without age labels
 #' plot(RVped2015)
 #'
+#'
 #' #plot pedigree with age labels, since unspecified
 #' #reference year defaults to ascertainment year
 #' plot(RVped2015, ref_year = "ascYr")
-#' plot(RVped2015, ref_year = "ascYr", cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = "ascYr",
+#'      cex = 0.75, symbolsize = 1.25,
+#'      mar = c(1, 2, 3, 2))
 #'
 #' #plot pedigree with age lablels at specified reference years.
 #' plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
@@ -147,13 +162,14 @@ summary.ped <- function(object, ...) {
 #' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
 #'
-plot.ped <- function(x, ref_year,
-                     legendLocation = "topleft",
-                     legendRadius = 0.25, ...) {
+plot.ped <- function(x, ref_year = NULL, location = "topleft", radius = 0.2,
+                     density = c(-1, 35, 55), angle = c(90, 65, 40),
+                     cex = 1, adj = 1, line = 2, ...) {
 
-  if (missing(ref_year)) {
+  if (is.null(ref_year)) {
+    # If no ref_year provided simply plot the pedigree with the usual id lables.
     k2ped <- ped2pedigree(x)
-    pedLabs = x$ID
+    pedLabs <- x$ID
   } else if (ref_year == "ascYr") {
     if(!("proband" %in% colnames(x))){
       stop("\n \n Proband not detected, cannot determine ascertainment year. \n Please supply ref_year. \n")
@@ -164,13 +180,16 @@ plot.ped <- function(x, ref_year,
     } else if (all(is.na(x$onsetYr))) {
       stop("\n \n OnsetYr missing, cannot determine ascertainment year. \n Please supply ref_year. \n")
     }
-
+    # If ascertainment year specified censor all pedigree info that occurs after
+    # the ascertainment year and create associated age lables.
     cped <- censor_ped(x, censor_year = x$onsetYr[x$proband])
     pedLabs <- pedigreeLabels(x = cped, ref_year = x$onsetYr[x$proband])
     k2ped <- ped2pedigree(cped)
     pYr <- x$onsetYr[x$proband]
 
   } else if (is.numeric(ref_year)) {
+    # Censor all pedigree info that occurs after
+    # ref_year and create associated age lables.
     cped <- censor_ped(x, censor_year = ref_year)
     pedLabs <- pedigreeLabels(x = cped, ref_year)
     k2ped <- ped2pedigree(cped)
@@ -179,10 +198,13 @@ plot.ped <- function(x, ref_year,
 
 
   plot(x = k2ped, id = pedLabs,
-       status = k2ped$status, affected = k2ped$affected, ...)
-  pedigree.legend(ped = k2ped, location = legendLocation, radius = legendRadius)
+       status = k2ped$status, affected = k2ped$affected,
+       density = density, angle = angle, cex = cex, ...)
+  pedigree.legend(ped = k2ped, labels = dimnames(k2ped$affected)[[2]],
+                  radius = radius, location = location,
+                  density = density,  angle = angle, cex = cex)
 
   if (!missing(ref_year)) {
-    mtext(paste0("Reference Year: ",  pYr), adj = 1, line = 2)
+    mtext(paste0("Reference Year: ",  pYr), adj = adj, line = line, cex = cex)
   }
 }
