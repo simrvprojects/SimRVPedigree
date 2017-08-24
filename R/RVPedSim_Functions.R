@@ -25,6 +25,9 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
   A_ID <- ped_file[ped_file$affected,
                    which(colnames(ped_file) %in% c("onsetYr", "ID", "proband"))]
   A_ID <- A_ID[order(A_ID$onsetYr), ]
+
+  #Eliminate affecteds who experienced onset after the end
+  #of the ascertainment span
   A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
   A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], T, F)
 
@@ -32,31 +35,26 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
     #In this scenario we have only 1 candidate proband
     #NOTE: sim_RVped has already checked to make sure
     #that there was another affected prior to this one
-
-    ped_file$proband[which(ped_file$ID == A_ID$ID[A_ID$proband])] <- T
+    ped_file$proband[ped_file$ID == A_ID$ID[A_ID$proband]] <- T
 
   } else if (sum(abs(A_ID$proband - 1)) > (num_affected - 1)) {
-
     #multiple available probands and the n-1 affected condition has already
     #been met by start of ascertainment period, so simply choose randomly
     #amongst available probands
-    probandID <- sample(size = 1,
-                        x = A_ID$ID[A_ID$proband])
-    ped_file$proband[which(ped_file$ID == probandID)] <- T
+    probandID <- sample(size = 1, x = A_ID$ID[A_ID$proband])
+    ped_file$proband[ped_file$ID == probandID] <- T
 
   } else {
-
     #no affecteds before ascertainment period, must choose from among
     #the nth or greater to experience onset
     A_ID$proband[1:(num_affected - 1)] <- F
     #must write additional if statement here because of R's interesting
     #take on how sample should work when there is only one 1 to sample from....
     if (sum(A_ID$proband) == 1) {
-      ped_file$proband[which(ped_file$ID == A_ID$ID[A_ID$proband])] <- T
+      ped_file$proband[ped_file$ID == A_ID$ID[A_ID$proband]] <- T
     } else {
-      probandID <- sample(size = 1,
-                          x = A_ID$ID[A_ID$proband])
-      ped_file$proband[which(ped_file$ID == probandID)] <- T
+      probandID <- sample(size = 1, x = A_ID$ID[A_ID$proband])
+      ped_file$proband[ped_file$ID == probandID] <- T
     }
   }
 
@@ -119,33 +117,24 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
 #' egPeds <- new.ped(EgPeds)
 #'
 #' #plot example_ped using kinship2
-#' ex_pedigree <- ped2pedigree(egPeds)
-#'
-#' library(kinship2)
-#' plot(ex_pedigree['1'])
-#' pedigree.legend(ex_pedigree['1'], location = "topleft",  radius = 0.25)
+#' plot(subset(egPeds, FamID == 1), location = "topright", cex = 0.85)
 #' mtext("Original Pedigree", side = 3, line = 2)
 #'
 #'
 #' ## Trim pedigree examples
 #' # Illustrate the effect of various settings for recall_probs
 #' Recall_Probabilities <- list(c(1),
-#'                              c(1, 0),
-#'                              c(1, 0.75, 0.5),
-#'                              c(0.5, 0.1, 0.05))
+#'                              c(1, 0.5),
+#'                              c(1, 0.25, 0.1))
 #'
 #'
 #' for (k in 1:length(Recall_Probabilities)) {
 #'    set.seed(2)
 #'    #trim pedigree
-#'    TrimPed <- trim_ped(ped_file = egPeds[egPeds$FamID == 1, ],
+#'    TrimPed <- trim_ped(ped_file = subset(egPeds, FamID == 1),
 #'                        recall_probs = Recall_Probabilities[[k]])
 #'
-#'    #plot trimmed pedigree
-#'    Tped <- ped2pedigree(TrimPed)
-#'
-#'    plot(Tped)
-#'    pedigree.legend(Tped, location = "topleft",  radius = 0.25)
+#'    plot(TrimPed, location = "topright", cex = 0.85)
 #'    mtext(paste0("recall_probs = (", sep = "",
 #'                 paste(Recall_Probabilities[[k]], collapse = ", "), ')' ),
 #'                 side = 3, line = 2 )
@@ -189,10 +178,12 @@ trim_ped = function(ped_file, recall_probs = NULL){
 
     ped_trim <- ped_file[4*kin_proband >= u, ]
   } else if (length(recall_probs) == 1 & sum(recall_probs) == 1) {
+    #Fully ascertained pedigrees, no trimming needed
     ped_trim <- ped_file
   } else {
-    # create rprobs, which associates the recall probabilities
-    # specified by the user with the appropriate individuals in the pedigree.
+    # create rprobs, which will associate the recall probabilities
+    # specified by the user with the appropriate individuals in the
+    # pedigree based on their kinship coefficients.
 
     rprobs <- rep(NA, length(ped_file$ID))
 
@@ -219,21 +210,15 @@ trim_ped = function(ped_file, recall_probs = NULL){
     ped_trim <- ped_file[rprobs >= u, ]
   }
 
-  # remove information and re-add individuals who cannot be recalled by proband
+  # re-add individuals who cannot be recalled by proband
   # but who are required to create a complete pedigree
   d <- 0
   while (d == 0) {
     #find the dad IDs that are required but have been removed
-    miss_dad  <- !is.element(ped_trim$dadID,
-                             ped_trim$ID[ped_trim$sex == 0])
-    readd_dad <- ped_trim$dadID[miss_dad]
-    readd_dad <- unique(readd_dad[!is.na(readd_dad)])
+    readd_dad <- find_missing_parent(ped_trim)
 
     #find the mom IDs that are required but have been removed
-    miss_mom  <- !is.element(ped_trim$momID,
-                             ped_trim$ID[ped_trim$sex == 1])
-    readd_mom <- ped_trim$momID[miss_mom]
-    readd_mom <- unique(readd_mom[!is.na(readd_mom)])
+    readd_mom <- find_missing_parent(ped_trim, dad = FALSE)
 
     #check to see if we need to readd anyone
     if (length(c(readd_dad, readd_mom)) == 0) {
@@ -285,7 +270,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 
 #' Determine if a pedigree is ascertained
 #'
-#' Intended priamrily as an internal function, \code{is_ascertained} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
+#' Intended priamrily as an internal function, \code{ascertain_ped} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
 #'
 #' @inheritParams trim_ped
 #' @inheritParams sim_RVped
@@ -308,19 +293,19 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #'                   stop_year = 2015)
 #'
 #' ex_ped
-#' is_ascertained(ped_file = ex_ped,
-#'                num_affected = 2,
-#'                ascertain_span = c(2000, 2015),
-#'                recall_probs = c(1, 1, 0.5, 0.25))[[1]]
+#' ascertain_ped(ped_file = ex_ped,
+#'               num_affected = 2,
+#'               ascertain_span = c(2000, 2015),
+#'               recall_probs = c(1, 1, 0.5, 0.25))[[1]]
 #'
 #' data(EgPeds)
 #' EgPeds[EgPeds$FamID == 1, ]
-#' is_ascertained(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
-#'                num_affected = 2,
-#'                ascertain_span = c(2000, 2015),
-#'                recall_probs = c(1))[[1]]
+#' ascertain_ped(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
+#'               num_affected = 2,
+#'               ascertain_span = c(2000, 2015),
+#'               recall_probs = c(1))[[1]]
 #'
-is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs = NULL){
+ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs = NULL){
 
   # prior to sending the simulated pedigree to the trim function,
   # we check to see if it meets the required criteria for number of
@@ -401,28 +386,28 @@ is_ascertained <- function(ped_file, num_affected, ascertain_span, recall_probs 
 #' data(AgeSpecific_Hazards)
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
-#' set.seed(2410)
+#' set.seed(1960)
 #' ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-#'                      GRR = 10,
-#'                      RVfounder = TRUE,
-#'                      FamID = 1,
-#'                      founder_byears = c(1900, 1920),
-#'                      ascertain_span = c(1995, 2015),
-#'                      num_affected = 2,
-#'                      stop_year = 2017,
-#'                      recall_probs = c(1, 0.5))
+#'                       GRR = 10,
+#'                       RVfounder = TRUE,
+#'                       FamID = 1,
+#'                       founder_byears = c(1900, 1920),
+#'                       ascertain_span = c(1995, 2015),
+#'                       num_affected = 2,
+#'                       stop_year = 2017,
+#'                       recall_probs = c(1, 1, 0))
 #'
 #'
 #' # Original pedigree prior to proband selection and trimming
-#' summary(ex_RVped[[1]])
 #' plot(ex_RVped[[1]])
 #'
 #' # The ascertained pedigree
-#' summary(ex_RVped[[2]])
 #' plot(ex_RVped[[2]])
+#' summary(ex_RVped[[2]])
 #'
 #'
-#' # Simulate ascertained pedigree but this time set RVfounder = F.
+#' # Simulate ascertained pedigree with RVfounder = FALSE.
+#' # NOTE: by default, RVfounder = FALSE.
 #' # Under this setting pedigrees segregate a causal
 #' # variant with probability equal to carrier prob.
 #'
@@ -476,8 +461,8 @@ sim_RVped = function(hazard_rates, GRR,
                        RVfounder, birth_range, NB_params)
 
     #check to see if pedigree is ascertained
-    check_pedigree <- is_ascertained(ped_file = fam_ped, num_affected,
-                                     ascertain_span, recall_probs)
+    check_pedigree <- ascertain_ped(ped_file = fam_ped, num_affected,
+                                    ascertain_span, recall_probs)
 
     #store updated pedigree
     ascertained <- check_pedigree[[1]]
