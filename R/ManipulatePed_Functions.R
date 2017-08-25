@@ -78,6 +78,10 @@ reassign_gen = function(ped_file){
     stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
   }
 
+  if(!"Gen" %in% colnames(ped_file)){
+    ped_file$Gen <- assign_gen(ped_file)
+  }
+
   #create new ped file with available affecteds only
   reGen_ped <- ped_file[ped_file$affected & ped_file$available, ]
 
@@ -88,16 +92,10 @@ reassign_gen = function(ped_file){
     d <- 0
     while (d == 0) {
       #find the dad IDs that are required but have been removed
-      miss_dad  <- !is.element(reGen_ped$dadID,
-                               reGen_ped$ID[which(reGen_ped$sex == 0)])
-      readd_dad <- reGen_ped$dadID[miss_dad]
-      readd_dad <- unique(readd_dad[!is.na(readd_dad)])
+      readd_dad <- find_missing_parent(reGen_ped)
 
       #find the mom IDs that are required but have been removed
-      miss_mom  <- !is.element(reGen_ped$momID,
-                               reGen_ped$ID[which(reGen_ped$sex == 1)])
-      readd_mom <- reGen_ped$momID[miss_mom]
-      readd_mom <- unique(readd_mom[!is.na(readd_mom)])
+      readd_mom <- find_missing_parent(reGen_ped, dad = FALSE)
 
       #check to see if we need to readd anyone
       if (length(c(readd_dad, readd_mom)) == 0) {
