@@ -166,19 +166,24 @@ summary.ped <- function(object, ...) {
 #'
 #' @param x An object of class ped.
 #' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.
+#' @param gen_lab Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.
 #' @param location The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.
 #' @param radius The radius size for the pedigree legend, as in \code{\link{pedigree.legend}}.  By default, \code{radius = 0.2}.
 #' @param density The density of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{density = c(-1, 35, 55)}.
 #' @param angle The angle of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{angle = c(90, 65, 40)}.
-#' @param cex The text size. By default, \code{cex = 1}
+#' @param gen_stretch Numeric. Used to stretch the spacing between generation lables.  By default, \code{gen_stretch = 2}.  Increase for more space between labels, decrease for less space.
+#' @param cex The text size. By default, \code{cex = 1}.
 #' @param adj When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{adj = 1}.
 #' @param line When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{line = 2}.
+#' @param mar The sizes for plot margins, as in \code{\link{par}}.
 #' @param ... Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.
 #'
-#' @seealso \code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}
+#' @seealso \code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}, \code{\link{par}}
 #' @importFrom graphics plot
 #' @importFrom graphics mtext
+#' @importFrom graphics par
 #' @importFrom kinship2 pedigree.legend
+#' @importFrom utils as.roman
 #' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 #' @export
 #'
@@ -203,23 +208,31 @@ summary.ped <- function(object, ...) {
 #' #plot pedigree without age labels
 #' plot(RVped2015)
 #'
-#'
 #' #plot pedigree with age labels, since unspecified
 #' #reference year defaults to ascertainment year
 #' plot(RVped2015, ref_year = "ascYr")
-#' plot(RVped2015, ref_year = "ascYr",
-#'      cex = 0.75, symbolsize = 1.25,
-#'      mar = c(1, 2, 3, 2))
 #'
 #' #plot pedigree with age lablels at specified reference years.
-#' plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
+#' plot(RVped2015, ref_year = 2015, cex = 0.75, symbolsize = 0.95)
 #' plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 #' plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
 #'
-plot.ped <- function(x, ref_year = NULL, location = "topleft", radius = 0.2,
-                     density = c(-1, 35, 55), angle = c(90, 65, 40),
-                     cex = 1, adj = 1, line = 2, ...) {
+#' # plot pedigree generation labels
+#' plot(RVped2015, ref_year = 2015, gen_lab = TRUE,
+#'      cex = 0.75, symbolsize = 0.95)
+#'
+#' # use gen_stretch to place extra space
+#' # between generation labels
+#' plot(RVped2015, ref_year = 2015, gen_lab = TRUE,
+#'      cex = 0.75, symbolsize = 0.95)
+#'
+plot.ped <- function(x, ref_year = NULL, gen_lab = FALSE,
+                     location = "topleft", radius = 0.2,
+                     density = c(-1, 35, 55),
+                     angle = c(90, 65, 40),
+                     gen_stretch = 2, cex = 1, adj = 1, line = 2,
+                     mar = c(5.1, 4.1, 4.1, 2.1), ...) {
 
   if (is.null(ref_year)) {
     # If no ref_year provided simply plot the pedigree with the usual id lables.
@@ -252,14 +265,41 @@ plot.ped <- function(x, ref_year = NULL, location = "topleft", radius = 0.2,
   }
 
 
+  if (gen_lab) {
+    #add extra space to margin for generation labels
+    mar[4] <- mar[4] + 1
+    #determine how many levels the pedigree has
+    nlevel <- nrow(align.pedigree(ped2pedigree(x))$nid)
+    # get generation lables
+    gen_labels <- get_gen_labs(x, nlevel)
+  }
+
+  par(mar = mar)
   plot(x = k2ped, id = pedLabs,
        status = k2ped$status, affected = k2ped$affected,
-       density = density, angle = angle, cex = cex, ...)
+       density = density, angle = angle, cex = cex,
+       mar = mar, ...)
   pedigree.legend(ped = k2ped, labels = dimnames(k2ped$affected)[[2]],
                   radius = radius, location = location,
                   density = density,  angle = angle, cex = cex)
 
-  if (!missing(ref_year)) {
+  if (!is.null(ref_year)) {
     mtext(paste0("Reference Year: ",  pYr), adj = adj, line = line, cex = cex)
   }
+
+  if (gen_lab) {
+    mtext(gen_labels,
+          side = 4, las = 2, cex = 1.5,
+          line = mar[4]/2,
+          at = seq(par("usr")[4],
+                   par("usr")[3] - diff(par("usr")[4:3])/(gen_stretch*nlevel),
+                   length.out = nlevel))
+    ## used for planning, delete before release
+    # abline(h = seq(par("usr")[4],
+    #                par("usr")[3] - diff(par("usr")[4:3])/(gen_stretch*nlevel),
+    #                length.out = nlevel))
+  }
+
+  #reset plot margins the default settings
+  par(mar = c(5, 4, 4, 2) + 0.1)
 }

@@ -66,8 +66,6 @@ ped2pedigree <- function(x){
 #' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 pedigreeLabels <- function(x, ref_year){
 
-  if (!is.ped(x)) stop("\n \n Please supply an object of class ped. \n")
-
   m <- length(unique(x$FamID))
 
   #create pedigree labels that reflect age data, when appropriate
@@ -112,4 +110,3 @@ pedigreeLabels <- function(x, ref_year){
   return(ped_labs)
 
 }
-

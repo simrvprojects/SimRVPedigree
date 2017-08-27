@@ -2,32 +2,21 @@
 #'
 #' The \code{reassign_gen} function assigns generation numbers among affected family members so that generation 1 represents the most recent generation that a putative disease variant shared identical by descent (IBD), as defined in Thompson (2000), by affected members could have been introduced into the pedigree.
 #'
-#' \emph{The \code{reassign_gen} function is primarily intended for pedigrees simulated by the \code{simRVPedigree} package.  Results will be inaccurate if inbreeding or loops are present.}
+#' \emph{**\code{reassign_gen} cannot be applied to pedigrees that contain loops or inbreeding.**}
 #'
 #' The \code{reassign_gen} function accepts a pedigree and reassigns generation numbers among disease-affected relatives so that generation 1 represents the generation of the most recent common ancestor of all disease-affected relatives.  We note that the individual in generation 1 could themselves be disease-affected, i.e. an individual can be considered their own ancestor.
 #'
 #' For example, consider a family with 2 affected members.  If the disease-affected relatives are a parent and a child, the affected parent would be assigned generation 1, and the affected child generation 2.  However, if the disease-affected relatives are a pair of siblings, each is be assigned generation 2 since a common parent of the two is assumed to be a carrier of a latent susceptibility variant.  Similarly, if the disease-affected relatives are a pair of cousins, is assigned generation 3, since a common grandparent is the most recent common ancestor from whom they could have inherited a shared variant associated with the disease.
 #'
-#' Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must create a ped object using \code{new.ped}.  This \code{ped} object \emph{must} contain the following variables for each pedigree member:
-#'
-#' \tabular{lll}{
-#' \strong{name} \tab \strong{type} \tab \strong{description} \cr
-#' \code{FamID} \tab numeric \tab family identification number \cr
-#' \code{ID} \tab numeric \tab individual identification number \cr
-#' \code{dadID} \tab numeric \tab identification number of father \cr
-#' \code{momID} \tab numeric \tab identification number of mother \cr
-#' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
-#' \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
-#' \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
-#' }
+#' Users who wish to assign generation number based on affection status in pedigrees that have not been simulated with the \code{SimRVpedigree} package must create a ped object using \code{\link{new.ped}}.
 #'
 #' @inheritParams censor_ped
-#' @return \item{\code{reGen_ped} }{A pedigree containing only affected members, obligate carriers, and founders with generation number based on the most recent common ancestor of affected members as described in details.}
+#' @return A \code{ped} object containing only affected members, obligate carriers, and founders with generation numbers reassigned among disease-affected relatives based on their most recent common ancestor, as described in details.
 #' @export
 #' @seealso \code{\link{new.ped}}
 #'
 #' @importFrom kinship2 kinship
+#' @importFrom kinship2 align.pedigree
 #' @references OUR MANUSCRIPT
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 #'
@@ -45,33 +34,19 @@
 #'                  reassign_gen(Bpeds[Bpeds$FamID == x, ])})
 #' Apeds <- do.call(rbind, Apeds)
 #'
-#' # Create kinship2 pedigree objects so that we can plot pedigrees
-#' kin2ped_before <- ped2pedigree(Bpeds)
-#' kin2ped_after  <- ped2pedigree(Apeds)
-#'
 #' # Compare pedigrees before and after reassigning
 #' # generation number based on affected status
 #' par(mfrow = c(1, 2))
 #' for (k in 1:4) {
-#'   ID1 = paste0("ID", sep = ":",
-#'                Bpeds$ID[Bpeds$FamID == k],
-#'                sep = "\n Gen:", Bpeds$Gen[Bpeds$FamID == k])
-#'
-#'   ID2 = paste0("ID", sep = ":",
-#'                Apeds$ID[Apeds$FamID == k],
-#'                sep = "\n Gen:", Apeds$Gen[Apeds$FamID == k])
-#'
-#'   plot(kin2ped_before[paste0(k)], id = ID1)
+#'   plot(subset(Bpeds, FamID == k), gen_lab = TRUE)
 #'   mtext(paste0("Ped", k, ": before generation reassignment", sep = ""),
 #'         side = 3)
 #'
-#'   plot(kin2ped_after[paste0(k)], id = ID2)
+#'   plot(subset(Apeds, FamID == k), gen_lab = TRUE)
 #'   mtext(paste0("Ped", k, ": after generation reassignment", sep = ""),
 #'         side = 3)
 #' }
 #' par(mfrow = c(1, 1))
-#'
-#'
 reassign_gen = function(ped_file){
 
   if (!is.ped(ped_file)) {
@@ -82,99 +57,129 @@ reassign_gen = function(ped_file){
     ped_file$Gen <- assign_gen(ped_file)
   }
 
+  if (sum(ped_file$affected[ped_file$available]) == 0) {
+    stop("\n \n No disease-affected relatives present.  \n Cannot reassign generations.")
+  }
+
+  if (sum(ped_file$affected[ped_file$available]) == 1) {
+    gped <- ped_file[ped_file$affected & ped_file$available, ]
+    gped$Gen <- 1
+    warning(paste0("\n \n Family ", gped$FamID, " only contains one disease-affected relative."))
+    return(gped)
+  }
+
   #create new ped file with available affecteds only
-  reGen_ped <- ped_file[ped_file$affected & ped_file$available, ]
+  gped <- ped_file[ped_file$affected & ped_file$available, ]
 
-  if (nrow(reGen_ped) == 0) {
-    warning("No affecteds to assign affected generation")
-    return(reGen_ped)
-  } else {
-    d <- 0
-    while (d == 0) {
-      #find the dad IDs that are required but have been removed
-      readd_dad <- find_missing_parent(reGen_ped)
+  #add back any unaffected relatives needed to create a full pedigree
+  d <- 0
+  while (d == 0) {
+    #find the dad IDs that are required but have been removed
+    readd_dad <- find_missing_parent(gped)
 
-      #find the mom IDs that are required but have been removed
-      readd_mom <- find_missing_parent(reGen_ped, dad = FALSE)
+    #find the mom IDs that are required but have been removed
+    readd_mom <- find_missing_parent(gped, dad = FALSE)
 
-      #check to see if we need to readd anyone
-      if (length(c(readd_dad, readd_mom)) == 0) {
-        d <- 1
-      } else {
-        #Now pull the rows containing the required parents
-        # from the original ped_file
-        readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
+    #check to see if we need to readd anyone
+    if (length(c(readd_dad, readd_mom)) == 0) {
+      d <- 1
+    } else {
+      #Now pull the rows containing the required parents
+      # from the original ped_file
+      readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
 
-        #combine with affected ped file
-        reGen_ped <- rbind(reGen_ped, readd)
-      }
+      #combine with affected ped file
+      gped <- rbind(gped, readd)
     }
+  }
 
-    #Change Generation number so that only affecteds have a gen number
-    reGen_ped$Gen <- ifelse(reGen_ped$affected, reGen_ped$Gen, NA)
+  pedgre <- ped2pedigree(gped)
+  if (any(align.pedigree(pedgre)$spouse == 2)) {
+    stop("\n \n Inbreeding detected. \n reassign_gen is not intended for pedigrees that contain loops or inbreeding.")
+  }
 
-    #table affected generation number
-    Gen_tab <- table(reGen_ped$Gen)
-    #minimum (earliest) generation number (i.e. 1)
-    min_gen <- as.numeric(names(Gen_tab[1]))
-    #second smallest generation number
-    min_gen2 <- as.numeric(names(Gen_tab[2]))
-    #difference between two earliest generation numbers
-    gen_diff <- min_gen2-min_gen
-    #number of affecteds in the earliest generation
-    num_in_min_gen <- as.numeric(Gen_tab[1])
+  id_array <- as.numeric(align.pedigree(pedgre)$nid)
+  id_array <- id_array[id_array != 0]
+  if (any(duplicated(id_array))) {
+    stop("\n \n Loop detected. \n reassign_gen is not intended for pedigrees that contain loops or inbreeding.")
+  }
 
+  #compute and store kinship matrix
+  kin_mat <- kinship(pedgre)
 
-    if (min_gen == 1 | (min_gen == 2 & num_in_min_gen >= 2)) {
-      #For this condition we do not need to reassign generation number
-      # Covers case when the founder who introduced the RV is affected
-      # and available, and case when RV founder not affected but 2 or more
-      # of his or her children are affected.
-      return(reGen_ped)
-    } else if (num_in_min_gen >= 2) {
-      #compute and store kinship matrix
-      kin_mat <- kinship(reGen_ped,
-                         id = reGen_ped$ID,
-                         dadid = reGen_ped$dadID,
-                         momid = reGen_ped$momID)
+  #check to make sure all available affecteds are related
+  if (any(kin_mat[gped$affected & gped$available,
+                  gped$affected & gped$available] == 0)) {
 
-      #find the distance between only those in the lowest generation
-      kin_distance <- -log(kin_mat[which(reGen_ped$Gen == min_gen),
-                                  which(reGen_ped$Gen == min_gen)])/log(2)
-      #find the new gen difference
-      new_gen_diff <- min_gen - (max(kin_distance)/2 + 1)
-      #assign new generation
-      reGen_ped$Gen[!is.na(reGen_ped$Gen)] <- reGen_ped$Gen[!is.na(reGen_ped$Gen)] - new_gen_diff
-      return(reGen_ped)
-    } else if (num_in_min_gen == 1) {
-      #compute and store kinship matrix
-      kin_mat <- kinship(reGen_ped,
-                         id = reGen_ped$ID,
-                         dadid = reGen_ped$dadID,
-                         momid = reGen_ped$momID)
+    #Reduce to kinship mat for affecteds only
+    ak_mat <- kin_mat[gped$affected & gped$available,
+                      gped$affected & gped$available]
+
+    url1 <- colnames(ak_mat)[which(ak_mat == 0, arr.ind = T)[1, 1]]
+    url2 <- colnames(ak_mat)[which(ak_mat == 0, arr.ind = T)[1, 2]]
+
+    stop(paste0("\n \n The disease-affected relatives with ID numbers ", url1, " and ", url2, " are not related. \n Cannot determine most recent common ancestor for unrelated affecteds. \n Please mark one the unrelated affecteds as unavailable."))
+  }
 
 
-      #find the distance between only those in the lowest 2 generations
-      kin_distance <- -log(kin_mat[which(reGen_ped$Gen == min_gen),
-                                  which(reGen_ped$Gen %in% c(min_gen,min_gen2))])/log(2)
+  #Change Generation number so that only affecteds have a gen number
+  gped$Gen <- ifelse(gped$affected, gped$Gen, NA)
 
-      #find the difference between the maximum distance in kin_distance and
-      # the value of the second smallest generation - this is the value we will
-      # use to adjust everyone at or below the second smallest generation
-      new_gen_diff <- min_gen2 - max(kin_distance)
+  #table affected generation number
+  gen_tab <- table(gped$Gen)
+  #first two smallest generation numbers (i.e. 1 and 2)
+  min_gens <- as.numeric(names(gen_tab[c(1, 2)]))
+  #difference between two earliest generation numbers
+  gen_diff <- diff(min_gens)
+  #number of affecteds in the earliest generation
+  num_in_min_gen <- as.numeric(gen_tab[1])
 
-      #find the difference between the maximum distance in kin_distance
-      # and the difference between the smallest 2 generations
-      # This will be the new gen no for the 1 individual in the lowest generation
-      new_gen_oldest <- max(kin_distance) - gen_diff
 
-      #assign new generation
-      reGen_ped$Gen[!is.na(reGen_ped$Gen)] <- ifelse(reGen_ped$Gen[!is.na(reGen_ped$Gen)] == min_gen,
-                                                    new_gen_oldest,
-                                                    reGen_ped$Gen[!is.na(reGen_ped$Gen)] - new_gen_diff)
+  if (min_gens[1] == 1 | (min_gens[1] == 2 & num_in_min_gen >= 2)) {
+    # For this condition we do not need to reassign generation number
+    # Covers case when the founder who introduced the RV is affected
+    # and available, and case when RV founder not affected but 2 or more
+    # of his or her children are affected.
+    return(gped)
+  } else if (num_in_min_gen >= 2) {
 
-      return(reGen_ped)
-    }
+
+    #find the distance between only those in the lowest generation
+    kin_distance <- -log(kin_mat[which(gped$Gen == min_gens[1]),
+                                 which(gped$Gen == min_gens[1])])/log(2)
+    #find the new gen difference
+    new_gen_diff <- min_gens[1] - (max(kin_distance)/2 + 1)
+    #assign new generation
+    gped$Gen[!is.na(gped$Gen)] <- gped$Gen[!is.na(gped$Gen)] - new_gen_diff
+    return(gped)
+  } else if (num_in_min_gen == 1) {
+    #compute and store kinship matrix
+    kin_mat <- kinship(gped,
+                       id = gped$ID,
+                       dadid = gped$dadID,
+                       momid = gped$momID)
+
+
+    #find the distance between only those in the lowest 2 generations
+    kin_distance <- -log(kin_mat[which(gped$Gen == min_gens[1]),
+                                 which(gped$Gen %in% min_gens)])/log(2)
+
+    #find the difference between the maximum distance in kin_distance and
+    # the value of the second smallest generation - this is the value we will
+    # use to adjust everyone at or below the second smallest generation
+    new_gen_diff <- min_gens[2] - max(kin_distance)
+
+    #find the difference between the maximum distance in kin_distance
+    # and the difference between the smallest 2 generations
+    # This will be the new gen no for the 1 individual in the lowest generation
+    new_gen_oldest <- max(kin_distance) - gen_diff
+
+    #assign new generation
+    gped$Gen[!is.na(gped$Gen)] <- ifelse(gped$Gen[!is.na(gped$Gen)] == min_gens[1],
+                                                   new_gen_oldest,
+                                                   gped$Gen[!is.na(gped$Gen)] - new_gen_diff)
+
+    return(gped)
   }
 }
 

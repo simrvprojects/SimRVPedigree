@@ -4,14 +4,17 @@
 \alias{plot.ped}
 \title{Plot pedigree}
 \usage{
-\method{plot}{ped}(x, ref_year = NULL, location = "topleft", radius = 0.2,
-  density = c(-1, 35, 55), angle = c(90, 65, 40), cex = 1, adj = 1,
-  line = 2, ...)
+\method{plot}{ped}(x, ref_year = NULL, gen_lab = FALSE,
+  location = "topleft", radius = 0.2, density = c(-1, 35, 55),
+  angle = c(90, 65, 40), gen_stretch = 2, cex = 1, adj = 1, line = 2,
+  mar = c(5.1, 4.1, 4.1, 2.1), ...)
 }
 \arguments{
 \item{x}{An object of class ped.}
 
 \item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.}
+
+\item{gen_lab}{Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.}
 
 \item{location}{The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.}
 
@@ -21,11 +24,15 @@
 
 \item{angle}{The angle of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{angle = c(90, 65, 40)}.}
 
-\item{cex}{The text size. By default, \code{cex = 1}}
+\item{gen_stretch}{Numeric. Used to stretch the spacing between generation lables.  By default, \code{gen_stretch = 2}.  Increase for more space between labels, decrease for less space.}
+
+\item{cex}{The text size. By default, \code{cex = 1}.}
 
 \item{adj}{When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{adj = 1}.}
 
 \item{line}{When \code{ref_year} is supplied, used to adjust position of reference year, as in \code{\link{mtext}}.  By default, \code{line = 2}.}
+
+\item{mar}{The sizes for plot margins, as in \code{\link{par}}.}
 
 \item{...}{Extra options that feed to \code{\link{plot.pedigree}}, or \code{\link{plot}}.}
 }
@@ -53,24 +60,29 @@ summary(RVped2015)
 #plot pedigree without age labels
 plot(RVped2015)
 
-
 #plot pedigree with age labels, since unspecified
 #reference year defaults to ascertainment year
 plot(RVped2015, ref_year = "ascYr")
-plot(RVped2015, ref_year = "ascYr",
-     cex = 0.75, symbolsize = 1.25,
-     mar = c(1, 2, 3, 2))
 
 #plot pedigree with age lablels at specified reference years.
-plot(RVped2015, ref_year = 2015, cex= 0.75, symbolsize = 1.25)
+plot(RVped2015, ref_year = 2015, cex = 0.75, symbolsize = 0.95)
 plot(RVped2015, ref_year = 2005, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 1995, cex= 0.75, symbolsize = 1.25)
 plot(RVped2015, ref_year = 1985, cex= 0.75, symbolsize = 1.25)
+
+# plot pedigree generation labels
+plot(RVped2015, ref_year = 2015, gen_lab = TRUE,
+     cex = 0.75, symbolsize = 0.95)
+
+# use gen_stretch to place extra space
+# between generation labels
+plot(RVped2015, ref_year = 2015, gen_lab = TRUE,
+     cex = 0.75, symbolsize = 0.95)
 
 }
 \references{
 Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 }
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}
+\code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}, \code{\link{par}}
 }
