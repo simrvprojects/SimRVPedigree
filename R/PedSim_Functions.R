@@ -318,8 +318,8 @@ sim_ped = function(hazard_rates, GRR,
 
   if (carrier_prob <= 0 | carrier_prob >= 1){
     stop ('carrier_prob must be a value between 0 and 1')
-  } else if (carrier_prob > 0.002) {
-    warning('carrier_prob > 0.002: sim_RVped is intended for simulating the transmission of rare variants.')
+  } else if (carrier_prob > 0.01) {
+    warning('carrier_prob > 0.01: sim_RVped is intended for simulating the transmission of rare variants.')
   }
 
   if(is.null(stop_year)){
