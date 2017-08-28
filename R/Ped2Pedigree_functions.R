@@ -81,24 +81,24 @@ pedigreeLabels <- function(x, ref_year){
 
       # Create a death age label for individuals who have died.
       Dage_lab <- ifelse(is.na(x$deathYr),
-                         " ", paste0("\n (", x$birthYr, " - ", x$deathYr, ")"))
+                         "", paste0("\n (", x$birthYr, " - ", x$deathYr, ")"))
     } else {
       warning('\n Death data is missing.  \n Creating age lables under the assumption that all pedigree members are still alive. \n')
 
       age_lab <- ifelse(is.na(x$birthYr),
-                        " ", paste0("\n age: ",
+                        "", paste0("\n age: ",
                                     ref_year - x$birthYr))
 
-      Dage_lab <- rep(" ", nrow(x))
+      Dage_lab <- rep("", nrow(x))
     }
 
     if (!is.na(match("onsetYr", colnames(x)))) {
       # Create a death age label for individuals who have died.
       Oage_lab <- ifelse(is.na(x$onsetYr),
-                         " ", paste0("\n onset age: ",
+                         "", paste0("\n onset age: ",
                                      x$onsetYr - x$birthYr))
     } else {
-      Oage_lab <- rep(" ", nrow(x))
+      Oage_lab <- rep("", nrow(x))
     }
 
     ped_labs = paste0("ID: ", sep = "", x$ID,

@@ -15,3 +15,4 @@ a list of generation numbers for pedigree members, in the order listed in \code{
 \description{
 Assign generation number based on oldest founder
 }
+\keyword{internal}

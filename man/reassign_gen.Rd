@@ -42,13 +42,13 @@ Apeds <- do.call(rbind, Apeds)
 # generation number based on affected status
 par(mfrow = c(1, 2))
 for (k in 1:5) {
-  plot(subset(Bpeds, FamID == k), gen_lab = TRUE)
+  plot(subset(Bpeds, FamID == k), gen_lab = TRUE, plot_legend = FALSE)
   mtext(paste0("Ped", k, ": before generation reassignment", sep = ""),
-        side = 3)
+        side = 3, line = 1.5)
 
-  plot(subset(Apeds, FamID == k), gen_lab = TRUE)
+  plot(subset(Apeds, FamID == k), gen_lab = TRUE, plot_legend = FALSE)
   mtext(paste0("Ped", k, ": after generation reassignment", sep = ""),
-        side = 3)
+        side = 3, line = 1.5)
 }
 par(mfrow = c(1, 1))
 }
