@@ -22,7 +22,7 @@ find_missing_parent <- function(x, dad = TRUE){
 #'
 #' @return a list of generation numbers for pedigree members, in the order listed in \code{x}.
 #' @importFrom kinship2 kindepth
-#' @export
+#' @keywords internal
 assign_gen <- function(x){
   Gen <- NA
   mates <- cbind(x$dadID, x$momID)
@@ -53,7 +53,7 @@ assign_gen <- function(x){
 #' @param nlevel The total number of levels in the pedigree.
 #'
 #' @return A character list of either blanks or roman numerals which wil be plotted along side the pedigree.
-#' @export
+#' @keywords internal
 get_gen_labs <- function(x, nlevel){
   max_gen <- max(x$Gen, na.rm = T)
   if (nlevel == max_gen) {

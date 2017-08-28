@@ -34,14 +34,14 @@ Bpeds <- new.ped(EgPeds)
 summary(Bpeds)
 
 # Reassign generation numbers in the first four pedigrees in EgPeds
-Apeds <- lapply(seq_len(4), function(x){
+Apeds <- lapply(seq_len(5), function(x){
                  reassign_gen(Bpeds[Bpeds$FamID == x, ])})
 Apeds <- do.call(rbind, Apeds)
 
 # Compare pedigrees before and after reassigning
 # generation number based on affected status
 par(mfrow = c(1, 2))
-for (k in 1:4) {
+for (k in 1:5) {
   plot(subset(Bpeds, FamID == k), gen_lab = TRUE)
   mtext(paste0("Ped", k, ": before generation reassignment", sep = ""),
         side = 3)

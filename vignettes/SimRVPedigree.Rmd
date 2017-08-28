@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -199,7 +199,7 @@ ascPed <- ex_RVped$ascertained_ped
 summary(ascPed)
 ```
 
-When an object of class ped is supplied to the `summary` function it will return a list containing two data frames. The first, `family_info` contains information for each pedigree supplied to `summary`.  Specifically, for each pedigree `family_info` contains: the family ID, the total number of relatives, the total number of affected relatives, the average onset age of the disease-affected realtives, the avarage of the pairwise kinship coefficients between the disease-affected relatives, the year the pedigree was ascertained, and a logical variable that indicates if the pedigree is segregating a causal variant. 
+When an object of class ped is supplied to the `summary` function it will return a list containing two data frames. The first, `family_info` contains information for each pedigree supplied to `summary`.  Specifically, for each pedigree `family_info` contains: the family ID, the total number of relatives, the total number of affected relatives, the average onset age of the disease-affected relatives, the average of the pairwise kinship coefficients between the disease-affected relatives, the year the pedigree was ascertained, and a logical variable that indicates if the pedigree is segregating a causal variant. 
 
 The second data frame returned by `summary` contains information for the disease-affected relatives in each pedigree.  This item is called `affected_info`.  For each disease-affected relative in each pedigree supplied, `affected_info` contains: their family ID, their ID, their year of birth, their year of onset, their year of death (when applicable), their relative risk of disease, a logical variable which indicated whether or not they are the proband, and their rare variant status.  
 
@@ -265,65 +265,66 @@ plot(ascPed, ref_year = "ascYr",
 Looking at the pedigree above, we see that in 2009, only 2 family members had experienced onset of lymphoid cancer: the proband (the pedigree member with ID 3) and her mother (ID 1).  Referring to the 2017 pedigree, we see that four years after the pedigree was ascertained the proband's nephew (ID 7)  experienced disease disease at age 26.
 
 \newpage
-Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  The `reassign_gen` function provided with the `SimRVPedigree` package may be used to accomplish this task, provided no inbreeding or loops are present in the pedigree.  We illustrate the behavior of this function by applying it to two of the five pedigrees included in the `EgPeds` data set. 
+Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  
 
+The `reassign_gen` function provided with the `SimRVPedigree` package may be used to accomplish this task, provided no inbreeding or loops are present in the pedigree.  We illustrate the behavior of this function by applying it to two of the pedigrees in the `EgPeds` data set. 
 
-```{r, fig.height = 5, fig.width = 6.5}
+```{r, fig.height = 6, fig.width = 8}
 # load the EgPeds dataset
 data(EgPeds)
 class(EgPeds)
 
 # create a ped object 
-Bped1 <- new.ped(EgPeds[EgPeds$FamID == 1, ])
-
-# Plot pedigree with FamID = 1
-plot(Bped1,
-     mar = c(1, 2, 3, 2))
+Bped1 <- new.ped(subset(EgPeds, FamID == 1))
 
 # Re-assign the generation numbers and store as Aped1
 Aped1 <- reassign_gen(Bped1)
 
-# Print before and after generations for the disease-affected relatives
-cbind(ID = Bped1$ID[Bped1$affected],
-      Gen_Before = Bped1$Gen[Bped1$affected],
-      Gen_After  = Aped1$Gen[Aped1$affected])
+# Plot the pedigree before and after generation reassignment.
+# To plot with generation labels, we set gen_lab = TRUE. 
+par(mfrow = c(1, 2))
+plot(Bped1, 
+     gen_lab = TRUE, 
+     plot_legend = FALSE, 
+     mar = c(1, 2, 3, 2))
+mtext("Before Generation Reassignment", side = 3, line = 2)
+
+plot(Aped1, 
+     gen_lab = TRUE, 
+     plot_legend = FALSE, 
+     mar = c(1, 2, 3, 2))
+mtext("After Generation Reassignment", side = 3, line = 2)
 ```
 
-Looking at the output above we see that the generation numbers of the affected members have not changed.  Referring back to the plotted pedigree we see that this is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).
+Looking at the pedigree after generation reassignment, the most striking observation is the reduction of the pedigree to include only affected members, their parents, and common ancestors.  Additionally, we see that the generation numbers of the affected members have not changed.  This is because the most recent common ancestors of the affected individuals (IDs 6, 8, and 15) are the two eldest founders (IDs 1 and 2).  We note that, since the focus of this assignment scheme is on the affected members, after generation reassignment all unaffected or unavailable family members will have missing generation numbers.
 
-We note that, `Aped1` is a reduced version of the original pedigree and will contain only affected members, their parents, and common ancestors.  Since the focus of this assignment scheme is on the affected members, all other family members will now have missing generation numbers. 
-
-```{r, fig.height = 4, fig.width = 6.5}
-#plot pedigree after reassigning generation numbers
-plot(Aped1,
-     location = "bottomleft", radius = 0.3,
-     mar = c(1, 2, 1, 2))
-
-# Print generation numbers of unaffected relatives after reassignment.
-# Notice that after reassignment they are all NA.
-Aped1$Gen[Aped1$affected == FALSE]
-```
 \newpage
 
 In this example, we reassign the generation numbers for the fifth pedigree contained in `EgPeds`.
 
-```{r, fig.height = 5.5, fig.width = 8}
+```{r, fig.height = 5, fig.width = 8}
 # create a ped object from family 5 in EgPeds
-Bped5 <- new.ped(EgPeds[EgPeds$FamID == 5, ])
-
-# Plot pedigree
-plot(Bped5)
+Bped5 <- new.ped(subset(EgPeds, FamID == 5))
 
 # Re-assign the generation numbers and store as Aped5
 Aped5 <- reassign_gen(Bped5)
 
-# Print before and after generations for the disease-affected relatives
-cbind(ID = Bped5$ID[Bped5$affected],
-      Gen_Before = Bped5$Gen[Bped5$affected],
-      Gen_After  = Aped5$Gen[Aped5$affected])
+# Plot the pedigree before and after generation reassignment.
+par(mfrow = c(1, 2))
+plot(Bped5, 
+     gen_lab = TRUE, 
+     plot_legend = FALSE, 
+     mar = c(1, 2, 3, 2))
+mtext("Before Generation Reassignment", side = 3, line = 2)
+
+plot(Aped5, 
+     gen_lab = TRUE, 
+     plot_legend = FALSE, 
+     mar = c(1, 2, 3, 2))
+mtext("After Generation Reassignment", side = 3, line = 2)
 ```
 
-In this example, referring to the plotted pedigree, we see a pair of affected cousins (IDs 15 and 33).  Therefore, each of the cousins is assigned generation 3, since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9). 
+In this example, referring to the pedigree before generation reassignment, we see a pair of affected cousins (IDs 15 and 33).  After generation reassignment, each of the cousins is assigned generation 3 since the most recent common ancestors of the affected cousins are their common grandparents (IDs 3 and 9). 
 
 
 #6. Parallel Processing Example<a name="ParProcExample"></a>

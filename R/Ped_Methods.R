@@ -167,6 +167,7 @@ summary.ped <- function(object, ...) {
 #' @param x An object of class ped.
 #' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.
 #' @param gen_lab Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.
+#' @param plot_legend Logical. Should legend for symbol shading be plotted.  By default, \code{TRUE}.
 #' @param location The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.
 #' @param radius The radius size for the pedigree legend, as in \code{\link{pedigree.legend}}.  By default, \code{radius = 0.2}.
 #' @param density The density of shading in plotted symbols, as in \code{\link{plot.pedigree}}.  By default, \code{density = c(-1, 35, 55)}.
@@ -228,6 +229,7 @@ summary.ped <- function(object, ...) {
 #'      cex = 0.75, symbolsize = 0.95)
 #'
 plot.ped <- function(x, ref_year = NULL, gen_lab = FALSE,
+                     plot_legend = TRUE,
                      location = "topleft", radius = 0.2,
                      density = c(-1, 35, 55),
                      angle = c(90, 65, 40),
@@ -279,9 +281,11 @@ plot.ped <- function(x, ref_year = NULL, gen_lab = FALSE,
        status = k2ped$status, affected = k2ped$affected,
        density = density, angle = angle, cex = cex,
        mar = mar, ...)
-  pedigree.legend(ped = k2ped, labels = dimnames(k2ped$affected)[[2]],
-                  radius = radius, location = location,
-                  density = density,  angle = angle, cex = cex)
+  if (plot_legend) {
+    pedigree.legend(ped = k2ped, labels = dimnames(k2ped$affected)[[2]],
+                    radius = radius, location = location,
+                    density = density,  angle = angle, cex = cex)
+  }
 
   if (!is.null(ref_year)) {
     mtext(paste0("Reference Year: ",  pYr), adj = adj, line = line, cex = cex)

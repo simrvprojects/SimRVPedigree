@@ -5,9 +5,9 @@
 \title{Plot pedigree}
 \usage{
 \method{plot}{ped}(x, ref_year = NULL, gen_lab = FALSE,
-  location = "topleft", radius = 0.2, density = c(-1, 35, 55),
-  angle = c(90, 65, 40), gen_stretch = 2, cex = 1, adj = 1, line = 2,
-  mar = c(5.1, 4.1, 4.1, 2.1), ...)
+  plot_legend = TRUE, location = "topleft", radius = 0.2,
+  density = c(-1, 35, 55), angle = c(90, 65, 40), gen_stretch = 2,
+  cex = 1, adj = 1, line = 2, mar = c(5.1, 4.1, 4.1, 2.1), ...)
 }
 \arguments{
 \item{x}{An object of class ped.}
@@ -15,6 +15,8 @@
 \item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.}
 
 \item{gen_lab}{Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.}
+
+\item{plot_legend}{Logical. Should legend for symbol shading be plotted.  By default, \code{TRUE}.}
 
 \item{location}{The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.}
 
