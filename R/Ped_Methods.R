@@ -10,7 +10,8 @@
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
+#' \code{affected} \tab logical \tab disease-affection status: \cr
+#' \tab \tab \code{affected = TRUE} if affected by disease, and \code{FALSE} otherwise, \cr
 #' }
 #'
 #' Optionally, \code{ped_file} \emph{may} contain any of the following columns:
@@ -27,8 +28,9 @@
 #' \code{deathYr} \tab numeric \tab the individual's year of death, when applicable, otherwise \code{NA} \cr
 #' \code{RR} \tab numeric \tab the individual's relative-risk of disease \cr
 #' \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
-#' \tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
-#' \code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+#' \tab \tab For the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
+#' \code{proband} \tab logical \tab proband identifier: \cr
+#' \tab \tab \code{proband = TRUE} if individual is the proband, and \code{FALSE} otherwise.\cr
 #' }
 #'
 #' \emph{We note that some of the optional fields above may be required for various ped functions}
@@ -98,10 +100,10 @@ is.ped <- function(x) {
 #' \tabular{ll}{
 #' \strong{variable} \tab \strong{description} \cr
 #' \code{FamID} \tab family identification number\cr
-#' \code{totalRelatives} \tab the total number of relatives \cr
-#' \code{numAffected}\tab the total number of disease-affected individuals\cr
-#' \code{aveOnsetAge}\tab the average onset age among the disease-affected relatives\cr
-#' \code{aveIBD}\tab the average of the pairwise IBD probabilities among the disease-affected relatives\cr
+#' \code{totalRelatives} \tab total number of relatives \cr
+#' \code{numAffected}\tab total number of disease-affected individuals\cr
+#' \code{aveOnsetAge}\tab average onset age among the disease-affected relatives\cr
+#' \code{aveIBD}\tab average of the pairwise IBD probabilities among the disease-affected relatives\cr
 #' \code{ascertainYear}\tab the year the pedigree was ascertained\cr
 #' \code{segRV} \tab logical Indicates whether or not pedigree segregates a causal variant. \cr \tab If the pedigree segregates the variant \code{segRV = TRUE}.\cr
 #' }
@@ -165,7 +167,7 @@ summary.ped <- function(object, ...) {
 #' Plot pedigree
 #'
 #' @param x An object of class ped.
-#' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.
+#' @param ref_year When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, \code{ref_year = NULL} and no age labels are created.
 #' @param gen_lab Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.
 #' @param plot_legend Logical. Should legend for symbol shading be plotted.  By default, \code{TRUE}.
 #' @param location The location for the pedigree legend, as in \code{\link{pedigree.legend}}. Options include: \code{"topleft"}, \code{"topright"}, \code{"bottomright"}, or \code{"bottomleft"}.  By default, \code{location = "topleft"}.

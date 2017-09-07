@@ -30,7 +30,7 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 
 \item{RVfounder}{Logical.  Indicates if all pedigrees segregate the rare, causal variant.  By default, \code{RVfounder = FALSE} See details.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 }
@@ -107,5 +107,6 @@ OUR MANUSCRIPT
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 
-Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
+Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
+Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 }

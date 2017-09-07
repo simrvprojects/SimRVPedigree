@@ -22,7 +22,7 @@ get_nextEvent(current_age, disease_status, RV_status, hazard_rates, GRR,
 
 \item{lambda_birth}{Numeric. The individual's birth rate.}
 
-\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.}
+\item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 }
 \value{
 A named matrix. The number of years until the next life event,

@@ -24,7 +24,8 @@ The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain 
 \code{dadID} \tab numeric \tab identification number of father \cr
 \code{momID} \tab numeric \tab identification number of mother \cr
 \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-\code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
+\code{affected} \tab logical \tab disease-affection status: \cr
+\tab \tab \code{affected = TRUE} if affected by disease, and \code{FALSE} otherwise, \cr
 }
 
 Optionally, \code{ped_file} \emph{may} contain any of the following columns:
@@ -41,8 +42,9 @@ Optionally, \code{ped_file} \emph{may} contain any of the following columns:
 \code{deathYr} \tab numeric \tab the individual's year of death, when applicable, otherwise \code{NA} \cr
 \code{RR} \tab numeric \tab the individual's relative-risk of disease \cr
 \code{Gen} \tab numeric \tab the individual's generation number relative to the eldest founder. \cr
-\tab \tab That is, for the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
-\code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+\tab \tab For the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
+\code{proband} \tab logical \tab proband identifier: \cr
+\tab \tab \code{proband = TRUE} if individual is the proband, and \code{FALSE} otherwise.\cr
 }
 
 \emph{We note that some of the optional fields above may be required for various ped functions}

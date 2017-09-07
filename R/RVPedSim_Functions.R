@@ -86,12 +86,12 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
 #' \code{dadID} \tab numeric \tab identification number of father \cr
 #' \code{momID} \tab numeric \tab identification number of mother \cr
 #' \code{sex} \tab numeric \tab gender identification; if male \code{sex = 0}, if female \code{sex = 1} \cr
-#' \code{affected} \tab logical \tab disease-affection status, \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
-#' \tab\tab\cr
+#' \code{affected} \tab logical \tab disease-affection status: \cr
+#' \code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+#' \tab \tab \code{affected  = TRUE} if affected by disease , and \code{FALSE} otherwise, \cr
 #' \code{birthYr} \tab numeric \tab the individual's birth year.\cr
 #' \code{onsetYr} \tab numeric \tab the individual's disease onset year, when applicable.\cr
 #' \code{deathYr} \tab numeric \tab the individual's death year, when applicable.\cr
-#' \code{proband} \tab logical \tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
 #' \code{RR} \tab numeric \tab the individual's relative risk of disease. \cr
 #' \code{available} \tab logical \tab availibility status; \cr
 #' \tab\tab \code{available = TRUE} if available, and \code{FALSE} otherwise. \cr
@@ -277,7 +277,7 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #'
 #' @return  A list containing the following data frames:
 #' @return \code{ascertained} Logical.  Indicates if pedigree is ascertained.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)
@@ -365,7 +365,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param FamID Numeric. The family ID to assign to the simulated pedigree.
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If not supplied, the default value of four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If not supplied, defaults to the current year.
-#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{birth_range}\code{ = c(18, 45)}.
+#' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #'
 #' @return  A list containing the following data frames:
@@ -375,7 +375,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #'
 #' @references OUR MANUSCRIPT
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
-#' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
+#' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.  Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 #'
 #'
 #' @section See Also:

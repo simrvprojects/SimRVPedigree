@@ -12,7 +12,7 @@
 \arguments{
 \item{x}{An object of class ped.}
 
-\item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, no age labels are created.}
+\item{ref_year}{When provided, the reference year for age labels.  Users may supply a (numeric) year which will create age labels at the specified year. Alternatively, users may set \code{ref_year}\code{ = "ascYR"}, which will create age lables for the year the pedigree was ascertained, when ascertained.  By default, \code{ref_year = NULL} and no age labels are created.}
 
 \item{gen_lab}{Logical. Should generation labels be printed in the margin.  By default, \code{FALSE}.}
 

@@ -24,10 +24,10 @@ The \code{summary.ped} function returns two data frames. The first is called \co
 \tabular{ll}{
 \strong{variable} \tab \strong{description} \cr
 \code{FamID} \tab family identification number\cr
-\code{totalRelatives} \tab the total number of relatives \cr
-\code{numAffected}\tab the total number of disease-affected individuals\cr
-\code{aveOnsetAge}\tab the average onset age among the disease-affected relatives\cr
-\code{aveIBD}\tab the average of the pairwise IBD probabilities among the disease-affected relatives\cr
+\code{totalRelatives} \tab total number of relatives \cr
+\code{numAffected}\tab total number of disease-affected individuals\cr
+\code{aveOnsetAge}\tab average onset age among the disease-affected relatives\cr
+\code{aveIBD}\tab average of the pairwise IBD probabilities among the disease-affected relatives\cr
 \code{ascertainYear}\tab the year the pedigree was ascertained\cr
 \code{segRV} \tab logical Indicates whether or not pedigree segregates a causal variant. \cr \tab If the pedigree segregates the variant \code{segRV = TRUE}.\cr
 }

@@ -12,7 +12,7 @@ censor_ped(ped_file, censor_year = NULL)
 \item{censor_year}{Numeric. The censor year. If not supplied, defaults to the year the pedigree was ascertained, i.e. the proband's onset year.  See details.}
 }
 \value{
-\item{\code{censored_ped}}{The censored pedigree.}
+The censored pedigree.
 }
 \description{
 \code{censor_ped} censors a pedigree of any information that occurs after a specified year.
