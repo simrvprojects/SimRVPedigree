@@ -278,33 +278,6 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #' @return  A list containing the following data frames:
 #' @return \code{ascertained} Logical.  Indicates if pedigree is ascertained.
 #' @keywords internal
-#'
-#' @examples
-#' data(AgeSpecific_Hazards)
-#' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
-#'
-#' #Simulate a random pedigree
-#' set.seed(2)
-#' ex_ped <- sim_ped(hazard_rates = my_HR,
-#'                   GRR = 50, carrier_prob = 0.002,
-#'                   FamID = 1,
-#'                   RVfounder = TRUE,
-#'                   founder_byears = c(1900, 1910),
-#'                   stop_year = 2015)
-#'
-#' ex_ped
-#' ascertain_ped(ped_file = ex_ped,
-#'               num_affected = 2,
-#'               ascertain_span = c(2000, 2015),
-#'               recall_probs = c(1, 1, 0.5, 0.25))[[1]]
-#'
-#' data(EgPeds)
-#' EgPeds[EgPeds$FamID == 1, ]
-#' ascertain_ped(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
-#'               num_affected = 2,
-#'               ascertain_span = c(2000, 2015),
-#'               recall_probs = c(1))[[1]]
-#'
 ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs = NULL){
 
   # prior to sending the simulated pedigree to the trim function,

@@ -23,31 +23,4 @@ A list containing the following data frames:
 \description{
 Intended priamrily as an internal function, \code{ascertain_ped} checks to see if a pedigree returned by \code{\link{sim_ped}} is ascertained.
 }
-\examples{
-data(AgeSpecific_Hazards)
-my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
-
-#Simulate a random pedigree
-set.seed(2)
-ex_ped <- sim_ped(hazard_rates = my_HR,
-                  GRR = 50, carrier_prob = 0.002,
-                  FamID = 1,
-                  RVfounder = TRUE,
-                  founder_byears = c(1900, 1910),
-                  stop_year = 2015)
-
-ex_ped
-ascertain_ped(ped_file = ex_ped,
-              num_affected = 2,
-              ascertain_span = c(2000, 2015),
-              recall_probs = c(1, 1, 0.5, 0.25))[[1]]
-
-data(EgPeds)
-EgPeds[EgPeds$FamID == 1, ]
-ascertain_ped(ped_file = new.ped(EgPeds[EgPeds$FamID == 1, -15]),
-              num_affected = 2,
-              ascertain_span = c(2000, 2015),
-              recall_probs = c(1))[[1]]
-
-}
 \keyword{internal}

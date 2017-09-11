@@ -107,6 +107,5 @@ OUR MANUSCRIPT
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 
-Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
-Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
+Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.  Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
 }
