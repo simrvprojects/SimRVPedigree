@@ -34,7 +34,9 @@
 #'
 get_nextEvent = function(current_age, disease_status, RV_status,
                          hazard_rates, GRR, carrier_prob,
-                         lambda_birth, birth_range){
+                         lambda_birth = c(18, 45),
+                         birth_range = c(2, 4/7),
+                         fert = 1){
 
   RR <- ifelse(RV_status, GRR, 1)
 
@@ -59,7 +61,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
   # so long as this value is less than the maximum birth age
   # Second condition deals with people who have reached the minimum birth age,
   # if neiter is met we return NA
-  nyear_birth <- rexp(1, lambda_birth)
+  nyear_birth <- rexp(1, lambda_birth*fert*disease_status + lambda_birth*(1 - disease_status))
   t_birth <- ifelse((current_age < birth_range[1] &
                        nyear_birth + birth_range[1] <= birth_range[2]),
                     nyear_birth + birth_range[1],
@@ -141,8 +143,6 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'          carrier_prob = 0.002,
 #'          RV_status = FALSE,
-#'          birth_range = c(17,45),
-#'          NB_params = c(2, 4/7),
 #'          YOB = 1900, stop_year = 2000)
 #'
 #' # Using the same random seed, notice how life events can vary for
@@ -154,14 +154,14 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
 #'                RV_status = TRUE,
-#'                birth_range = c(17,45),
-#'                NB_params = c(2, 4/7),
 #'                YOB = 1900, stop_year = 2000)
 #'
 #'
 sim_life = function(hazard_rates, GRR, carrier_prob,
                     RV_status, YOB, stop_year,
-                    birth_range, NB_params){
+                    birth_range = c(18, 45),
+                    NB_params = c(2, 4/7),
+                    fert = 1){
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
@@ -176,6 +176,14 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
 
   if (GRR <= 0) {
     stop ('GRR must be greater than 0')
+  }
+
+  if (fert <= 0) {
+    stop ('fert must be greater than 0')
+  }
+
+  if (fert > 1) {
+    warning ('fert > 1 detected. \n Are you sure you want to increase fertility after disease-onset?')
   }
 
   #initialize lists to store event times and types
@@ -194,7 +202,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
     #generate next event
     l_event <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
                              hazard_rates, GRR, carrier_prob,
-                             lambda_birth = B_lambda, birth_range)
+                             lambda_birth = B_lambda, birth_range, fert)
 
     if(yr + l_event[[1]] <= stop_year){
       #add to previous life events

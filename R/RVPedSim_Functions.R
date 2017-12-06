@@ -340,6 +340,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param stop_year Numeric. The last year of study.  If not supplied, defaults to the current year.
 #' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
+#' @param fert Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.
 #'
 #' @return  A list containing the following data frames:
 #' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
@@ -393,7 +394,8 @@ sim_RVped = function(hazard_rates, GRR,
                      carrier_prob = 0.002,
                      RVfounder = FALSE,
                      birth_range = c(18, 45),
-                     NB_params = c(2, 4/7)){
+                     NB_params = c(2, 4/7),
+                     fert = 1){
 
   if(!(RVfounder %in% c(FALSE, TRUE))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -431,7 +433,7 @@ sim_RVped = function(hazard_rates, GRR,
     #generate pedigree
     fam_ped <- sim_ped(hazard_rates, GRR, FamID,
                        founder_byears, stop_year, carrier_prob,
-                       RVfounder, birth_range, NB_params)
+                       RVfounder, birth_range, NB_params, fert)
 
     #check to see if pedigree is ascertained
     check_pedigree <- ascertain_ped(ped_file = fam_ped, num_affected,

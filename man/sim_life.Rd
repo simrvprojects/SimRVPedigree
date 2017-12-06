@@ -5,7 +5,7 @@
 \title{Simulate all life events}
 \usage{
 sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
-  birth_range, NB_params)
+  birth_range = c(18, 45), NB_params = c(2, 4/7), fert = 1)
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
@@ -23,6 +23,8 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
+
+\item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
 }
 \value{
 A named matrix containing the years of an individual's simulated life events, named by event type, see details.
@@ -61,8 +63,6 @@ set.seed(7664)
 sim_life(hazard_rates = my_HR, GRR = 10,
          carrier_prob = 0.002,
          RV_status = FALSE,
-         birth_range = c(17,45),
-         NB_params = c(2, 4/7),
          YOB = 1900, stop_year = 2000)
 
 # Using the same random seed, notice how life events can vary for
@@ -74,8 +74,6 @@ set.seed(7664)
 sim_life(hazard_rates = my_HR, GRR = 10,
                carrier_prob = 0.002,
                RV_status = TRUE,
-               birth_range = c(17,45),
-               NB_params = c(2, 4/7),
                YOB = 1900, stop_year = 2000)
 
 

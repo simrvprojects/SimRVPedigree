@@ -186,7 +186,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #'
 sim_nFam = function(found_info, stop_year, last_id,
                     hazard_rates, birth_range, NB_params,
-                    GRR, carrier_prob, RVfounder, intro_RV){
+                    GRR, carrier_prob, RVfounder, fert){
 
   nfam_ped <- found_info
 
@@ -194,7 +194,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   sim_years <- sim_life(hazard_rates, GRR, carrier_prob,
                         RV_status = any(found_info[, c(7:8)] == 1),
                         YOB = found_info$birthYr, stop_year,
-                        birth_range, NB_params)
+                        birth_range, NB_params, fert)
 
 
 
@@ -310,7 +310,8 @@ sim_ped = function(hazard_rates, GRR,
                    carrier_prob = 0.002,
                    RVfounder = FALSE,
                    birth_range = c(18, 45),
-                   NB_params = c(2, 4/7)){
+                   NB_params = c(2, 4/7),
+                   fert = 1){
 
   if(!(RVfounder %in% c(T, F))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -341,7 +342,7 @@ sim_ped = function(hazard_rates, GRR,
                          stop_year, last_id,
                          hazard_rates, birth_range, NB_params,
                          GRR, carrier_prob,
-                         RVfounder)
+                         RVfounder, fert)
 
       #replace individual by their simulated self and add family members when necessary
       fam_ped <- rbind(fam_ped[-which(fam_ped$ID == re_sim[k]), ],
