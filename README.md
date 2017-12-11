@@ -45,4 +45,7 @@ plot(ex_ped[[2]])
 
 # Obtain summary information for the ascertained pedigree.
 summary(ex_ped[[2]])
+#> $family_info
+#>  FamID totalRelatives numAffected AveOnsetAge aveIBD ascertainYear segRV
+#> 1 1 10 3 61.66667 0.5 1999 TRUE
 ```
