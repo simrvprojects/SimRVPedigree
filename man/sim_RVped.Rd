@@ -97,10 +97,9 @@ plot(ex_RVped[[2]])
 summary(ex_RVped[[2]])
 
 
-# Simulate ascertained pedigree with RVfounder = FALSE.
 # NOTE: by default, RVfounder = FALSE.
 # Under this setting pedigrees segregate a causal
-# variant with probability equal to carrier prob.
+# variant with probability equal to carrier_prob.
 
 
 }
