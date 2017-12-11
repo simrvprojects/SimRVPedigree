@@ -380,10 +380,9 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' summary(ex_RVped[[2]])
 #'
 #'
-#' # Simulate ascertained pedigree with RVfounder = FALSE.
 #' # NOTE: by default, RVfounder = FALSE.
 #' # Under this setting pedigrees segregate a causal
-#' # variant with probability equal to carrier prob.
+#' # variant with probability equal to carrier_prob.
 #'
 #'
 sim_RVped = function(hazard_rates, GRR,
