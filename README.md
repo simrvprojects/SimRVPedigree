@@ -48,7 +48,7 @@ summary(ex_ped[[2]])
 #> $family_info
 #>   FamID totalRelatives numAffected aveOnsetAge aveIBD ascertainYear segRV
 #> 1     1             10           3    61.66667    0.5          1999  TRUE
-
+#> 
 #> $affected_info
 #>   FamID ID birthYr onsetYr deathYr RR proband RVstatus
 #> 1     1  1    1905    1968    1973 10   FALSE        1
