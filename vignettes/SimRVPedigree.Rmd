@@ -85,6 +85,7 @@ Optional arguments:
 11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigree will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
+14. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
 
 We will illustrate the usage and output of this function in the next section.
 
