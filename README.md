@@ -6,7 +6,7 @@
 To simulate pedigrees or to simulate life events for an individual we provide:
 * `sim_RVped()` to simulate pedigrees ascertained for multiple disease-affected relatives,
 * `sim_ped()` to simulate pedigrees, and
-* `sim_life()` to simulate life events for an individual until a specified stop-year.
+* `sim_life()` to simulate life events until a specified stop-year.
 
 To manipulate pedigrees we provide:
 * `plot.ped()` to plot pedigrees,
