@@ -6,7 +6,7 @@ Authors@R: c(person("Christina", "Nieuwoudt",
                     role = c("aut", "cre"),
                     email = "cnieuwou@sfu.ca"),
              person("Jinko", "Graham", role = "aut"))
-sDescription: Routines to simulate and manipulate pedigrees ascertained to
+Description: Routines to simulate and manipulate pedigrees ascertained to
     contain multiple family members affected by a rare disease.
 Depends:
     R (>= 3.2.5)
