@@ -415,18 +415,18 @@ Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi,
 Terri H. Beaty, and Ingo Ruczinski (2014). **Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives**.
 	Bioinformatics; Vol. 30, No. 15, pp. 2189–2196.
 	
-[2] Renaud Gaujoux (2014). 
-  **doRNG: Generic Reproducible Parallel Backend for foreach Loops.** 
-  *R package version 1.6.*
+[2] Renaud Gaujoux (2017). 
+  **doRNG: Generic Reproducible Parallel Backend for 'foreach' Loops.** 
+  *R package version 1.6.6*
   https://CRAN.R-project.org/package=doRNG.
   
 [3] Ken-Ichi Kojima, Therese M. Kelleher. (1962), 
   **Survival of Mutant Genes**. 
   The American Naturalist; Vol. 96, No. 891, pp. 329-346. 
   
-[4] Revolution Analytics and Steve Weston (2015).
+[4] Microsoft Corporation and Steve Weston (2017).
   **doParallel: Foreach Parallel Adaptor for the 'parallel' Package.** 
-  *R package version 1.0.10.*
+  *R package version 1.0.11.*
   https://CRAN.R-project.org/package=doParallel.
 
 [5] The Surveillance, Epidemiology, and End Results (SEER) Program.  Retrieved on 24 October 2016 from http://seer.cancer.gov/.
