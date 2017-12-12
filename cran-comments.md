@@ -2,7 +2,7 @@
 * local Windows OS install, R 3.4.2
 * ubuntu 12.04 (on travis-ci), R 3.4.2
 * local OS X install, R 3.4.2 
-** try OS X install on campus again before submitting**
+**try OS X install on campus again before submitting**
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes
