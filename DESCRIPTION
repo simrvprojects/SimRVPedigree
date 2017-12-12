@@ -2,8 +2,10 @@ Package: SimRVPedigree
 Type: Package
 Title: Simulate Pedigrees Ascertained for a Rare Disease
 Version: 0.1.0
-Author: Christina Nieuwoudt, Jinko Graham
-Maintainer: Christina Nieuwoudt <cnieuwou@sfu.ca>
+Authors@R: c(person("Christina", "Nieuwoudt", 
+                    role = c("aut", "cre"),
+                    email = "cnieuwou@sfu.ca"),
+             person("Jinko", "Graham", role = "aut"))
 Description: Routines to simulate and manipulate pedigrees ascertained to
     contain multiple family members affected by a rare disease.
 Depends:
@@ -18,7 +20,7 @@ Suggests:
     graphics (>= 3.3.0),
     knitr (>= 1.13),
     rmarkdown (>= 0.9.6),
-    testthat
+    testthat (>= 1.0.2)
 License: GNU General Public License
 LazyData: TRUE
 RoxygenNote: 6.0.1
