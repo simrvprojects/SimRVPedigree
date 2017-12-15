@@ -81,7 +81,7 @@ for (k in 1:length(Recall_Probabilities)) {
 
 }
 \references{
-OUR MANUSCRIPT
+Nieuwoudt, Christina M and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153; doi: https://doi.org/10.1101/234153
 
 Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 }
