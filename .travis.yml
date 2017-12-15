@@ -7,5 +7,3 @@ cache: packages
 notifications:
   email:
     - cnieuwou@sfu.ca
-before_install:
-  Rscript -e 'update.packages(ask = FALSE)'

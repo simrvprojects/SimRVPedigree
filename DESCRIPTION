@@ -9,15 +9,15 @@ Authors@R: c(person("Christina", "Nieuwoudt",
 Description: Routines to simulate and manipulate pedigrees ascertained to
     contain multiple family members affected by a rare disease.
 Depends:
-    R (>= 3.4.3)
+    R (>= 3.4.2)
 Imports:
     kinship2 (>= 1.6.4),
     dplyr (>= 0.7.4),
-    stats (>= 3.4.3)
+    stats (>= 3.4.2)
 Suggests:
     doParallel (>= 1.0.11),
     doRNG (>= 1.6.6),
-    graphics (>= 3.4.3),
+    graphics (>= 3.4.2),
     knitr (>= 1.17),
     rmarkdown (>= 1.8),
     roxygen2 (>= 6.0.1),
