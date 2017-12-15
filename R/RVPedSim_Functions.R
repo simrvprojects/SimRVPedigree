@@ -106,7 +106,7 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
 #' @export
 #'
 #' @references Nieuwoudt, Christina M and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153; doi: https://doi.org/10.1101/234153
-#' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
+#' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187.
 #'
 #' @importFrom kinship2 kinship
 #' @importFrom stats runif

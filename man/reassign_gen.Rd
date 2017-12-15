@@ -55,7 +55,7 @@ par(mfrow = c(1, 1))
 \references{
 Nieuwoudt, Christina M and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
 
-Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.  Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187
+Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169. Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187.
 }
 \seealso{
 \code{\link{new.ped}}
