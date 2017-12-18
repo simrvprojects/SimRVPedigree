@@ -3,6 +3,8 @@ In this resubmission I have:
 
  * added a bioRxiv reference in the 'Description' field of the DESCRIPTION file in the form:
  authors (year) <bioRxiv:...>
+ 
+ Note: After adding the reference R CMD check results issues a note because the reference does not end in a period.
 
 ## Test environments
 * local Windows OS install, R 3.4.3
