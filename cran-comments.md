@@ -1,3 +1,13 @@
+##Resubmission
+In this resubmission I have:
+
+ * added a bioRxiv reference in the 'Description' field of the DESCRIPTION file in the form:
+ authors (year) <bioRxiv:...>
+
+Note: After adding the reference a note is issued in the R CMD check results: 
+Malformed Description field: should contain one or more complete sentences.
+
+
 ## Test environments
 * local Windows OS install, R 3.4.3
 * ubuntu 14.05.5 LTS (on travis-ci), R 3.4.2
