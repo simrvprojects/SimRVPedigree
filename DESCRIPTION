@@ -7,7 +7,9 @@ Authors@R: c(person("Christina", "Nieuwoudt",
                     email = "cnieuwou@sfu.ca"),
              person("Jinko", "Graham", role = "aut"))
 Description: Routines to simulate and manipulate pedigrees ascertained to
-    contain multiple family members affected by a rare disease.
+    contain multiple family members affected by a rare disease. 
+    Christina Nieuwoudt, Samantha J Jones, Angela Brooks-Wilson, 
+    and Jinko Graham (2017) <bioRxiv:234153>.
 Depends:
     R (>= 3.4.2)
 Imports:
