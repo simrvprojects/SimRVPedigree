@@ -187,7 +187,7 @@ summary.ped <- function(object, ...) {
 #' @importFrom graphics par
 #' @importFrom kinship2 pedigree.legend
 #' @importFrom utils as.roman
-#' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
+#' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} \url{https://CRAN.R-project.org/package=kinship2}
 #' @export
 #'
 #' @examples

@@ -16,5 +16,5 @@ A pedigree object.  See \code{\link{pedigree}} for details.
 Create a kinship2 pedigree structure from an object of class ped
 }
 \references{
-Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
+Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} \url{https://CRAN.R-project.org/package=kinship2}
 }

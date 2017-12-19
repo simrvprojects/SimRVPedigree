@@ -83,7 +83,7 @@ plot(RVped2015, ref_year = 2015, gen_lab = TRUE,
 
 }
 \references{
-Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
+Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} \url{https://CRAN.R-project.org/package=kinship2}
 }
 \seealso{
 \code{\link{plot.pedigree}}, \code{\link{pedigree.legend}}, \code{\link{plot}}, \code{\link{par}}
