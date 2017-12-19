@@ -1,7 +1,20 @@
 ##Resubmission
+In this resubmission I have updated a reference in AgeSpecififc_Hazards.Rd, which had prompted the following error message:
+ 
+ Found the following (possibly) invalid URLs:
+   URL: https://www.ssa.gov/oact/NOTES/as120/TOC.html
+     From: man/AgeSpecific_Hazards.Rd
+           inst/doc/SimRVPedigree.html
+     Status: Error
+     Message: libcurl error code 35:
+               Unknown SSL protocol error in connection to www.ssa.gov:443
+               
+ * The updated reference does not contain a URL, and should therefore resolve this error.
+
+##Resubmission
 In this resubmission I have:
 
- * added a reference in the 'Description' field of the DESCRIPTION file in the form:
+ * fixed the reference in the 'Description' field of the DESCRIPTION file to be of the form:
  authors (year) <https...>
  
 ## Test environments
@@ -11,8 +24,13 @@ In this resubmission I have:
   - Tested on a campus MAC, which unfortunately I did not have permission to update to more recent version of R.
 
 ## R CMD check results
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
 
+Possibly mis-spelled words in DESCRIPTION:
+  Jinko (12:9)
+  Nieuwoudt (11:15)
+  
+These are not misspelled words, these are names of authors. 
 
 ## Downstream Dependencies
 Currently, there are no downstream dependencies for this package.
