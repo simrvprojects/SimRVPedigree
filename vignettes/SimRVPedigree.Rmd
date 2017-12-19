@@ -36,7 +36,7 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 1. Given a sample of pedigrees we allow for the possibility that different families may segregate different rare variants, but make the assumption that within a family genetic cases are due to a shared rare variant that increases disease susceptibility.
 
 2. With respect to how the causal variant is introduced to the pedigree we allow users to choose from one of the following two assumptions:
-    + a. Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in [1].
+    + a. Assume that the variant is rare enough that a single copy has been introduced by one founder, and begin the simulation of the pedigree with this founder, as in [2].
     + b. Simulate the starting founder's rare-variant status with probability equal to the carrier probability of the rare variant in the population.  We note that under this setting pedigrees may not segregate the rare variant.
     
 3. When the rare variant is present, we transmit it from parent to offspring according to Mendel's laws.
@@ -84,7 +84,7 @@ Optional arguments:
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
 11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigree will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
-13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [3].
+13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [4].
 14. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
 
 We will illustrate the usage and output of this function in the next section.
@@ -112,7 +112,7 @@ Additionally, the user will need to specify:
    3. `hazardDF[, 3]`: the age-specific hazard rate for death in the affected population, i.e. individuals who have had lymphoid cancer.
 2. `partition`: a partition of ages over which to apply the age-specific hazard rates in `hazardDF`.
 
-For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [5].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables such as those provided by the U.S. Social Security Administration [6].
+For individuals studying lymphoid cancer in the United States, the age-specific hazard rates of lymphoid cancer and of death in the affected population may be estimated by a program such as the Surveillance, Epidemiology, and End Results Program (SEER) [6].  Furthermore, since death by lymphoid cancer accounts for a relatively small proportion of all death causes in the general population, the user may choose to approximate the hazard rates of death in the unaffected population by the age-specific hazard rates of death in the general population, which can be estimated from actuarial life tables such as those provided by the U.S. Social Security Administration [1].
 
 For the sake of illustration, suppose that the family study in the example was conducted in the United States.  The `AgeSpecific_Hazards` data set included with the `SimRVPedigree` package contains age-specific hazard rates which were generated to roughly mimic those required for lymphoid cancer onset in the United States as described above.  The three columns in the `AgeSpecific_Hazards` data set provide the required age-specific hazard rates, in yearly increments, beginning at age 0 and ending with age 100.  That is, the values in the first row describe the hazard rates for an individual whose age is contained in the interval [0, 1), while the values in the second row describe the hazard rates for an individual whose age is contained in the interval [1, 2), and so on.  For more information on the `AgeSpecific_Hazards` data set type the command `help(AgeSpecific_Hazards)` into the `R` console.
 
@@ -349,7 +349,7 @@ relative-risk | Average Computation Time (in minutes) | Number of trials
 
 Other combinations of simulation settings could also result in longer computation times.  For this reason, when possible, we recommend the use of parallel processing to simulate a large number of pedigrees ascertained for multiple affected members.  
 
-The following parallel processing example uses the `doParallel` [4] and `doRNG` [2] packages to simulate an entire study sample of 150 pedigrees for the family-based study described in section 5.  The following code has been tested on both Windows and Macintosh operating systems, however, slight modifications may be necessary for users working other operating systems. 
+The following parallel processing example uses the `doParallel` [5] and `doRNG` [3] packages to simulate an entire study sample of 150 pedigrees for the family-based study described in section 5.  The following code has been tested on both Windows and Macintosh operating systems, however, slight modifications may be necessary for users working other operating systems. 
 
 ```{r, eval = FALSE}
 #Note that parallel processing is achieved using the doParallel package, 
@@ -410,38 +410,37 @@ RV_peds = foreach(i = seq(npeds),
 
 
 #7. References <a name="Ref"></a>
-[1] Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson,
+[1] Felicitie C. Bell and Michael L. Miller (2005). **Life Tables for the United States Social Security Area, 1900-2100**. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary. https://www.ssa.gov/oact/NOTES/pdf_studies/study120.pdf.
+
+[2] Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson,
 Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi,
 Terri H. Beaty, and Ingo Ruczinski (2014). **Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives**.
 	Bioinformatics; Vol. 30, No. 15, pp. 2189–2196.
 	
-[2] Renaud Gaujoux (2017). 
+[3] Renaud Gaujoux (2017). 
   **doRNG: Generic Reproducible Parallel Backend for 'foreach' Loops.** 
   *R package version 1.6.6*
   https://CRAN.R-project.org/package=doRNG.
   
-[3] Ken-Ichi Kojima, Therese M. Kelleher. (1962), 
+[4] Ken-Ichi Kojima and Therese M. Kelleher. (1962), 
   **Survival of Mutant Genes**. 
   The American Naturalist; Vol. 96, No. 891, pp. 329-346. 
   
-[4] Microsoft Corporation and Steve Weston (2017).
+[5] Microsoft Corporation and Steve Weston (2017).
   **doParallel: Foreach Parallel Adaptor for the 'parallel' Package.** 
   *R package version 1.0.11.*
   https://CRAN.R-project.org/package=doParallel.
 
-[5] The Surveillance, Epidemiology, and End Results (SEER) Program.  Retrieved on 24 October 2016 from http://seer.cancer.gov/.
+[6] The Surveillance, Epidemiology, and End Results (SEER) Program. http://seer.cancer.gov/.
 
-[6] Social Security Administration. Life Tables for the United States Social Security Area 1900-2100. Retrieved on 24 October 2016 from https://www.ssa.gov/oact/NOTES/as120/TOC.html.
-
-[7] Terry M Therneau and Jason Sinnwell (2015).
+[7] Terry M. Therneau and Jason Sinnwell (2015).
   **kinship2: Pedigree Functions.** 
   *R package version 1.6.4.* 
   https://CRAN.R-project.org/package=kinship2.
 
-[8] Thompson, E. (2000). 
+[8] Elizabeth Thompson (2000). 
   *Statistical Inference from Genetic Data on Pedigrees*. 
   NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
-  Retrieved from http://www.jstor.org.proxy.lib.sfu.ca/stable/4153187.
 
 [9] Ellen M. Wijsman (2012). 
   *The role of large pedigrees in an era of high-throughput sequencing*. 
