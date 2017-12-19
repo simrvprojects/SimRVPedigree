@@ -410,7 +410,7 @@ RV_peds = foreach(i = seq(npeds),
 
 
 #7. References <a name="Ref"></a>
-[1] Felicitie C. Bell and Michael L. Miller (2005). **Life Tables for the United States Social Security Area, 1900-2100**. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary. https://www.ssa.gov/oact/NOTES/pdf_studies/study120.pdf.
+[1] Felicitie C. Bell and Michael L. Miller (2005). **Life Tables for the United States Social Security Area, 1900-2100**. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary.
 
 [2] Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson,
 Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi,

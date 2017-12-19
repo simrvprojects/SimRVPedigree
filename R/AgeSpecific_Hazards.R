@@ -10,8 +10,8 @@
 #'
 #' @docType data
 #'
-#' @references The Surveillance, Epidemiology, and End Results (SEER) Program. \url{http://seer.cancer.gov/}
-#' @references Bell, F. C., Miller, M. L. (2005). \emph{Life Tables for the United States Social Security Area, 1900-2100}. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary. Retrieved from \url{http://www.ssa.gov/oact/NOTES/pdf_studies/study120.pdf}.
+#' @references The Surveillance, Epidemiology, and End Results (SEER) Program. \url{https://seer.cancer.gov/}
+#' @references Bell, F. C., Miller, M. L. (2005). \emph{Life Tables for the United States Social Security Area, 1900-2100}. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary.
 #'
 #' @usage data(AgeSpecific_Hazards)
 #'

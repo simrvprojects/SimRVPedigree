@@ -22,8 +22,8 @@ The \code{AgeSpecific_Hazards} dataset contains age-specific hazard rates which 
 The three columns in the \code{AgeSpecific_Hazards} dataset provide age-specific hazard rates, in yearly increments, beginning at age 0 and ending with age 100.  That is, the values in the first row describe the hazard rates for an individual whose age is contained in the interval [0, 1), while the values in the second row describe the hazard rates for an individual whose age is contained in the interval [1, 2), and so on.
 }
 \references{
-The Surveillance, Epidemiology, and End Results (SEER) Program. \url{http://seer.cancer.gov/}
+The Surveillance, Epidemiology, and End Results (SEER) Program. \url{https://seer.cancer.gov/}
 
-Bell, F. C., Miller, M. L. (2005). \emph{Life Tables for the United States Social Security Area, 1900-2100}. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary. Retrieved from \url{http://www.ssa.gov/oact/NOTES/pdf_studies/study120.pdf}.
+Bell, F. C., Miller, M. L. (2005). \emph{Life Tables for the United States Social Security Area, 1900-2100}. Baltimore, Md.: Social Security Administration, Office of the Chief Actuary.
 }
 \keyword{datasets}
