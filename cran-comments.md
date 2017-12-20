@@ -1,4 +1,12 @@
 ##Resubmission
+In this resubmission I have:
+
+ * fixed the reference in the 'Description' field of the DESCRIPTION file to be of the form:
+ authors (year) <doi...>, and
+
+ * changed the 'Depends' field in the DESCRIPTION file to R (>= 3.4.0). Previously, it was R (>= 3.4.2).
+
+##Resubmission
 In this resubmission I have updated a reference in AgeSpecififc_Hazards.Rd, which had prompted the following error message:
  
  Found the following (possibly) invalid URLs:
