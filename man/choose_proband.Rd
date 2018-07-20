@@ -4,7 +4,7 @@
 \alias{choose_proband}
 \title{Choose a proband from the disease-affected relatives in a pedigree}
 \usage{
-choose_proband(ped_file, num_affected, ascertain_span)
+choose_proband(ped_file, num_affected, ascertain_span, first_diagnosis)
 }
 \arguments{
 \item{ped_file}{Pedigree simulated by \code{sim_ped}.}
@@ -12,6 +12,8 @@ choose_proband(ped_file, num_affected, ascertain_span)
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
 \item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
+
+\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
 }
 \value{
 Pedigree with proband selected.

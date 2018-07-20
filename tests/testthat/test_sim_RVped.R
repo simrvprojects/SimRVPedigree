@@ -49,6 +49,27 @@ test_that("proband in trimmed pedigree had 1 affected relative before onset, whe
 })
 
 
+test_that("there are n - 1 affected realtives NOT including any relatives affected before first_diagnosis", {
+  RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+                     GRR = 50, carrier_prob = 0.002,
+                     RVfounder = TRUE,
+                     FamID = 1,
+                     num_affected = 2,
+                     recall_probs = c(1),
+                     founder_byears = c(1850, 1870),
+                     ascertain_span = c(2000, 2015),
+                     first_diagnosis = 1975)[[2]]
+  summary(RVped)
+
+  Oyears <- RVped$onsetYr[which(RVped$affected == 1
+                                & RVped$available == 1
+                                & RVped$proband == 0
+                                & RVped$onsetYr >= 1975)]
+
+  expect_gte(length(Oyears), 1)
+})
+
+
 test_that("issues error when RR < 0", {
   expect_error(sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                          GRR = -1, carrier_prob = 0.002, FamID = 1,

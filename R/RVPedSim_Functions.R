@@ -1,12 +1,25 @@
 #' Initial checks to disqualify a pedigree from ascertainment.
 #'
-#' @inheritParams choose_proband
+#'
+#'
+#' @inheritParams ascertain_ped
 #'
 #' @return Logical. If TRUE, pedigree is discarded.
 #' @keywords internal
-disqualify_ped <- function(ped_file, num_affected, ascertain_span){
-  length(which(ped_file$onsetYr <= ascertain_span[2])) < num_affected |
-    length(which(ped_file$onsetYr %in% ascertain_span[1]:ascertain_span[2])) < 1
+disqualify_ped <- function(ped_file, num_affected, ascertain_span, first_diagnosis){
+  #first we check if there are at least num_affected affecteds who experienced disease onset
+  #prior to the end of the ascertainment span and after the first year that realiable
+  #diagnoses could be made
+  #next we check to see if at least one affected experienced disease-onet during
+  #the ascertainment period.
+  if (is.null(first_diagnosis)) {
+    return(length(which(ped_file$onsetYr <= ascertain_span[2])) < num_affected |
+             length(which(ped_file$onsetYr %in% ascertain_span[1]:ascertain_span[2])) < 1)
+  } else {
+    return(length(which(ped_file$onsetYr <= ascertain_span[2] & ped_file$onsetYr >= first_diagnosis)) < num_affected |
+             length(which(ped_file$onsetYr %in% ascertain_span[1]:ascertain_span[2])) < 1)
+  }
+
 }
 
 #' Choose a proband from the disease-affected relatives in a pedigree
@@ -17,7 +30,7 @@ disqualify_ped <- function(ped_file, num_affected, ascertain_span){
 #' @return Pedigree with proband selected.
 #' @keywords internal
 #'
-choose_proband = function(ped_file, num_affected, ascertain_span){
+choose_proband = function(ped_file, num_affected, ascertain_span, first_diagnosis){
   #initialize proband ID variable
   ped_file$proband <- F
 
@@ -27,8 +40,13 @@ choose_proband = function(ped_file, num_affected, ascertain_span){
   A_ID <- A_ID[order(A_ID$onsetYr), ]
 
   #Eliminate affecteds who experienced onset after the end
-  #of the ascertainment span
-  A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
+  #of the ascertainment span or before reliable diagnoses could be made
+  if (is.null(first_diagnosis)) {
+    A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2]), ]
+  } else {
+    A_ID <- A_ID[which(A_ID$onsetYr <= ascertain_span[2] & A_ID$onsetYr >= first_diagnosis), ]
+  }
+
   A_ID$proband <- ifelse(A_ID$onsetYr %in% ascertain_span[1]:ascertain_span[2], T, F)
 
   if (sum(A_ID$proband) == 1) {
@@ -278,18 +296,18 @@ ascertainTrim_ped <- function(ped_file, num_affected){
 #' @return  A list containing the following data frames:
 #' @return \code{ascertained} Logical.  Indicates if pedigree is ascertained.
 #' @keywords internal
-ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs = NULL){
+ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs = NULL, first_diagnosis = NULL){
 
   # prior to sending the simulated pedigree to the trim function,
   # we check to see if it meets the required criteria for number of
   # affected.  If it does, we choose a proband from the available
   # candidates prior to sending it to the trim_ped function.
-  if (disqualify_ped(ped_file, num_affected, ascertain_span)) {
+  if (disqualify_ped(ped_file, num_affected, ascertain_span, first_diagnosis)) {
     ascertained <- FALSE
     return_ped = ped_file
   } else {
     #choose a proband
-    pro_ped <- choose_proband(ped_file, num_affected, ascertain_span)
+    pro_ped <- choose_proband(ped_file, num_affected, ascertain_span, first_diagnosis)
 
     # Now that we have a full pedigree that meets our conditions, we trim the
     # pedigree and check to see that the trimmed pedigree STILL meets our
@@ -324,7 +342,10 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #'   \item if less than \code{num_affected} - 1 individuals experienced disease onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} affected individuals when the pedigree was ascertained through the proband.
 #' }
 #'
+#' We allow users to specify the first year that reliable diagnoses can be made using the argument \code{first_diagnosis}.  All subjects who experience disease onset prior to this year are not considered when ascertaining the pedigree for a specific number of affected relatives.  By default, \code{first_diagnosis = NULL} so that all affected relatives, who are recalled by the proband are considered.
+#'
 #' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient, as defined by Thompson (see references), between the proband and his or her relatives are assumed.  This has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length \eqn{l}, such that the first \eqn{l-1} items represent the respective recall probabilities for relatives of degree \eqn{1, 2, ... , l-1} and the \eqn{l^{th}} item represents the recall probability of a relative of degree \eqn{l} or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
+#'
 #'
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
 #'
@@ -341,6 +362,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #' @param fert Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.
+#' @param first_diagnosis Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.
 #'
 #' @return  A list containing the following data frames:
 #' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
@@ -394,7 +416,8 @@ sim_RVped = function(hazard_rates, GRR,
                      RVfounder = FALSE,
                      birth_range = c(18, 45),
                      NB_params = c(2, 4/7),
-                     fert = 1){
+                     fert = 1,
+                     first_diagnosis = NULL){
 
   if(!(RVfounder %in% c(FALSE, TRUE))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -436,7 +459,7 @@ sim_RVped = function(hazard_rates, GRR,
 
     #check to see if pedigree is ascertained
     check_pedigree <- ascertain_ped(ped_file = fam_ped, num_affected,
-                                    ascertain_span, recall_probs)
+                                    ascertain_span, recall_probs, first_diagnosis)
 
     #store updated pedigree
     ascertained <- check_pedigree[[1]]

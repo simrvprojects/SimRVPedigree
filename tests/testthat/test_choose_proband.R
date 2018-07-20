@@ -10,7 +10,8 @@ test_that("returns a dataframe with the proband variable with a single proband",
                      ascertain_span = c(1970, 2015))[[1]][, c(1:14)]
 
   Tped = choose_proband(ped_file = RVped, num_affected = 2,
-                        ascertain_span = c(1970, 2015))
+                        ascertain_span = c(1970, 2015),
+                        first_diagnosis = NULL)
 
   expect_true("proband" %in% colnames(Tped))
   expect_equal(sum(Tped$proband), 1)
@@ -27,7 +28,8 @@ test_that("The proband is an affected and experienced onset during the ascertain
                      ascertain_span = c(1980, 2015))[[1]][, c(1:14)]
 
   Tped = choose_proband(ped_file = RVped, num_affected = 2,
-                        ascertain_span = c(1970, 2015))
+                        ascertain_span = c(1970, 2015),
+                        first_diagnosis = NULL)
 
 
   expect_true(Tped$affected[Tped$proband] == 1)

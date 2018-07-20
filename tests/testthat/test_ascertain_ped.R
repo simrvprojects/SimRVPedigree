@@ -44,5 +44,3 @@ test_that("ascertained pedigrees meet number affected criteria", {
     expect_true(sum(my_ped$affected) < my_n | length(which(my_ped$onsetYr >= as[1] & my_ped$onsetYr <= as[2])) == 0)
   }
   })
-
-

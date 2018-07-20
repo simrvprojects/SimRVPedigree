@@ -7,7 +7,7 @@
 sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
   founder_byears, stop_year = NULL, recall_probs = NULL,
   carrier_prob = 0.002, RVfounder = FALSE, birth_range = c(18, 45),
-  NB_params = c(2, 4/7), fert = 1)
+  NB_params = c(2, 4/7), fert = 1, first_diagnosis = NULL)
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
@@ -35,6 +35,8 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
 \item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
+
+\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
 }
 \value{
 A list containing the following data frames:
@@ -62,6 +64,8 @@ Upon simulating a pedigree with \code{num_affected} individuals, \code{sim_RVped
   \item experienced disease onset between the years specified by \code{ascertain_span},
   \item if less than \code{num_affected} - 1 individuals experienced disease onset prior to the lower bound of \code{ascertain_span}, a proband is chosen from the affected individuals, such that there were at least \code{num_affected} affected individuals when the pedigree was ascertained through the proband.
 }
+
+We allow users to specify the first year that reliable diagnoses can be made using the argument \code{first_diagnosis}.  All subjects who experience disease onset prior to this year are not considered when ascertaining the pedigree for a specific number of affected relatives.  By default, \code{first_diagnosis = NULL} so that all affected relatives, who are recalled by the proband are considered.
 
 After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient, as defined by Thompson (see references), between the proband and his or her relatives are assumed.  This has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length \eqn{l}, such that the first \eqn{l-1} items represent the respective recall probabilities for relatives of degree \eqn{1, 2, ... , l-1} and the \eqn{l^{th}} item represents the recall probability of a relative of degree \eqn{l} or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
 
