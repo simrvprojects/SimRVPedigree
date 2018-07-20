@@ -408,3 +408,94 @@ get_famInfo <- function(ped_file){
                     ascertainYear = AY,
                     segRV = SRV))
 }
+
+#' Reduce pedigree to contain disease-affected relatives
+#'
+#' Reduce pedigree to contain only the disease-affected relatives and the individuals who
+#'
+#' @param ped_file A ped object. See \code{\link{new.ped}} for details.
+#' @export
+#'
+#' @return \code{red_ped} A pedigree containing only affected members, obligate carriers, and founders.
+#'
+#' @examples
+#' library(SimRVPedigree)
+#' #Read in example pedigrees and create ped object
+#' data(EgPeds)
+#' ex_peds <- new.ped(EgPeds)
+#'
+#' #plot full pedigree
+#' plot(ex_peds[which(ex_peds$FamID == 1), ])
+#'
+#' #reduce to affected only pedigree
+#' Apeds = reduce_to_affected(ex_peds[which(ex_peds$FamID == 1), ])
+#' plot(Apeds)
+#'
+reduce_to_affected <- function(ped_file){
+
+  if (!is.ped(ped_file)) {
+    stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
+  }
+
+  #assign generation number if not included in ped_file
+  if(!"Gen" %in% colnames(ped_file)){
+    ped_file$Gen <- assign_gen(ped_file)
+  }
+
+  #create new ped file with affecteds only
+  red_ped <- ped_file[which(ped_file$affected == TRUE), ]
+
+  if (nrow(red_ped) == 0) {
+    warning(paste0("Disease-affected relatives are not present in pedigree with FamID ",
+                   sep = "", ped_file$FamID[1]))
+    return(red_ped)
+  } else {
+    d <- 0
+    while (d == 0) {
+      #find the dad IDs that are required but have been removed
+      miss_dad  <- !is.element(red_ped$dadID,
+                               red_ped$ID[which(red_ped$sex == 0)])
+      readd_dad <- red_ped$dadID[miss_dad]
+      readd_dad <- unique(readd_dad[!is.na(readd_dad)])
+
+      #find the mom IDs that are required but have been removed
+      miss_mom  <- !is.element(red_ped$momID,
+                               red_ped$ID[which(red_ped$sex == 1)])
+      readd_mom <- red_ped$momID[miss_mom]
+      readd_mom <- unique(readd_mom[!is.na(readd_mom)])
+
+      #check to see if we need to readd anyone
+      if (length(c(readd_dad, readd_mom)) == 0) {
+        d <- 1
+      } else {
+        #Now pull the rows containing the required parents
+        # from the original ped_file
+        readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
+
+        #combine with affected ped file
+        red_ped <- rbind(red_ped, readd)
+      }
+    }
+  }
+
+  # We want to ensure that generation 1 includes the most recent common ancestor of all
+  # the affected individuals, if it does not, we remove the extra individuals.
+  #
+  # the SimRVPedigree function reassign_gen assigns generation number based on
+  # the MRCA of the disease-affected reletives.  We can determine the individuals
+  # to retain based on the generation number returned by reassign_gen.
+  #
+  if (max(red_ped$Gen, na.rm = TRUE) != max(reassign_gen(red_ped)$Gen, na.rm = TRUE)) {
+    for(i in 1:(max(red_ped$Gen, na.rm = TRUE) - max(reassign_gen(red_ped)$Gen, na.rm = TRUE))){
+      #remove parnets in generation i
+      geni_parents <- red_ped$ID[red_ped$Gen == i]
+      red_ped$dadID[which(red_ped$dadID %in% geni_parents)] <- NA
+      red_ped$momID[which(red_ped$momID %in% geni_parents)] <- NA
+      red_ped <- red_ped[-which(red_ped$Gen == i), ]
+    }
+  }
+
+  red_ped$Gen <- red_ped$Gen - (min(red_ped$Gen) - 1)
+
+  return(red_ped)
+}
