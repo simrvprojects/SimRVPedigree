@@ -269,7 +269,7 @@ trim_ped = function(ped_file, recall_probs = NULL){
 #'
 #' @return Logical. If TRUE, pedigree is ascertained.
 #' @keywords internal
-ascertainTrim_ped <- function(ped_file, num_affected){
+ascertainTrim_ped <- function(ped_file, num_affected, first_diagnosis = NULL){
 
   #Gather the onset years for all affecteds, and for the proband.
   #We need to ensure that at least num_affected - 1 were affected prior to
@@ -279,6 +279,9 @@ ascertainTrim_ped <- function(ped_file, num_affected){
   Oyears <- ped_file$onsetYr[ped_file$affected
                              & ped_file$available
                              & ped_file$proband == FALSE]
+  if (!is.null(first_diagnosis)) {
+    Oyears <- Oyears[which(Oyears >= first_diagnosis)]
+  }
 
   #determine the number of available affected individuals
   ascertained <- sum(Oyears <= POyear) >= (num_affected - 1)
@@ -314,7 +317,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
     # conditions, we then update ascertained appropriately.
     ascertained_ped <- trim_ped(ped_file = pro_ped, recall_probs)
 
-    ascertained <- ascertainTrim_ped(ped_file = ascertained_ped, num_affected)
+    ascertained <- ascertainTrim_ped(ped_file = ascertained_ped, num_affected, first_diagnosis)
     return_ped = ascertained_ped
   }
 
