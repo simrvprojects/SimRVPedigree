@@ -17,6 +17,8 @@
 #'
 #' @importFrom kinship2 kinship
 #' @importFrom kinship2 align.pedigree
+#' @importFrom utils combn
+#'
 #' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 #'
@@ -86,6 +88,7 @@ reassign_gen = function(ped_file){
     } else {
       #Now pull the rows containing the required parents
       # from the original ped_file
+
       readd <- ped_file[which(ped_file$ID %in% c(readd_dad, readd_mom)), ]
 
       #combine with affected ped file
@@ -118,19 +121,21 @@ reassign_gen = function(ped_file){
     url1 <- colnames(ak_mat)[which(ak_mat == 0, arr.ind = T)[1, 1]]
     url2 <- colnames(ak_mat)[which(ak_mat == 0, arr.ind = T)[1, 2]]
 
-    stop(paste0("\n \n The disease-affected relatives with ID numbers ", url1, " and ", url2, " are not related. \n Cannot determine most recent common ancestor for unrelated affecteds. \n Please mark one the unrelated affecteds as unavailable."))
+    stop(paste0("\n \n The disease-affected relatives with ID numbers ", url1, " and ", url2, " are not related. \n Cannot determine most recent common ancestor for unrelated affecteds."))
   }
 
+  #store the old generation numbers
+  old_gen <- gped$Gen
 
   #Change Generation number so that only affecteds have a gen number
   gped$Gen <- ifelse(gped$affected, gped$Gen, NA)
 
   #table affected generation number
   gen_tab <- table(gped$Gen)
+
   #first two smallest generation numbers (i.e. 1 and 2)
   min_gens <- as.numeric(names(gen_tab[c(1, 2)]))
-  #difference between two earliest generation numbers
-  gen_diff <- diff(min_gens)
+
   #number of affecteds in the earliest generation
   num_in_min_gen <- as.numeric(gen_tab[1])
 
@@ -141,43 +146,26 @@ reassign_gen = function(ped_file){
     # and available, and case when RV founder not affected but 2 or more
     # of his or her children are affected.
     return(gped)
-  } else if (num_in_min_gen >= 2) {
+  } else {
+    #find all pairwaise combinations of the disease-affected relatives
+    pair_mat <- combn(x = gped$ID[gped$affected & gped$available], m = 2)
 
+    #find mrca for each pair of disease affected relatives, reduce to unique mrcas
+    mrca <- unique(unlist(lapply(1:ncol(pair_mat), function(x){
+      find_mrca(gped, pair_mat[1, x], pair_mat[2, x])
+    })))
 
-    #find the distance between only those in the lowest generation
-    kin_distance <- -log(kin_mat[which(gped$Gen == min_gens[1]),
-                                 which(gped$Gen == min_gens[1])])/log(2)
-    #find the new gen difference
-    new_gen_diff <- min_gens[1] - (max(kin_distance)/2 + 1)
+    #find the amount by which we must shift the generation number
+    #if mrca contains multiple mrcas, we take the one with the smallest
+    #generation number.
+    if (length(mrca) > 1){
+      new_gen_diff <- min(old_gen[which(gped$ID %in% mrca)]) - 1
+    } else {
+      new_gen_diff <- old_gen[which(gped$ID == mrca)] - 1
+    }
+
     #assign new generation
     gped$Gen[!is.na(gped$Gen)] <- gped$Gen[!is.na(gped$Gen)] - new_gen_diff
-    return(gped)
-  } else if (num_in_min_gen == 1) {
-    #compute and store kinship matrix
-    kin_mat <- kinship(gped,
-                       id = gped$ID,
-                       dadid = gped$dadID,
-                       momid = gped$momID)
-
-
-    #find the distance between only those in the lowest 2 generations
-    kin_distance <- -log(kin_mat[which(gped$Gen == min_gens[1]),
-                                 which(gped$Gen %in% min_gens)])/log(2)
-
-    #find the difference between the maximum distance in kin_distance and
-    # the value of the second smallest generation - this is the value we will
-    # use to adjust everyone at or below the second smallest generation
-    new_gen_diff <- min_gens[2] - max(kin_distance)
-
-    #find the difference between the maximum distance in kin_distance
-    # and the difference between the smallest 2 generations
-    # This will be the new gen no for the 1 individual in the lowest generation
-    new_gen_oldest <- max(kin_distance) - gen_diff
-
-    #assign new generation
-    gped$Gen[!is.na(gped$Gen)] <- ifelse(gped$Gen[!is.na(gped$Gen)] == min_gens[1],
-                                                   new_gen_oldest,
-                                                   gped$Gen[!is.na(gped$Gen)] - new_gen_diff)
 
     return(gped)
   }
