@@ -9,15 +9,22 @@ test_that("sim_life should always begin at start and end at death when stop_year
   expect_equal(colnames(Levents)[length(Levents)], "Death")
 })
 
-test_that("sim_life never returns onset more than once", {
-  Levents <- sim_life(hazard_rates = hazard(AgeSpecific_Hazards),
-                      GRR = 50, carrier_prob = 0.02, RV_status = T,
-                      YOB = 1900, stop_year = 2001,
-                      birth_range = c(18, 45), NB_params = c(2, 4/7))
-  if("Onset" %in% names(table(colnames(Levents)))){
-    expect_equal(as.numeric(table(colnames(Levents))[names(table(colnames(Levents))) == "Onset"]),
-                 1)
+test_that("sim_life never returns more than one onset event", {
+  onset_occured = FALSE
+
+  while (onset_occured == FALSE) {
+    Levents <- sim_life(hazard_rates = hazard(AgeSpecific_Hazards),
+                        GRR = 500, carrier_prob = 0.02, RV_status = T,
+                        YOB = 1900, stop_year = 2001,
+                        birth_range = c(18, 45), NB_params = c(2, 4/7))
+
+    if ("Onset" %in% names(table(colnames(Levents)))) {
+      onset_occured = TRUE
+    }
   }
+
+  expect_equal(as.numeric(table(colnames(Levents))[names(table(colnames(Levents))) == "Onset"]), 1)
+
 })
 
 test_that("sim_life always returns death event after all other events", {
