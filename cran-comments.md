@@ -1,3 +1,19 @@
+##Resubmission August 2018
+In this resubmission I have:
+- Fixed a bug in the reassign_gen function and improved the tests for this function. 
+
+- added a new argument, called first_diagnosis, to the sim_RVped function.  This argument allows users to implement a new ascertainment criteria. 
+  NOTE: the default setting of the new argument ensures backwards compatibility. 
+
+- added reduce_to_affected function, which creates a minimal pedigree containing only the disease-affected relatives and the individuals required for a ped object.
+
+- DESCRIPTION file:
+    - Updated the Depends field to R (>= 3.5.0),
+    - Updated the version number to 0.2.0 to reflect:
+         - the bug fix in the reassign_gen function,
+         - the addition of the new argument in the sim_RVped function, called first_diagnosis, and
+         - the addition of a new function called reduce_to_affected.
+
 ##Resubmission
 In this resubmission I have:
 
@@ -26,7 +42,7 @@ In this resubmission I have:
  authors (year) <https...>
  
 ## Test environments
-* local Windows OS install, R 3.4.3
+* local Windows OS install, R 3.5.0
 * ubuntu 14.05.5 LTS (on travis-ci), R 3.4.2
 * local OS X install, R 3.3.3 
   - Tested on a campus MAC, which unfortunately I did not have permission to update to more recent version of R.
