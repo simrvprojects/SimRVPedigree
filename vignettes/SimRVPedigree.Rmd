@@ -2,7 +2,7 @@
 title: "SimRVPedigree"
 author: "Christina Nieuwoudt, Jinko Graham"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{SimRVPedigree}
   %\VignetteEngine{knitr::rmarkdown}
@@ -56,6 +56,8 @@ The `sim_RVped` function is used to randomly simulate families ascertained to ha
 
 2. `ascertain_span`: The span, in years, in which the family-based study ascertains families for analysis.  We require that the proband, i.e. the affected family member who enlists the family for analysis, experienced disease onset during the ascertainment period.  Additionally, when `num_affected` = $n$ affected family members are requested, we require that at the time of ascertainment the proband is at least the $n^{th}$ affected.  For example, suppose that we would like to mimic a family-based study that requires at least 3 affected members per family.  Presumably, the family would be ascertained for study when the proband, upon speaking to the clinician, informs the clinician that he or she is aware of at least 2 family members who are also affected by the disease of interest.  We also require that this condition is met when simulating families with incomplete ascertainment, discussed next.
 
+3. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Any relatives who experience disease-onset prior to `first_diagnosis` are not considered when counting the total number of disease-affected relatives in the pedigree.
+
 4. `recall_probs`: the proband's recall probabilities for relatives, i.e. a list of length $q$ such as $p = (p_1, p_2, ..., p_q)$.  In this context, $p_i$ is used to denote the proband's recall probability for a relative of degree $i$ when $i = 1, 2, ..., q-1$, or the proband's recall probability for a relative of degree $q$ or greater when $i = q$.
 This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  To simulate fully ascertained families simply specify `recall_probs = c(1)` so that the proband's recall probability of all relatives is 1.  If `recall_probs` is unspecified, the default values of four times the kinship coefficient, as defined in [8], between the proband and his or her relatives are assumed, which has the effect of retaining all first-degree relatives with probability 1, retaining all second-degree relatives with probability 0.5, retaining all third-degree relatives with probability 0.25, etc.
 
@@ -86,6 +88,7 @@ Optional arguments:
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [4].
 14. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
+15. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Relatives who experience disease-onset prior to `first_diagnosis` do not contribute to the total numer of diesease-affected reletives when ascertaining the pedigree.  By default, `first_diagnosis = NULL` so that all diagnoses are considered reliable.
 
 We will illustrate the usage and output of this function in the next section.
 
