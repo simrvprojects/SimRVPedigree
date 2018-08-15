@@ -13,7 +13,7 @@ disqualify_ped(ped_file, num_affected, ascertain_span, first_diagnosis)
 
 \item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
 
-\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
+\item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 }
 \value{
 Logical. If TRUE, pedigree is discarded.

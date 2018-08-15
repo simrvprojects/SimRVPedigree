@@ -16,7 +16,7 @@ ascertain_ped(ped_file, num_affected, ascertain_span, recall_probs = NULL,
 
 \item{recall_probs}{Numeric. The proband's recall probabilities for relatives, see details.  If not supplied, the default value of four times kinship coefficient between the proband and the relative is used.}
 
-\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
+\item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 }
 \value{
 A list containing the following data frames:

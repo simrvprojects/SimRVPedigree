@@ -11,7 +11,7 @@ ascertainTrim_ped(ped_file, num_affected, first_diagnosis = NULL)
 
 \item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
 
-\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
+\item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 }
 \value{
 Logical. If TRUE, pedigree is ascertained.

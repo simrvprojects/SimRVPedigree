@@ -36,7 +36,7 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 
 \item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
 
-\item{first_diagnosis}{Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.}
+\item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 }
 \value{
 A list containing the following data frames:

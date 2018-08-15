@@ -369,7 +369,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #' @param fert Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.
-#' @param first_diagnosis Numeric. The first year that a reliable diagnosis could be made regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered valid. See details.
+#' @param first_diagnosis Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.
 #'
 #' @return  A list containing the following data frames:
 #' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
@@ -455,6 +455,12 @@ sim_RVped = function(hazard_rates, GRR,
 
   if(is.null(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
+  }
+
+  if(!is.null(first_diagnosis)) {
+    if(first_diagnosis >= ascertain_span[1]) {
+      stop("first_diagnosis >= ascertainment_span[1], \n Please re-define the ascertainment span so that all diagnoses within this time frame are considered reliable.")
+    }
   }
 
   ascertained <- FALSE
