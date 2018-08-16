@@ -88,7 +88,7 @@ Optional arguments:
 12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
 13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [4].
 14. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
-15. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Relatives who experience disease-onset prior to `first_diagnosis` do not contribute to the total numer of diesease-affected reletives when ascertaining the pedigree.  By default, `first_diagnosis = NULL` so that all diagnoses are considered reliable.
+15. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Relatives who experience disease-onset prior to `first_diagnosis` do not contribute to the total number of disease-affected relatives when ascertaining the pedigree.  By default, `first_diagnosis = NULL` so that all diagnoses are considered reliable.
 
 We will illustrate the usage and output of this function in the next section.
 
