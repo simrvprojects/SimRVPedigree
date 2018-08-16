@@ -22,7 +22,7 @@ test_that("If unrelated, find_mcra returns NA", {
 })
 
 
-test_that("If related, find_mcra returns a single ID", {
+test_that("If related, find_mcra returns at most two IDs", {
   n_gens <- 0
   while(n_gens < 4){
     ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
@@ -41,11 +41,11 @@ test_that("If related, find_mcra returns a single ID", {
   #randomly select two unrelated individuals
   test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
 
-  expect_equal(length(find_mrca(ex_ped, test_ids[1], test_ids[2])), 1)
+  expect_lte(length(find_mrca(ex_ped, test_ids[1], test_ids[2])), 2)
 })
 
 
-test_that("If related, find_mcra returns a non missing value", {
+test_that("If related, find_mcra returns non-missing values", {
   n_gens <- 0
   while(n_gens < 4){
     ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
@@ -64,7 +64,8 @@ test_that("If related, find_mcra returns a non missing value", {
   #randomly select two unrelated individuals
   test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
 
-  expect_true(!is.na(find_mrca(ex_ped, test_ids[1], test_ids[2])), 1)
+
+  expect_true(!any(is.na(find_mrca(ex_ped, test_ids[1], test_ids[2]))))
 })
 
 
@@ -89,5 +90,5 @@ test_that("If related, find_mcra returns am ID that is less than or equal to the
   #randomly select two unrelated individuals
   test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
 
-  expect_lte(find_mrca(ex_ped, test_ids[1], test_ids[2]), min(test_ids))
+  expect_lte(max(find_mrca(ex_ped, test_ids[1], test_ids[2])), min(test_ids))
 })

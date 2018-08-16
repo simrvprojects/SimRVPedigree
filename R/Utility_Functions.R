@@ -74,10 +74,26 @@ get_gen_labs <- function(x, nlevel){
 #' @keywords internal
 #'
 find_available_parent <- function(ped, ID){
-  dad <- ped$dadID[ped$ID == ID]
-  mom <- ped$momID[ped$ID == ID]
-  available_parent <- ifelse(is.na(ped$dadID[ped$ID == dad]), mom, dad)
-  return(available_parent)
+  if (is.na(ID)) {
+    #parent of missing person is also missing
+    return(NA)
+  } else {
+    dad <- ped$dadID[ped$ID == ID]
+    mom <- ped$momID[ped$ID == ID]
+    if (is.na(dad) & is.na(mom)) {
+      #if mom and dad are both missing, then this person is a founder so return NA
+      available_parent <- NA
+    } else if (is.na(ped$dadID[ped$ID == dad]) & is.na(ped$dadID[ped$ID == mom])) {
+      #if both parents have missing parents, i.e. we've reached the
+      # top two founders, return them both
+      available_parent <- c(mom, dad)
+    } else {
+      available_parent <- ifelse(is.na(ped$dadID[ped$ID == dad]), mom, dad)
+    }
+
+    return(available_parent)
+  }
+
 }
 
 
@@ -132,8 +148,19 @@ find_mrca <- function(ped, ID1, ID2){
   na2 <- ID2
   mrca_found <- FALSE
   while (mrca_found == FALSE) {
-    al1 <- c(al1, find_available_parent(ped, na1))
-    al2 <- c(al2, find_available_parent(ped, na2))
+    if (length(na1) == 1) {
+      al1 <- c(al1, find_available_parent(ped, na1))
+    } else {
+      al1 <- c(al1,
+               unlist(lapply(na1, function(x){find_available_parent(ped, x)})))
+    }
+
+    if (length(na2) == 1) {
+      al2 <- c(al2, find_available_parent(ped, na2))
+    } else {
+      al2 <- c(al2,
+               unlist(lapply(na2, function(x){find_available_parent(ped, x)})))
+    }
 
     if (length(intersect(al1, al2)) > 0) {
       #common ancestor is found!
@@ -141,9 +168,18 @@ find_mrca <- function(ped, ID1, ID2){
       mrca_found <- TRUE
     } else {
       #no common ancestor, update variables to
-      #the individuals we just added to ancestor lists
-      na1 <- find_available_parent(ped, na1)
-      na2 <- find_available_parent(ped, na2)
+      #the individuals we just added to ancestor lists]
+      if (length(na1) == 1) {
+        na1 <- find_available_parent(ped, na1)
+      } else {
+        na1 <- unlist(lapply(na1, function(x){find_available_parent(ped, x)}))
+      }
+
+      if (length(na2) == 1) {
+        na2 <- find_available_parent(ped, na2)
+      } else {
+        na2 <- unlist(lapply(na2, function(x){find_available_parent(ped, x)}))
+      }
 
     }
 
