@@ -71,7 +71,7 @@ get_gen_labs <- function(x, nlevel){
 #' @param ID the Id of the person whose availble parent we would like to find
 #'
 #' @return the ID of the availble parent
-#' @export
+#' @keywords internal
 #'
 find_available_parent <- function(ped, ID){
   dad <- ped$dadID[ped$ID == ID]
@@ -81,19 +81,53 @@ find_available_parent <- function(ped, ID){
 }
 
 
-#' Find the most recent common ancestor of two related individuals
+#' Find the most recent common ancestor of two pedigree members
 #'
-#' @param ped The ped object
+#' @param ped A ped object
 #' @param ID1 The ID of the first relative
 #' @param ID2 The ID of the second relative
 #'
 #' @return The ID of the common ancestor
 #' @export
 #'
+#' @examples
+#' library(SimRVPedigree)
+#' data(AgeSpecific_Hazards)
+#'
+#'
+#' set.seed(2)
+#' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+#'                   GRR = 10, FamID = 1,
+#'                   founder_byears = c(1800, 1900),
+#'                   stop_year = 2020)
+#'
+#' plot(ex_ped)
+#'
+#' # Find most recent common ancestor of individuals with IDs 14 and 18
+#' find_mrca(ped = ex_ped, ID1 = 14, ID2 = 18)
+#'
+#' # Note that someone can be their own most recent common ancsetor.
+#' # In the following example, since the individual with ID 10 is the grandfather
+#' # of the individual with ID 22, the find_mrca function returns 10.
+#' find_mrca(ped = ex_ped, ID1 = 22, ID2 = 10)
+#'
+#' # For unrelated individuals, the find_mcra function returns NA
+#' find_mrca(ped = ex_ped, ID1 = 12, ID2 = 10)
+#' find_mrca(ped = ex_ped, ID1 = 21, ID2 = 19)
+#'
 find_mrca <- function(ped, ID1, ID2){
+
+  if (!is.ped(ped)) {
+    stop("\n \n Expecting a ped object. \n Please use new.ped to create an object of class ped.")
+  }
+
+  #the following lists will store all of the ancestors of the individuals
+  # with ID1 and ID2, **including themselves**.
   al1 <- c(ID1)
   al2 <- c(ID2)
 
+  # the following variables are the people for whom we want to
+  # find parents.  We update these in the following while loop.
   na1 <- ID1
   na2 <- ID2
   mrca_found <- FALSE
@@ -102,9 +136,12 @@ find_mrca <- function(ped, ID1, ID2){
     al2 <- c(al2, find_available_parent(ped, na2))
 
     if (length(intersect(al1, al2)) > 0) {
+      #common ancestor is found!
       common_ancestor <- intersect(al1, al2)
       mrca_found <- TRUE
     } else {
+      #no common ancestor, update variables to
+      #the individuals we just added to ancestor lists
       na1 <- find_available_parent(ped, na1)
       na2 <- find_available_parent(ped, na2)
 

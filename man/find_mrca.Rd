@@ -2,12 +2,12 @@
 % Please edit documentation in R/Utility_Functions.R
 \name{find_mrca}
 \alias{find_mrca}
-\title{Find the most recent common ancestor of two related individuals}
+\title{Find the most recent common ancestor of two pedigree members}
 \usage{
 find_mrca(ped, ID1, ID2)
 }
 \arguments{
-\item{ped}{The ped object}
+\item{ped}{A ped object}
 
 \item{ID1}{The ID of the first relative}
 
@@ -17,5 +17,31 @@ find_mrca(ped, ID1, ID2)
 The ID of the common ancestor
 }
 \description{
-Find the most recent common ancestor of two related individuals
+Find the most recent common ancestor of two pedigree members
+}
+\examples{
+library(SimRVPedigree)
+data(AgeSpecific_Hazards)
+
+
+set.seed(2)
+ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
+                  GRR = 10, FamID = 1,
+                  founder_byears = c(1800, 1900),
+                  stop_year = 2020)
+
+plot(ex_ped)
+
+# Find most recent common ancestor of individuals with IDs 14 and 18
+find_mrca(ped = ex_ped, ID1 = 14, ID2 = 18)
+
+# Note that someone can be their own most recent common ancsetor.
+# In the following example, since the individual with ID 10 is the grandfather
+# of the individual with ID 22, the find_mrca function returns 10.
+find_mrca(ped = ex_ped, ID1 = 22, ID2 = 10)
+
+# For unrelated individuals, the find_mcra function returns NA
+find_mrca(ped = ex_ped, ID1 = 12, ID2 = 10)
+find_mrca(ped = ex_ped, ID1 = 21, ID2 = 19)
+
 }
