@@ -40,7 +40,7 @@ check_ped <- function(ped_file){
     wrong_par <- c(ped_file$ID[which(ped_file$momID == moms[which(!moms %in% ped_file$ID)])],
                    ped_file$ID[which(ped_file$dadID == dads[which(!dads %in% ped_file$ID)])])
 
-    stop(paste0('ID: ', sep = '', wrong_par, '.  Non-founders must have both a mother and a father, while founders have neither.'))
+    stop(paste0('ID: ', sep = '', wrong_par, '.  Non-founders must have a mother and a father. Founders have neither.'))
   }
 
   if (any(!is.na(ped_file$momID[is.na(ped_file$dadID)])) |
