@@ -2,10 +2,12 @@
 In this resubmission I have:
 - Fixed a bug in the reassign_gen function and improved the tests for this function. 
 
+- Added a function called find_mrca, which finds the most recent common ancestor of two pedigree members.
+
 - Added a new argument, called first_diagnosis, to the sim_RVped function.  This argument allows users to implement new ascertainment criteria. 
   NOTE: the default setting of the new argument ensures backwards compatibility. 
 
-- Added find_mrca function, to find the most recent common ancestor of two pedigree members.
+
 
 - Updated the DESCRIPTION file:
     - Updated the Depends field to R (>= 3.5.0),
