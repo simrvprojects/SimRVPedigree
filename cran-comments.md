@@ -15,6 +15,11 @@ In this resubmission I have:
          - the addition of the new argument in the sim_RVped function, called first_diagnosis, and
          - the addition of a new function called reduce_to_affected.
 
+Test Environments prior to resubmission
+* local Windows OS install, R 3.5.0
+* ubuntu 14.05.5 LTS (on travis-ci), R 3.4.2
+
+
 ##Resubmission
 In this resubmission I have:
 
@@ -43,7 +48,7 @@ In this resubmission I have:
  authors (year) <https...>
  
 ## Test environments
-* local Windows OS install, R 3.5.0
+* local Windows OS install, R 3.4.3
 * ubuntu 14.05.5 LTS (on travis-ci), R 3.4.2
 * local OS X install, R 3.3.3 
   - Tested on a campus MAC, which unfortunately I did not have permission to update to more recent version of R.
