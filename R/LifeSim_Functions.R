@@ -34,8 +34,8 @@
 #'
 get_nextEvent = function(current_age, disease_status, RV_status,
                          hazard_rates, GRR, carrier_prob,
-                         lambda_birth = c(18, 45),
-                         birth_range = c(2, 4/7),
+                         lambda_birth,
+                         birth_range = c(18, 45),
                          fert = 1){
 
   RR <- ifelse(RV_status, GRR, 1)
