@@ -136,8 +136,8 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' # The following commands simulate all life events for an individual, who
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this
-#' # individual has two children, one in 1921 and another in 1925, and then
-#' # dies in 1987.
+#' # individual has two children, one in 1922 and another in 1924, and then
+#' # dies in 1993.
 #' set.seed(135)
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'          carrier_prob = 0.002,
@@ -147,8 +147,8 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # Using the same random seed, notice how life events can vary for
 #' # someone who has inherited the causal variant, which carries a
 #' # relative-risk of 10. From the output, this individual also has
-#' # two children, but then experiences disease onset in 1974,
-#' # and dies in 1976.
+#' # two children, but then experiences disease onset in 1960,
+#' # and dies in 1966.
 #' set.seed(135)
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
@@ -197,8 +197,8 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   #and max reproductive ages.
   B_range <- c(NA, NA)
   if (restricted_BR) {
-    B_range[1] <- round(runif(1, min = 18, max = 25))
-    B_range[2] <- B_range[1] + round(runif(1, min = 15, max = 20))
+    B_range[1] <- round(runif(1, min = 18, max = 27))
+    B_range[2] <- B_range[1] + round(runif(1, min = 10, max = 18))
   } else {
     B_range[1:2] <- birth_range[1:2]
   }
