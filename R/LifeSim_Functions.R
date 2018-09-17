@@ -34,9 +34,7 @@
 #'
 get_nextEvent = function(current_age, disease_status, RV_status,
                          hazard_rates, GRR, carrier_prob,
-                         lambda_birth,
-                         birth_range = c(18, 45),
-                         fert = 1){
+                         lambda_birth, birth_range, fert = 1){
 
   RR <- ifelse(RV_status, GRR, 1)
 
@@ -138,8 +136,9 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' # The following commands simulate all life events for an individual, who
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this
-#' # individual has 2 children: one in 1927, and one in 1934, and dies in 1987.
-#' set.seed(7664)
+#' # individual has two children, one in 1921 and another in 1925, and then
+#' # dies in 1987.
+#' set.seed(135)
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'          carrier_prob = 0.002,
 #'          RV_status = FALSE,
@@ -148,18 +147,18 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' # Using the same random seed, notice how life events can vary for
 #' # someone who has inherited the causal variant, which carries a
 #' # relative-risk of 10. From the output, this individual also has
-#' # 1 child in 1927, but then experiences disease onset in 1976,
-#' # and dies in 1978.
-#' set.seed(7664)
+#' # two children, but then experiences disease onset in 1974,
+#' # and dies in 1976.
+#' set.seed(135)
 #' sim_life(hazard_rates = my_HR, GRR = 10,
 #'                carrier_prob = 0.002,
 #'                RV_status = TRUE,
 #'                YOB = 1900, stop_year = 2000)
 #'
-#'
 sim_life = function(hazard_rates, GRR, carrier_prob,
                     RV_status, YOB, stop_year,
                     birth_range = c(18, 45),
+                    restricted_BR = TRUE,
                     NB_params = c(2, 4/7),
                     fert = 1){
 
@@ -194,15 +193,32 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   #initialize disease status, start age at minumum age permissable under part
   DS <- F; t <- min_age; yr <- YOB
 
+  #if a randomly reduced reproduction span is selected, select the reduced min
+  #and max reproductive ages.
+  B_range <- c(NA, NA)
+  if (restricted_BR) {
+    B_range[1] <- round(runif(1, min = 18, max = 25))
+    B_range[2] <- B_range[1] + round(runif(1, min = 15, max = 20))
+  } else {
+    B_range[1:2] <- birth_range[1:2]
+  }
+
+  # #generate and store the birth rate for this individual
+  # B_lambda <- rgamma(1, shape = NB_params[1],
+  #                      scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
+  #                                                                birth_range[1])
+
   #generate and store the birth rate for this individual
   B_lambda <- rgamma(1, shape = NB_params[1],
-                       scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
-                                                                 birth_range[1])
+                     scale = (1-NB_params[2])/NB_params[2])/(B_range[2] -
+                                                               B_range[1])
+
   while(t < max_age & yr <= stop_year){
     #generate next event
     l_event <- get_nextEvent(current_age = t, disease_status = DS, RV_status,
                              hazard_rates, GRR, carrier_prob,
-                             lambda_birth = B_lambda, birth_range, fert)
+                             lambda_birth = B_lambda, birth_range = B_range,
+                             fert)
 
     if(yr + l_event[[1]] <= stop_year){
       #add to previous life events

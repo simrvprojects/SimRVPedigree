@@ -339,6 +339,8 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #'
 #' We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_life}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
 #'
+#' We allow users the option to simulate reproduction over a reduced birth range. This is accomplished using the argument \code{restricted_BR}.  When this option is selected, the lower bound of each individual's birth span is selected, uniformly from ages 18 to 25.  The range of the birth span is then selected, uniformly from 15 to 20 years.  The upper bound is then given by the lower bound plus the range.  If \code{restricted_BR = FALSE}, then all individuals may reproduce betweeen the ages specifed by \code{birth_range}.  We have found that the random birth spans produced when \code{restriced_BR = TRUE} tend to produce more optimally spaced children than the fixed birth spans.
+#'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
 #' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
@@ -367,6 +369,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param recall_probs Numeric. The proband's recall probabilities for relatives, see details.  If not supplied, the default value of four times kinship coefficient between the proband and the relative is used.
 #' @param stop_year Numeric. The last year of study.  If not supplied, defaults to the current year.
 #' @param birth_range Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.
+#' @param restricted_BR Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{restricted_BR = TRUE}.  See details.
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #' @param fert Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.
 #' @param first_diagnosis Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.
@@ -397,6 +400,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #'                       founder_byears = c(1900, 1920),
 #'                       ascertain_span = c(1995, 2015),
 #'                       num_affected = 2,
+#'                       restricted_BR = FALSE,
 #'                       stop_year = 2017,
 #'                       recall_probs = c(1, 1, 0))
 #'
@@ -422,6 +426,7 @@ sim_RVped = function(hazard_rates, GRR,
                      carrier_prob = 0.002,
                      RVfounder = FALSE,
                      birth_range = c(18, 45),
+                     restricted_BR = TRUE,
                      NB_params = c(2, 4/7),
                      fert = 1,
                      first_diagnosis = NULL){
@@ -468,7 +473,7 @@ sim_RVped = function(hazard_rates, GRR,
     #generate pedigree
     fam_ped <- sim_ped(hazard_rates, GRR, FamID,
                        founder_byears, stop_year, carrier_prob,
-                       RVfounder, birth_range, NB_params, fert)
+                       RVfounder, birth_range, restricted_BR, NB_params, fert)
 
     #check to see if pedigree is ascertained
     check_pedigree <- ascertain_ped(ped_file = fam_ped, num_affected,

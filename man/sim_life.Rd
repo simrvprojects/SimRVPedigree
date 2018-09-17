@@ -5,7 +5,8 @@
 \title{Simulate all life events}
 \usage{
 sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
-  birth_range = c(18, 45), NB_params = c(2, 4/7), fert = 1)
+  birth_range = c(18, 45), restricted_BR = TRUE, NB_params = c(2, 4/7),
+  fert = 1)
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
@@ -21,6 +22,8 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 \item{stop_year}{Numeric. The last year of study.  If not supplied, defaults to the current year.}
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
+
+\item{restricted_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{restricted_BR = TRUE}.  See details.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
@@ -58,8 +61,9 @@ my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
 # The following commands simulate all life events for an individual, who
 # has NOT inherited a causal variant, born in 1900.  From the output, this
-# individual has 2 children: one in 1927, and one in 1934, and dies in 1987.
-set.seed(7664)
+# individual has two children, one in 1921 and another in 1925, and then
+# dies in 1987.
+set.seed(135)
 sim_life(hazard_rates = my_HR, GRR = 10,
          carrier_prob = 0.002,
          RV_status = FALSE,
@@ -68,14 +72,13 @@ sim_life(hazard_rates = my_HR, GRR = 10,
 # Using the same random seed, notice how life events can vary for
 # someone who has inherited the causal variant, which carries a
 # relative-risk of 10. From the output, this individual also has
-# 1 child in 1927, but then experiences disease onset in 1976,
-# and dies in 1978.
-set.seed(7664)
+# two children, but then experiences disease onset in 1974,
+# and dies in 1976.
+set.seed(135)
 sim_life(hazard_rates = my_HR, GRR = 10,
                carrier_prob = 0.002,
                RV_status = TRUE,
                YOB = 1900, stop_year = 2000)
-
 
 }
 \references{
