@@ -25,7 +25,7 @@ sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year = NULL,
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 
-\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  See details.}
+\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  Please see \code{\link{sim_life}} for details.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 

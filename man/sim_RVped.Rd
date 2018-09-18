@@ -33,7 +33,7 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 
-\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  See details.}
+\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  Please see \code{\link{sim_life}} for details.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
@@ -57,8 +57,6 @@ When \code{RV_founder = TRUE}, all simulated pedigrees will segregate a genetic 
 We note that when \code{GRR = 1}, pedigrees do not segregate the causal variant regardless of the setting selected for \code{RVfounder}.  When the causal variant is introduced to the pedigree we transmit it from parent to offspring according to Mendel's laws.
 
 We begin simulating the pedigree by generating the year of birth, uniformly, between the years specified in \code{founder_byears} for the starting founder.  Next, we simulate this founder's life events using the \code{\link{sim_life}} function, and censor any events that occur after the study \code{stop_year}.  Possible life events include: reproduction, disease onset, and death. We continue simulating life events for any offspring, censoring events which occur after the study stop year, until the simulation process terminates.  We do not simulate life events for marry-ins, i.e. individuals who mate with either the starting founder or offspring of the starting founder.
-
-We allow users the option to simulate reproduction over a randomly generated birth range. This is accomplished using the argument \code{random_BR}.  When this option is selected, the lower bound of each individual's birth span is selected, uniformly from age 18 to 27.  The range of the birth span is then selected, uniformly from 10 to 18 years.  The upper bound is then given by the lower bound plus the range.  If \code{random_BR = FALSE}, then individuals reproduce betweeen the ages specifed by \code{birth_range}.  We have found that the narrower random birth spans produced when \code{restriced_BR = TRUE} tend to produce more optimally spaced children than the wider fixed birth span.
 
 We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 

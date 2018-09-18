@@ -23,7 +23,7 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 
 \item{birth_range}{Numeric vector of length 2. The minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, \code{c(18, 45)}.}
 
-\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  See details.}
+\item{random_BR}{Logical. If \code{TRUE}, reproductive span is restricted to a random interval contained in [18, 45]. By default, \code{random_BR = TRUE}.  Please see \code{\link{sim_life}} for details.}
 
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
@@ -44,7 +44,7 @@ We make the following assumptions regarding the simulation of waiting times:
 
 \item We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that disease-affected individuals experience death according to the age-specific hazard rate for death in the \emph{affected} population.  On the other hand, we assume that \emph{unaffected} individuals experience death according to the age-specific hazard rate for death in the \emph{unaffected} population.  If the disease of interest is sufficiently rare, the user may choose to substitute the \emph{population} age-specific hazard rate for death for the aforementioned age-specific hazard rate for death in the \emph{unaffected} population.  The user is expected to supply age-specific hazard rates of death for both the \emph{affected} and \emph{unaffected} populations.
 
-\item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45 years.  We do not allow for offspring to be produced outside of an individual's \code{birth_range}.
+\item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45 years.  By default, the birth range for each indivdiual randomly generated as follows: first we sample the lower bound uniformly from ages 18 to 27, next we sample the range of the birth span uniformly from 10 to 18 years, finally we add this value to the lower bound to get the upper bound of the birth range.  We have found that randomly generated birth spans tend to produce more optimally spaced children than wider fixed birth spans.  However, users who prefer to specify a non-random birth range must simply set \code{random_BR = FALSE}, which will result in a fixed birth interval specifed by \code{birth_range}.  In either case, we do not allow for offspring to be produced outside of an individual's \code{birth_range}.
 
 }
 
