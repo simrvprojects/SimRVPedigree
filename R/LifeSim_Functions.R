@@ -62,7 +62,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
   nyear_birth <- rexp(1, lambda_birth*fert*disease_status + lambda_birth*(1 - disease_status))
   t_birth <- ifelse((current_age < birth_range[1] &
                        nyear_birth + birth_range[1] <= birth_range[2]),
-                    nyear_birth + birth_range[1],
+                    nyear_birth + birth_range[1] - current_age,
                     ifelse((current_age >= birth_range[1] &
                               (nyear_birth + current_age) <= birth_range[2]),
                            nyear_birth,
@@ -240,6 +240,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
         yr <- yr + l_event[[1]]
       }
     } else {
+      #if event is after stop date, increment yr to stop while loop
       yr <- yr + l_event[[1]]
     }
 
