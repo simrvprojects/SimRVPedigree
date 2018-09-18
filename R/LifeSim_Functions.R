@@ -158,7 +158,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 sim_life = function(hazard_rates, GRR, carrier_prob,
                     RV_status, YOB, stop_year,
                     birth_range = c(18, 45),
-                    restricted_BR = TRUE,
+                    random_BR = TRUE,
                     NB_params = c(2, 4/7),
                     fert = 1){
 
@@ -196,7 +196,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   #if a randomly reduced reproduction span is selected, select the reduced min
   #and max reproductive ages.
   B_range <- c(NA, NA)
-  if (restricted_BR) {
+  if (random_BR) {
     B_range[1] <- round(runif(1, min = 18, max = 27))
     B_range[2] <- B_range[1] + round(runif(1, min = 10, max = 18))
   } else {

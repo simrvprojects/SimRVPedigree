@@ -184,7 +184,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #' additional information for mate and offspring, when offspring are generated.
 #'
 sim_nFam = function(found_info, stop_year, last_id,
-                    hazard_rates, birth_range, restricted_BR, NB_params,
+                    hazard_rates, birth_range, random_BR, NB_params,
                     GRR, carrier_prob, RVfounder, fert){
 
   nfam_ped <- found_info
@@ -193,7 +193,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   sim_years <- sim_life(hazard_rates, GRR, carrier_prob,
                         RV_status = any(found_info[, c(7:8)] == 1),
                         YOB = found_info$birthYr, stop_year,
-                        birth_range, restricted_BR, NB_params, fert)
+                        birth_range, random_BR, NB_params, fert)
 
 
 
@@ -312,7 +312,7 @@ sim_ped = function(hazard_rates, GRR,
                    carrier_prob = 0.002,
                    RVfounder = FALSE,
                    birth_range = c(18, 45),
-                   restricted_BR = TRUE,
+                   random_BR = TRUE,
                    NB_params = c(2, 4/7),
                    fert = 1){
 
@@ -343,7 +343,7 @@ sim_ped = function(hazard_rates, GRR,
     for (k in 1:length(re_sim)) {
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
                          stop_year, last_id,
-                         hazard_rates, birth_range, restricted_BR, NB_params,
+                         hazard_rates, birth_range, random_BR, NB_params,
                          GRR, carrier_prob,
                          RVfounder, fert)
 
