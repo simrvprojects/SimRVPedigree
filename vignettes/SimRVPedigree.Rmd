@@ -45,7 +45,7 @@ The distinguishing feature of the `SimRVPedigree` package is that it aims to mim
 
 5. We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that unaffected individuals experience death according to the age-specific hazard rate for death in the unaffected population; if the disease of interest is sufficiently rare, the user may instead choose to substitute the population age-specific hazard rate for death in the general population.  We assume that affected individuals experience death according to the age-specific hazard rate for death in the affected population.  The user is expected to supply both of these age-specific hazard rates.
 
-6. We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 18 to age 45 years.  We do not allow for offspring to be produced outside of the birth range specified by the user.
+6. We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 20 to age 35 years.  The birth range for an individual is simulated as follows: first we sample the lower bound uniformly from ages 18 to 27, next we sample the range of the birth span uniformly from 10 to 18 years and add this value to the lower bound to determine the upper bound of the birth range.  We do not allow for offspring to be produced outside of an individual's simulated reproductive birth span.
 
 7. We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  After disease onset occurs the affected hazard rate for death is applied.
 
@@ -85,10 +85,11 @@ Optional arguments:
 9. `stop_year`: the last year of study.  If missing, the current year is used.
 10. `recall_probs`: the proband's recall probabilities for relatives, as described in section 3.  If missing, four times kinship coefficient between the proband and the relative is used.
 11. `RVfounder`: A logical variable indicating whether the pedigree will segregate the rare variant.  When `RVfounder = TRUE` the pedigree will segregate the causal rare-variant, which is introduced by the starting founder.  However, when `RVfounder = FALSE` we allow the starting founder to introduce the causal variant with probability equal to `carrier_prob`.  Therefore, when `RVfounder = FALSE` the simulated pedigree may not segregate the causal variant.  By default, `RVfounder = FALSE`.
-12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce.  By default, `birth_range = c(18, 45)`.
-13. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [4].
-14. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
-15. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Relatives who experience disease-onset prior to `first_diagnosis` do not contribute to the total number of disease-affected relatives when ascertaining the pedigree.  By default, `first_diagnosis = NULL` so that all diagnoses are considered reliable.
+12. `birth_range`: the minimum and maximum allowable ages, in years, between which individuals may reproduce when using a fixed birth span for all individuals. Please note that `birth_range` is ignored unless `random_BR = FALSE`, when `random_BR = FALSE` the default `birth_range = c(18, 45)` is used.
+13. `random_BR`: A logical variable indicating that reproductive spans are randomly generated intervals contained in [18, 45]. By default, `random_BR = TRUE`.
+14. `NB_params`: the size and probability parameters of the negative binomial distribution used to model the number of children per household. By default, `NB_params = c(2, 4/7)`, this setting is due to the findings of Kojima and Kelleher [4].
+15. `fert`: A constant used to rescale the birth rate after disease onset.  By default, `fert = 1`. 
+16. `first_diagnosis`: The first year that reliable diagnoses can be obtained regarding disease-affection status.  Relatives who experience disease-onset prior to `first_diagnosis` do not contribute to the total number of disease-affected relatives when ascertaining the pedigree.  By default, `first_diagnosis = NULL` so that all diagnoses are considered reliable.
 
 We will illustrate the usage and output of this function in the next section.
 
@@ -176,7 +177,7 @@ Now we show how `sim_RVped` may be used to simulate a pedigree ascertained for t
 
 ```{r}
 # simulate an ascertained pedigree 
-set.seed(3170)
+set.seed(13729)
 ex_RVped <- sim_RVped(hazard_rates = LC_hazard,
                       num_affected = 2,
                       ascertain_span = c(1995, 2010),
@@ -239,34 +240,34 @@ The columns displayed in the output produced by `head` may be described as follo
 To plot pedigrees we use the `plot` function. 
 ```{r, fig.height = 6.5, fig.width = 6.5}
 # Plot the ascertained pedigree
-plot(ascPed, location = "bottomleft")
+plot(ascPed, location = "topleft")
 ```
 
-The legend, in the lower left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 3, and 7) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 3) is indicated by shading in the lower third the symbol.  Individuals who have inherited a causal variant (IDs 1, 3, 4, 7, 6, and 9) have shading in the upper right third of their symbol.
+The legend, in the lower left corner of the plot, provides information for the shading seen in certain pedigree members.   Looking at the legend, we see that individuals who are affected by disease (IDs 1, 4, and 5) are indicated by a solid shading in the upper left third of their symbol.  The proband (ID 5) is indicated by shading in the lower third the symbol.  Individuals who have inherited a causal variant (IDs 1, 4, 5, 9, and 10) have shading in the upper right third of their symbol.
  \newpage
 Often, there is additional individual information we would like to display with the pedigree; for example: an individual's age of onset, and their age at death or their current age at a given reference year.  We can create age labels at the year 2017 by supplying the argument `ref_year = 2017` to the `plot` function.
 ```{r, fig.height = 6.5, fig.width = 6.5}
 # Plot the pedigree, with age labels, in 2017.
 plot(ascPed, ref_year = 2017,
-     location = "bottomleft",
+     location = "topleft",
      cex = 0.75, symbolsize = 1.15,
      mar = c(1, 2, 3, 2))
 ```
-When `ref_year` is supplied, additional information will be plotted when possible.  If year of birth is provided, the pedigree will contain an age identifier for individuals who are alive at the specified reference year.  When both year of birth and year of death are provided, the individual's year of birth and death will be displayed instead.  If year of disease-onset data is provided, the disease-onset age will be displayed below individuals who have experienced disease-onset by the selected reference year.  For example, the pedigree member with ID 1 was born in 1914,  died in 1959, and experienced disease onset at age 38.
+When `ref_year` is supplied, additional information will be plotted when possible.  If year of birth is provided, the pedigree will contain an age identifier for individuals who are alive at the specified reference year.  When both year of birth and year of death are provided, the individual's year of birth and death will be displayed instead.  If year of disease-onset data is provided, the disease-onset age will be displayed below individuals who have experienced disease-onset by the selected reference year.  For example, the pedigree member with ID 1 was born in 1906, died in 1969, and experienced disease onset at age 63.
 
 \newpage
-It is important to note that the pedigree may have been quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = ascYr` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
+It is important to note that the pedigree may have been quite different at the time of ascertainment.  We assume that ascertainment occurred during the same calendar year that the proband experienced disease onset. If we supply the argument `ref_year = "ascYr"` to the `plot` function it will plot the pedigree, with age labels, at the time of ascertainment.
 
 ```{r, fig.height = 5.5, fig.width = 6.5}
 # Plot the pedigrees, with age labels,
 # at the time of ascertainment.
 plot(ascPed, ref_year = "ascYr",
-     location = "bottomleft",
+     location = "topleft",
      cex = 0.75, symbolsize = 1.15,
      mar = c(1, 2, 3, 2))
 ```
 
-Looking at the pedigree above, we see that in 2009, only 2 family members had experienced onset of lymphoid cancer: the proband (the pedigree member with ID 3) and her mother (ID 1).  Referring to the 2017 pedigree, we see that four years after the pedigree was ascertained the proband's nephew (ID 7)  experienced disease disease at age 26.
+Looking at the pedigree above, we see that in 1998, only 2 family members had experienced onset of lymphoid cancer: the proband (the pedigree member with ID 5) and his mother (ID 1).  Referring to the 2017 pedigree, we see that two years after the pedigree was ascertained the proband's brother (ID 4) experienced disease disease at age 60.
 
 \newpage
 Occasionally, it is of interest for researchers to assign generation numbers among affected family members that reflect their distance from the most recent common ancestor with whom all could share a variant identical by descent (IBD).  For example, consider a family with two affected members.  If the affected relatives are a parent and a child, then the parent would be assigned generation 1 and the child generation 2.  If instead, the affected relatives were a pair of siblings, each would be assigned generation 2, since their parents would represent generation 1.  
@@ -345,10 +346,10 @@ To illustrate the effect of the relative-risk argument on the time required to s
 
 relative-risk | Average Computation Time (in minutes) | Number of trials
 ------------- | --------------------------------------|-----------------
-1  | 5.43 | 10
-2  | 1.69 | 10
-5  | 0.45 | 10
-10 | 0.16 | 10
+1  | 6.021 | 10
+2  | 2.290 | 10
+5  | 0.413 | 10
+10 | 0.115 | 10
 
 Other combinations of simulation settings could also result in longer computation times.  For this reason, when possible, we recommend the use of parallel processing to simulate a large number of pedigrees ascertained for multiple affected members.  
 
