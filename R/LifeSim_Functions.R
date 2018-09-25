@@ -107,7 +107,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #'  \item We assume that, given an individual's current age, their time to death is the waiting time in a non-homogeneous Poisson process with age-specific hazard rate determined by their affection status.  We assume that disease-affected individuals experience death according to the age-specific hazard rate for death in the \emph{affected} population.  On the other hand, we assume that \emph{unaffected} individuals experience death according to the age-specific hazard rate for death in the \emph{unaffected} population.  If the disease of interest is sufficiently rare, the user may choose to substitute the \emph{population} age-specific hazard rate for death for the aforementioned age-specific hazard rate for death in the \emph{unaffected} population.  The user is expected to supply age-specific hazard rates of death for both the \emph{affected} and \emph{unaffected} populations.
 #'
-#'  \item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 20 to age 35 years.  The birth range for an individual is simulated as follows: first we sample the lower bound uniformly from ages 18 to 27, next we sample the range of the birth span uniformly from 10 to 18 years and add this value to the lower bound to determine the upper bound of the birth range.  We do not allow for offspring to be produced outside of an individual's simulated reproductive birth span.
+#'  \item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 20 to age 35 years.  The birth range for an individual is simulated as follows: first we sample the lower bound uniformly from ages 16 to 27, next we sample the range of the birth span uniformly from 10 to 18 years and add this value to the lower bound to determine the upper bound of the birth range.  We do not allow for offspring to be produced outside of an individual's simulated reproductive birth span.
 #'  }
 #'
 #'
@@ -196,7 +196,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   #and max reproductive ages.
   B_range <- c(NA, NA)
   if (random_BR) {
-    B_range[1] <- round(runif(1, min = 18, max = 27))
+    B_range[1] <- round(runif(1, min = 16, max = 27))
     B_range[2] <- B_range[1] + round(runif(1, min = 10, max = 18))
   } else {
     B_range[1:2] <- birth_range[1:2]
