@@ -157,19 +157,15 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 sim_life = function(hazard_rates, GRR, carrier_prob,
                     RV_status, YOB, stop_year,
-                    birth_range = c(18, 45),
                     NB_params = c(2, 4/7),
-                    fert = 1){
+                    fert = 1, birth_range = NULL){
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
   }
 
-  if (length(birth_range) != 2 |
-      birth_range[1] >= birth_range[2] |
-      birth_range[1] <= 0 |
-      birth_range[2] >= hazard_rates$partition[length(hazard_rates$partition)]){
-    stop ('Please provide appropriate values for birth_range.')
+  if (!is.null(birth_range)) {
+    warning("The argument birth_range has been depreciated. Execute help(sim_life) for details.")
   }
 
   if (GRR <= 0) {
@@ -184,6 +180,8 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
     warning ('fert > 1 detected. \n Are you sure you want to increase fertility after disease-onset?')
   }
 
+
+
   #initialize lists to store event times and types
   R_life <- c(0)
   R_life_names  <- c("Start")
@@ -192,24 +190,10 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   #initialize disease status, start age at minumum age permissable under part
   DS <- F; t <- min_age; yr <- YOB
 
-  # #sample the minimum and maximum reproductive ages.
-  # B_range <- c(NA, NA)
-  # if (random_BR) {
-  #   B_range[1] <- round(runif(1, min = 16, max = 27))
-  #   B_range[2] <- B_range[1] + round(runif(1, min = 10, max = 18))
-  # } else {
-  #   B_range[1:2] <- birth_range[1:2]
-  # }
-
   #sample the minimum and maximum reproductive ages.
   B_range <- c(NA, NA)
   B_range[1] <- round(runif(1, min = 16, max = 27))
   B_range[2] <- B_range[1] + round(runif(1, min = 10, max = 18))
-
-  # #generate and store the birth rate for this individual
-  # B_lambda <- rgamma(1, shape = NB_params[1],
-  #                      scale = (1-NB_params[2])/NB_params[2])/(birth_range[2] -
-  #                                                                birth_range[1])
 
   #generate and store the birth rate for this individual
   B_lambda <- rgamma(1, shape = NB_params[1],

@@ -184,8 +184,8 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
 #' additional information for mate and offspring, when offspring are generated.
 #'
 sim_nFam = function(found_info, stop_year, last_id,
-                    hazard_rates, birth_range, NB_params,
-                    GRR, carrier_prob, RVfounder, fert){
+                    hazard_rates, NB_params, GRR,
+                    carrier_prob, RVfounder, fert){
 
   nfam_ped <- found_info
 
@@ -193,7 +193,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   sim_years <- sim_life(hazard_rates, GRR, carrier_prob,
                         RV_status = any(found_info[, c(7:8)] == 1),
                         YOB = found_info$birthYr, stop_year,
-                        birth_range, NB_params, fert)
+                        NB_params, fert)
 
 
 
@@ -311,9 +311,9 @@ sim_ped = function(hazard_rates, GRR,
                    FamID, founder_byears, stop_year = NULL,
                    carrier_prob = 0.002,
                    RVfounder = FALSE,
-                   birth_range = c(18, 45),
                    NB_params = c(2, 4/7),
-                   fert = 1){
+                   fert = 1,
+                   birth_range = NULL){
 
   if(!(RVfounder %in% c(T, F))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -325,8 +325,12 @@ sim_ped = function(hazard_rates, GRR,
     warning('carrier_prob > 0.01: sim_RVped is intended for simulating the transmission of rare variants.')
   }
 
-  if(is.null(stop_year)){
+  if (is.null(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
+  }
+
+  if (!is.null(birth_range)) {
+    warning("The argument birth_range has been depreciated. Execute help(sim_life) for details.")
   }
 
   fam_ped <- create_pedFile()
@@ -342,7 +346,7 @@ sim_ped = function(hazard_rates, GRR,
     for (k in 1:length(re_sim)) {
       newKin <- sim_nFam(found_info = fam_ped[which(fam_ped$ID == re_sim[k]),],
                          stop_year, last_id,
-                         hazard_rates, birth_range, NB_params,
+                         hazard_rates, NB_params,
                          GRR, carrier_prob,
                          RVfounder, fert)
 

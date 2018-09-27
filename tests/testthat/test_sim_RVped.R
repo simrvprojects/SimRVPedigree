@@ -88,16 +88,6 @@ test_that("issues error when ascertain_span not properly specified", {
                            ascertain_span = c(2017, 2015)))
   })
 
-test_that("issues error when birth_range not properly specified", {
-  expect_error(sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
-                         GRR = 35, carrier_prob = 0.002, FamID = 1,
-                         RVfounder = TRUE,
-                         num_affected = 2,
-                         birth_range = c(10, 5),
-                         founder_byears = c(1900, 1980),
-                         ascertain_span = c(2000, 2015)))
-  })
-
 test_that("issues error when recall_probs not properly specified", {
   expect_error(sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                          GRR = 35, carrier_prob = 0.002, FamID = 1,
@@ -116,3 +106,13 @@ test_that("issues error when hazard_rates is not a hazard object", {
                          founder_byears = c(1900, 1980),
                          ascertain_span = c(2000, 2015)))
 })
+
+# test_that("issues error when birth_range not properly specified", {
+#   expect_error(sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
+#                          GRR = 35, carrier_prob = 0.002, FamID = 1,
+#                          RVfounder = TRUE,
+#                          num_affected = 2,
+#                          birth_range = c(10, 5),
+#                          founder_byears = c(1900, 1980),
+#                          ascertain_span = c(2000, 2015)))
+# })
