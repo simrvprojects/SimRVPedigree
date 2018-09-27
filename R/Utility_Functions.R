@@ -112,7 +112,6 @@ find_available_parent <- function(ped, ID){
 #' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
 #'                   GRR = 10, FamID = 1,
 #'                   founder_byears = c(1800, 1900),
-#'                   random_BR = TRUE,
 #'                   stop_year = 2020)
 #'
 #' plot(ex_ped)
