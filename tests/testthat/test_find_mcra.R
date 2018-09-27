@@ -69,7 +69,7 @@ test_that("If related, find_mcra returns non-missing values", {
 })
 
 
-test_that("If related, find_mcra returns am ID that is less than or equal to the IDS of the realtive", {
+test_that("If related, find_mcra returns an ID that is less than or equal to the IDS of the relative", {
   #NOTE: because of the manner in which pedigree members are added to the pedigree
   #the IDs of related individuals should always increase, therefore the mcra cannot
   #have an ID that is greater than either of the relatives
