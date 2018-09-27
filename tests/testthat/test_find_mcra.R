@@ -37,9 +37,15 @@ test_that("If related, find_mcra returns at most two IDs", {
     }
   }
 
+  #compute kinship matrix
+  kin_mat <- kinship2::kinship(ped2pedigree(ex_ped))
 
-  #randomly select two unrelated individuals
-  test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
+  #find all combinations of related individuals
+  related_index <- which(kin_mat != 0, arr.ind = T)
+  related_index <- related_index[related_index[, 1] != related_index[, 2], ]
+
+  #randomly select two related individuals
+  test_ids <- ex_ped$ID[as.numeric(related_index[sample(1:nrow(related_index), size = 1), ])]
 
   expect_lte(length(find_mrca(ex_ped, test_ids[1], test_ids[2])), 2)
 })
@@ -60,9 +66,19 @@ test_that("If related, find_mcra returns non-missing values", {
     }
   }
 
+  #compute kinship matrix
+  kin_mat <- kinship2::kinship(ped2pedigree(ex_ped))
 
-  #randomly select two unrelated individuals
-  test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
+  #find all combinations of related individuals
+  related_index <- which(kin_mat != 0, arr.ind = T)
+  related_index <- related_index[related_index[, 1] != related_index[, 2], ]
+
+  #randomly select two related individuals
+  test_ids <- ex_ped$ID[as.numeric(related_index[sample(1:nrow(related_index), size = 1), ])]
+
+
+  # #randomly select two related individuals
+  # test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
 
 
   expect_true(!any(is.na(find_mrca(ex_ped, test_ids[1], test_ids[2]))))
@@ -87,8 +103,19 @@ test_that("If related, find_mcra returns an ID that is less than or equal to the
     }
   }
 
-  #randomly select two unrelated individuals
-  test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
+  #compute kinship matrix
+  kin_mat <- kinship2::kinship(ped2pedigree(ex_ped))
+
+  #find all combinations of related individuals
+  related_index <- which(kin_mat != 0, arr.ind = T)
+  related_index <- related_index[related_index[, 1] != related_index[, 2], ]
+
+  #randomly select two related individuals
+  test_ids <- ex_ped$ID[as.numeric(related_index[sample(1:nrow(related_index), size = 1), ])]
+
+
+  # #randomly select two related individuals
+  # test_ids <- sample(ex_ped$ID[ex_ped$available], size = 2)
 
   expect_lte(max(find_mrca(ex_ped, test_ids[1], test_ids[2])), min(test_ids))
 })
