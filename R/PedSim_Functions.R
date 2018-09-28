@@ -271,29 +271,35 @@ sim_nFam = function(found_info, stop_year, last_id,
 #' @references Alexandre Bureau, Samuel G. Younkin, Margaret M. Parker, Joan E. Bailey-Wilson, Mary L. Marazita, Jeffrey C. Murray, Elisabeth Mangold, Hasan Albacha-Hejazi, Terri H. Beaty, and Ingo Ruczinski (2014). \emph{Inferring rare disease risk variants based on exact probabilities of sharing by multiple affected relatives.} Bioinformatics; Vol. 30, No. 15, pp. 2189-2196.
 #'
 #' @section See Also:
-#' \code{\link{sim_RVped}}
+#' \code{\link{sim_RVped}}, \code{\link{sim_life}}
 #'
 #' @examples
 #' data(AgeSpecific_Hazards)
 #'
-#' #Simulate a random pedigree
-#' set.seed(22)
+#' # Simulate a random pedigree
+#' set.seed(5)
 #' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
 #'                   GRR = 10,
 #'                   FamID = 1,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
+#' # View the simulated pedigree
 #' ex_ped
-#' plot(ex_ped, location = "bottomleft")
+#'
+#' # Plot the pedigree
+#' plot(ex_ped, location = "topleft")
+#'
+#' # Plot the pedigree, this time with age labels for
+#' # all descendents of the starting founder (ID 1)
 #' plot(ex_ped, ref_year = 2015,
 #'      cex= 0.75, symbolsize = 1.25,
-#'      location = "bottomleft")
+#'      location = "topleft")
 #'
-#' summary(ex_ped)
 #'
-#' #Simulate a random pedigree
-#' set.seed(22)
+#' # Simulate a random pedigree. This time set RVfounder to TRUE so that
+#' # the eldest introduces a causal rare variant with probability 1.
+#' set.seed(5)
 #' ex_ped <- sim_ped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
 #'                   RVfounder = TRUE,
 #'                   GRR = 10,
@@ -301,11 +307,13 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
+#' # View the simulated pedigree
 #' ex_ped
-#' plot(ex_ped)
+#'
+#' # Plot the pedigree with age labels
 #' plot(ex_ped, ref_year = 2015,
-#'      cex= 0.75, symbolsize = 1.25)
-#' summary(ex_ped)
+#'      cex= 0.75, symbolsize = 1.25,
+#'      location = "topleft")
 #'
 sim_ped = function(hazard_rates, GRR,
                    FamID, founder_byears, stop_year = NULL,
