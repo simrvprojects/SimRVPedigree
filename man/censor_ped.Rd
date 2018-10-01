@@ -43,7 +43,7 @@ RVped2015 <- sim_RVped(hazard_rates = haz_obj,
 
 # Plot the 2015 pedigree
 plot(RVped2015)
-mtext(side = 3, line = 2, "Reference Year: 2017")
+mtext(side = 3, line = 2, "Reference Year: 2015")
 
 # Censor RVped2015 after 1960
 RVped1960 <- censor_ped(ped_file = RVped2015, censor_year = 1960)
