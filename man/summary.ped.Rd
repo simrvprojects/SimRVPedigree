@@ -60,9 +60,20 @@ RVped2015 <- sim_RVped(hazard_rates = haz_obj,
                        recall_probs = c(1),
                        founder_byears = c(1900, 1925),
                        FamID = 1)[[2]]
+
+# Plot the pedigree with age labels at the year 2015
+plot(RVped2015, ref_year = 2015)
+
+# View summary information for the pedigree
 summary(RVped2015)
 
+
+
+# Import the EgPeds dataset and create ped object
 data(EgPeds)
-summary(EgPeds)
+study_peds <- new.ped(EgPeds)
+
+# View summary information for study_peds
+summary(study_peds)
 
 }
