@@ -223,8 +223,8 @@ summary.ped <- function(object, ...) {
 #' #plot pedigree without age labels
 #' plot(RVped2015)
 #'
-#' #plot pedigree with age labels, since unspecified
-#' #reference year defaults to ascertainment year
+#' #plot pedigree with age labels, set the
+#' #reference year to be the ascertainment year
 #' plot(RVped2015, ref_year = "ascYr")
 #'
 #' #plot pedigree with age lablels at specified reference years.

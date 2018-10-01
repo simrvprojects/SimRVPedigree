@@ -35,7 +35,7 @@ plot(ex_ped)
 # Find most recent common ancestor of individuals with IDs 19 and 21
 find_mrca(ped = ex_ped, ID1 = 19, ID2 = 21)
 
-# Note that someone can be their own most recent common ancsetor.
+# Note that someone can be their own most recent common ancestor.
 # In the following example, since the individual with ID 8 is the grandmother
 # of the individual with ID 21, the find_mrca function returns 8.
 find_mrca(ped = ex_ped, ID1 = 8, ID2 = 21)

@@ -307,8 +307,6 @@ sim_nFam = function(found_info, stop_year, last_id,
 #'                   founder_byears = c(1900, 1910),
 #'                   stop_year = 2015)
 #'
-#' # View the simulated pedigree
-#' ex_ped
 #'
 #' # Plot the pedigree with age labels
 #' plot(ex_ped, ref_year = 2015,
