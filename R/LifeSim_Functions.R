@@ -165,7 +165,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
   }
 
   if (!is.null(birth_range)) {
-    warning("The argument birth_range has been depreciated. Execute help(sim_life) for details.")
+    warning("The argument birth_range has been deprecated. Execute help(sim_life) for details.")
   }
 
   if (GRR <= 0) {
