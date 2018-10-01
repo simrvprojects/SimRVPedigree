@@ -2,7 +2,7 @@
 In this resubmission I have:
 - Fixed a bug in the find_mrca function and improved the tests for this function. 
 
-- Due to reviwer comments, we have improved the process used to simulate reproduction.  The new process better models age-specific fertility. As a result, the birth_range argument has been deprecated in the sim_life, sim_ped, and sim_RVped functions.  To prepare users for this change, in this resubmission, users are issued a warning if they alter the default NULL value of this argument.
+- We have improved the process used to simulate reproduction.  The new process better models age-specific fertility. As a result, the birth_range argument has been deprecated in the sim_life, sim_ped, and sim_RVped functions.  To prepare users for this change, in this resubmission, users are issued a warning if they alter the default NULL value of this argument.
 
 - Updated the DESCRIPTION file:
     - Updated the version number to 0.3.0 to reflect:
