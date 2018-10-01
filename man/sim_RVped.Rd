@@ -81,12 +81,12 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 data(AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(10001)
+set.seed(2)
 ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
                       GRR = 20,
                       RVfounder = TRUE,
                       FamID = 1,
-                      founder_byears = c(1900, 1950),
+                      founder_byears = c(1900, 1905),
                       ascertain_span = c(1995, 2015),
                       num_affected = 2,
                       stop_year = 2017,
