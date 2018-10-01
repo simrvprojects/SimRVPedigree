@@ -19,7 +19,7 @@
 #' @importFrom kinship2 align.pedigree
 #' @importFrom utils combn
 #'
-#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
+#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (24 September 2018) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. <doi:10.1101/234153>.
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 #'
 #' @examples
@@ -208,7 +208,7 @@ reassign_gen = function(ped_file){
 #'
 #' # Plot the 2015 pedigree
 #' plot(RVped2015)
-#' mtext(side = 3, line = 2, "Reference Year: 2017")
+#' mtext(side = 3, line = 2, "Reference Year: 2015")
 #'
 #' # Censor RVped2015 after 1960
 #' RVped1960 <- censor_ped(ped_file = RVped2015, censor_year = 1960)
