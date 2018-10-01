@@ -1,7 +1,7 @@
 Package: SimRVPedigree
 Type: Package
 Title: Simulate Pedigrees Ascertained for a Rare Disease
-Version: 1.0.0
+Version: 0.3.0
 Authors@R: c(person("Christina", "Nieuwoudt", 
                     role = c("aut", "cre"),
                     email = "cnieuwou@sfu.ca"),
@@ -9,7 +9,7 @@ Authors@R: c(person("Christina", "Nieuwoudt",
 Description: Routines to simulate and manipulate pedigrees ascertained to
     contain multiple family members affected by a rare disease. 
     Christina Nieuwoudt, Samantha J Jones, Angela Brooks-Wilson, 
-    and Jinko Graham (2017) <doi:10.1101/234153>.
+    and Jinko Graham (2018) <doi:10.1101/234153>.
 Depends:
     R (>= 3.5.0)
 Imports:
