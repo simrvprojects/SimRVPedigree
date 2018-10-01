@@ -81,9 +81,9 @@ In the event that a trimmed pedigree fails the \code{num_affected} condition,  \
 data(AgeSpecific_Hazards)
 
 #Simulate pedigree ascertained for multiple affected individuals
-set.seed(1960)
+set.seed(10001)
 ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-                      GRR = 10,
+                      GRR = 20,
                       RVfounder = TRUE,
                       FamID = 1,
                       founder_byears = c(1900, 1950),
@@ -92,11 +92,15 @@ ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
                       stop_year = 2017,
                       recall_probs = c(1, 1, 0))
 
+# Observe: ex_RVped is a list containing two ped objects
+summary(ex_RVped)
 
-# Original pedigree prior to proband selection and trimming
+# The first is the original pedigree prior
+# to proband selection and trimming
 plot(ex_RVped[[1]])
 
-# The ascertained pedigree
+# The second is the ascertained pedigree which
+# has been trimmed based on proband recall
 plot(ex_RVped[[2]])
 summary(ex_RVped[[2]])
 
@@ -108,7 +112,7 @@ summary(ex_RVped[[2]])
 
 }
 \references{
-Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
+Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (24 September 2018) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. <doi:10.1101/234153>.
 
 Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 

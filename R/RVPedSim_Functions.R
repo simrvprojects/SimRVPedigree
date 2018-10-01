@@ -123,7 +123,7 @@ choose_proband = function(ped_file, num_affected, ascertain_span, first_diagnosi
 #' @seealso \code{\link{sim_RVped}}, \code{\link{sim_ped}}, \code{\link{new.ped}}
 #' @export
 #'
-#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
+#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (24 September 2018) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. <doi:10.1101/234153>.
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 #'
 #' @importFrom kinship2 kinship
@@ -376,7 +376,7 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @return \item{\code{ascertained_ped} }{The ascertained pedigree, with proband selected and trimmed according to proband recall probability.  See details.}
 #' @export
 #'
-#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
+#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (24 September 2018) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. <doi:10.1101/234153>.
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 #' @references Thompson, E. (2000). \emph{Statistical Inference from Genetic Data on Pedigrees.} NSF-CBMS Regional Conference Series in Probability and Statistics, 6, I-169.
 #'
@@ -389,9 +389,9 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' data(AgeSpecific_Hazards)
 #'
 #' #Simulate pedigree ascertained for multiple affected individuals
-#' set.seed(1960)
+#' set.seed(10001)
 #' ex_RVped <- sim_RVped(hazard_rates = hazard(hazardDF = AgeSpecific_Hazards),
-#'                       GRR = 10,
+#'                       GRR = 20,
 #'                       RVfounder = TRUE,
 #'                       FamID = 1,
 #'                       founder_byears = c(1900, 1950),
@@ -400,11 +400,15 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #'                       stop_year = 2017,
 #'                       recall_probs = c(1, 1, 0))
 #'
+#' # Observe: ex_RVped is a list containing two ped objects
+#' summary(ex_RVped)
 #'
-#' # Original pedigree prior to proband selection and trimming
+#' # The first is the original pedigree prior
+#' # to proband selection and trimming
 #' plot(ex_RVped[[1]])
 #'
-#' # The ascertained pedigree
+#' # The second is the ascertained pedigree which
+#' # has been trimmed based on proband recall
 #' plot(ex_RVped[[2]])
 #' summary(ex_RVped[[2]])
 #'
@@ -464,7 +468,7 @@ sim_RVped = function(hazard_rates, GRR,
   }
 
   if (!is.null(birth_range)) {
-    warning("The argument birth_range has been depreciated. Execute help(sim_life) for details.")
+    warning("The argument birth_range has been deprecated. Execute help(sim_life) for details.")
   }
 
   ascertained <- FALSE
