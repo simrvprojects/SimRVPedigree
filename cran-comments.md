@@ -9,6 +9,7 @@ In this resubmission I have:
          - the updated reproduction process, which better models age-specific fertility.
          - the deprecated argument birth_range from the sim_life, sim_ped, and sim_RVped functions.
          - the bug fix in the find_mrca function,
+    - Reverted the Depends field to R (>= 3.4.0) to fix error on package check page for flavor r-oldrel-osx-x86_64.
 
 Test Environments prior to resubmission
 * local Windows OS install, R 3.5.0
