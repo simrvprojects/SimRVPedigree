@@ -11,7 +11,7 @@ Description: Routines to simulate and manipulate pedigrees ascertained to
     Christina Nieuwoudt, Samantha J Jones, Angela Brooks-Wilson, 
     and Jinko Graham (2018) <doi:10.1101/234153>.
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.4.0)
 Imports:
     kinship2 (>= 1.6.4),
     dplyr (>= 0.7.4),
