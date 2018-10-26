@@ -171,7 +171,6 @@ legend("topleft", title = "Population", legend = c("General", "Affected"),
        col = c("dodgerblue", "goldenrod2"), lwd = 3)
 ```
 
-\newpage
 Now we show how `sim_RVped` may be used to simulate a pedigree ascertained for the previously described study.  Here we make the assumption that a causal variant is introduced by one of the two eldest founders. 
 
 ```{r}
