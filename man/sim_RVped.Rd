@@ -36,7 +36,7 @@ sim_RVped(hazard_rates, GRR, num_affected, ascertain_span, FamID,
 
 \item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 
-\item{birth_range}{This argument is depreciated.}
+\item{birth_range}{This argument is deprecated.}
 }
 \value{
 A list containing the following data frames:

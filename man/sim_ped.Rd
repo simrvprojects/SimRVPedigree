@@ -27,7 +27,7 @@ sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year = NULL,
 
 \item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
 
-\item{birth_range}{This argument is depreciated.}
+\item{birth_range}{This argument is deprecated.}
 }
 \value{
 The simulated pedigree.

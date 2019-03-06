@@ -24,7 +24,7 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 
 \item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
 
-\item{birth_range}{This argument is depreciated.}
+\item{birth_range}{This argument is deprecated.}
 }
 \value{
 A named matrix containing the years of an individual's simulated life events, named by event type, see details.
