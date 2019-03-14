@@ -198,22 +198,22 @@ sim_nFam = function(found_info, stop_year, last_id,
 
 
   # update disease status and onset year if onset occured prior to stop_year
-  if (is.element("Onset", colnames(sim_years))) {
+  if (!is.na(sim_years$onset_event)) {
     nfam_ped$affected <- T
-    nfam_ped$onsetYr <- sim_years[colnames(sim_years) == "Onset"]
+    nfam_ped$onsetYr <- sim_years$onset_event
   } else {
     nfam_ped$affected <- F
   }
 
   # update death status and death year if onset occured prior to stop_year
-  if (is.element("Death", colnames(sim_years))) {
-    nfam_ped$deathYr <- sim_years[colnames(sim_years) == "Death"]
+  if (!is.na(sim_years$death_event)) {
+    nfam_ped$deathYr <- sim_years$death_event
   }
 
   #store the birth years of each child
-  birth_events <- sim_years[colnames(sim_years) == "Child"]
+  birth_events <- sim_years$repro_events
 
-  if (length(birth_events) > 0) {
+  if (!is.null(birth_events)) {
     #add a mate
     new_mate <- create_mate(partner_info = nfam_ped[1,], last_id,
                             GRR, carrier_prob,
