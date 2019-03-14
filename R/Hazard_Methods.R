@@ -38,7 +38,8 @@
 #' class(my_HR)
 #' my_HR[[2]]
 #'
-hazard <- function(hazardDF, partition = NULL) {
+hazard <- function(hazardDF, partition = NULL,
+                   subtype_ID = NULL) {
   # Set up a new object of class Hazard
 
   if(is.null(partition)){
@@ -74,29 +75,62 @@ hazard <- function(hazardDF, partition = NULL) {
     stop('hazardDF contains negative values')
   }
 
+  # Choose Hazard Format
+  # Execute if hazard_type and subtype_ID are NULL
+  # otherwise check to see that both have been properly specified
+  # and create the multi hazard object
 
-  if (class(hazardDF) != "data.frame") {
-    stop("hazardDF must be a data frame with 3 columns:
-         column 1 = population age-specific hazard rate of disease,
-         column 2 = age-specific hazard rate of death in the unaffected population,
-         column 3 = age-specific hazard rate of death in the affected population")
-  } else if (ncol(hazardDF) != 3) {
-    stop("hazardDF must be a data frame with 3 columns:
-         column 1 = population age-specific hazard rate of disease,
-         column 2 = age-specific hazard rate of death in the unaffected population,
-         column 3 = age-specific hazard rate of death in the affected population")
-  } else if(sum(hazardDF[, 2] > hazardDF[, 3]) > nrow(hazardDF)/2 |
-            sum(which(hazardDF[, 2] == hazardDF[, 3])) != 0){
-    warning("Please check that you have specified hazardDF such that:
-            column 2 = age-specific hazard rate of death in the UNAFFECTED population,
-            column 3 = age-specific hazard rate of death in the AFFECTED population")
-  }
+  if (is.null(subtype_ID)) {
+    #print('Creating the hazard object for a disease with no subtypes')
+    if (class(hazardDF) != "data.frame") {
+      stop("hazardDF must be a data frame with 3 columns:
+           column 1 = population age-specific hazard rate of disease,
+           column 2 = age-specific hazard rate of death in the unaffected population,
+           column 3 = age-specific hazard rate of death in the affected population")
+    } else if (ncol(hazardDF) != 3) {
+      stop("hazardDF must be a data frame with 3 columns:
+           column 1 = population age-specific hazard rate of disease,
+           column 2 = age-specific hazard rate of death in the unaffected population,
+           column 3 = age-specific hazard rate of death in the affected population")
+    } else if(sum(hazardDF[, 2] > hazardDF[, 3]) > nrow(hazardDF)/2 |
+              sum(which(hazardDF[, 2] == hazardDF[, 3])) != 0){
+      warning("Please check that you have specified hazardDF such that:
+              column 2 = age-specific hazard rate of death in the UNAFFECTED population,
+              column 3 = age-specific hazard rate of death in the AFFECTED population")
+    }
+
+    #create dummy subtype IDs
+    s_ID <- c("A")
+    } else {
+      num_subs <- length(subtype_ID)
+      s_ID <- subtype_ID
+      #print(paste0('Creating the hazard object for a disease with ', num_subs,' subtypes'))
+
+      if (class(hazardDF) != "data.frame") {
+        stop(paste0("hazardDF must be a data frame with ", num_subs + 2, " columns:
+                    columns 1:", num_subs," = population age-specific hazard rate of disease for each subtype,
+                    column ", num_subs + 1, " = age-specific hazard rate of death in the UNAFFECTED population,
+                    column ", num_subs + 2, "= age-specific hazard rate of death in the AFFECTED population"))
+      } else if (ncol(hazardDF) != num_subs + 2) {
+        stop(paste0("hazardDF must be a data frame with ", num_subs + 2, " columns:
+                    columns 1:", num_subs," = population age-specific hazard rate of disease for each subtype,
+                    column ", num_subs + 1, " = age-specific hazard rate of death in the UNAFFECTED population,
+                    column ", num_subs + 2, "= age-specific hazard rate of death in the AFFECTED population"))
+      } else if(sum(hazardDF[, num_subs + 1] > hazardDF[, num_subs + 2]) > nrow(hazardDF)/2 |
+                sum(which(hazardDF[, num_subs + 1] == hazardDF[, num_subs + 2])) != 0){
+        warning(paste0("Please check that you have specified hazardDF such that:
+                       column ", num_subs + 1, " = age-specific hazard rate of death in the UNAFFECTED population,
+                       column ", num_subs + 2, " = age-specific hazard rate of death in the AFFECTED population"))
+      }
+      }
+
 
   obj <- list(hazardDF = hazardDF,
-              partition = partition)
+              partition = partition,
+              subtype_ID = s_ID)
   class(obj) <- "hazard"
   return(obj)
-}
+      }
 
 #' Check to see if object is of class hazard
 #'
@@ -114,5 +148,12 @@ print.hazard <- function(x, ...) {
   cat("Hazard object with age-specific hazard rates spanning from age",
       x$partition[1], "to age",  x$partition[length(x$partition)])
   cat("\n")
-  cat("Lifetime risk of disease = ", 1 - exp(-sum(diff(x$partition)*x$hazardDF[, 1])), "\n")
+  if (length(x$subtype_ID) == 1){
+    cat("Lifetime risk of disease = ", 1 - exp(-sum(diff(x$partition)*x$hazardDF[, 1])), "\n")
+  } else {
+    for (i in 1:length(x$subtype_ID)) {
+      cat("Lifetime risk of ", x$subtype_ID[i], " = ",  1 - exp(-sum(diff(x$partition)*x$hazardDF[, i])), "\n")
+    }
+  }
+
 }

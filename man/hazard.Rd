@@ -4,7 +4,7 @@
 \alias{hazard}
 \title{Create an object of class hazard.}
 \usage{
-hazard(hazardDF, partition = NULL)
+hazard(hazardDF, partition = NULL, subtype_ID = NULL)
 }
 \arguments{
 \item{hazardDF}{Data.frame. Column 1 specifies the age-specific hazard rate of \emph{disease} in the population of interest, column 2 specifies the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and column 3 specifies the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.}
