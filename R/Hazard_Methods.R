@@ -101,7 +101,7 @@ hazard <- function(hazardDF, partition = NULL,
     }
 
     #create dummy subtype IDs
-    s_ID <- c("A")
+    s_ID <- c("no_subtypes")
     } else {
       num_subs <- length(subtype_ID)
       s_ID <- subtype_ID
