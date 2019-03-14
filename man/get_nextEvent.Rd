@@ -49,4 +49,3 @@ If get_nextEvent returns the waiting time to the next life event, named for even
  \item "Death" death event
 }
 }
-\keyword{internal}
