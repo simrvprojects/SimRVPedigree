@@ -20,6 +20,7 @@ create_pedFile = function(){
              RR = numeric(),
              available = logical(),
              Gen = numeric(),
+             subtype = character(),
              do_sim = logical(),
              stringsAsFactors = FALSE)
 }
@@ -85,6 +86,7 @@ create_founder = function(FamID, GRR, carrier_prob,
                                  RR = founder_dat[[2]],
                                  available = T,
                                  Gen = 1,
+                                 subtype = NA,
                                  do_sim = T,
                                  stringsAsFactors = FALSE)
 
@@ -123,6 +125,7 @@ create_mate = function(partner_info, last_id,
                               RR = 1,
                               available = F,
                               Gen = partner_info$Gen,
+                              subtype = NA,
                               do_sim = F,
                               stringsAsFactors = FALSE)
 
@@ -162,6 +165,7 @@ create_offspring = function(dad_info, mom_info, byear, last_id, GRR){
                                RR = NA,
                                available = T,
                                Gen = dad_info$Gen + 1,
+                               subtype = NA,
                                do_sim = T,
                                stringsAsFactors = FALSE)
   new_child_info$RR <- ifelse(sum(new_child_info$DA1, new_child_info$DA2) == 0,
@@ -201,6 +205,7 @@ sim_nFam = function(found_info, stop_year, last_id,
   if (!is.na(sim_years$onset_event)) {
     nfam_ped$affected <- T
     nfam_ped$onsetYr <- sim_years$onset_event
+    nfam_ped$subtype <- sim_years$subtype
   } else {
     nfam_ped$affected <- F
   }
@@ -368,5 +373,7 @@ sim_ped = function(hazard_rates, GRR,
 
   rownames(fam_ped) <- NULL
 
-  return(ped(fam_ped[, c(1:14)]))
+  #return all pedigree fields, except for do_sim and subtype,
+  #unless multiple subtypes are simulated
+  return(ped(fam_ped[, c(1:(14 + (length(hazard_rates$subtype_ID) > 1)))]))
 }
