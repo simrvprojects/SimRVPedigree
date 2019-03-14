@@ -13,6 +13,7 @@
 #'
 #' @param hazardDF Data.frame. Column 1 specifies the age-specific hazard rate of \emph{disease} in the population of interest, column 2 specifies the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and column 3 specifies the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.
 #' @param partition Numeric vector. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If not supplied,  defaults to a partition that starts at 0 and increases in yearly increments.  See details.
+#' @param subtype_ID List. If specifying a disease with multiple subtypes, a list of IDs used for naming.  By default, \code{subtype_ID = NULL}, i.e. no subtypes to simulate.
 #'
 #' @return An object of class hazard.
 #' @export
