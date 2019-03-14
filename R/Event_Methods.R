@@ -19,3 +19,20 @@ events <- function(life_events) {
 is.events <- function(x) {
   return(inherits(x, "events"))
 }
+
+
+#' @export
+print.events <- function(x, ...) {
+  cat("Life events starting at year-of-birth: ", x$life_events[1], "\n")
+  cat("\n")
+  print(x$life_events)
+  cat("\n")
+  if ( !is.na(x$onset_event) ) {
+    if ( x$subtype != "no_subtypes" ) {
+      cat("Onset of disease-subtype", x$subtype, "at age", x$onset_event - as.numeric(x$life_events[1]), "\n")
+    } else {
+      cat("Onset of disease at age", x$onset_event - as.numeric(x$life_events[1]), "\n")
+    }
+
+  }
+}
