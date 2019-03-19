@@ -162,8 +162,13 @@ is.ped <- function(x) {
 summary.ped <- function(object, ...) {
   n <- length(unique(object$FamID))
 
+  #gather subtype information, when applicable
+  if ("subtype" %in% colnames(object)) {
+    s_ID <- unique(na.omit(RV_peds$subtype))
+  }
+
   famdat <- lapply(unique(object$FamID), function(y){
-    get_famInfo(object[object$FamID == y, ])
+    get_famInfo(object[object$FamID == y, ], s_ID)
   })
 
   afdat <- lapply(unique(object$FamID), function(y){

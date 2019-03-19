@@ -101,8 +101,17 @@ pedigreeLabels <- function(x, ref_year){
       Oage_lab <- rep("", nrow(x))
     }
 
+    if (!is.na(match("subtype", colnames(x)))) {
+      # Create a death age label for individuals who have died.
+      Sub_lab <- ifelse(is.na(x$onsetYr),
+                         "", paste0("\n subtype: ",
+                                    x$subtype))
+    } else {
+      Sub_lab <- rep("", nrow(x))
+    }
+
     ped_labs = paste0("ID: ", sep = "", x$ID,
-                    age_lab, Dage_lab, Oage_lab)
+                    age_lab, Dage_lab, Oage_lab, Sub_lab)
   } else {
     ped_labs = x$ID
   }

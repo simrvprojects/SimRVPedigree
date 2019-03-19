@@ -4,10 +4,12 @@
 \alias{get_famInfo}
 \title{Obtain summary information}
 \usage{
-get_famInfo(ped_file)
+get_famInfo(ped_file, s_ID = NULL)
 }
 \arguments{
-\item{ped_file}{}
+\item{ped_file}{A ped object}
+
+\item{s_ID}{A vector of subtype IDs. By default, \code{s_ID = NULL}, which implies there are no subtypes.}
 }
 \value{
 A data frame containing the relevant summary information
