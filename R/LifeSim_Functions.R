@@ -119,18 +119,27 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'  }
 #'
 #'
-#' \code{sim_life} will return a named matrix, which contains the years of the simulated life events, named by event type.  The possible event types are as follows:
+#' The events simulated by \code{sim_life} are labelled as follows:
 #' \itemize{
+#'  \item "Start" the individual's year of birth.
 #'  \item "Child" a reproductive event, i.e. creation of offspring
 #'  \item "Onset" disease onset event,
 #'  \item "Death" death event
 #' }
 #'
+#'
 #' @param YOB A positive number. The indivdiual's year of birth.
 #' @param RV_status Numeric. \code{RV_status = TRUE} if the individual is a carrier of a rare variant that increases disease suseptibility, and \code{FALSE} otherwise.
 #' @inheritParams sim_RVped
 #'
-#' @return A named matrix containing the years of an individual's simulated life events, named by event type, see details.
+#' @return an object of class \code{event}.  An object of class \code{event} is a list that contains the following items.
+#' @return \item{\code{life_events} }{A named numeric vector of life events, see details.}
+#' @return \item{\code{repro_events} }{A vector of reproduction years, that is the year(s) that the individual produces offspring.  When the individual does not reproduce \code{repro_events = NULL}.}
+#' @return \item{\code{onset_event} }{Numeric. When applicable the year of disease-onset. When onset does not occur \code{onset_event = NA}}
+#' @return \item{\code{death_event} }{Numeric. When applicable the year of death. When death is censored \code{death_event = NA}}
+#' @return \item{\code{subtype} }{Character. When applicable, the disease subtype.}
+#' @return \item{\code{censor_year} }{Numeric. When applicable the last year that data was observed. Note: after death \code{censor_year = NA}}
+
 #'
 #' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.

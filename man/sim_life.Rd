@@ -27,7 +27,19 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 \item{birth_range}{This argument is deprecated.}
 }
 \value{
-A named matrix containing the years of an individual's simulated life events, named by event type, see details.
+an object of class \code{event}.  An object of class \code{event} is a list that contains the following items.
+
+\item{\code{life_events} }{A named numeric vector of life events, see details.}
+
+\item{\code{repro_events} }{A vector of reproduction years, that is the year(s) that the individual produces offspring.  When the individual does not reproduce \code{repro_events = NULL}.}
+
+\item{\code{onset_event} }{Numeric. When applicable the year of disease-onset. When onset does not occur \code{onset_event = NA}}
+
+\item{\code{death_event} }{Numeric. When applicable the year of death. When death is censored \code{death_event = NA}}
+
+\item{\code{subtype} }{Character. When applicable, the disease subtype.}
+
+\item{\code{censor_year} }{Numeric. When applicable the last year that data was observed. Note: after death \code{censor_year = NA}}
 }
 \description{
 Primarily intended as an internal function, \code{sim_life} simulates all life events for an individual starting at birth, age 0, and ending with death or the end of the study.
@@ -44,8 +56,9 @@ We make the following assumptions regarding the simulation of waiting times:
 \item We assume that, given an individual's current age, their time to reproduction is the waiting time in a homogeneous Poisson process.  That is, we assume that individuals reproduce at uniform rate during their reproductive years.  For example, one's reproductive years may span from age 20 to age 35 years.  To mimic observed age-specific fertility data, the birth range for an individual is simulated as follows: first we sample the lower bound uniformly from ages 16 to 27, next we sample the range of the birth span uniformly from 10 to 18 years and add this value to the lower bound to determine the upper bound of the birth range.  We do not allow for offspring to be produced outside of an individual's simulated reproductive birth span.
  }
 
-\code{sim_life} will return a named matrix, which contains the years of the simulated life events, named by event type.  The possible event types are as follows:
+The events simulated by \code{sim_life} are labelled as follows:
 \itemize{
+ \item "Start" the individual's year of birth.
  \item "Child" a reproductive event, i.e. creation of offspring
  \item "Onset" disease onset event,
  \item "Death" death event
