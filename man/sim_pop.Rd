@@ -2,7 +2,7 @@
 % Please edit documentation in R/Validation_Functions.R
 \name{sim_pop}
 \alias{sim_pop}
-\title{Simulate a sample of individuals}
+\title{Simulate survival data for a population sample}
 \usage{
 sim_pop(nlives, hazard_rates, GRR, YOB, stop_year, RV_status = NULL,
   carrier_prob = 0.002)
@@ -26,14 +26,14 @@ sim_pop(nlives, hazard_rates, GRR, YOB, stop_year, RV_status = NULL,
 A data frame of event times and classifiers for the simulated individuals.
 }
 \description{
-Simulate a sample of individuals
+Simulate survival data for a population sample
 }
 \examples{
 library(SimRVPedigree)
 data(AgeSpecific_Hazards)
 
 a = Sys.time()
-s_dat = sim_pop(nlives = 1000,
+s_dat = sim_pop(nlives = 100,
                 hazard_rates = hazard(AgeSpecific_Hazards[, c(1, 1, 2, 3)],
                                       subtype_ID = c("HL", "NHL")),
                 GRR = 10,
@@ -45,8 +45,9 @@ difftime(b, a, units = "secs")
 head(s_dat)
 table(s_dat$RV_status)
 table(s_dat$affected)
-table(s_dat$onset_age)
+summary(s_dat$onset_age)
 table(s_dat$subtype)
+table(s_dat$RV_status, s_dat$subtype)
 
 
 }
