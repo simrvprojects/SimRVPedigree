@@ -91,7 +91,7 @@ sim_life(hazard_rates = my_HR, GRR = 10,
 
 set.seed(1)
 sim_life(hazard_rates = hazard(AgeSpecific_Hazards[, c(1, 1, 2, 3)], subtype_ID = c("HL", "NHL")),
-            GRR = 10,
+            GRR = c(10, 10),
                carrier_prob = 0.002,
                RV_status = TRUE,
                YOB = 1900, stop_year = 2000)
