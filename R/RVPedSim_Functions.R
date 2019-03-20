@@ -251,7 +251,7 @@ trim_ped = function(ped_file, recall_probs = NULL){
         readd$onsetYr <- NA
         readd$deathYr <- NA
         readd$available <- F
-        readd$RR        <- NA
+        #readd$RR        <- NA
         readd$affected  <- ifelse(readd$ID %in% marry_ins, F, NA)
       }
 
@@ -443,9 +443,9 @@ sim_RVped = function(hazard_rates, GRR,
     stop ('num_affected < 1: To simulate pedigrees that do not consider the number of disease-affected relatives please use sim_ped.')
   }
 
-  if (GRR > 0 & GRR < 1){
-    warning('Setting GRR < 1 can significantly increase computation time')
-  }
+  # if (GRR > 0 & GRR < 1){
+  #   warning('Setting GRR < 1 can significantly increase computation time')
+  # }
 
   if (!missing(recall_probs)) {
     if (any(recall_probs > 1) | any(recall_probs < 0) ){
