@@ -401,8 +401,10 @@ get_famInfo <- function(ped_file, s_ID = NULL){
   if (!is.null(s_ID)) {
     k = length(s_ID)
     subDat <- as.data.frame(matrix(NA, ncol = k, nrow = 1))
-    colnames(subDat) = paste0("count_", s_ID)
-    subDat[1, ] <- sapply(1:length(s_ID), function(x) sum(AV$subtype == s_ID[x]))
+    colnames(subDat) = paste0("p_", s_ID)
+    subDat[1, ] <- sapply(1:length(s_ID), function(x){
+      sum(AV$subtype == s_ID[x])/nrow(AV)
+      })
 
     FamDat <- cbind(FamDat, subDat)
   }
