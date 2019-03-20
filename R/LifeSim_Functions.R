@@ -1,3 +1,17 @@
+#' Calculate the onset hazard for an individual
+#'
+#' Calculate the onset hazard rate of disease for an individual given the carrier probability and the genetic relative risk for the subtype and the individual's RV status.
+#'
+#' @inheritParams sim_life
+#' @param sub_hazard The hazard rate of disease for the subtype of interest
+#' @param sub_GRR The genetic relative risk of disease for the subtype of interest.
+#'
+#' @return The baseline age-specific hazard rates of disease
+#' @keywords internal
+get_onsetHazard <- function(sub_hazard, sub_GRR, carrier_prob, RV_status){
+  (sub_hazard/(1 + carrier_prob*(sub_GRR - 1)))*ifelse(RV_status, sub_GRR, 1)
+}
+
 #' Simulate the next life event
 #'
 #' Primarily intended as an internal function, \code{get_nextEvent} randomly simulates an individual's next life event given their current age, disease status, and relative-risk of disease.
@@ -37,18 +51,20 @@ get_nextEvent = function(current_age, disease_status, RV_status,
                          hazard_rates, GRR, carrier_prob,
                          lambda_birth, birth_range, fert = 1){
 
-  RR <- ifelse(RV_status, GRR, 1)
-
   #set the number of subtypes to simulate
   num_subs <- length(hazard_rates$subtype_ID)
 
   event_type <- "retry"
   while (event_type == "retry"){
     #Multi-Subtype option
-    t_onset <- ifelse(rep(disease_status, num_subs), rep(NA, num_subs),
+    #If diseased set time to onset to NA. (lines 50-51)
+    #Otherwise, simulate the waiting time to each subtype
+    t_onset <- ifelse(rep(disease_status, num_subs),
+                      rep(NA, num_subs),
                       sapply(1:num_subs, function(x){
                         get_wait_time(p = runif(1), last_event = current_age,
-                                      hazard = hazard_rates[[1]][, x]*RR/(1 + carrier_prob*(GRR[x] - 1)),
+                                      hazard = get_onsetHazard(hazard_rates[[1]][, x],
+                                                               GRR[x], carrier_prob, RV_status),
                                       part = hazard_rates[[2]])
                       }))
 
@@ -173,7 +189,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'
 #' set.seed(1)
 #' sim_life(hazard_rates = hazard(AgeSpecific_Hazards[, c(1, 1, 2, 3)], subtype_ID = c("HL", "NHL")),
-#'             GRR = 10,
+#'             GRR = c(10, 10),
 #'                carrier_prob = 0.002,
 #'                RV_status = TRUE,
 #'                YOB = 1900, stop_year = 2000)
@@ -206,7 +222,7 @@ sim_life = function(hazard_rates, GRR, carrier_prob,
 
 
   if (length(hazard_rates$subtype_ID) > 1 & length(GRR) == 1) {
-    GRR = rep(GRR, length(hazard_rates$subtype_ID))
+    stop('please ensure that GRR has one item for each subtype')
   } else if (length(GRR) != length(hazard_rates$subtype_ID)) {
     stop('length(GRR) != length(subtype_counts)\n please ensure that GRR contains one entry for each subtype')
   }
