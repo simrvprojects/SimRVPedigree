@@ -6,8 +6,8 @@
 \title{Age-specific hazard rate dataset with subtypes}
 \format{A data frame with 100 rows and 4 variables:
 \describe{
-\item{pop_HL_hazard}{The age-specific population hazard rate for lymphoid cancer}
-\item{pop_HNL_hazard}{The age-specific population hazard rate for lymphoid cancer}
+\item{pop_HL_hazard}{The population, age-specific hazard rate for Hodgkin Lymphoma}
+\item{pop_NHL_hazard}{The population, age-specific hazard rate for Non-Hodgkin Lymphoma}
 \item{unaffected_death_hazard}{The age-specific hazard rate for death in the \strong{unaffected} population}
 \item{affected_death_hazard}{The age-specific hazard rate for death in the \strong{affected} population}
 }}
