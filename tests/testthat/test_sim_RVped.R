@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("sim_RVped")
+
+data("AgeSpecific_Hazards")
+
 
 EXPed <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 35, carrier_prob = 0.002,

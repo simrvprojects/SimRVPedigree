@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("ascertain_ped")
+
+data("AgeSpecific_Hazards")
+data("SubtypeHazards")
 
 EXPed <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                    GRR = 35, carrier_prob = 0.002,
@@ -155,7 +159,7 @@ test_that("pedigrees with the incorrect number of affecteds fail", {
     as[1] <- as[1] - 5
 
 
-    aped <- ascertain_ped(exPed, num_affected = my_n, ascertain_span = as, recall_probs = c(1, 1, 0.5))
+    aped <- ascertain_ped(exPed, num_affected = my_n, ascertain_span = as, recall_probs = c(1))
     my_ped <- aped[[2]][aped[[2]]$available == 1, ]
 
     re_sim <- aped[[1]]

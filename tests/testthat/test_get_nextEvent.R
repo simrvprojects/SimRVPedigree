@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("get_nextEvent")
+
+data("AgeSpecific_Hazards")
+
 test_that("If current age > max birth age and disease status = 1, next event is death", {
   expect_equal(get_nextEvent(current_age = 46,
                              disease_status = 1,

@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("sim_ped")
+
+data("AgeSpecific_Hazards")
+
 test_that("returns a single ped file dataframe", {
   expect_true(is.data.frame(sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),
                                     GRR = 10, carrier_prob = 0.002,

@@ -1,4 +1,7 @@
+library(SimRVPedigree)
 context("assign_gen")
+
+data("AgeSpecific_Hazards")
 
 test_that("returns a ped with the correct generations", {
   EXPed <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),

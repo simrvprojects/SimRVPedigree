@@ -1,5 +1,8 @@
-data("EgPeds")
+library(SimRVPedigree)
 context("trim_ped")
+
+
+data("EgPeds")
 
 eggped <- new.ped(EgPeds)
 test_that("returns an error when no proband selected", {

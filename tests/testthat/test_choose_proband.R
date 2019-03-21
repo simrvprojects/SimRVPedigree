@@ -1,4 +1,7 @@
+library(SimRVPedigree)
 context("choose_proband")
+
+data("AgeSpecific_Hazards")
 test_that("returns a dataframe with the proband variable with a single proband", {
   RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,

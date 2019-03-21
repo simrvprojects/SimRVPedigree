@@ -1,4 +1,9 @@
+library(SimRVPedigree)
 context("sim_life")
+
+data("AgeSpecific_Hazards")
+data("SubtypeHazards")
+
 test_that("sim_life should always begin at start and end at death when stop_year is sufficiently large", {
   Levents <- sim_life(hazard_rates = hazard(AgeSpecific_Hazards),
                       GRR = 25, carrier_prob = 0.02, RV_status = T,

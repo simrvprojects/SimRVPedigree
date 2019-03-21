@@ -1,4 +1,7 @@
+library(SimRVPedigree)
 context("disqualify_ped")
+
+data("AgeSpecific_Hazards")
 
 test_that("peds with fewer than num_affected relatives or affecteds are discarded", {
   exPed <- sim_ped(hazard_rates = hazard(AgeSpecific_Hazards),

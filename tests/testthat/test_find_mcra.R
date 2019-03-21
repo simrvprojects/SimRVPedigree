@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("find_mcra")
+
+data("AgeSpecific_Hazards")
+
 test_that("If unrelated, find_mcra returns NA", {
   n_gens <- 0
   while(n_gens < 4){

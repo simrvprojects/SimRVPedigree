@@ -1,4 +1,7 @@
+library(SimRVPedigree)
 context("censor_ped")
+
+data("AgeSpecific_Hazards")
 test_that("censor_ped returns an error when expected", {
   RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,

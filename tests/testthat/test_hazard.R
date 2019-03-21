@@ -1,4 +1,7 @@
+library(SimRVPedigree)
 context("hazard")
+
+data("AgeSpecific_Hazards")
 
 test_that("issues errors when invalid partition supplied", {
   expect_error(hazard(partition = seq(1, 100, by = 1),

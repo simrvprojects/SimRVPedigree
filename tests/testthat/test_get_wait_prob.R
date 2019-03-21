@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("get_wait_prob")
+
+data("AgeSpecific_Hazards")
+
 test_that("wait_prob return is between 0 and 1", {
   expect_equal(get_wait_prob(last_event = 0, wait_time = 100,
                              hazard = AgeSpecific_Hazards[,2],

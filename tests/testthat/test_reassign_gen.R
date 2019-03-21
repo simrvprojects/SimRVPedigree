@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("reassign_gen")
+
+data("AgeSpecific_Hazards")
+
 test_that("reassign_gen returns a smaller or equally sized pedfile", {
   RVped <- sim_RVped(hazard_rates = hazard(AgeSpecific_Hazards),
                      GRR = 50, carrier_prob = 0.002,

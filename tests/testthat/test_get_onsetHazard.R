@@ -1,3 +1,4 @@
+library(SimRVPedigree)
 context("get_onsetHazard")
 test_that("Always returns a vector of the appropriate length", {
 
@@ -7,28 +8,28 @@ test_that("Always returns a vector of the appropriate length", {
   expect_equal(length(get_onsetHazard(sub_hazard = t_haz,
                                       sub_GRR = 1, carrier_prob = 0.002,
                                       RV_status = T)),
-               length(SubtypeHazards[, 1]))
+               length(t_haz))
 
   expect_equal(length(get_onsetHazard(sub_hazard = t_haz,
                                       sub_GRR = 1, carrier_prob = 0.002,
                                       RV_status = F)),
-               length(SubtypeHazards[, 1]))
+               length(t_haz))
 
   expect_equal(length(get_onsetHazard(sub_hazard = t_haz,
                                       sub_GRR = 50, carrier_prob = 0.002,
                                       RV_status = T)),
-               length(SubtypeHazards[, 1]))
+               length(t_haz))
 
 
   expect_equal(length(get_onsetHazard(sub_hazard = t_haz,
                                       sub_GRR = 50, carrier_prob = 0.002,
                                       RV_status = F)),
-               length(SubtypeHazards[, 1]))
+               length(t_haz))
 
   expect_equal(length(get_onsetHazard(sub_hazard = t_haz,
                                       sub_GRR = 1, carrier_prob = 0,
                                       RV_status = T)),
-               length(SubtypeHazards[, 1]))
+               length(t_haz))
 
 })
 

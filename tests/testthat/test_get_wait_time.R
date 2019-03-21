@@ -1,4 +1,8 @@
+library(SimRVPedigree)
 context("get_wait_time")
+
+data("AgeSpecific_Hazards")
+
 test_that("wait_time return is in [0, max(part) - last_event]", {
   expect_gte(get_wait_time(p = 0, last_event = 0,
                            hazard = AgeSpecific_Hazards[,2],

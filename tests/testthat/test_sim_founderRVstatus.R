@@ -1,3 +1,4 @@
+library(SimRVPedigree)
 context("sim_founderRVstatus")
 test_that("If GRR = 1, always returns d = (0, 0) and RR = 1", {
   expect_equal(sim_founderRVstatus(GRR = 1, carrier_prob = 0.02,
