@@ -63,8 +63,9 @@ get_nextEvent = function(current_age, disease_status, RV_status,
                       rep(NA, num_subs),
                       sapply(1:num_subs, function(x){
                         get_wait_time(p = runif(1), last_event = current_age,
-                                      hazard = get_onsetHazard(hazard_rates[[1]][, x],
-                                                               GRR[x], carrier_prob, RV_status),
+                                      hazard = get_onsetHazard(sub_hazard = hazard_rates[[1]][, x],
+                                                               sub_GRR = GRR[x],
+                                                               carrier_prob, RV_status),
                                       part = hazard_rates[[2]])
                       }))
 
@@ -188,11 +189,12 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'                YOB = 1900, stop_year = 2000)
 #'
 #' set.seed(1)
-#' sim_life(hazard_rates = hazard(AgeSpecific_Hazards[, c(1, 1, 2, 3)], subtype_ID = c("HL", "NHL")),
-#'             GRR = c(10, 10),
-#'                carrier_prob = 0.002,
-#'                RV_status = TRUE,
-#'                YOB = 1900, stop_year = 2000)
+#' sim_life(hazard_rates = hazard(SubtypeHazards,
+#'                                subtype_ID = c("HL", "NHL")),
+#'          GRR = c(100, 1),
+#'          carrier_prob = 0.002,
+#'          RV_status = TRUE,
+#'          YOB = 1900, stop_year = 2000)
 #'
 #'
 sim_life = function(hazard_rates, GRR, carrier_prob,
