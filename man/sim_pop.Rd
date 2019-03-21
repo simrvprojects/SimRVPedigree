@@ -30,13 +30,13 @@ Simulate survival data for a population sample
 }
 \examples{
 library(SimRVPedigree)
-data(AgeSpecific_Hazards)
+data(SubtypeHazards)
 
 a = Sys.time()
 s_dat = sim_pop(nlives = 100,
-                hazard_rates = hazard(AgeSpecific_Hazards[, c(1, 1, 2, 3)],
+                hazard_rates = hazard(SubtypeHazards,
                                       subtype_ID = c("HL", "NHL")),
-                GRR = 10,
+                GRR = c(10, 1),
                 YOB = 1900,
                 stop_year = 2000)
 b = Sys.time()
