@@ -38,7 +38,7 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder){
     # If GRR (genetic relative risk) = 1, the variant is not associated with
     # the disease; hence we do not allow an RV to segregate in the pedigree
     d_locus <- c(0, 0)
-    #fRR <- 1
+    fRR <- rep(1, length(GRR))
   } else if (RVfounder == FALSE){
     # If FALSE has been selected we allow the founder
     # the opportunity to introduce 1 copy of the RV with
@@ -46,14 +46,14 @@ sim_founderRVstatus <- function(GRR, carrier_prob, RVfounder){
     # update intro_RV appropriately
     d_locus <- sample(x = c(0, ifelse(runif(1) <= carrier_prob, 1, 0)),
                       size = 2, replace = F)
-    #fRR <- ifelse(any(d_locus == 1), GRR, 1)
+    fRR <- ifelse(rep(any(d_locus == 1), length(GRR)), GRR, rep(1, length(GRR)))
   } else if (RVfounder == TRUE){
     d_locus <- sample(x = c(0, 1), size = 2, replace = F)
-    #fRR <- GRR
+    fRR <- GRR
   }
 
-  #founder_dat <- list(d_locus, fRR)
-  founder_dat <- d_locus
+founder_dat <- list(d_locus, fRR)
+  #founder_dat <- d_locus
   return(founder_dat)
 }
 
@@ -76,8 +76,8 @@ create_founder = function(FamID, GRR, carrier_prob,
                                  dadID = NA,
                                  momID = NA,
                                  affected = F,
-                                 DA1 = founder_dat[1],
-                                 DA2 = founder_dat[2],
+                                 DA1 = founder_dat[[1]][1],
+                                 DA2 = founder_dat[[1]][2],
                                  birthYr = round(runif(1,
                                                        min = founder_byears[1],
                                                        max = founder_byears[2])),
@@ -194,7 +194,7 @@ sim_nFam = function(found_info, stop_year, last_id,
 
   #Simulate life steps for founder
   sim_years <- sim_life(hazard_rates, GRR, carrier_prob,
-                        RV_status = any(found_info[, c(7:8)] == 1),
+                        RV_status = any(found_info[, 7:8] == 1),
                         YOB = found_info$birthYr, stop_year,
                         NB_params, fert)
 
