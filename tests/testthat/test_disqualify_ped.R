@@ -5,7 +5,7 @@ test_that("peds with fewer than num_affected relatives or affecteds are discarde
                    GRR = 50, carrier_prob = 0.002,
                    RVfounder = TRUE, FamID = 1,
                    founder_byears = c(1900, 1910))
-  my_n <- sample(x = c(1, 2, 3), size = 1)
+  my_n <- sample(x = c(2, 3), size = 1)
   as <- sort(round(runif(2, 1970, 2010)))
   as[1] <- as[1] - 1
 
