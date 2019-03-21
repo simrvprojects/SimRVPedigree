@@ -127,6 +127,8 @@ is.ped <- function(x) {
 #' @return \item{\code{affected_info} }{A data frame containing information for the affected individuals in each pedigree supplied.  See details.}
 #' @export
 #'
+#' @importFrom stats na.omit
+#'
 #' @examples
 #' #Read in age-specific harard data and create hazard object.
 #' data(AgeSpecific_Hazards)
@@ -164,8 +166,11 @@ summary.ped <- function(object, ...) {
 
   #gather subtype information, when applicable
   if ("subtype" %in% colnames(object)) {
-    s_ID <- unique(na.omit(RV_peds$subtype))
+    s_ID <- unique(na.omit(object$subtype))
+  } else {
+    s_ID <- NULL
   }
+
 
   famdat <- lapply(unique(object$FamID), function(y){
     get_famInfo(object[object$FamID == y, ], s_ID)
