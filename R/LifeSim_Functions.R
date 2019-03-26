@@ -42,7 +42,7 @@ get_onsetHazard <- function(sub_hazard, sub_GRR, carrier_prob, RV_status){
 #' @return A named matrix. The number of years until the next life event,
 #' named by event type.  See Details.
 #'
-#' @export
+#' @keywords internal
 #' @importFrom stats runif
 #' @importFrom stats rexp
 #'
@@ -158,7 +158,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' @return \item{\code{censor_year} }{Numeric. When applicable the last year that data was observed. Note: after death \code{censor_year = NA}}
 
 #'
-#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (14 December 2017) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. bioRxiv 234153.
+#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko (2018). \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. Source Code for Biology and Medicine, 13:2.
 #' @references Ken-Ichi Kojima, Therese M. Kelleher. (1962), \emph{Survival of Mutant Genes}. The American Naturalist 96, 329-346.
 #' @export
 #' @importFrom stats rgamma
