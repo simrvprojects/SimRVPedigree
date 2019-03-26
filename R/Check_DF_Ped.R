@@ -6,7 +6,7 @@
 #'
 check_ped <- function(ped_file){
   if (class(ped_file) != "data.frame") {
-    stop("ped_file must be a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected")
+    stop("ped_file must be a data.frame with the following variables:\n FamID, ID, dadID, momID, sex, affected")
   }
 
 
@@ -16,11 +16,22 @@ check_ped <- function(ped_file){
       !"momID" %in% colnames(ped_file) |
       !"sex" %in% colnames(ped_file) |
       !"affected" %in% colnames(ped_file)) {
-    stop('please provide a data.frame with the following variables: FamID, ID, dadID, momID, sex, affected')
+    stop('please provide a data.frame with the following variables:\n FamID, ID, dadID, momID, sex, affected')
   }
 
   if(any(is.na(ped_file$ID))) {
-    stop('ID contains missing values.  Please ensure all individuals have a valid ID.')
+    stop('ID contains missing values.\n  Please ensure all individuals have a valid ID.')
+  }
+
+  if (!(class(ped_file$ID) %in% c("numeric", "integer"))) {
+    stop('\n Please specify ID as a numeric variable.')
+  }
+
+  if (any(!ped_file$affected %in% c(TRUE, FALSE, NA))) {
+    stop('For the variable "affected" please use the following convention
+         TRUE = affected by disease
+         FALSE = unaffected
+         NA = unknown disease-affection status.\n')
   }
 
   moms <- unique(ped_file$momID[!is.na(ped_file$momID)])
