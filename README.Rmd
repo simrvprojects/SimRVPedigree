@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: rmarkdown::github_document
 ---
 ![statistics](https://cranlogs.r-pkg.org/badges/SimRVPedigree)
 
@@ -15,6 +15,11 @@ knitr::opts_chunk$set(
 
 # SimRVPedigree
 Simulate Pedigrees Ascertained for Rare Disease
+
+# Under Construction
+
+Please note: we are currently expanding `SimRVPedigree` to simulate diseases with multiple subtypes.  For the latest stable version of `SimRVPedigree` please visit \url{https://cran.r-project.org/web/packages/SimRVPedigree/index.html}.
+
 
 ## Installation
 
