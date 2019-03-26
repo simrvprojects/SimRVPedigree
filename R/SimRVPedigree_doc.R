@@ -4,8 +4,8 @@
 #'
 #'Family-based studies to identify genetic susceptibility factors associated with rare diseases are regaining traction.  The resurgence in popularity is due to the fact that family-based studies have more power to detect rare variants, require smaller sample sizes, and can more accurately detect sequencing errors than case-control studies, Wijsman (2012).  However, identifying a suitable number of families for analysis can require years of continued collaboration between researchers and clinicians.  As a result, collecting new data to replicate findings or evaluate methodology is impractical.  The \code{SimRVPedigree} package aims to address this problem by providing a platform to randomly simulate families ascertained to contain multiple relatives affected by a rare disease. The distinguishing feature of the \code{SimRVPedigree} package is that it aims to mimic the process of family development, while allowing users to incorporate multiple facets of family ascertainment.
 #'
-#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko. (24 September 2018) \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. <doi:10.1101/234153>.
-#' @references Ellen M. Wijsman (2012). \emph{The role of large pedigrees in an era of high-throughput sequencing.} Hum Genet 131, 1555-1563
+#' @references Nieuwoudt, Christina and Jones, Samantha J and Brooks-Wilson, Angela and Graham, Jinko (2018). \emph{Simulating Pedigrees Ascertained for Multiple Disease-Affected Relatives}. Source Code for Biology and Medicine, 13:2.
+#' @references Ellen M. Wijsman (2012). \emph{The role of large pedigrees in an era of high-throughput sequencing.} Human Genetetics, 131, 1555-1563
 #'
 #' @docType package
 #' @name SimRVPedigree
