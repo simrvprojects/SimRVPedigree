@@ -250,15 +250,9 @@ trim_ped = function(ped_file, recall_probs = NULL){
         #If the variables birthYr, onsetYr, and deathYr
         #are included in ped_file mark these values as
         #NA for the unrecalled individuals
-        if ("birthYr" %in% colnames(ped_file)) {
-          readd$birthYr <- NA
-        }
-        if ("onsetYr" %in% colnames(ped_file)) {
-          readd$onsetYr <- NA
-        }
-        if ("deathYr" %in% colnames(ped_file)) {
-          readd$deathYr <- NA
-        }
+        if ("birthYr" %in% colnames(ped_file)) readd$birthYr <- NA
+        if ("onsetYr" %in% colnames(ped_file)) readd$onsetYr <- NA
+        if ("deathYr" %in% colnames(ped_file)) readd$deathYr <- NA
         readd$available <- F
         #readd$RR        <- NA
         readd$affected  <- ifelse(readd$ID %in% marry_ins, F, NA)
