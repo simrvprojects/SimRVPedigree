@@ -23,10 +23,6 @@ check_ped <- function(ped_file){
     stop('ID contains missing values.\n  Please ensure all individuals have a valid ID.')
   }
 
-  if (!(class(ped_file$ID) %in% c("numeric", "integer"))) {
-    stop('\n Please specify ID as a numeric variable.')
-  }
-
   if (any(!ped_file$affected %in% c(TRUE, FALSE, NA))) {
     stop('For the variable "affected" please use the following convention
          TRUE = affected by disease
