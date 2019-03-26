@@ -1,17 +1,6 @@
 ---
 output: rmarkdown::github_document
 ---
-![statistics](https://cranlogs.r-pkg.org/badges/SimRVPedigree)
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
 
 # SimRVPedigree
 Simulate Pedigrees Ascertained for Rare Disease
