@@ -322,8 +322,7 @@ sim_ped = function(hazard_rates, GRR,
                    carrier_prob = 0.002,
                    RVfounder = FALSE,
                    NB_params = c(2, 4/7),
-                   fert = 1,
-                   birth_range = NULL){
+                   fert = 1){
 
   if(!(RVfounder %in% c(T, F))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -337,10 +336,6 @@ sim_ped = function(hazard_rates, GRR,
 
   if (is.null(stop_year)){
     stop_year <- as.numeric(format(Sys.Date(),'%Y'))
-  }
-
-  if (!is.null(birth_range)) {
-    warning("The argument birth_range has been deprecated. Execute help(sim_life) for details.")
   }
 
   fam_ped <- create_pedFile()

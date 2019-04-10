@@ -5,7 +5,7 @@
 \title{Simulate all life events}
 \usage{
 sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
-  NB_params = c(2, 4/7), fert = 1, birth_range = NULL)
+  NB_params = c(2, 4/7), fert = 1)
 }
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
@@ -23,8 +23,6 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 \item{NB_params}{Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).}
 
 \item{fert}{Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.}
-
-\item{birth_range}{This argument is deprecated.}
 }
 \value{
 an object of class \code{event}.  An object of class \code{event} is a list that contains the following items.

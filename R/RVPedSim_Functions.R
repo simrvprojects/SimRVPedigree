@@ -372,7 +372,6 @@ ascertain_ped <- function(ped_file, num_affected, ascertain_span, recall_probs =
 #' @param NB_params Numeric vector of length 2. The size and probability parameters of the negative binomial distribution used to model the number of children per household.  By default, \code{NB_params}\code{ = c(2, 4/7)}, due to the investigation of Kojima and Kelleher (1962).
 #' @param fert Numeric.  A constant used to rescale the fertility rate after disease-onset. By default, \code{fert = 1}.
 #' @param first_diagnosis Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.
-#' @param birth_range This argument is deprecated.
 #'
 #' @return  A list containing the following data frames:
 #' @return \item{\code{full_ped} }{The full pedigree, prior to proband selection and trimming.}
@@ -430,8 +429,7 @@ sim_RVped = function(hazard_rates, GRR,
                      RVfounder = FALSE,
                      NB_params = c(2, 4/7),
                      fert = 1,
-                     first_diagnosis = NULL,
-                     birth_range = NULL){
+                     first_diagnosis = NULL){
 
   if(!(RVfounder %in% c(FALSE, TRUE))){
     stop ('Please set RVfounder to TRUE or FALSE.')
@@ -468,10 +466,6 @@ sim_RVped = function(hazard_rates, GRR,
     if(first_diagnosis >= ascertain_span[1]) {
       stop("first_diagnosis >= ascertainment_span[1], \n Please re-define the ascertainment span so that all diagnoses within this time frame are considered reliable.")
     }
-  }
-
-  if (!is.null(birth_range)) {
-    warning("The argument birth_range has been deprecated. Execute help(sim_life) for details.")
   }
 
   ascertained <- FALSE

@@ -200,14 +200,10 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 sim_life = function(hazard_rates, GRR, carrier_prob,
                     RV_status, YOB, stop_year,
                     NB_params = c(2, 4/7),
-                    fert = 1, birth_range = NULL){
+                    fert = 1){
 
   if(!is.hazard(hazard_rates)) {
     stop("hazard_rates must be an object of class hazard")
-  }
-
-  if (!is.null(birth_range)) {
-    warning("The argument birth_range has been deprecated. Execute help(sim_life) for details.")
   }
 
   if (any(GRR <= 0)) {
