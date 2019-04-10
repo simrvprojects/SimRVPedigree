@@ -262,10 +262,25 @@ plot.ped <- function(x, ref_year = NULL, gen_lab = FALSE,
                      gen_stretch = 2, cex = 1, adj = 1, line = 2,
                      mar = c(5.1, 4.1, 4.1, 2.1), ...) {
 
+
+
   if (is.null(ref_year)) {
-    # If no ref_year provided simply plot the pedigree with the usual id lables.
+    # If ref_year is not provided
+    # plot the pedigree with ID and subtype lables, when present.
     k2ped <- ped2pedigree(x)
-    pedLabs <- x$ID
+
+    if (!is.na(match("subtype", colnames(x)))) {
+      # Create a death age label for individuals who have died.
+      Sub_lab <- ifelse(is.na(x$subtype),
+                        "", paste0("\n subtype: ",
+                                   x$subtype))
+
+      pedLabs = paste0("ID: ", sep = "", x$ID,
+                       Sub_lab)
+    } else {
+      pedLabs <- x$ID
+    }
+
   } else if (ref_year == "ascYr") {
     if(!("proband" %in% colnames(x))){
       stop("\n \n Proband not detected, cannot determine ascertainment year. \n Please supply ref_year. \n")
@@ -324,10 +339,6 @@ plot.ped <- function(x, ref_year = NULL, gen_lab = FALSE,
           at = seq(par("usr")[4],
                    par("usr")[3] - diff(par("usr")[4:3])/(gen_stretch*nlevel),
                    length.out = nlevel))
-    ## used for planning, delete before release
-    # abline(h = seq(par("usr")[4],
-    #                par("usr")[3] - diff(par("usr")[4:3])/(gen_stretch*nlevel),
-    #                length.out = nlevel))
   }
 
   #reset plot margins the default settings

@@ -66,8 +66,6 @@ ped2pedigree <- function(x){
 #' @references Terry M Therneau and Jason Sinnwell (2015). \strong{kinship2: Pedigree Functions.} \emph{R package version 1.6.4.} https://CRAN.R-project.org/package=kinship2
 pedigreeLabels <- function(x, ref_year){
 
-  m <- length(unique(x$FamID))
-
   #create pedigree labels that reflect age data, when appropriate
   if(!missing(ref_year) & !is.na(match(c("birthYr"), colnames(x)))){
 
@@ -103,7 +101,7 @@ pedigreeLabels <- function(x, ref_year){
 
     if (!is.na(match("subtype", colnames(x)))) {
       # Create a death age label for individuals who have died.
-      Sub_lab <- ifelse(is.na(x$onsetYr),
+      Sub_lab <- ifelse(is.na(x$subtype),
                          "", paste0("\n subtype: ",
                                     x$subtype))
     } else {
