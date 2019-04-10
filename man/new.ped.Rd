@@ -16,7 +16,7 @@ An object of class ped.
 Create an object of class \code{ped}, from a \code{data.frame}, required input for \code{\link{reassign_gen}}, \code{\link{censor_ped}}, and \code{\link{trim_ped}} functions.
 }
 \details{
-The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following columns:
+The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain the following variables:
 \tabular{lll}{
 \strong{name} \tab \strong{type} \tab \strong{description} \cr
 \code{FamID} \tab numeric \tab family identification number \cr
@@ -28,7 +28,7 @@ The data frame supplied to \code{new.ped}, \code{ped_file}, \emph{must} contain 
 \tab \tab \code{affected = TRUE} if affected by disease, and \code{FALSE} otherwise, \cr
 }
 
-Optionally, \code{ped_file} \emph{may} contain any of the following columns:
+Optionally, \code{ped_file} \emph{may} contain any of the following variables:
 \tabular{lll}{
 \strong{name} \tab \strong{type}\tab \strong{description} \cr
 \code{available} \tab logical \tab availibility status; \cr
@@ -45,6 +45,7 @@ Optionally, \code{ped_file} \emph{may} contain any of the following columns:
 \tab \tab For the eldest founder \code{Gen} = 1, for his or her offspring \code{Gen} = 2, etc. \cr
 \code{proband} \tab logical \tab proband identifier: \cr
 \tab \tab \code{proband = TRUE} if individual is the proband, and \code{FALSE} otherwise.\cr
+\code{subtype} \tab character \tab the individual's disease subtype, when applicable, otherwise \code{NA} \cr
 }
 
 \emph{We note that some of the optional fields above may be required for various ped functions}
