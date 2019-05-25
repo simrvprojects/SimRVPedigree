@@ -9,7 +9,8 @@ Simulate Pedigrees Ascertained for Rare Disease
 
 Please note: we are currently expanding `SimRVPedigree` to simulate
 diseases with multiple subtypes. For the latest stable version of
-`SimRVPedigree` please visit .
+`SimRVPedigree` please visit
+<https://cran.r-project.org/web/packages/SimRVPedigree/index.html>.
 
 ## Installation
 
