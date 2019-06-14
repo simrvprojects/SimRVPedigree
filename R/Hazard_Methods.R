@@ -89,7 +89,8 @@ hazard <- function(hazardDF, partition = NULL,
            column 2 = age-specific hazard rate of death in the unaffected population,
            column 3 = age-specific hazard rate of death in the affected population")
     } else if (ncol(hazardDF) != 3) {
-      stop("hazardDF must be a data frame with 3 columns:
+      stop("Perhaps you are trying to specify the hazard rates for a disease with multiple subtypes and forgot to supply a list of subtype labels to subtype_ID?\n
+           Otherwise, for diseases with only one subtype hazardDF must be a data frame with 3 columns:
            column 1 = population age-specific hazard rate of disease,
            column 2 = age-specific hazard rate of death in the unaffected population,
            column 3 = age-specific hazard rate of death in the affected population")
@@ -109,12 +110,12 @@ hazard <- function(hazardDF, partition = NULL,
 
       if (class(hazardDF) != "data.frame") {
         stop(paste0("hazardDF must be a data frame with ", num_subs + 2, " columns:
-                    columns 1:", num_subs," = population age-specific hazard rate of disease for each subtype,
+                    columns 1:", num_subs," = population age-specific hazard rates of disease for each subtype in subtype_ID,
                     column ", num_subs + 1, " = age-specific hazard rate of death in the UNAFFECTED population,
                     column ", num_subs + 2, "= age-specific hazard rate of death in the AFFECTED population"))
       } else if (ncol(hazardDF) != num_subs + 2) {
         stop(paste0("hazardDF must be a data frame with ", num_subs + 2, " columns:
-                    columns 1:", num_subs," = population age-specific hazard rate of disease for each subtype,
+                    columns 1:", num_subs," = population age-specific hazard rates of disease for each subtype in subtype_ID,
                     column ", num_subs + 1, " = age-specific hazard rate of death in the UNAFFECTED population,
                     column ", num_subs + 2, "= age-specific hazard rate of death in the AFFECTED population"))
       } else if(sum(hazardDF[, num_subs + 1] > hazardDF[, num_subs + 2]) > nrow(hazardDF)/2 |
