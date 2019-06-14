@@ -4,12 +4,13 @@
 \alias{ascertainTrim_ped}
 \title{Check to see if a trimmed pedigree is ascertained.}
 \usage{
-ascertainTrim_ped(ped_file, num_affected, first_diagnosis = NULL)
+ascertainTrim_ped(ped_file, num_affected, first_diagnosis = NULL,
+  sub_criteria = NULL)
 }
 \arguments{
 \item{ped_file}{Pedigree simulated by \code{sim_ped}.}
 
-\item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
+\item{num_affected}{Numeric vector.  The minimum number of disease-affected relatives required for ascertainment.}
 
 \item{first_diagnosis}{Numeric. The first year that reliable diagnoses can be obtained regarding disease-affection status.  By default, \code{first_diagnosis}\code{ = NULL} so that all diagnoses are considered reliable. See details.}
 }

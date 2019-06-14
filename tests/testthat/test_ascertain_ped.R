@@ -139,7 +139,9 @@ test_that("pedigrees with the correct number of affected fail if onset at wrong 
     #collect data on affected relatives
     aff_dat <- aped[[2]][aped[[2]]$affected & aped[[2]]$available, ]
 
-    if ( sum(exPed$affected) >= my_n & !aped[[1]]) {
+    #check to see if the pedigree was disqualfied, but had the correct
+    #number of affecteds
+    if (nrow(aff_dat) >= my_n & !aped[[1]]) {
       re_sim <- FALSE
     }
 

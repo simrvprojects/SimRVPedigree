@@ -9,7 +9,7 @@ choose_proband(ped_file, num_affected, ascertain_span, first_diagnosis)
 \arguments{
 \item{ped_file}{Pedigree simulated by \code{sim_ped}.}
 
-\item{num_affected}{Numeric.  The minimum number of affected individuals in the pedigree.}
+\item{num_affected}{Numeric vector.  The minimum number of disease-affected relatives required for ascertainment.}
 
 \item{ascertain_span}{Numeric vector of length 2.  The year span of the ascertainment period.  This period represents the range of years during which the proband developed disease and the family would have been ascertained for multiple affected relatives.}
 
