@@ -125,10 +125,15 @@ test_that("pedigrees with the correct number of affected fail if onset at wrong 
                      GRR = 50, carrier_prob = 0.002,
                      RVfounder = TRUE, FamID = 1,
                      founder_byears = c(1900, 1910))
+
+    #number of affected required for ascertainment
     my_n <- sample(x = c(2, 3), size = 1)
+
+    #ascertainment span
     as <- sort(round(runif(2, 2005, 2015)))
     as[1] <- as[1] - 5
 
+    #check to see if pedigree is ascertained
     aped <- ascertain_ped(exPed, num_affected = my_n, ascertain_span = as, recall_probs = c(1, 1, 0.5))
 
     #collect data on affected relatives
@@ -167,4 +172,33 @@ test_that("pedigrees with the incorrect number of affecteds fail", {
   }
 
   expect_true(sum(my_ped$affected) < my_n)
+})
+
+
+test_that("pedigrees have the correct number of indivdiuals with a particular subtype", {
+
+  re_sim <- FALSE
+  while (!re_sim){
+    exPed <- sim_ped(hazard_rates = hazard(SubtypeHazards, subtype_ID = c("HL", "NHL")),
+                     GRR = c(100, 100), carrier_prob = 0.002,
+                     RVfounder = TRUE, FamID = 1,
+                     founder_byears = c(1900, 1910),
+                     stop_year = 2019)
+
+    my_n <- sample(x = c(2, 3), size = 1)
+    my_n2 <- my_n - 1
+    as <- c(1900, 2019)
+
+
+    aped <- ascertain_ped(exPed, num_affected = my_n,
+                          ascertain_span = as, recall_probs = c(1),
+                          sub_criteria = list("HL", my_n2))
+
+    my_ped <- aped[[2]][aped[[2]]$available == 1, ]
+
+    re_sim <- aped[[1]]
+
+  }
+
+  expect_true(sum(my_ped$affected) >= my_n & sum(my_ped$affected[which(my_ped$subtype == "HL")]) >= my_n2)
 })
