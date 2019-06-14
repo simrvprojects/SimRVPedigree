@@ -15,7 +15,7 @@ create_offspring(dad_info, mom_info, byear, last_id, GRR)
 
 \item{last_id}{Numeric.  The last id used in the pedigree.}
 
-\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.  Note: When simulating diseases with multiple subtypes \code{GRR} must contain one entry for each simulated subtype.  See details.}
 }
 \value{
 new_child_info the pedigree information for the new child

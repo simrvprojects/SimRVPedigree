@@ -11,7 +11,7 @@ sim_ped(hazard_rates, GRR, FamID, founder_byears, stop_year = NULL,
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
-\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.  Note: When simulating diseases with multiple subtypes \code{GRR} must contain one entry for each simulated subtype.  See details.}
 
 \item{FamID}{Numeric. The family ID to assign to the simulated pedigree.}
 
