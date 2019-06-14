@@ -167,7 +167,7 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #' data(AgeSpecific_Hazards)
 #' my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 #'
-#' # The following commands simulate all life events for an individual, who
+#' # The following commands simulate all life events for an individual who
 #' # has NOT inherited a causal variant, born in 1900.  From the output, this
 #' # individual has two children, one in 1921 and another in 1923, and then
 #' # dies in 1987.
@@ -188,6 +188,9 @@ get_nextEvent = function(current_age, disease_status, RV_status,
 #'                RV_status = TRUE,
 #'                YOB = 1900, stop_year = 2000)
 #'
+#' # The following commands simulate life events for an individual who
+#' # has inherited a causal rare variant, with relative risk 100 for
+#' # the subtype "HL" and no increased relative risk for the subtype"NHL".
 #' set.seed(1)
 #' sim_life(hazard_rates = hazard(SubtypeHazards,
 #'                                subtype_ID = c("HL", "NHL")),

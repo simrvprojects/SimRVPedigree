@@ -10,7 +10,7 @@ sim_life(hazard_rates, GRR, carrier_prob, RV_status, YOB, stop_year,
 \arguments{
 \item{hazard_rates}{An object of class \code{hazard}, created by \code{\link{hazard}}.}
 
-\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.}
+\item{GRR}{Numeric. The genetic relative-risk of disease, i.e. the relative-risk of disease for individuals who carry at least one copy of the causal variant.  Note: When simulating diseases with multiple subtypes \code{GRR} must contain one entry for each simulated subtype.  See details.}
 
 \item{carrier_prob}{Numeric.  The carrier probability for all causal variants with relative-risk of disease \code{GRR}.  By default, \code{carrier_prob}\code{ = 0.002}}
 
@@ -66,7 +66,7 @@ The events simulated by \code{sim_life} are labelled as follows:
 data(AgeSpecific_Hazards)
 my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 
-# The following commands simulate all life events for an individual, who
+# The following commands simulate all life events for an individual who
 # has NOT inherited a causal variant, born in 1900.  From the output, this
 # individual has two children, one in 1921 and another in 1923, and then
 # dies in 1987.
@@ -87,6 +87,9 @@ sim_life(hazard_rates = my_HR, GRR = 10,
                RV_status = TRUE,
                YOB = 1900, stop_year = 2000)
 
+# The following commands simulate life events for an individual who
+# has inherited a causal rare variant, with relative risk 100 for
+# the subtype "HL" and no increased relative risk for the subtype"NHL".
 set.seed(1)
 sim_life(hazard_rates = hazard(SubtypeHazards,
                                subtype_ID = c("HL", "NHL")),
