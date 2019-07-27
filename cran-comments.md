@@ -1,3 +1,14 @@
+##Resubmission -- NEXT TIME
+(Note to self) before next resubmission:
+ - update reference to Source Code for Biology and Medicine
+ - adapted methodology to simulate diseases with different subtypes
+
+- Updated the DESCRIPTION file:
+    - Updated the version number to 0.4.0 to reflect:
+         - updated methodology allowing for simulation of disease subtypes.
+         - removal of deprecated argument birth_range from the sim_life, sim_ped, and sim_RVped functions.
+
+
 ##Resubmission October 2018
 In this resubmission I have:
 - Fixed a bug in the find_mrca function and improved the tests for this function. 
