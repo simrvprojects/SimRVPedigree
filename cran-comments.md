@@ -2,6 +2,7 @@
 (Note to self) before next resubmission:
  - update reference to Source Code for Biology and Medicine
  - adapted methodology to simulate diseases with different subtypes
+ 
 
 - Updated the DESCRIPTION file:
     - Updated the version number to 0.4.0 to reflect:
