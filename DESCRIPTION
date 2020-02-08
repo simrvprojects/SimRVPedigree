@@ -1,7 +1,7 @@
 Package: SimRVPedigree
 Type: Package
 Title: Simulate Pedigrees Ascertained for a Rare Disease
-Version: 0.4.3
+Version: 0.4.4
 Authors@R: c(person("Christina", "Nieuwoudt", 
                     role = c("aut", "cre"),
                     email = "cnieuwou@sfu.ca"),

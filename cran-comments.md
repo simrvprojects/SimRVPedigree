@@ -1,6 +1,6 @@
 ##Resubmission February 2020
 - Updated the DESCRIPTION file:
-    - Updated the version number to 0.4.3 to reflect:
+    - Updated the version number to 0.4.4 to reflect:
          - new functionality that allows users to simulate diseases with multiple disease subtypes.
          - removal of previously deprecated argument birth_range from the sim_life, sim_ped, and sim_RVped functions.
          - fixed all improper uses of class() == *, and instead switched to using inherits() or is().
