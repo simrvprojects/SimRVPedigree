@@ -22,6 +22,7 @@ find_missing_parent <- function(x, dad = TRUE){
 #'
 #' @return a list of generation numbers for pedigree members, in the order listed in \code{x}.
 #' @importFrom kinship2 kindepth
+#' @importFrom methods is
 #' @keywords internal
 assign_gen <- function(x){
   Gen <- NA
@@ -34,7 +35,7 @@ assign_gen <- function(x){
   kd <- kindepth(ped2pedigree(x))
   Gen[kd != 0] <- kd[kd != 0]
 
-  if(class(mates) == "matrix"){
+  if(is(mates, "matrix")){
     for(i in 1:nrow(mates)){
       mate_gens <-  kd[x$ID %in% mates[i, ]]
       Gen[x$ID %in% mates[i, ]] <- max(mate_gens)
