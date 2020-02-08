@@ -20,7 +20,7 @@ An object of class hazard.
 Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_life}} functions.
 }
 \details{
-Users are permitted to specify harzard objects for two scenarios: (1) for a disease without subtypes or  (2) for a disease with multiple subtypes.  When simulate
+Users are permitted to specify harzard objects for two scenarios: (1) for a disease without subtypes or  (2) for a disease with multiple subtypes.
 
 When simulating a disease \emph{without subtypes}, \code{hazardDF} must contain 3 columns that meet the following criteria:
 \describe{

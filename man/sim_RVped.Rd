@@ -154,7 +154,7 @@ summary(ex_RVped[[2]])
 # argument.
 set.seed(2)
 ex_RVped <- sim_RVped(hazard_rates = my_hazards,
-                      GRR = c(20, 1),
+                      GRR = c(20),
                       RVfounder = TRUE,
                       FamID = 1,
                       founder_byears = c(1900, 1905),
