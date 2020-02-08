@@ -1,5 +1,7 @@
 #' Simulate survival data for a population sample
 #'
+#' This function is under construction. Plan to release in an update after function level testing has been implemented.
+#'
 #' @inheritParams sim_RVped
 #' @param nlives Numeric.  The number of individuals to simulate
 #' @param YOB Numeric. The year of birth for all individuals in the sample.
@@ -7,29 +9,7 @@
 #' @param RV_status Numeric.  The rare variant status for all individuals in the study. \code{RV_status = 1} if carrier of the cRV, otherwise \code{RV_status = 0}.  By default, \code{RV_status = NULL} so that the cRV status is simulated based on \code{carrier_prob}.
 #'
 #' @return A data frame of event times and classifiers for the simulated individuals.
-#'
-#' @export
-#'
-#' @examples
-#' library(SimRVPedigree)
-#' data(SubtypeHazards)
-#'
-#' a = Sys.time()
-#' s_dat = sim_pop(nlives = 100,
-#'                 hazard_rates = hazard(SubtypeHazards,
-#'                                       subtype_ID = c("HL", "NHL")),
-#'                 GRR = c(10, 1),
-#'                 YOB = 1900,
-#'                 stop_year = 2000)
-#' b = Sys.time()
-#' difftime(b, a, units = "secs")
-#'
-#' head(s_dat)
-#' table(s_dat$RV_status)
-#' table(s_dat$affected)
-#' summary(s_dat$onset_age)
-#' table(s_dat$subtype)
-#' table(s_dat$RV_status, s_dat$subtype)
+#' @keywords internal
 #'
 #'
 sim_pop <- function(nlives, hazard_rates, GRR,
