@@ -7,11 +7,11 @@
 hazard(hazardDF, partition = NULL, subtype_ID = NULL)
 }
 \arguments{
-\item{hazardDF}{Data.frame. Column 1 specifies the age-specific hazard rate of \emph{disease} in the population of interest, column 2 specifies the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and column 3 specifies the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.}
+\item{hazardDF}{Data.frame. A data.frame contianing the age-specific hazard rate(s) of \emph{disease} in the population of interest, the age-specific hazard rate for \emph{death} in the \strong{unaffected} population, and the age-specific hazard rate for \emph{death} in the \strong{affected} population.  See details.}
 
 \item{partition}{Numeric vector. The partition of ages, in years, over which to apply the age-specific hazard rates in \code{hazardDF}. If not supplied,  defaults to a partition that starts at 0 and increases in yearly increments.  See details.}
 
-\item{subtype_ID}{List. If specifying a disease with multiple subtypes, a list of IDs used for naming.  By default, \code{subtype_ID = NULL}, i.e. no subtypes to simulate.}
+\item{subtype_ID}{List. If specifying a disease with multiple subtypes, a list of character subtype IDs.  By default, \code{subtype_ID = NULL}, i.e. no subtypes to simulate.}
 }
 \value{
 An object of class hazard.
@@ -20,34 +20,57 @@ An object of class hazard.
 Create a hazard object, required input for \code{\link{sim_RVped}}, \code{\link{sim_ped}}, and \code{\link{sim_life}} functions.
 }
 \details{
-\code{hazardDF} must contain 3 columns that meet the following criteria:
+Users are permitted to specify harzard objects for two scenarios: (1) for a disease without subtypes or  (2) for a disease with multiple subtypes.  When simulate
+
+When simulating a disease \emph{without subtypes}, \code{hazardDF} must contain 3 columns that meet the following criteria:
 \describe{
  \item{column 1:}{age-specific hazard rates of \emph{disease} for the population of interest}
  \item{column 2:}{age-specific hazard rates of \emph{death} for the \strong{unaffected} population.  If the disease of interest is sufficiently rare, so that death by the disease is rare, the user may choose to use the population, age-specific, hazard rates of death instead.}
  \item{column 3:}{age-specific hazard rates of \emph{death} for the \strong{affected} population.}
 }
 
+When simulating a disease \emph{with n disease subtypes}, \code{hazardDF} must contain n + 2 columns that meet the following criteria:
+\describe{
+ \item{column 1:}{age-specific hazard rates of \emph{disease} for the first subtype of interest}
+ \item{column 2:}{age-specific hazard rates of \emph{disease} for the second subtype of interest}
+ \item{...}{}
+ \item{column n:}{age-specific hazard rates of \emph{disease} for the \eqn{n^{th}} subtype of interest}
+ \item{column n + 1:}{age-specific hazard rates of \emph{death} for the \strong{unaffected} population.  If the disease of interest is sufficiently rare, so that death by the disease is rare, the user may choose to use the population, age-specific, hazard rates of death instead.}
+ \item{column n + 2:}{age-specific hazard rates of \emph{death} for an individual affectd by any of the \eqn{n} subtypes.}
+}
 Users must provide \code{partition} in years; e.g. a hazard rate for a baby between 6 months and 1 year of age should have lower bound 0.5 years and an upper bound 1 year.  Additionally, \code{partition} must apply to all of the age-specific hazard rates in \code{hazardDF}.
 }
 \examples{
+# Specifying the hazard rates for a disease
+# with only one subtype (or grouped subtypes).
 data(AgeSpecific_Hazards)
 
 head(AgeSpecific_Hazards)
 nrow(AgeSpecific_Hazards)
 
-my_part = seq(0, 100, by = 1)
-my_HR <- hazard(hazardDF = AgeSpecific_Hazards,
-                partition = my_part)
-
-
-my_HR
-class(my_HR)
-head(my_HR[[1]])
-my_HR[[2]]
-
-
 my_HR <- hazard(hazardDF = AgeSpecific_Hazards)
 class(my_HR)
+head(my_HR[[1]])
+
+#NOTE: since partition was not supplied, the partition has been assummed to
+# start at 0 and increase in yearly increments.
 my_HR[[2]]
+
+my_HR
+
+
+# Specifying the hazard rates for a with teo disease subtypes
+data(SubtypeHazards)
+
+head(SubtypeHazards)
+nrow(SubtypeHazards)
+
+my_SHR <- hazard(hazardDF = SubtypeHazards,
+                 subtype_ID = c("Hodgkin Lymphoma", "Non-Hodgkin Lymphoma"))
+class(my_SHR)
+head(my_SHR[[1]])
+my_SHR
+
+
 
 }
