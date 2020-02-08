@@ -17,7 +17,7 @@ ped2pedigree <- function(x){
   dA_loc <- match(c("DA1", "DA2"), colnames(x))
 
   if (length(dA_loc[!is.na(dA_loc)]) == 2) {
-    x$RVstatus <- x$DA1 + x$DA2
+    x$RVstatus <- ifelse(x$DA1 + x$DA2 == 0, 0, 1)
   }
 
   if (any(!is.na(match(c("affected", "proband", "RVstatus"), colnames(x))))) {
