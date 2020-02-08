@@ -366,7 +366,7 @@ ascertain_ped <- function(ped_file, num_affected,
 #'
 #' We do not model disease remission. Rather, we impose the restriction that individuals may only experience disease onset once, and remain affected from that point on.  If disease onset occurs then we apply the hazard rate for death in the affected population.
 #'
-#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use instead \code{\link{sim_ped}}.
+#' \code{sim_RVped} will only return ascertained pedigrees with at least \code{num_affected} affected individuals.  That is, if a simulated pedigree does not contain at least \code{num_affected} affected individuals \code{sim_RVped} will discard the pedigree and simulate another until the condition is met.  We note that even for \code{num_affected = 2}, \code{sim_RVped} can be computationally expensive.  To simulate a pedigree with no proband, and without a minimum number of affected members use \code{\link{sim_ped}} instead of \code{sim_RVped}.
 #'
 #' When simulating diseases with multiple subtypes, users may wish to apply additional ascertainment criteria using the \code{sub_criteria} argument. When supplied, this argument allows users to impose numeric subtype-specific ascertainmet criteria. For example, if and \code{sub_criteria = list("HL", 1)} then at least 1 of the \code{num_affected} disease-affected relatives must be affected by subtype "HL" for the pedigree to be asceratained.  We note that the first entry of \code{sub_criteria}, i.e. the subtype label, must match the one of subtype labels in the hazards object supplied to \code{hazard_rates}.  See examples.
 #'
@@ -379,7 +379,7 @@ ascertain_ped <- function(ped_file, num_affected,
 #'
 #' We allow users to specify the first year that reliable diagnoses can be made using the argument \code{first_diagnosis}.  All subjects who experience disease onset prior to this year are not considered when ascertaining the pedigree for a specific number of disease-affected relatives.  By default, \code{first_diagnosis = NULL} so that all affected relatives, recalled by the proband, are considered when ascertaining the pedigree.
 #'
-#' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to allow researchers to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient, as defined by Thompson (see references), between the proband and his or her relatives are assumed.  This has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length \eqn{l}, such that the first \eqn{l-1} items represent the respective recall probabilities for relatives of degree \eqn{1, 2, ... , l-1} and the \eqn{l^{th}} item represents the recall probability of a relative of degree \eqn{l} or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
+#' After the proband is selected, the pedigree is trimmed based on the proband's recall probability of his or her relatives.  This option is included to model the possibility that a proband either cannot provide a complete family history or that they explicitly request that certain family members not be contacted.  If \code{recall_probs} is missing, the default values of four times the kinship coefficient, as defined by Thompson, between the proband and his or her relatives are assumed.  This has the effect of retaining all first degree relatives with probability 1, retaining all second degree relatives with probability 0.5, retaining all third degree relatives with probability 0.25, etc.  Alternatively, the user may specify a list of length \eqn{l}, such that the first \eqn{l-1} items represent the respective recall probabilities for relatives of degree \eqn{1, 2, ... , l-1} and the \eqn{l^{th}} item represents the recall probability of a relative of degree \eqn{l} or greater. For example, if \code{recall_probs = c(1, 0.75, 0.5)}, then all first degree relatives (i.e. parents, siblings, and offspring) are retained with probability 1, all second degree relatives (i.e. grandparents, grandchildren, aunts, uncles, nieces and nephews) are retained with probability 0.75, and all other relatives are retained with probability 0.5. To simulate fully ascertained pedigrees, simply specify \code{recall_probs = c(1)}.
 #'
 #'
 #' In the event that a trimmed pedigree fails the \code{num_affected} condition,  \code{sim_RVped} will discard that pedigree and simulate another until the condition is met.  For this reason, the values specified for \code{recall_probs} affect computation time.
@@ -465,7 +465,7 @@ ascertain_ped <- function(ped_file, num_affected,
 #' # Set GRR = c(20, 1) so that individuals who carry a causal variant
 #' # are 20 times more likely than non-carriers to develop "HL" but have
 #' # same risk as non-carriers to develop "NHL".
-#' set.seed(6)
+#' set.seed(8)
 #' ex_RVped <- sim_RVped(hazard_rates = my_hazards,
 #'                       GRR = c(20, 1),
 #'                       RVfounder = TRUE,
@@ -477,9 +477,10 @@ ascertain_ped <- function(ped_file, num_affected,
 #'                       recall_probs = c(1, 1, 0))
 #'
 #' plot(ex_RVped[[2]], cex = 0.6)
+#' summary(ex_RVped[[2]])
 #'
 #'
-#' # Note that we can modify the ascertainment criteria to require that
+#' # Note that we can modify the ascertainment criteria so that
 #' # at least 1 of the two disease-affected relatives are affected by
 #' # the "HL" subtype by supplying c("HL", 1) to the sub_criteria
 #' # argument.
