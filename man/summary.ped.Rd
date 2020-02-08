@@ -30,6 +30,10 @@ The \code{summary.ped} function returns two data frames. The first is called \co
 \code{aveIBD}\tab average of the pairwise IBD probabilities among the disease-affected relatives\cr
 \code{ascertainYear}\tab the year the pedigree was ascertained\cr
 \code{segRV} \tab logical Indicates whether or not pedigree segregates a causal variant. \cr \tab If the pedigree segregates the variant \code{segRV = TRUE}.\cr
+\code{p_subtypeLabel} \tab NOTE: this is only listed when pedigrees contain relatives affected by multiple subtypes. \cr
+                      \tab the proportion of disease-affected relatives in the family with the specified subtype.\cr
+                      \tab Here "subtypeLabel" is determined by subtype ID specifed by the user when creating the \cr
+                      \tab \code{\link{hazard}} object.\cr
 }
 
 The second item returned by \code{summary.ped} is called \code{affected_info}, and contains the following fields for each disease-affected relative supplied.
@@ -40,8 +44,10 @@ The second item returned by \code{summary.ped} is called \code{affected_info}, a
 \code{birthYr}\tab the individual's birth year, when applicable, otherwise \code{NA} \cr
 \code{onsetYr}\tab the individual's year of disease onset, when applicable, otherwise \code{NA} \cr
 \code{deathYr}\tab the individual's year of death, when applicable, otherwise \code{NA} \cr
-\code{RR}\tab the individual's relative-risk of disease \cr
 \code{proband}\tab a proband identifier: \code{proband = TRUE} if the individual is the proband, and \code{FALSE} otherwise.\cr
+\code{RVstatus}\tab the individual's causal RV status; set to 1 if individual is a carrier, and 0 otherwise.\cr
+\code{subtype}\tab NOTE: this is only listed when pedigree was simulated for diseases with multiple subtypes.\cr
+              \tab The individual's disease subtype.\cr
 }
 }
 \examples{
