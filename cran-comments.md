@@ -9,7 +9,6 @@
 Test Environments prior to resubmission
 * https://win-builder.r-project.org/
 * local Windows OS install, R 3.5.0
-* ubuntu 14.04.5 LTS (on travis-ci), R 3.5.0
 
 
 ##Resubmission October 2018
