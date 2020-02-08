@@ -1,13 +1,15 @@
-##Resubmission -- NEXT TIME
-(Note to self) before next resubmission:
- - update reference to Source Code for Biology and Medicine
- - adapted methodology to simulate diseases with different subtypes
- 
-
+##Resubmission February 2020
 - Updated the DESCRIPTION file:
-    - Updated the version number to 0.4.0 to reflect:
-         - updated methodology allowing for simulation of disease subtypes.
-         - removal of deprecated argument birth_range from the sim_life, sim_ped, and sim_RVped functions.
+    - Updated the version number to 0.4.3 to reflect:
+         - new functionality that allows users to simulate diseases with multiple disease subtypes.
+         - removal of previously deprecated argument birth_range from the sim_life, sim_ped, and sim_RVped functions.
+         - fixed all improper uses of class() == *, and instead switched to using inherits() or is().
+         Many thanks to Kurt Hornik for again pointing out this deficiency. 
+
+Test Environments prior to resubmission
+* https://win-builder.r-project.org/
+* local Windows OS install, R 3.5.0
+* ubuntu 14.04.5 LTS (on travis-ci), R 3.5.0
 
 
 ##Resubmission October 2018
