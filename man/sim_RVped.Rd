@@ -133,7 +133,7 @@ my_hazards <- hazard(SubtypeHazards,
 # Set GRR = c(20, 1) so that individuals who carry a causal variant
 # are 20 times more likely than non-carriers to develop "HL" but have
 # same risk as non-carriers to develop "NHL".
-set.seed(10)
+set.seed(45)
 ex_RVped <- sim_RVped(hazard_rates = my_hazards,
                       GRR = c(20, 1),
                       RVfounder = TRUE,
@@ -145,14 +145,12 @@ ex_RVped <- sim_RVped(hazard_rates = my_hazards,
                       recall_probs = c(1, 1, 0))
 
 plot(ex_RVped[[2]], cex = 0.6)
-summary(ex_RVped[[2]])
-
 
 # Note that we can modify the ascertainment criteria so that
 # at least 1 of the two disease-affected relatives are affected by
 # the "HL" subtype by supplying c("HL", 1) to the sub_criteria
 # argument.
-set.seed(24)
+set.seed(69)
 ex_RVped <- sim_RVped(hazard_rates = my_hazards,
                       GRR = c(20, 1),
                       RVfounder = TRUE,
