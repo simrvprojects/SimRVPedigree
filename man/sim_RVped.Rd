@@ -133,7 +133,7 @@ my_hazards <- hazard(SubtypeHazards,
 # Set GRR = c(20, 1) so that individuals who carry a causal variant
 # are 20 times more likely than non-carriers to develop "HL" but have
 # same risk as non-carriers to develop "NHL".
-set.seed(8)
+set.seed(10)
 ex_RVped <- sim_RVped(hazard_rates = my_hazards,
                       GRR = c(20, 1),
                       RVfounder = TRUE,
@@ -152,7 +152,7 @@ summary(ex_RVped[[2]])
 # at least 1 of the two disease-affected relatives are affected by
 # the "HL" subtype by supplying c("HL", 1) to the sub_criteria
 # argument.
-set.seed(2)
+set.seed(24)
 ex_RVped <- sim_RVped(hazard_rates = my_hazards,
                       GRR = c(20, 1),
                       RVfounder = TRUE,
